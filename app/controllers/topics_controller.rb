@@ -1,7 +1,7 @@
 class TopicsController < ApplicationController
   before_action :set_forums
   before_action :set_owner, only: [:new, :create]
-  before_action :set_topic
+  before_action :set_topic, except: [:new, :create]
   before_action :authenticate_user!, only: [:new, :create]
 
   layout 'forum'
