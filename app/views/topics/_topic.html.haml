@@ -1,0 +1,7 @@
+= content_tag_for :tr, topic do
+  %td
+    %h4
+      = icons_for_topic(topic)
+      = link_to topic.title, topic
+    %ul.list-inline
+      %li= link_to topic.forum.name, topic.forum, class: 'btn btn-xs', style: css_styles_for_forum(topic.forum)

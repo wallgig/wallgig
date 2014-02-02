@@ -38,16 +38,16 @@ screen_resolutions.each do |screen_resolution|
 end
 
 forums = [
-  { name: 'site news',       color: '3AB54A', text_color: 'FFFFFF', description: 'Wallgig News and Announcements' },
-  { name: 'general',         color: '808281', text_color: 'FFFFFF' },
-  { name: 'intros',          color: '0E76BD', text_color: 'FFFFFF', description: 'Introduce yourself here! Meet new friends' },
-  { name: 'artists room',    color: 'ED207B', text_color: 'FFFFFF', description: 'Show off your latest creations here!' },
-  { name: 'requests',        color: 'F7941D', text_color: 'FFFFFF', description: 'Request for custom wallpapers, signatures, etc. here!' },
-  { name: 'gaming',          color: 'F1592A', text_color: 'FFFFFF', description: 'Discuss games here. PC, PS3/4, Xbox, MMO, anything! Join our gaming communities' },
-  { name: 'music',           color: '9EB83B', text_color: 'FFFFFF', description: 'Talk about music here. Share playlists and more!' },
-  { name: 'movies & tv',     color: '92278F', text_color: 'FFFFFF', description: 'Discuss latest movies and tv episodes' },
-  { name: 'feedback & bugs', color: 'BF1E2E', text_color: 'FFFFFF', description: 'Report bugs, give feedback or post suggestions here' },
-  { name: 'uncategorized',   color: 'AB9364', text_color: 'FFFFFF' }
+  { name: 'Site news',       color: '3AB54A', text_color: 'FFFFFF', description: 'Wallgig News and Announcements' },
+  { name: 'General',         color: '808281', text_color: 'FFFFFF' },
+  { name: 'Intros',          color: '0E76BD', text_color: 'FFFFFF', description: 'Introduce yourself here! Meet new friends' },
+  { name: 'Artists room',    color: 'ED207B', text_color: 'FFFFFF', description: 'Show off your latest creations here!' },
+  { name: 'Requests',        color: 'F7941D', text_color: 'FFFFFF', description: 'Request for custom wallpapers, signatures, etc. here!' },
+  { name: 'Gaming',          color: 'F1592A', text_color: 'FFFFFF', description: 'Discuss games here. PC, PS3/4, Xbox, MMO, anything! Join our gaming communities' },
+  { name: 'Music',           color: '9EB83B', text_color: 'FFFFFF', description: 'Talk about music here. Share playlists and more!' },
+  { name: 'Movies & TV',     color: '92278F', text_color: 'FFFFFF', description: 'Discuss latest movies and tv episodes' },
+  { name: 'Feedback & Bugs', color: 'BF1E2E', text_color: 'FFFFFF', description: 'Report bugs, give feedback or post suggestions here' },
+  { name: 'Uncategorized',   color: 'AB9364', text_color: 'FFFFFF' }
 ]
 
 forums.each do |forum|

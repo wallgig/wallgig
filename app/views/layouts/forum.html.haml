@@ -1,12 +1,13 @@
 - content_for :content do
   .row
+    .col-lg-3
+      .page-subheader
+        %h3 Forums
+      .list-group
+        = link_to 'All topics', forums_path, class: 'list-group-item'
+        - @forums.each do |forum|
+          = link_to forum.name, forum, class: 'list-group-item', style: css_styles_for_forum(forum)
     .col-lg-9
       = yield
-    .col-lg-3
-      %h3 Forums
-      .list-group
-        - @forums.each do |forum|
-          = link_to forum, class: 'list-group-item', style: css_styles_for_forum(forum) do
-            = forum.name
 
 = render template: 'layouts/application'

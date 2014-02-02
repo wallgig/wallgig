@@ -32,6 +32,7 @@ class Topic < ActiveRecord::Base
 
   scope :pinned_first, -> { order(pinned: :desc) }
   scope :latest,       -> { order(updated_at: :desc) }
+  scope :for_index,    -> { pinned_first.latest }
 
   after_initialize do
     self.forum ||= Forum.uncategorized
@@ -39,14 +40,6 @@ class Topic < ActiveRecord::Base
 
   before_save do
     self.cooked_content = ApplicationController.helpers.markdown(content) if content_changed?
-  end
-
-  def to_s
-    title
-  end
-
-  def cooked_content
-    read_attribute(:cooked_content).try(:html_safe)
   end
 
   def pin!

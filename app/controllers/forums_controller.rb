@@ -5,12 +5,11 @@ class ForumsController < ApplicationController
   layout 'forum'
 
   def index
+    @topics = Topic.accessible_by(current_ability, :read).for_index
   end
 
-  # GET /forums/1
-  # GET /forums/1.json
   def show
-    # @topics = @forum.topics.accessible_by(current_ability, :read).pinned_first.latest
+    @topics = @forum.topics.accessible_by(current_ability, :read).for_index
     render action: 'index'
   end
 

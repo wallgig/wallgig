@@ -3,4 +3,5 @@
     = link_to 'New topic', new_topic_path(forum: @forum), class: 'btn btn-primary'
   %h1= title 'Forums'
 
-@TODO
+%table.table
+  %tbody= render @topics
