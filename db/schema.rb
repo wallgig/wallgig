@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20140201131337) do
+ActiveRecord::Schema.define(version: 20140202201401) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -127,7 +127,6 @@ ActiveRecord::Schema.define(version: 20140201131337) do
   add_index "forum_topics", ["user_id"], name: "index_forum_topics_on_user_id", using: :btree
 
   create_table "forums", force: true do |t|
-    t.integer  "group_id"
     t.string   "name"
     t.string   "slug"
     t.text     "description"
@@ -140,9 +139,10 @@ ActiveRecord::Schema.define(version: 20140201131337) do
     t.boolean  "member_can_read",  default: true
     t.boolean  "member_can_post",  default: true
     t.boolean  "member_can_reply", default: true
+    t.string   "color"
+    t.string   "text_color"
   end
 
-  add_index "forums", ["group_id"], name: "index_forums_on_group_id", using: :btree
   add_index "forums", ["slug"], name: "index_forums_on_slug", using: :btree
 
   create_table "groups", force: true do |t|

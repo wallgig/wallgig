@@ -1,33 +1,11 @@
-- title [@group.name, 'Forums']
-
 .page-header
-  - if can? :create, @group.forums.new
-    .pull-right
-      = link_to new_group_forum_path(@group), class: 'btn btn-primary' do
-        %span.glyphicon.glyphicon-plus
-        New forum
-  %h2 Forums
+  %h2= title 'Forums'
 
-%table.table.table-hover
-  %thead
-    %tr
-      %th.col-md-6 Forum
-      %th.col-md-1.text-center Topics
-      / %th.col-md-1.text-center Replies
-      %th.col-md-4 Last post
-
-  %tbody
-    - @forums.each do |forum|
-      %tr
-        %td
-          = link_to forum.name, [@group, forum]
-          = markdown_line forum.description
-        %td.text-center= forum.topics.count
-        / %td.text-center TODO
-        %td
-          - if forum.latest_topic.present?
-            = link_to forum.latest_topic do
-              lastest topic by
-              = forum.latest_topic.user.username
-              = time_tag forum.latest_topic.updated_at, time_ago_in_words(forum.latest_topic.updated_at), title: forum.latest_topic.updated_at
-              ago
+.row
+  .col-lg-9
+    @TODO
+  .col-lg-3
+    .list-group
+      - @forums.each do |forum|
+        = link_to forum, class: 'list-group-item', style: css_styles_for_forum(forum) do
+          = forum.name

@@ -3,7 +3,6 @@
 # Table name: forums
 #
 #  id               :integer          not null, primary key
-#  group_id         :integer
 #  name             :string(255)
 #  slug             :string(255)
 #  description      :text
@@ -16,6 +15,8 @@
 #  member_can_read  :boolean          default(TRUE)
 #  member_can_post  :boolean          default(TRUE)
 #  member_can_reply :boolean          default(TRUE)
+#  color            :string(255)
+#  text_color       :string(255)
 #
 
 # Read about factories at https://github.com/thoughtbot/factory_girl

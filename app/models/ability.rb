@@ -24,10 +24,10 @@ class Ability
     can :read, Group, access: ['public', 'private']
 
     # Forum
-    can :read, Forum, group: { has_forums: true }, guest_can_read: true
+    # can :read, Forum, group: { has_forums: true }, guest_can_read: true
 
     # Forum topic
-    can :read, ForumTopic, hidden: false
+    # can :read, ForumTopic, hidden: false
 
     if user.persisted?
       # Wallpaper
@@ -62,19 +62,19 @@ class Ability
       cannot :leave, Group, owner_id: user.id
 
       # Forum
-      can :crud, Forum, group: { users_groups: { user_id: user.id, role: 'admin' } }
-      can :read, Forum, guest_can_read: true
-      can :read, Forum, group: { users_groups: { user_id: user.id } }, member_can_read: true
+      # can :crud, Forum, group: { users_groups: { user_id: user.id, role: 'admin' } }
+      # can :read, Forum, guest_can_read: true
+      # can :read, Forum, group: { users_groups: { user_id: user.id } }, member_can_read: true
 
       # Forum topic
-      can :read,   ForumTopic, forum: { guest_can_read:  true }
-      can :create, ForumTopic, forum: { guest_can_post:  true }
-      can :reply,  ForumTopic, forum: { guest_can_reply: true }
+      # can :read,   ForumTopic, forum: { guest_can_read:  true }
+      # can :create, ForumTopic, forum: { guest_can_post:  true }
+      # can :reply,  ForumTopic, forum: { guest_can_reply: true }
       # can :read,   ForumTopic, forum: { group: { users_groups: { user_id: user.id } }, member_can_read:  true }
       # can :create, ForumTopic, forum: { group: { users_groups: { user_id: user.id } }, member_can_post:  true }
       # can :reply,  ForumTopic, forum: { group: { users_groups: { user_id: user.id } }, member_can_reply: true }
-      can [:crud, :moderate], ForumTopic, forum: { group: { users_groups: { user_id: user.id, role: ['admin', 'moderator'] } } }
-      cannot :reply, ForumTopic, locked: true
+      # can [:crud, :moderate], ForumTopic, forum: { group: { users_groups: { user_id: user.id, role: ['admin', 'moderator'] } } }
+      # cannot :reply, ForumTopic, locked: true
     else
       # Wallpaper
       can :read, Wallpaper, processing: false, purity: 'sfw'

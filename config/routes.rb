@@ -9,7 +9,7 @@ Wallgig::Application.routes.draw do
 
   root 'wallpapers#index'
 
-  get 'forums' => 'forums#official_index', as: :official_forums
+  resources :forums, only: [:index, :show]
 
   resources :groups do
     resources :forums do
