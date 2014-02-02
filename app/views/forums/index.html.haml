@@ -1,10 +1,13 @@
 .page-header
+  .pull-right
+    = link_to 'New topic', @forum.present? ? new_forum_topic_path(@forum) : new_topic_path, class: 'btn btn-primary'
   %h2= title 'Forums'
 
 .row
   .col-lg-9
     @TODO
   .col-lg-3
+    %h3 Forums
     .list-group
       - @forums.each do |forum|
         = link_to forum, class: 'list-group-item', style: css_styles_for_forum(forum) do

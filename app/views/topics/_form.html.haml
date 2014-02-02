@@ -1,0 +1,7 @@
+= simple_form_for([@owner, @topic]) do |f|
+  .form-inputs
+    = f.input :title
+    = f.input :content
+
+  .form-actions
+    = f.button :submit, class: 'btn btn-primary'

@@ -1,0 +1,96 @@
+- title [@topic.owner.name, @topic.title]
+
+.page-header
+  .pull-right
+    - if can? :moderate, @topic
+      .btn-group
+        %button{:type => 'button', :class => 'btn btn-default dropdown-toggle', :data => {:toggle => 'dropdown'}}
+          %span.glyphicon.glyphicon-wrench
+          Moderate topic
+        %ul.dropdown-menu.pull-right{:role => 'menu'}
+          %li
+            - if @topic.pinned?
+              = link_to unpin_topic_path(@topic), method: :patch do
+                %span.glyphicon.glyphicon-pushpin
+                Unpin topic
+            - else
+              = link_to pin_topic_path(@topic), method: :patch do
+                %span.glyphicon.glyphicon-pushpin
+                Pin topic
+          %li
+            - if @topic.locked?
+              = link_to unlock_topic_path(@topic), method: :patch do
+                %span.glyphicon.glyphicon-lock
+                Unlock topic
+            - else
+              = link_to lock_topic_path(@topic), method: :patch do
+                %span.glyphicon.glyphicon-lock
+                Lock topic
+          %li
+            - if @topic.hidden?
+              = link_to unhide_topic_path(@topic), method: :patch do
+                %span.glyphicon.glyphicon-eye-close
+                Unhide topic
+            - else
+              = link_to hide_topic_path(@topic), method: :patch do
+                %span.glyphicon.glyphicon-eye-open
+                Hide topic
+          - if can? :update, @topic
+            %li
+              = link_to edit_topic_path(@topic) do
+                %span.glyphicon.glyphicon-pencil
+                Edit topic
+          %li
+            = link_to @topic, data: { method: :destroy, confirm: 'Are you sure?' } do
+              %span.glyphicon.glyphicon-remove
+              Delete topic
+    - if can? :reply, @topic
+      = link_to new_topic_comment_path(@topic), class: 'btn btn-primary' do
+        %span.glyphicon.glyphicon-plus
+        New reply
+  %h2
+    - if @topic.owner_type == 'Forum'
+      = link_to @topic.owner.name, @topic.owner, class: 'btn', style: css_styles_for_forum(@topic.owner)
+    = @topic.title
+    - if @topic.pinned?
+      %small
+        %span.label.label-primary Pinned
+    - if @topic.locked?
+      %small
+        %span.label.label-danger Locked
+    - if @topic.hidden?
+      %small
+        %span.label.label-warning Hidden
+.panel.panel-default.panel-forum-topic
+  .panel-body
+    .row
+      .col-sm-2
+        = link_to @topic.user do
+          = image_tag user_avatar_url(@topic.user, 50), alt: @topic.user.username, width: 50, height: 50
+        %h4= link_to_user @topic.user
+        %h5= role_name_for @topic.user
+      .col-sm-10
+        %ul.list-inline.pull-right
+          - if can? :update, @topic
+            %li
+              %small= link_to 'Edit', edit_topic_path(@topic)
+          %li
+            %small= link_to 'Report', new_topic_report_path(@topic)
+        = @topic.cooked_content
+        %p.text-muted
+          %small
+            #{time_tag @topic.created_at, time_ago_in_words(@topic.created_at), title: @topic.created_at} ago
+            - if @topic.created_at != @topic.updated_at
+              &middot; updated #{time_tag @topic.updated_at, time_ago_in_words(@topic.updated_at), title: @topic.updated_at} ago
+
+.text-center= paginate @comments
+
+.panel.panel-default
+  = render partial: 'comments/forum_topic_comment', collection: @comments, as: :comment
+
+.text-center= paginate @comments
+
+- if can? :reply, @topic
+  = simple_form_for :comment, url: topic_comments_path(@topic), data: { provide: 'comments' } do |f|
+    = f.input :comment, as: :text, label: false
+    = f.submit 'Post', class: 'btn btn-primary', data: { disable_with: 'Posting' }
