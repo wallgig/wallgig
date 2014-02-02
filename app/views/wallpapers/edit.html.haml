@@ -1,6 +1,10 @@
 .row
   .col-lg-6.col-lg-offset-3
-    %h1 Editing wallpaper
+    .page-header
+      %h1 Editing wallpaper
+
+    - if @wallpaper.image.present?
+      .well.text-center= image_tag @wallpaper.image.thumb('400x300').url
 
     = render 'form'
 
