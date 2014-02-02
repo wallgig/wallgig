@@ -3,5 +3,10 @@
     = link_to 'New topic', new_topic_path(forum: @forum), class: 'btn btn-primary'
   %h1= title 'Forums'
 
-%table.table
-  %tbody= render @topics
+- if @topics.any?
+  %ul.list-group= render @topics
+- else
+  %p.text-center
+    There are no topics yet.
+    - if @forum.topics.blank? || can?(:create, @forum.topics.new)
+      = link_to 'Start the first one!', new_topic_path(forum: @forum)

@@ -24,9 +24,12 @@ class Ability
     can :read, Group, access: ['public', 'private']
 
     # Forum
+    can :read, Forum # TODO public forums only
     # can :read, Forum, group: { has_forums: true }, guest_can_read: true
 
     # Forum topic
+    can :read, Topic
+    # cannot :create, Topic, forum: { slug: 'site-news' }
     # can :read, ForumTopic, hidden: false
 
     if user.persisted?

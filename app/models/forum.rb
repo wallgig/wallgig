@@ -20,9 +20,7 @@
 #
 
 class Forum < ActiveRecord::Base
-  has_many :topics, as: :owner
-  # has_many :topics, class_name: 'ForumTopic'
-  # has_one :latest_topic, -> { order(updated_at: :desc) }, class_name: 'ForumTopic'
+  has_many :topics
 
   extend FriendlyId
   friendly_id :name, use: :slugged
@@ -35,9 +33,5 @@ class Forum < ActiveRecord::Base
 
   def self.uncategorized
     friendly.find('uncategorized')
-  end
-
-  def label_css_style
-
   end
 end
