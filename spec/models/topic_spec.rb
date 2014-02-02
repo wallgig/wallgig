@@ -3,8 +3,6 @@
 # Table name: topics
 #
 #  id             :integer          not null, primary key
-#  owner_id       :integer
-#  owner_type     :string(255)
 #  user_id        :integer
 #  title          :string(255)
 #  content        :text
@@ -14,6 +12,7 @@
 #  hidden         :boolean
 #  created_at     :datetime
 #  updated_at     :datetime
+#  forum_id       :integer
 #
 
 require 'spec_helper'

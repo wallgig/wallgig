@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20140202215102) do
+ActiveRecord::Schema.define(version: 20140202221201) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -156,6 +156,10 @@ ActiveRecord::Schema.define(version: 20140202215102) do
     t.string   "tagline"
     t.string   "access"
     t.boolean  "official",    default: false
+    t.boolean  "internal",    default: false
+    t.string   "color"
+    t.string   "text_color"
+    t.integer  "position"
   end
 
   add_index "groups", ["access"], name: "index_groups_on_access", using: :btree
@@ -276,8 +280,6 @@ ActiveRecord::Schema.define(version: 20140202215102) do
   end
 
   create_table "topics", force: true do |t|
-    t.integer  "owner_id"
-    t.string   "owner_type"
     t.integer  "user_id"
     t.string   "title"
     t.text     "content"
@@ -287,9 +289,10 @@ ActiveRecord::Schema.define(version: 20140202215102) do
     t.boolean  "hidden"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.integer  "forum_id"
   end
 
-  add_index "topics", ["owner_id", "owner_type"], name: "index_topics_on_owner_id_and_owner_type", using: :btree
+  add_index "topics", ["forum_id"], name: "index_topics_on_forum_id", using: :btree
   add_index "topics", ["user_id"], name: "index_topics_on_user_id", using: :btree
 
   create_table "user_profiles", force: true do |t|

@@ -1,6 +1,6 @@
 .page-header
   .pull-right
-    = link_to 'New topic', @forum.present? ? new_forum_topic_path(@forum) : new_topic_path, class: 'btn btn-primary'
+    = link_to 'New topic', new_topic_path(forum: @forum), class: 'btn btn-primary'
   %h1= title 'Forums'
 
 @TODO

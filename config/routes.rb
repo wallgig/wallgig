@@ -9,9 +9,7 @@ Wallgig::Application.routes.draw do
 
   root 'wallpapers#index'
 
-  resources :forums, only: [:index, :show] do
-    resources :topics, only: [:new, :create]
-  end
+  resources :forums, only: [:index, :show]
 
   resources :topics do
     concerns :commentable

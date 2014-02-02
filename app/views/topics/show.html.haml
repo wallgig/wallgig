@@ -1,4 +1,4 @@
-- title [@topic.owner.name, @topic.title]
+- title [@topic.forum.name, @topic.title]
 
 .page-header
   .pull-right
@@ -6,7 +6,6 @@
       .btn-group
         %button{:type => 'button', :class => 'btn btn-default dropdown-toggle', :data => {:toggle => 'dropdown'}}
           %span.glyphicon.glyphicon-wrench
-          Moderate topic
         %ul.dropdown-menu.pull-right{:role => 'menu'}
           %li
             - if @topic.pinned?
@@ -49,8 +48,7 @@
         %span.glyphicon.glyphicon-plus
         New reply
   %h2
-    - if @topic.owner_type == 'Forum'
-      = link_to @topic.owner.name, @topic.owner, class: 'btn', style: css_styles_for_forum(@topic.owner)
+    = link_to @topic.forum.name, @topic.forum, class: 'btn', style: css_styles_for_forum(@topic.forum)
     = @topic.title
     - if @topic.pinned?
       %small

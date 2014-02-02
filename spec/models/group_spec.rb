@@ -13,6 +13,10 @@
 #  tagline     :string(255)
 #  access      :string(255)
 #  official    :boolean          default(FALSE)
+#  internal    :boolean          default(FALSE)
+#  color       :string(255)
+#  text_color  :string(255)
+#  position    :integer
 #
 
 require 'spec_helper'

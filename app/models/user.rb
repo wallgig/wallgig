@@ -45,6 +45,8 @@ class User < ActiveRecord::Base
   has_one :profile,  class_name: 'UserProfile', dependent: :destroy
   has_one :settings, class_name: 'UserSetting', dependent: :destroy
 
+  has_many :topics, dependent: :nullify
+
   # Include default devise modules. Others available are:
   # :timeoutable and :omniauthable
   devise :database_authenticatable, :registerable,

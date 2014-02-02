@@ -13,6 +13,10 @@
 #  tagline     :string(255)
 #  access      :string(255)
 #  official    :boolean          default(FALSE)
+#  internal    :boolean          default(FALSE)
+#  color       :string(255)
+#  text_color  :string(255)
+#  position    :integer
 #
 
 class Group < ActiveRecord::Base
@@ -38,10 +42,13 @@ class Group < ActiveRecord::Base
   scope :newest,          -> { order(created_at: :desc) }
   scope :alphabetically,  -> { order(name: :asc) }
 
+  # For official forums
+  scope :internal, -> { where(internal: true).order(position: :asc) }
+
   after_create :create_admin_user!
 
   def create_admin_user!
-    users_groups.create! user_id: owner_id, role: :admin
+    users_groups.create! user_id: owner_id, role: :admin if owner_id.present?
   end
 
   def add_member(user)

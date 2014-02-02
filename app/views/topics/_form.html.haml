@@ -1,5 +1,6 @@
 = simple_form_for([@owner, @topic]) do |f|
   .form-inputs
+    = f.association :forum, collection: @forums, include_blank: false
     = f.input :title
     = f.input :content
 

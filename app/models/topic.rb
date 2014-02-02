@@ -3,8 +3,6 @@
 # Table name: topics
 #
 #  id             :integer          not null, primary key
-#  owner_id       :integer
-#  owner_type     :string(255)
 #  user_id        :integer
 #  title          :string(255)
 #  content        :text
@@ -14,23 +12,30 @@
 #  hidden         :boolean
 #  created_at     :datetime
 #  updated_at     :datetime
+#  forum_id       :integer
 #
 
 class Topic < ActiveRecord::Base
-  belongs_to :owner, polymorphic: true
+  MODERATION_ACTIONS = [:pin, :unpin, :lock, :unlock, :hide, :unhide]
+
+  belongs_to :forum
   belongs_to :user
 
   acts_as_commentable
 
   include Reportable
 
-  validates :owner,   presence: true
-  validates :user,    presence: true
-  validates :title,   presence: true, length: { minimum: 10 }
-  validates :content, presence: true, length: { minimum: 20 }
+  validates :forum_id, presence: true
+  validates :user_id,  presence: true
+  validates :title,    presence: true, length: { minimum: 10 }
+  validates :content,  presence: true, length: { minimum: 20 }
 
   scope :pinned_first, -> { order(pinned: :desc) }
   scope :latest,       -> { order(updated_at: :desc) }
+
+  after_initialize do
+    self.forum ||= Forum.uncategorized
+  end
 
   before_save do
     self.cooked_content = ApplicationController.helpers.markdown(content) if content_changed?

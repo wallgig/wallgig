@@ -33,6 +33,10 @@ class Forum < ActiveRecord::Base
 
   scope :ordered, -> { order(position: :asc) }
 
+  def self.uncategorized
+    friendly.find('uncategorized')
+  end
+
   def label_css_style
 
   end
