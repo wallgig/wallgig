@@ -1,4 +1,4 @@
-.panel-body{:data => {:comment_id => comment.id}}
+= content_tag_for :div, comment, class: 'panel-body' do
   .row
     .col-sm-2
       = link_to comment.user do
@@ -12,7 +12,7 @@
             %small= link_to 'Edit', edit_comment_path(comment)
         %li
           %small= link_to 'Report', new_comment_report_path(comment)
-      = comment.cooked_comment
+      = comment.cooked_comment.html_safe
       %p.text-muted
         %small
           #{time_tag comment.created_at, time_ago_in_words(comment.created_at), title: comment.created_at} ago

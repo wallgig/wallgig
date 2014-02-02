@@ -2,6 +2,7 @@
 
 .page-header
   .pull-right
+    = link_to @topic.forum.name, @topic.forum, class: 'btn', style: css_styles_for_forum(@topic.forum)
     - if can? :moderate, @topic
       .btn-group
         %button{:type => 'button', :class => 'btn btn-default dropdown-toggle', :data => {:toggle => 'dropdown'}}
@@ -48,17 +49,8 @@
         %span.glyphicon.glyphicon-plus
         New reply
   %h2
-    = link_to @topic.forum.name, @topic.forum, class: 'btn', style: css_styles_for_forum(@topic.forum)
+    = icons_for_topic(@topic)
     = @topic.title
-    - if @topic.pinned?
-      %small
-        %span.label.label-primary Pinned
-    - if @topic.locked?
-      %small
-        %span.label.label-danger Locked
-    - if @topic.hidden?
-      %small
-        %span.label.label-warning Hidden
 .panel.panel-default.panel-forum-topic
   .panel-body
     .row
@@ -74,7 +66,8 @@
               %small= link_to 'Edit', edit_topic_path(@topic)
           %li
             %small= link_to 'Report', new_topic_report_path(@topic)
-        = @topic.cooked_content
+
+        = @topic.cooked_content.html_safe
         %p.text-muted
           %small
             #{time_tag @topic.created_at, time_ago_in_words(@topic.created_at), title: @topic.created_at} ago
@@ -84,7 +77,7 @@
 .text-center= paginate @comments
 
 .panel.panel-default
-  = render partial: 'comments/forum_topic_comment', collection: @comments, as: :comment
+  = render partial: 'comments/topic_comment', collection: @comments, as: :comment
 
 .text-center= paginate @comments
 

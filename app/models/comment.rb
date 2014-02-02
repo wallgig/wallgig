@@ -42,8 +42,4 @@ class Comment < ActiveRecord::Base
       Redcarpet::Markdown.new(renderer, space_after_headers: true)
     end
   end
-
-  def cooked_comment
-    read_attribute(:cooked_comment).try(:html_safe)
-  end
 end

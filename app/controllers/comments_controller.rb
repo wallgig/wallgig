@@ -3,9 +3,6 @@ class CommentsController < ApplicationController
   before_action :set_comment, only: [:edit, :update, :destroy]
   before_action :authenticate_user!, only: :create
 
-  # GET /comments
-  # GET /parent/1/comments
-  # GET /parent/1/comments.json
   def index
     if @parent.present?
       render partial: partial_name, collection: @parent.comments.recent, as: :comment
@@ -18,31 +15,15 @@ class CommentsController < ApplicationController
     authorize! :update, @comment
   end
 
-  def update
-    authorize! :update, @comment
-
-    respond_to do |format|
-      if @comment.update(comment_params)
-        format.html { redirect_to @parent || @comment.commentable, notice: 'Forum topic was successfully updated.' }
-        format.json { head :no_content }
-      else
-        format.html { render action: 'edit' }
-        format.json { render json: @parent.errors, status: :unprocessable_entity }
-      end
-    end
-  end
-
-  # POST /parent/1/comments
-  # POST /parent/1/comments.json
   def create
     @comment = @parent.comments.new(comment_params)
     @comment.user = current_user
 
     authorize! :create, @comment
 
-    # OPTIMIZE
     if @comment.save
-      if @parent.is_a?(ForumTopic)
+      # OPTIMIZE
+      if @comment.commentable_type == 'Topic'
         redirect_to @parent, notice: 'Comment was successfully created.'
       else
         render partial: partial_name, locals: { comment: @comment }
@@ -52,6 +33,20 @@ class CommentsController < ApplicationController
         render json: @comment.errors.full_messages, status: :unprocessable_entity
       else
         render action: 'new'
+      end
+    end
+  end
+
+  def update
+    authorize! :update, @comment
+
+    respond_to do |format|
+      if @comment.update(comment_params)
+        format.html { redirect_to actual_comment_url(@comment), notice: 'Comment was successfully updated.' }
+        format.json { head :no_content }
+      else
+        format.html { render action: 'edit' }
+        format.json { render json: @parent.errors, status: :unprocessable_entity }
       end
     end
   end
@@ -71,15 +66,12 @@ class CommentsController < ApplicationController
   def set_parent
     if params[:wallpaper_id].present?
       @parent = Wallpaper.find(params[:wallpaper_id])
-      authorize! :read, @parent
     elsif params[:user_id].present?
       @parent = User.find_by(username: params[:user_id])
-      authorize! :read, @parent
-    elsif params[:forum_topic_id].present?
-      @parent = ForumTopic.find(params[:forum_topic_id])
-      authorize! :read, @parent
-      authorize! :reply, @parent
+    elsif params[:topic_id].present?
+      @parent = Topic.find(params[:topic_id])
     end
+    authorize! :read, @parent
   end
 
   def set_comment
@@ -96,6 +88,14 @@ class CommentsController < ApplicationController
       'wallpaper_comment'
     else
       'comment'
+    end
+  end
+
+  def actual_comment_url(comment)
+    if comment.commentable_type == 'Topic'
+      comment.commentable
+    else
+      comment
     end
   end
 end
