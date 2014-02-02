@@ -2,6 +2,8 @@ class ForumsController < ApplicationController
   before_action :set_forums
   before_action :set_forum, only: [:show]
 
+  layout 'forum'
+
   def index
   end
 

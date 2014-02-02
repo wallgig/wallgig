@@ -1,7 +1,10 @@
 class TopicsController < ApplicationController
+  before_action :set_forums
   before_action :set_owner, only: [:new, :create]
   before_action :set_topic
   before_action :authenticate_user!, only: [:new, :create]
+
+  layout 'forum'
 
   def show
     @comments = @topic.comments.page
@@ -31,6 +34,10 @@ class TopicsController < ApplicationController
   end
 
   private
+
+  def set_forums
+    @forums = Forum.accessible_by(current_ability, :read).ordered
+  end
 
   def set_owner
     if params[:forum_id].present?
