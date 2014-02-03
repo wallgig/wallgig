@@ -17,7 +17,7 @@ ActiveAdmin.register User do
     end
     column 'Avatar' do |user|
       link_to admin_user_path(user) do
-        image_tag gravatar_url(user, 48)
+        image_tag user_avatar_url(user, 50)
       end
     end
     column :sign_in_count

@@ -1,7 +1,7 @@
 = content_tag_for :li, topic, class: 'list-group-item' do
   .media
     = link_to topic.user, class: 'pull-left' do
-      = image_tag gravatar_url(topic.user, 50), width: 50, height: 50, class: 'media-object'
+      = image_tag user_avatar_url(topic.user, 50), width: 50, height: 50, class: 'media-object'
     .pull-right
       = link_to topic.forum.name, topic.forum, class: 'btn btn-xs', style: css_styles_for_forum(topic.forum)
     .media-body
