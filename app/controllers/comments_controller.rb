@@ -70,6 +70,7 @@ class CommentsController < ApplicationController
       @parent = User.find_by(username: params[:user_id])
     elsif params[:topic_id].present?
       @parent = Topic.find(params[:topic_id])
+      authorize! :comment, @parent # TODO authorize comment others too?
     end
     authorize! :read, @parent
   end

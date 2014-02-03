@@ -1,8 +1,8 @@
 class TopicsController < ApplicationController
   before_action :set_forums
-  before_action :set_postable_forums, only: [:new, :create]
+  before_action :set_postable_forums, only: [:new, :edit, :create, :update]
   before_action :set_topic, except: [:new, :create]
-  before_action :authenticate_user!, only: [:new, :create]
+  before_action :authenticate_user!, except: :show
 
   layout 'forum'
 
@@ -17,6 +17,10 @@ class TopicsController < ApplicationController
     authorize! :create, @topic
   end
 
+  def edit
+    authorize! :update, @topic
+  end
+
   def create
     @topic = current_user.topics.new(topic_params)
     authorize! :create, @topic
@@ -29,6 +33,30 @@ class TopicsController < ApplicationController
         format.html { render action: 'new' }
         format.json { render json: @topic.errors, status: :unprocessable_entity }
       end
+    end
+  end
+
+  def update
+    authorize! :update, @topic
+
+    respond_to do |format|
+      if @topic.update(topic_params)
+        format.html { redirect_to @topic, notice: 'Topic was successfully updated.' }
+        format.json { head :no_content }
+      else
+        format.html { render action: 'edit' }
+        format.json { render json: @topic.errors, status: :unprocessable_entity }
+      end
+    end
+  end
+
+  def destroy
+    authorize! :destroy, @topic
+
+    @topic.destroy
+    respond_to do |format|
+      format.html { redirect_to forums_url, notice: 'Topic was successfully deleted.' }
+      format.json { head :no_content }
     end
   end
 

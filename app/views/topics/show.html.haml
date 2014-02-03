@@ -41,10 +41,10 @@
                 %span.glyphicon.glyphicon-pencil
                 Edit topic
           %li
-            = link_to @topic, data: { method: :destroy, confirm: 'Are you sure?' } do
+            = link_to @topic, data: { method: :delete, confirm: 'Are you sure?' } do
               %span.glyphicon.glyphicon-remove
               Delete topic
-    - if can? :reply, @topic
+    - if can? :comment, @topic
       = link_to new_topic_comment_path(@topic), class: 'btn btn-primary' do
         %span.glyphicon.glyphicon-plus
         New reply
@@ -81,7 +81,7 @@
 
 .text-center= paginate @comments
 
-- if can? :reply, @topic
+- if can? :comment, @topic
   = simple_form_for :comment, url: topic_comments_path(@topic), data: { provide: 'comments' } do |f|
     = f.input :comment, as: :text, label: false
     = f.submit 'Post', class: 'btn btn-primary', data: { disable_with: 'Posting' }

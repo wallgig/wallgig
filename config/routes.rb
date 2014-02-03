@@ -9,22 +9,6 @@ Wallgig::Application.routes.draw do
 
   root 'wallpapers#index'
 
-  resources :forums, only: [:index, :show]
-
-  resources :topics do
-    concerns :commentable
-    concerns :reportable
-
-    member do
-      patch :pin
-      patch :unpin
-      patch :lock
-      patch :unlock
-      patch :hide
-      patch :unhide
-    end
-  end
-
   resources :groups do
     resources :collections
 
@@ -71,6 +55,24 @@ Wallgig::Application.routes.draw do
     concerns :reportable
     member do
       get 'reply'
+    end
+  end
+
+  # Forums
+  resources :forums, only: [:index, :show]
+
+  # Topics
+  resources :topics do
+    concerns :commentable
+    concerns :reportable
+
+    member do
+      patch :pin
+      patch :unpin
+      patch :lock
+      patch :unlock
+      patch :hide
+      patch :unhide
     end
   end
 
