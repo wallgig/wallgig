@@ -66,6 +66,11 @@ class User < ActiveRecord::Base
             format: { with: /\A[a-zA-Z0-9_]*[a-zA-Z][a-zA-Z0-9_]*\z/, message: 'Only letters, numbers, and underscores allowed.' },
             length: { minimum: 3, maximum: 20 }
 
+  # Scopes
+  scope :confirmed, -> { where.not(confirmed_at: nil) }
+  scope :newest,    -> { order(created_at: :desc) }
+
+  # Callbacks
   before_save :ensure_authentication_token
 
   before_create do

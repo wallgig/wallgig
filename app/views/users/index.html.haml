@@ -1,0 +1,9 @@
+- @user_days.each do |day, users|
+  %h3= time_tag day, day.to_formatted_s(:long)
+  - users.each do |user|
+    = link_to user, title: user.username, data: { toggle: 'tooltip' } do
+      = image_tag user_avatar_url(user, 50), width: 50, height: 50
+
+- content_for(:javascript_for_page) do
+  :javascript
+    $('[data-toggle=tooltip]').tooltip();

@@ -81,12 +81,10 @@ Wallgig::Application.routes.draw do
     sessions: 'sessions'
   }
 
-  resources :users, only: [:show] do
+  resources :users, only: [:index, :show] do
     concerns :commentable
-
     resources :collections, only: [:index]
-
-    resources :favourites, only: [:index]
+    resources :favourites,  only: [:index]
   end
 
   # OPTIMIZE

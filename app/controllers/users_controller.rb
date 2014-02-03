@@ -4,10 +4,13 @@ class UsersController < ApplicationController
 
   impressionist actions: [:show]
 
-  layout 'user_profile'
+  layout 'user_profile', only: :show
 
-  # GET /users/1
-  # GET /users/1.json
+  def index
+    @users = User.confirmed.where(created_at: 1.week.ago..Time.now).includes(:profile).newest
+    @user_days = @users.group_by { |u| u.created_at.to_date }
+  end
+
   def show
     wallpapers = @user.wallpapers
                        .accessible_by(current_ability, :read)
@@ -33,6 +36,7 @@ class UsersController < ApplicationController
                         .limit(6)
   end
 
+  # TODO move this under account namespace
   def update_screen_resolution
     width  = params.require(:width)
     height = params.require(:height)
