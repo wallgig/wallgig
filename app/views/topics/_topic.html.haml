@@ -8,7 +8,7 @@
       %h4.media-heading
         = icons_for_topic(topic)
         = link_to topic.title, topic
-      %ul.list-inline
+      %ul.list-inline.text-muted
         %li= pluralize topic.comments.size, 'comment'
         %li
           started by

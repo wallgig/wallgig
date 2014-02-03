@@ -68,6 +68,10 @@ class Ability
       can :create,  Topic, forum: { can_post: true }
       can :comment, Topic, forum: { can_comment: true }, locked: false
       can :update,  Topic, user_id: user.id
+      cannot :update, Topic do |topic|
+        # 15 minutes to update a topic
+        Time.now - topic.created_at > 15.minutes
+      end unless user.admin? || user.moderator?
     else
       # Wallpaper
       can :read, Wallpaper, processing: false, purity: 'sfw'

@@ -15,6 +15,7 @@
 #  updated_at     :datetime
 #
 
+# TODO deprecate
 class ForumTopic < ActiveRecord::Base
   belongs_to :forum
   belongs_to :user
