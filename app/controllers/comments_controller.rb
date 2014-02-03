@@ -24,7 +24,7 @@ class CommentsController < ApplicationController
     if @comment.save
       # OPTIMIZE
       if @comment.commentable_type == 'Topic'
-        redirect_to @parent, notice: 'Comment was successfully created.'
+        redirect_to topic_path(@parent, anchor: "comment_#{@comment.id}"), notice: 'Comment was successfully created.'
       else
         render partial: partial_name, locals: { comment: @comment }
       end
