@@ -17,6 +17,8 @@
 class Comment < ActiveRecord::Base
   include ActsAsCommentable::Comment
 
+  has_paper_trail
+
   include Reportable
 
   belongs_to :commentable, polymorphic: true, counter_cache: true

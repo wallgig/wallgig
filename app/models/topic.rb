@@ -25,6 +25,8 @@ class Topic < ActiveRecord::Base
   belongs_to :user
   belongs_to :last_commented_by, class_name: 'User'
 
+  has_paper_trail
+
   acts_as_commentable
 
   include Reportable
