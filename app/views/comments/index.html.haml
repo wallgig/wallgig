@@ -6,7 +6,7 @@
     .row
       .col-lg-2
         .media
-          - case comment.commentable.class.name
+          - case comment.commentable_type
           - when 'User'
             = link_to comment.commentable, class: 'pull-left' do
               = image_tag user_avatar_url(comment.commentable, 50), alt: comment.commentable.username, class: 'media-object'

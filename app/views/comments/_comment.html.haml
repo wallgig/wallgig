@@ -3,7 +3,7 @@
     %h5
       = link_to_user comment.user
       %small #{time_ago_in_words comment.created_at} ago
-    %p= comment.comment.html_safe
+    %p= comment.cooked_comment.html_safe
     .text-right
       %small
         = link_to new_comment_report_path(comment) do

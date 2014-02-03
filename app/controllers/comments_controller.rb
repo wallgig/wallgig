@@ -77,7 +77,8 @@ class CommentsController < ApplicationController
       @parent = Topic.find(params[:topic_id])
       authorize! :comment, @parent # TODO authorize comment others too?
     end
-    authorize! :read, @parent
+
+    authorize! :read, @parent if @parent.present?
   end
 
   def set_comment
