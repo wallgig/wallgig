@@ -30,6 +30,7 @@
 #  cached_votes_up       :integer          default(0)
 #  cached_votes_down     :integer          default(0)
 #  cached_weighted_score :integer          default(0)
+#  comments_count        :integer          default(0)
 #
 
 FactoryGirl.define do

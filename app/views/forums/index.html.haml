@@ -1,6 +1,6 @@
 .page-header
-  .pull-right
-    = link_to 'New topic', new_topic_path(forum: @forum), class: 'btn btn-primary'
+  - if can? :create, (@forum.try(:topics).try(:new) || Topic)
+    = link_to 'New topic', new_topic_path(forum: @forum), class: 'btn btn-primary pull-right'
   %h1= title 'Forums'
 
 - if @topics.any?
@@ -8,5 +8,5 @@
 - else
   %p.text-center
     There are no topics yet.
-    - if @forum.topics.blank? || can?(:create, @forum.topics.new)
+    - if can? :create, (@forum.try(:topics).try(:new) || Topic)
       = link_to 'Start the first one!', new_topic_path(forum: @forum)

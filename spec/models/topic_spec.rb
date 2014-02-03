@@ -7,12 +7,13 @@
 #  title          :string(255)
 #  content        :text
 #  cooked_content :text
-#  pinned         :boolean
-#  locked         :boolean
-#  hidden         :boolean
+#  pinned         :boolean          default(FALSE)
+#  locked         :boolean          default(FALSE)
+#  hidden         :boolean          default(FALSE)
 #  created_at     :datetime
 #  updated_at     :datetime
 #  forum_id       :integer
+#  comments_count :integer          default(0)
 #
 
 require 'spec_helper'

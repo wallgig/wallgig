@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20140202221201) do
+ActiveRecord::Schema.define(version: 20140203001851) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -133,14 +133,11 @@ ActiveRecord::Schema.define(version: 20140202221201) do
     t.integer  "position"
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.boolean  "guest_can_read",   default: true
-    t.boolean  "guest_can_post",   default: true
-    t.boolean  "guest_can_reply",  default: true
-    t.boolean  "member_can_read",  default: true
-    t.boolean  "member_can_post",  default: true
-    t.boolean  "member_can_reply", default: true
     t.string   "color"
     t.string   "text_color"
+    t.boolean  "can_read",    default: true
+    t.boolean  "can_post",    default: true
+    t.boolean  "can_comment", default: true
   end
 
   add_index "forums", ["slug"], name: "index_forums_on_slug", using: :btree
@@ -284,12 +281,13 @@ ActiveRecord::Schema.define(version: 20140202221201) do
     t.string   "title"
     t.text     "content"
     t.text     "cooked_content"
-    t.boolean  "pinned"
-    t.boolean  "locked"
-    t.boolean  "hidden"
+    t.boolean  "pinned",         default: false
+    t.boolean  "locked",         default: false
+    t.boolean  "hidden",         default: false
     t.datetime "created_at"
     t.datetime "updated_at"
     t.integer  "forum_id"
+    t.integer  "comments_count", default: 0
   end
 
   add_index "topics", ["forum_id"], name: "index_topics_on_forum_id", using: :btree
@@ -354,6 +352,7 @@ ActiveRecord::Schema.define(version: 20140202221201) do
     t.string   "unlock_token"
     t.datetime "locked_at"
     t.string   "authentication_token"
+    t.integer  "comments_count",         default: 0
   end
 
   add_index "users", ["authentication_token"], name: "index_users_on_authentication_token", unique: true, using: :btree
@@ -447,6 +446,7 @@ ActiveRecord::Schema.define(version: 20140202221201) do
     t.integer  "cached_votes_up",                 default: 0
     t.integer  "cached_votes_down",               default: 0
     t.integer  "cached_weighted_score",           default: 0
+    t.integer  "comments_count",                  default: 0
   end
 
   add_index "wallpapers", ["cached_votes_down"], name: "index_wallpapers_on_cached_votes_down", using: :btree

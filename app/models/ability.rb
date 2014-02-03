@@ -24,13 +24,10 @@ class Ability
     can :read, Group, access: ['public', 'private']
 
     # Forum
-    can :read, Forum # TODO public forums only
-    # can :read, Forum, group: { has_forums: true }, guest_can_read: true
+    can :read, Forum, can_read: true
 
-    # Forum topic
-    can :read, Topic
-    # cannot :create, Topic, forum: { slug: 'site-news' }
-    # can :read, ForumTopic, hidden: false
+    # Topic
+    can :read, Topic, forum: { can_read: true }, hidden: false
 
     if user.persisted?
       # Wallpaper
@@ -65,19 +62,12 @@ class Ability
       cannot :leave, Group, owner_id: user.id
 
       # Forum
-      # can :crud, Forum, group: { users_groups: { user_id: user.id, role: 'admin' } }
-      # can :read, Forum, guest_can_read: true
-      # can :read, Forum, group: { users_groups: { user_id: user.id } }, member_can_read: true
+      can :post, Forum, can_post: true
 
-      # Forum topic
-      # can :read,   ForumTopic, forum: { guest_can_read:  true }
-      # can :create, ForumTopic, forum: { guest_can_post:  true }
-      # can :reply,  ForumTopic, forum: { guest_can_reply: true }
-      # can :read,   ForumTopic, forum: { group: { users_groups: { user_id: user.id } }, member_can_read:  true }
-      # can :create, ForumTopic, forum: { group: { users_groups: { user_id: user.id } }, member_can_post:  true }
-      # can :reply,  ForumTopic, forum: { group: { users_groups: { user_id: user.id } }, member_can_reply: true }
-      # can [:crud, :moderate], ForumTopic, forum: { group: { users_groups: { user_id: user.id, role: ['admin', 'moderator'] } } }
-      # cannot :reply, ForumTopic, locked: true
+      # Topic
+      can :create,  Topic, forum: { can_post: true }
+      can :comment, Topic, forum: { can_comment: true }, locked: false
+      can :update,  Topic, user_id: user.id
     else
       # Wallpaper
       can :read, Wallpaper, processing: false, purity: 'sfw'

@@ -38,7 +38,7 @@ screen_resolutions.each do |screen_resolution|
 end
 
 forums = [
-  { name: 'Site news',       color: '3AB54A', text_color: 'FFFFFF', description: 'Wallgig News and Announcements' },
+  { name: 'Site news',       color: '3AB54A', text_color: 'FFFFFF', description: 'Wallgig News and Announcements', can_post: false },
   { name: 'General',         color: '808281', text_color: 'FFFFFF' },
   { name: 'Intros',          color: '0E76BD', text_color: 'FFFFFF', description: 'Introduce yourself here! Meet new friends' },
   { name: 'Artists room',    color: 'ED207B', text_color: 'FFFFFF', description: 'Show off your latest creations here!' },

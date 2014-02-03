@@ -29,6 +29,7 @@
 #  unlock_token           :string(255)
 #  locked_at              :datetime
 #  authentication_token   :string(255)
+#  comments_count         :integer          default(0)
 #
 
 FactoryGirl.define do

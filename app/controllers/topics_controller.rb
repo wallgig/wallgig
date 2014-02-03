@@ -1,5 +1,6 @@
 class TopicsController < ApplicationController
   before_action :set_forums
+  before_action :set_postable_forums, only: [:new, :create]
   before_action :set_topic, except: [:new, :create]
   before_action :authenticate_user!, only: [:new, :create]
 
@@ -47,6 +48,10 @@ class TopicsController < ApplicationController
 
   def set_forums
     @forums = Forum.accessible_by(current_ability, :read).ordered
+  end
+
+  def set_postable_forums
+    @postable_forums = Forum.accessible_by(current_ability, :post).ordered
   end
 
   def set_topic

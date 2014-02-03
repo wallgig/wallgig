@@ -6,9 +6,9 @@ class CreateTopics < ActiveRecord::Migration
       t.string :title
       t.text :content
       t.text :cooked_content
-      t.boolean :pinned
-      t.boolean :locked
-      t.boolean :hidden
+      t.boolean :pinned, default: false
+      t.boolean :locked, default: false
+      t.boolean :hidden, default: false
 
       t.timestamps
     end

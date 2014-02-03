@@ -18,4 +18,4 @@
               - if current_user != comment.user
                 = link_to reply_comment_path(comment), class: 'reply-comment' do
                   %span.glyphicon.glyphicon-share-alt
-      %p= comment.cooked_comment
+      %p= comment.cooked_comment.html_safe
