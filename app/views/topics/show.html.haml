@@ -83,5 +83,5 @@
 
 - if can? :comment, @topic
   = simple_form_for :comment, url: topic_comments_path(@topic), data: { provide: 'comments' } do |f|
-    = f.input :comment, as: :text, label: false
-    = f.submit 'Post', class: 'btn btn-primary', data: { disable_with: 'Posting' }
+    = f.input :comment, as: :text, label: false, input_html: { data: { provide: 'markdown' } }
+    = f.submit 'Post comment', class: 'btn btn-primary', data: { disable_with: 'Posting' }

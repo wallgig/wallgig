@@ -2,7 +2,7 @@
   .form-inputs
     = f.association :forum, collection: @postable_forums, include_blank: false
     = f.input :title
-    = f.input :content
+    = f.input :content, input_html: { data: { provide: 'markdown' } }
 
   .form-actions
     = f.button :submit, class: 'btn btn-primary'
