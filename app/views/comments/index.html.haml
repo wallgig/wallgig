@@ -13,7 +13,7 @@
             .media-body
               %h4.media-heading= link_to_user comment.commentable
           - when 'Wallpaper'
-            - next unless can?(:read, comment.commentable) && comment.commentable.thumbnail_image.present?
+            - next unless can?(:read, comment.commentable) && comment.commentable.thumbnail_image.present? && current_purities.include?(comment.commentable.purity)
             - wallpaper = comment.commentable.decorate
             = link_to wallpaper, title: wallpaper.cached_tag_list, target: '_blank' do
               = image_tag wallpaper.thumbnail_image_url, width: 250, height: 188, class: 'img-wallpaper'
