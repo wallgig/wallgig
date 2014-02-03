@@ -12,7 +12,7 @@ class TopicsController < ApplicationController
 
   def new
     @topic = current_user.topics.new
-    @topic.forum = @forums.friendly.find(params[:forum]) if params[:forum].present?
+    @topic.forum = @forum_list.friendly.find(params[:forum]) if params[:forum].present?
     authorize! :create, @topic
   end
 

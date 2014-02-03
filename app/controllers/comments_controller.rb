@@ -15,10 +15,15 @@ class CommentsController < ApplicationController
     authorize! :update, @comment
   end
 
+  def new
+    @comment = @parent.comments.new
+    @comment.user = current_user
+    authorize! :create, @comment
+  end
+
   def create
     @comment = @parent.comments.new(comment_params)
     @comment.user = current_user
-
     authorize! :create, @comment
 
     if @comment.save
