@@ -13,7 +13,10 @@
         %li
           started by
           = link_to_user topic.user
-          / @TODO last comment by
+        - if topic.last_commented_by.present? && topic.last_commented_by != topic.user
+          %li
+            last comment by
+            = link_to_user topic.last_commented_by
         %li
           = time_tag topic.updated_at, title: topic.updated_at do
-            #{time_ago_in_words topic.updated_at} ago
+            #{time_ago_in_words topic.last_commented_at || topic.created_at} ago

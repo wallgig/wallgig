@@ -5,11 +5,11 @@ class ForumsController < ApplicationController
   layout 'forum'
 
   def index
-    @topics = Topic.accessible_by(current_ability, :read).for_index
+    @topics = Topic.accessible_by(current_ability, :read).latest
   end
 
   def show
-    @topics = @forum.topics.accessible_by(current_ability, :read).for_index
+    @topics = @forum.topics.accessible_by(current_ability, :read).pinned_first.latest
     render action: 'index'
   end
 

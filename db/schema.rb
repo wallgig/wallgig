@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20140203001851) do
+ActiveRecord::Schema.define(version: 20140203004029) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -281,16 +281,19 @@ ActiveRecord::Schema.define(version: 20140203001851) do
     t.string   "title"
     t.text     "content"
     t.text     "cooked_content"
-    t.boolean  "pinned",         default: false
-    t.boolean  "locked",         default: false
-    t.boolean  "hidden",         default: false
+    t.boolean  "pinned",               default: false
+    t.boolean  "locked",               default: false
+    t.boolean  "hidden",               default: false
     t.datetime "created_at"
     t.datetime "updated_at"
     t.integer  "forum_id"
-    t.integer  "comments_count", default: 0
+    t.integer  "comments_count",       default: 0
+    t.datetime "last_commented_at"
+    t.integer  "last_commented_by_id"
   end
 
   add_index "topics", ["forum_id"], name: "index_topics_on_forum_id", using: :btree
+  add_index "topics", ["last_commented_by_id"], name: "index_topics_on_last_commented_by_id", using: :btree
   add_index "topics", ["user_id"], name: "index_topics_on_user_id", using: :btree
 
   create_table "user_profiles", force: true do |t|
