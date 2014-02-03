@@ -34,6 +34,8 @@ module ApplicationHelper
 
   # Taken from http://icelab.com.au/articles/render-single-line-markdown-text-with-redcarpet/
   def markdown(text)
+    return if text.blank?
+
     renderer = Redcarpet::Render::HTML.new({
       :filter_html => true,
       :hard_wrap => true
@@ -47,6 +49,8 @@ module ApplicationHelper
   end
 
   def markdown_line(text)
+    return if text.blank?
+
     renderer = Redcarpet::Render::HTMLWithoutBlockElements.new({
       :filter_html => true,
       :hard_wrap => true

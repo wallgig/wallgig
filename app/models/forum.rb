@@ -31,4 +31,8 @@ class Forum < ActiveRecord::Base
   def self.uncategorized
     friendly.find('uncategorized')
   end
+
+  def self.list(current_ability)
+    Forum.accessible_by(current_ability, :read).ordered
+  end
 end

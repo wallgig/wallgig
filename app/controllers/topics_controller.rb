@@ -7,7 +7,7 @@ class TopicsController < ApplicationController
   layout 'forum'
 
   def show
-    @comments = @topic.comments.page
+    @comments = @topic.comments.includes(user: :profile).page
     @comments = @comments.page(params[:page] || @comments.total_pages) # Show last page first
   end
 

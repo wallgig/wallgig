@@ -5,11 +5,11 @@ class ForumsController < ApplicationController
   layout 'forum'
 
   def index
-    @topics = Topic.accessible_by(current_ability, :read).latest
+    @topics = topics.latest
   end
 
   def show
-    @topics = @forum.topics.accessible_by(current_ability, :read).pinned_first.latest
+    @topics = topics.pinned_first.latest
     render action: 'index'
   end
 
@@ -26,5 +26,9 @@ class ForumsController < ApplicationController
 
   def forum_params
     params.require(:forum).permit(:name, :slug, :description)
+  end
+
+  def topics
+    (@forum.try(:topics) || Topic).accessible_by(current_ability, :read).includes(:forum, user: :profile, last_commented_by: :profile)
   end
 end

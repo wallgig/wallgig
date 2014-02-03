@@ -44,10 +44,11 @@ class Ability
 
       # Comment
       can :crud, Comment, user_id: user.id
-      cannot :destroy, Comment do |comment|
+      cannot [:update, :destroy], Comment do |comment|
         # 15 minutes to destroy a comment
         Time.now - comment.created_at > 15.minutes
       end
+      can :update, Comment, commentable_type: 'Topic', user_id: user.id
 
       # User
       can :crud, User, id: user.id
