@@ -1,7 +1,11 @@
 .page-header
   - if can? :create, (@forum.try(:topics).try(:new) || Topic)
     = link_to 'New topic', new_topic_path(forum: @forum), class: 'btn btn-primary pull-right'
-  %h1= title 'Forums'
+  %h1
+    - if @forum.present?  
+      = title @forum.name
+    - else
+      = title 'Forums', 'All topics'
 
 - if @topics.any?
   %ul.list-group= render @topics
