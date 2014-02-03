@@ -26,27 +26,16 @@ class Comment < ActiveRecord::Base
   scope :latest, -> { reorder('created_at DESC') }
   default_scope -> { order('created_at ASC') }
 
-  # NOTE: install the acts_as_votable plugin if you
-  # want user to vote on the quality of comments.
-  #acts_as_voteable
-
   belongs_to :user
 
   validates :comment, presence: true, length: { minimum: 20 }
 
   before_save do
-    self.cooked_comment = self.class.markdown.render(comment)
+    self.cooked_comment = ApplicationController.helpers.markdown(comment) if comment_changed?
   end
 
   after_create  :update_last_comment_on_create
   after_destroy :update_last_comment_on_destroy
-
-  def self.markdown
-    @markdown ||= begin
-      renderer = Redcarpet::Render::HTML.new(hard_wrap: true)
-      Redcarpet::Markdown.new(renderer, space_after_headers: true)
-    end
-  end
 
   def update_last_comment_on_create
     if commentable_type == 'Topic'
