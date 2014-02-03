@@ -1,10 +1,10 @@
 module UsersHelper
   def link_to_user(user)
-    link_to user.username, user, class: css_class_for(user)
+    link_to user.username, user, class: css_class_for(user), style: css_style_for_user(user)
   end
 
   def username_tag(user)
-    content_tag :span, user.username, class: css_class_for(user)
+    content_tag :span, user.username, class: css_class_for(user), style: css_style_for_user(user)
   end
 
   def css_class_for(user)
@@ -15,6 +15,10 @@ module UsersHelper
     elsif user.moderator?
       'user-moderator'
     end
+  end
+
+  def css_style_for_user(user)
+    "color:##{user.profile.username_color_hex};" if user.profile.username_color_hex.present?
   end
 
   def role_name_for(user)
