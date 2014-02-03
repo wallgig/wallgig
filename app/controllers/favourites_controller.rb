@@ -7,6 +7,7 @@ class FavouritesController < ApplicationController
   def index
     @wallpapers = set_owner.favourite_wallpapers
                            .accessible_by(current_ability, :read)
+                           .with_purities(current_purities)
                            .page(params[:page])
     @wallpapers = WallpapersDecorator.new(@wallpapers, context: { user: current_user })
 

@@ -11,7 +11,7 @@ class CollectionsController < ApplicationController
       # Viewing user's collections. They are ordered.
       relation = @user.collections.ordered
     else
-      relation = Collection.where({ wallpapers: { purity: 'sfw' }})
+      relation = Collection.where({ wallpapers: { purity: current_purities }})
                            .where.not({ wallpapers: { id: nil } })
     end
 
@@ -29,6 +29,7 @@ class CollectionsController < ApplicationController
   def show
     wallpapers = @collection.wallpapers
                             .accessible_by(current_ability, :read)
+                            .with_purities(current_purities)
                             .latest
                             .page(params[:page])
     @wallpapers = WallpapersDecorator.new(wallpapers, context: { user: current_user })

@@ -11,21 +11,23 @@ class UsersController < ApplicationController
   def show
     wallpapers = @user.wallpapers
                        .accessible_by(current_ability, :read)
+                       .with_purities(current_purities)
                        .latest
                        .limit(6)
     @wallpapers = WallpapersDecorator.new(wallpapers, context: { user: current_user })
 
     favourite_wallpapers = @user.favourite_wallpapers
-                      .accessible_by(current_ability, :read)
-                      .latest
-                      .limit(10)
+                                .accessible_by(current_ability, :read)
+                                .with_purities(current_purities)
+                                .latest
+                                .limit(10)
     @favourite_wallpapers = WallpapersDecorator.new(favourite_wallpapers, context: { user: current_user })
 
     # OPTIMIZE
     @collections = @user.collections
                         .includes(:wallpapers)
                         .accessible_by(current_ability, :read)
-                        .where({ wallpapers: { purity: 'sfw' }})
+                        .where({ wallpapers: { purity: current_purities }})
                         .where.not({ wallpapers: { id: nil } })
                         .order('collections.updated_at DESC') # FIXME
                         .limit(6)
