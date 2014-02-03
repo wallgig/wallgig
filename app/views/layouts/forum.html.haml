@@ -5,7 +5,7 @@
         %h3 Forums
       .list-group
         = link_to 'All topics', forums_path, class: "list-group-item #{'active' if @forum.blank? && @topic.try(:forum).blank?}"
-        - Forum.list(current_ability).each do |forum|
+        - @forum_list.each do |forum|
           = link_to forum.name, forum, class: 'list-group-item', style: css_styles_for_forum(forum, (@forum || @topic.try(:forum)) != forum)
     .col-lg-10
       = yield

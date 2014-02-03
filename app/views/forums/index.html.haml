@@ -7,7 +7,7 @@
     - else
       = title 'Forums', 'All topics'
   - if @forum.try(:description).try(:present?)
-    - cache(@forum, 'forums_index_description') do
+    - cache(['forums', 'index', @forum, 'markdown_description']) do
       %p.text-muted= markdown_line @forum.description
 
 - if @topics.any?

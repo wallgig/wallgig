@@ -1,8 +1,7 @@
 class ForumsController < ApplicationController
-  before_action :set_forums
   before_action :set_forum, only: [:show]
 
-  layout 'forum'
+  include ForumLayout
 
   def index
     @topics = topics.latest
@@ -14,10 +13,6 @@ class ForumsController < ApplicationController
   end
 
   private
-
-  def set_forums
-    @forums = Forum.accessible_by(current_ability, :read).ordered
-  end
 
   def set_forum
     @forum = Forum.friendly.find(params[:id])

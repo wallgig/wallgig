@@ -1,10 +1,9 @@
 class TopicsController < ApplicationController
-  before_action :set_forums
   before_action :set_postable_forums, only: [:new, :edit, :create, :update]
   before_action :set_topic, except: [:new, :create]
   before_action :authenticate_user!, except: :show
 
-  layout 'forum'
+  include ForumLayout
 
   def show
     @comments = @topic.comments.includes(user: :profile).page
@@ -73,10 +72,6 @@ class TopicsController < ApplicationController
   end
 
   private
-
-  def set_forums
-    @forums = Forum.accessible_by(current_ability, :read).ordered
-  end
 
   def set_postable_forums
     @postable_forums = Forum.accessible_by(current_ability, :post).ordered
