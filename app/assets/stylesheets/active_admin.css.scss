@@ -33,3 +33,8 @@
     background-color: #d9534f;
   }
 }
+
+@import "users";
+.username-link {
+  text-decoration: none !important;
+}

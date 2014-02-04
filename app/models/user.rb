@@ -69,6 +69,7 @@ class User < ActiveRecord::Base
   # Scopes
   scope :confirmed, -> { where.not(confirmed_at: nil) }
   scope :newest,    -> { order(created_at: :desc) }
+  scope :staff,     -> { where(['developer = :bool OR admin = :bool OR moderator = :bool', { bool: true }]) }
 
   # Callbacks
   before_save :ensure_authentication_token
