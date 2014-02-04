@@ -4,13 +4,8 @@ class Api::V1::WallpapersController < Api::V1::BaseController
   before_action :set_wallpaper, only: [:show]
 
   def index
-    if params[:user_id].present?
-      @user = User.find_by(username: params[:user_id])
-      authorize! :read, @user
-      index_for @user.wallpapers.latest
-    else
-      index_for Wallpaper.latest
-    end
+    @wallpapers = WallpaperSearch.new(search_params).wallpapers
+    respond_with @wallpapers
   end
 
   def show
@@ -36,13 +31,6 @@ class Api::V1::WallpapersController < Api::V1::BaseController
 
   private
 
-  def index_for(scope)
-    @wallpapers = scope.page(params[:page]).decorate
-    respond_with @wallpapers do |format|
-      format.json { render action: 'index' }
-    end
-  end
-
   def set_wallpaper
     @wallpaper = Wallpaper.find(params[:id])
     authorize! :read, @wallpaper
@@ -50,6 +38,13 @@ class Api::V1::WallpapersController < Api::V1::BaseController
 
   def wallpaper_params
     params.require(:wallpaper).permit(:purity, :image, :image_url, :tag_list, :image_gravity, :source)
+  end
+
+  def search_params
+    params.permit(:q, :page, :width, :height, :order, purity: [], tags: [], exclude_tags: [], colors: []).tap do |p|
+      p[:order]  ||= 'latest'
+      p[:purity] ||= ['sfw']
+    end
   end
 
   def create_wallpaper_params

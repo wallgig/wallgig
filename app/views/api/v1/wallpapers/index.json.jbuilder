@@ -7,12 +7,22 @@ json.wallpapers do
     end
     json.extract! wallpaper, :purity
     json.image do
+      json.file_name wallpaper.image_name
+      json.gravity wallpaper.image_gravity
+      json.original do
+        json.width wallpaper.image_width
+        json.height wallpaper.image_height
+        json.url wallpaper.image_url
+      end
       json.thumbnail do
         json.width 250
         json.height 188
         json.url wallpaper.thumbnail_image_url
       end
     end
+    json.tags wallpaper.tag_list
+    json.source wallpaper.source.presence
+    json.extract! wallpaper, :created_at, :updated_at
   end
 end
 
@@ -22,5 +32,4 @@ json.pagination do
   json.current_page @wallpapers.current_page
   json.total_pages @wallpapers.total_pages
   json.next_url @wallpapers.next_page.present? ? url_for(page: @wallpapers.next_page) : nil
-  json.previous_url @wallpapers.prev_page.present? ? url_for(page: @wallpapers.prev_page) : nil
 end
