@@ -36,6 +36,11 @@
             %span.glyphicon.glyphicon-question-sign
             = @wallpaper.cooked_source
 
+    - unless @wallpaper.approved?
+      .panel-body
+        .alert.alert-danger
+          Wallpaper is pending moderator approval.
+
     - if user_signed_in?
       .panel-body
         .btn-group.btn-group-justified

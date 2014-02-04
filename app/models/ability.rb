@@ -31,9 +31,9 @@ class Ability
 
     if user.persisted?
       # Wallpaper
-      can :crud, Wallpaper, user_id: user.id
       can :read, Wallpaper, processing: false
-      can [:update, :update_purity], Wallpaper
+      cannot :read, Wallpaper, approved_at: nil
+      can :crud, Wallpaper, user_id: user.id
       cannot :update_purity, Wallpaper, purity_locked: true unless user.admin? || user.moderator?
 
       # Favourite
