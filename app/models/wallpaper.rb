@@ -31,12 +31,15 @@
 #  cached_votes_down     :integer          default(0)
 #  cached_weighted_score :integer          default(0)
 #  comments_count        :integer          default(0)
+#  approved_by_id        :integer
+#  approved_at           :datetime
 #
 
 require 'redcarpet_renderers'
 
 class Wallpaper < ActiveRecord::Base
   belongs_to :user, counter_cache: true
+  belongs_to :approved_by, class_name: 'User'
 
   has_many :wallpaper_colors, -> { order('wallpaper_colors.percentage DESC') }, dependent: :destroy
   has_many :colors, through: :wallpaper_colors, class_name: 'Kolor'
@@ -133,6 +136,9 @@ class Wallpaper < ActiveRecord::Base
   scope :latest,        -> { order(created_at: :desc) }
   scope :with_purities, -> (*purities) { where(purity: purities) }
   scope :similar_to,    -> (w) { where.not(id: w.id).where(["( SELECT SUM(((phash::bigint # ?) >> bit) & 1 ) FROM generate_series(0, 63) bit) <= 15", w.phash]) }
+
+  scope :approved,      -> { where.not(approved_at: nil) }
+  scope :not_approved,  -> { where(approved_at:nil) }
 
   # Callbacks
   before_validation :set_image_hash, on: :create
@@ -335,8 +341,10 @@ class Wallpaper < ActiveRecord::Base
     end if source.present?
   end
 
-  def image_name
-    nil # temporarily disabled image name
+  def approve_by!(user)
+    self.approved_by = user
+    self.approved_at = Time.now
+    save!
   end
 
   private

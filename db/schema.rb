@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20140204015837) do
+ActiveRecord::Schema.define(version: 20140204020433) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -434,8 +434,12 @@ ActiveRecord::Schema.define(version: 20140204015837) do
     t.integer  "cached_votes_down",               default: 0
     t.integer  "cached_weighted_score",           default: 0
     t.integer  "comments_count",                  default: 0
+    t.integer  "approved_by_id"
+    t.datetime "approved_at"
   end
 
+  add_index "wallpapers", ["approved_at"], name: "index_wallpapers_on_approved_at", using: :btree
+  add_index "wallpapers", ["approved_by_id"], name: "index_wallpapers_on_approved_by_id", using: :btree
   add_index "wallpapers", ["cached_votes_down"], name: "index_wallpapers_on_cached_votes_down", using: :btree
   add_index "wallpapers", ["cached_votes_score"], name: "index_wallpapers_on_cached_votes_score", using: :btree
   add_index "wallpapers", ["cached_votes_total"], name: "index_wallpapers_on_cached_votes_total", using: :btree
