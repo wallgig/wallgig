@@ -142,8 +142,11 @@ class Wallpaper < ActiveRecord::Base
   # Callbacks
   before_validation :set_image_hash, on: :create
 
+  before_create :auto_approve_if_trusted_user
+
   after_create :queue_create_thumbnails
   after_create :queue_process_image
+
   around_save :check_image_gravity_changed
 
   before_save do
@@ -354,5 +357,9 @@ class Wallpaper < ActiveRecord::Base
     if image_hash.present? && (duplicate = self.class.where.not(id: self.id).where(image_hash: image_hash).first)
       errors.add :image, "has already been uploaded (#{duplicate})"
     end
+  end
+
+  def auto_approve_if_trusted_user
+    self.approved_at = Time.now if user.staff? || user.trusted?
   end
 end
