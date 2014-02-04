@@ -328,17 +328,8 @@ class Wallpaper < ActiveRecord::Base
   end
 
   def cooked_source
-    @cooked_source ||= begin
-      renderer = Redcarpet::Render::HTMLWithoutBlockElements.new({
-        filter_html: true,
-        hard_wrap: true
-      })
-      markdown = Redcarpet::Markdown.new(renderer, {
-        autolink: true,
-        no_intra_emphasis: true
-      })
-      markdown.render(source).html_safe
-    end if source.present?
+    # OPTIMIZE save to model?
+    ApplicationController.helpers.markdown(source) if source.present?
   end
 
   def approve_by!(user)
