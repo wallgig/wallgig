@@ -1,6 +1,6 @@
 json.wallpaper do
   json.extract! @wallpaper, :id
-  json.url wallpaper_url(@wallpaper)
+  json.url wallpaper_url(@wallpaper, protocol: :http)
   json.owner do
     json.extract! @wallpaper.user, :id, :username
   end

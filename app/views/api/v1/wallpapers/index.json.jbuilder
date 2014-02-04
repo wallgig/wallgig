@@ -1,7 +1,7 @@
 json.wallpapers do
   json.array! @wallpapers do |wallpaper|
     json.extract! wallpaper, :id
-    json.url wallpaper_url(wallpaper)
+    json.url wallpaper_url(wallpaper, protocol: :http)
     json.owner do
       json.extract! wallpaper.user, :id, :username
     end
@@ -12,7 +12,7 @@ json.wallpapers do
       json.original do
         json.width wallpaper.image_width
         json.height wallpaper.image_height
-        json.url wallpaper.image_url
+        json.url wallpaper.requested_image_url
       end
       json.thumbnail do
         json.width 250
