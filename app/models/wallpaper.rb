@@ -332,7 +332,7 @@ class Wallpaper < ActiveRecord::Base
 
   def cooked_source
     # OPTIMIZE save to model?
-    ApplicationController.helpers.markdown(source) if source.present?
+    ApplicationController.helpers.markdown_line(source) if source.present?
   end
 
   def approved?
