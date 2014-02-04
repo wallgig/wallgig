@@ -23,10 +23,13 @@
   &.no {
     @extend .status_tag.error;
   }
+  &.sfw {
+    background-color: #5cb85c;
+  }
   &.sketchy {
-    background-color: #fda500;
+    background-color: #f0ad4e;
   }
   &.nsfw {
-    background-color: #bf0600;
+    background-color: #d9534f;
   }
 }

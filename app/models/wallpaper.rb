@@ -35,8 +35,6 @@
 #  approved_at           :datetime
 #
 
-require 'redcarpet_renderers'
-
 class Wallpaper < ActiveRecord::Base
   belongs_to :user, counter_cache: true
   belongs_to :approved_by, class_name: 'User'
@@ -138,8 +136,8 @@ class Wallpaper < ActiveRecord::Base
   scope :with_purities, -> (*purities) { where(purity: purities) }
   scope :similar_to,    -> (w) { where.not(id: w.id).where(["( SELECT SUM(((phash::bigint # ?) >> bit) & 1 ) FROM generate_series(0, 63) bit) <= 15", w.phash]) }
 
-  scope :approved,      -> { where.not(approved_at: nil) }
-  scope :not_approved,  -> { where(approved_at:nil) }
+  scope :approved,         -> { where.not(approved_at: nil) }
+  scope :pending_approval, -> { where(approved_at:nil) }
 
   # Callbacks
   before_validation :set_image_hash, on: :create
@@ -341,6 +339,12 @@ class Wallpaper < ActiveRecord::Base
   def approve_by!(user)
     self.approved_by = user
     self.approved_at = Time.now
+    save!
+  end
+
+  def unapprove!
+    self.approved_by = nil
+    self.approved_at = nil
     save!
   end
 

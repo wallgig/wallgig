@@ -1,24 +1,31 @@
 ActiveAdmin.register Wallpaper do
-  permit_params :purity, :purity_locked, :tag_list
+  config.filters = false
 
-  batch_action :purity_lock do |selection|
-    Wallpaper.find(selection).each &:lock_purity!
-    redirect_to :back, notice: 'Wallpaper purities locked!'
-  end
+  permit_params :purity, :tag_list, :source, :image_gravity
 
-  batch_action :update_index do |selection|
+  scope :pending_approval, default: true
+  scope :processing
+  scope('SFW')     { |w| w.approved.processed.with_purities('sfw') }
+  scope('Sketchy') { |w| w.approved.processed.with_purities('sketchy') }
+  scope('NSFW')    { |w| w.approved.processed.with_purities('nsfw') }
+  scope :all
+
+  batch_action :reindex do |selection|
     Wallpaper.find(selection).each &:update_index
-    redirect_to :back, notice: 'Wallpaper indices updated!'
+    redirect_to :back, notice: 'Wallpaper indices were successfully updated.'
   end
 
   batch_action :reprocess do |selection|
     Wallpaper.find(selection).each &:queue_create_thumbnails
     Wallpaper.find(selection).each &:queue_process_image
-    redirect_to :back, notice: 'Wallpaper queued for reprocessing!'
+    redirect_to :back, notice: 'Wallpapers were successfully queued for reprocessing.'
   end
 
-  %i(user tags purity purity_locked processing image_width image_height source created_at updated_at).each do |a|
-    filter a
+  batch_action :approve do |selection|
+    Wallpaper.find(selection).each do |wallpaper|
+      wallpaper.approve_by!(current_user)
+    end
+    redirect_to :back, 'Wallpapers were successfully approved.'
   end
 
   index do
@@ -35,19 +42,22 @@ ActiveAdmin.register Wallpaper do
         end
       end
     end
+    column 'Approved', sortable: :approved_at do |wallpaper|
+      status_tag wallpaper.approved? ? 'Yes' : 'No'
+    end
     column 'Purity', sortable: :purity do |wallpaper|
       status_tag wallpaper.purity_text
     end
-    column :purity_locked
+    column :processing, sortable: :processing do |wallpaper|
+      status_tag wallpaper.processing? ? 'Yes' : 'No'
+    end
     column 'Tags', :cached_tag_list, sortable: false
     column 'Views', :impressions_count
     column 'Favourites', sortable: :favourites_count do |wallpaper|
       link_to wallpaper.favourites_count, admin_favourites_path(q: { wallpaper_id_eq: wallpaper })
     end
+    column 'Comments', :comments_count
     column :user
-    column :processing, sortable: :processing do |wallpaper|
-      status_tag wallpaper.processing? ? 'Yes' : 'No'
-    end
     column :created_at
     column :updated_at
     actions
@@ -57,8 +67,8 @@ ActiveAdmin.register Wallpaper do
     panel 'Wallpaper Details' do
       attributes_table_for wallpaper do
         row :user
-        row :purity, &:purity_text
-        row :purity_locked
+        row(:approved) { |w| status_tag w.approved? ? 'Yes' : 'No' }
+        row(:purity) { |w| status_tag w.purity_text }
         row :tag_list
         row :source
         row :primary_color do |wallpaper|
@@ -106,6 +116,7 @@ ActiveAdmin.register Wallpaper do
       attributes_table_for wallpaper do
         row :impressions_count
         row :favourites_count
+        row :comments_count
       end
     end
     if wallpaper.similar_wallpapers.any?
@@ -129,8 +140,8 @@ ActiveAdmin.register Wallpaper do
   form do |f|
     f.inputs do
       f.input :purity
-      f.input :purity_locked
       f.input :tag_list
+      f.input :source
       f.input :image_gravity
     end
     f.actions
@@ -148,8 +159,28 @@ ActiveAdmin.register Wallpaper do
     redirect_to admin_wallpaper_path(@to_wallpaper), notice: 'Wallpapers merged!'
   end
 
+  member_action :approve_wallpaper, method: :post do
+    @wallpaper = Wallpaper.find(params[:id])
+    @wallpaper.approve_by!(current_user)
+    redirect_to admin_wallpaper_path(@wallpaper), notice: 'Wallpaper was successfully approved.'
+  end
+
+  member_action :unapprove_wallpaper, method: :post do
+    @wallpaper = Wallpaper.find(params[:id])
+    @wallpaper.unapprove!
+    redirect_to admin_wallpaper_path(@wallpaper), notice: 'Wallpaper was successfully unapproved.'
+  end
+
   action_item only: :show do
     link_to 'Merge Wallpaper', merge_wallpaper_admin_wallpaper_path(wallpaper)
+  end
+
+  action_item only: :show do
+    if wallpaper.approved?
+      link_to 'Unapprove', unapprove_wallpaper_admin_wallpaper_path(wallpaper), data: { method: :post, confirm: 'Are you sure?' }
+    else
+      link_to 'Approve', approve_wallpaper_admin_wallpaper_path(wallpaper), data: { method: :post, confirm: 'Are you sure?' }
+    end
   end
 
   controller do
