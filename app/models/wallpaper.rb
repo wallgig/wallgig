@@ -319,7 +319,7 @@ class Wallpaper < ActiveRecord::Base
   end
 
   def set_image_hash
-    self.image_hash = Digest::MD5.hexdigest(image.file.read) if image.present?
+    self.image_hash = Digest::MD5.file(image.file).hexdigest if image.present?
   end
 
   def category_list
