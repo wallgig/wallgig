@@ -29,8 +29,10 @@ class Collection < ActiveRecord::Base
 
   paginates_per 20
 
+  scope :public,  -> { where(public: true) }
+  scope :private, -> { where(public: false) }
   scope :ordered, -> { order(position: :asc) }
-  scope :latest, -> { order(updated_at: :desc) }
+  scope :latest,  -> { order(updated_at: :desc) }
 
   attr_accessor :collect_status
 

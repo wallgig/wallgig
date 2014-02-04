@@ -1,4 +1,6 @@
 ActiveAdmin.register Favourite do
+  config.filters = false
+
   menu parent: 'Wallpapers'
 
   actions :index
