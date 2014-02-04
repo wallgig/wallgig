@@ -34,7 +34,7 @@ class Ability
       can :read, Wallpaper, processing: false
       cannot :read, Wallpaper, approved_at: nil
       can :crud, Wallpaper, user_id: user.id
-      cannot :update_purity, Wallpaper, purity_locked: true unless user.admin? || user.moderator?
+      cannot :update_purity, Wallpaper, purity_locked: true unless user.moderator?
 
       # Favourite
       can :crud, Favourite, user_id: user.id
@@ -47,7 +47,7 @@ class Ability
       cannot [:update, :destroy], Comment do |comment|
         # 15 minutes to destroy a comment
         Time.now - comment.created_at > 15.minutes
-      end
+      end unless user.moderator?
       can :update, Comment, commentable_type: 'Topic', user_id: user.id
 
       # User

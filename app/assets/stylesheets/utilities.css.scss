@@ -121,3 +121,10 @@
 .tt-suggestion p {
   margin: 0;
 }
+
+/*
+  Markdown editor
+ */
+.md-editor > textarea {
+  resize: vertical !important;
+}
