@@ -30,6 +30,7 @@
 #  locked_at              :datetime
 #  authentication_token   :string(255)
 #  comments_count         :integer          default(0)
+#  trusted                :boolean          default(FALSE)
 #
 
 class User < ActiveRecord::Base
@@ -68,6 +69,7 @@ class User < ActiveRecord::Base
 
   # Scopes
   scope :confirmed, -> { where.not(confirmed_at: nil) }
+  scope :trusted,   -> { where(trusted: true) }
   scope :newest,    -> { order(created_at: :desc) }
   scope :staff,     -> { where(['developer = :bool OR admin = :bool OR moderator = :bool', { bool: true }]) }
 
@@ -119,6 +121,10 @@ class User < ActiveRecord::Base
 
   def favourite_wallpapers
     get_voted Wallpaper
+  end
+
+  def staff?
+    developer? || admin? || moderator?
   end
 
   private

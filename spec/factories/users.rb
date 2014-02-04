@@ -30,6 +30,7 @@
 #  locked_at              :datetime
 #  authentication_token   :string(255)
 #  comments_count         :integer          default(0)
+#  trusted                :boolean          default(FALSE)
 #
 
 FactoryGirl.define do

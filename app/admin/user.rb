@@ -3,9 +3,10 @@ ActiveAdmin.register User do
 
   actions :all, except: [:destroy]
 
-  permit_params :email, :username, :password, :moderator, :admin, :developer, :locked_at
+  permit_params :email, :username, :trusted, :moderator, :admin, :developer, :locked_at, :password
 
   scope :all, default: true
+  scope :trusted
   scope :confirmed
   scope('Not Confirmed') { |u| u.where(confirmed_at: nil) }
   scope('Locked') { |u| u.where.not(locked_at: nil) }
@@ -36,10 +37,11 @@ ActiveAdmin.register User do
     f.inputs do
       f.input :email
       f.input :username
-      f.input :password
+      f.input :trusted
       f.input :moderator
       f.input :admin
       f.input :developer
+      f.input :password
     end
     f.actions
   end
