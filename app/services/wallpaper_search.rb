@@ -31,6 +31,12 @@ class WallpaperSearch
         :facets => {}
       }
 
+      payload[:query][:bool][:must] << {
+        :term => {
+          :'approved' => true
+        }
+      }
+
       # Handle query string
       if @options[:q].present?
         payload[:query][:bool][:must] << {

@@ -111,9 +111,10 @@ class Wallpaper < ActiveRecord::Base
       indexes :views,                type: 'integer', index: 'not_analyzed'
       indexes :views_today,          type: 'integer', index: 'not_analyzed'
       indexes :views_this_week,      type: 'integer', index: 'not_analyzed'
-      indexes :favourites,           type: 'integer', index: 'not_analyzed'
-      indexes :favourites_today,     type: 'integer', index: 'not_analyzed'
-      indexes :favourites_this_week, type: 'integer', index: 'not_analyzed'
+      indexes :favourites,           type: 'integer', index: 'not_analyzed' # TODO
+      indexes :favourites_today,     type: 'integer', index: 'not_analyzed' # TODO
+      indexes :favourites_this_week, type: 'integer', index: 'not_analyzed' # TODO
+      indexes :bool, type: 'boolean'
     end
   end
 
