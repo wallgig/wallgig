@@ -262,7 +262,8 @@ class Wallpaper < ActiveRecord::Base
       favourites_this_week: favourites.where('created_at >= ?', Time.now.beginning_of_week).size, # FIXME
       colors:               wallpaper_colors.includes(:color).map { |color| { hex: color.hex, percentage: (color.percentage * 10).ceil } },
       created_at:           created_at,
-      updated_at:           updated_at
+      updated_at:           updated_at,
+      approved:             approved?
     }.to_json
   end
 
@@ -330,6 +331,10 @@ class Wallpaper < ActiveRecord::Base
   def cooked_source
     # OPTIMIZE save to model?
     ApplicationController.helpers.markdown(source) if source.present?
+  end
+
+  def approved?
+    approved_at.present?
   end
 
   def approve_by!(user)
