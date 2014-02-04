@@ -9,6 +9,9 @@ class UsersController < ApplicationController
   def index
     @users = User.confirmed.where(created_at: 1.week.ago..Time.now).includes(:profile).newest
     @user_days = @users.group_by { |u| u.created_at.to_date }
+
+    @user_staff = User.staff.includes(:profile).group_by { |u| u.role_name }
+    @user_staff = [['Developer', @user_staff['Developer']], ['Admin', @user_staff['Admin']], ['Moderator', @user_staff['Moderator']]].reject { |u| u[1].blank? }
   end
 
   def show

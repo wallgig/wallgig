@@ -123,6 +123,13 @@ class User < ActiveRecord::Base
     get_voted Wallpaper
   end
 
+  def role_name
+    return 'Developer' if developer?
+    return 'Admin'     if admin?
+    return 'Moderator' if moderator?
+    'Member'
+  end
+
   def staff?
     developer? || admin? || moderator?
   end

@@ -22,17 +22,7 @@ module UsersHelper
   end
 
   def role_name_for(user)
-    if user.profile.title.present?
-      user.profile.title
-    elsif user.developer?
-      'Developer'
-    elsif user.admin?
-      'Admin'
-    elsif user.moderator?
-      'Moderator'
-    else
-      'Member'
-    end
+    user.profile.title.presence || user.role_name
   end
 
   def user_avatar_url(user, size = 200)
