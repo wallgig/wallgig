@@ -30,7 +30,9 @@ ActiveAdmin.register User do
     column('Confirmed', sortable: :confirmed_at) { |u| status_tag u.confirmed? ? 'Yes' : 'No' }
     column :created_at
     column :updated_at
-    default_actions
+    actions do |user|
+      link_to 'Pretend', pretend_admin_user_path(user), data: { method: :post, confirm: 'Are you sure?' }
+    end
   end
 
   form do |f|
@@ -44,6 +46,12 @@ ActiveAdmin.register User do
       f.input :password
     end
     f.actions
+  end
+
+  member_action :pretend, method: :post do
+    @user = User.find_by!(username: params[:id])
+    sign_in @user
+    redirect_to root_url, notice: "You are now pretending to be #{@user.username}."
   end
 
   controller do
