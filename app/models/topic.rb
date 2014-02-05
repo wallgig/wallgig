@@ -53,32 +53,26 @@ class Topic < ActiveRecord::Base
   end
 
   def pin!
-    self.pinned = true
-    self.save!
+    update_attribute(:pinned, true)
   end
 
   def unpin!
-    self.pinned = false
-    self.save!
+    update_attribute(:pinned, false)
   end
 
   def lock!
-    self.locked = true
-    self.save!
+    update_attribute(:locked, true)
   end
 
   def unlock!
-    self.locked = false
-    self.save!
+    update_attribute(:locked, false)
   end
 
   def hide!
-    self.hidden = true
-    self.save!
+    update_attribute(:hidden, true)
   end
 
   def unhide!
-    self.hidden = false
-    self.save!
+    update_attribute(:hidden, false)
   end
 end
