@@ -6,15 +6,13 @@
       %h4= link_to_user comment.user
       %p= role_name_for(comment.user)
     .col-sm-10
-      %ul.list-inline.pull-right
-        - if can? :update, comment
-          %li
-            %small= link_to 'Edit', edit_comment_path(comment)
-        %li
-          %small= link_to 'Report', new_comment_report_path(comment)
-      = comment.cooked_comment.html_safe
-      %p.text-muted
-        %small
-          #{time_tag comment.created_at, time_ago_in_words(comment.created_at), title: comment.created_at} ago
+      %small.pull-right
+        %ul.list-inline.text-muted
+          %li #{time_tag comment.created_at, time_ago_in_words(comment.created_at), title: comment.created_at} ago
           - if comment.created_at != comment.updated_at
-            &middot; updated #{time_tag comment.updated_at, time_ago_in_words(comment.updated_at), title: comment.updated_at} ago
+            %li updated #{time_tag comment.updated_at, time_ago_in_words(comment.updated_at), title: comment.updated_at} ago
+          - if can? :update, comment
+            %li= link_to 'Edit', edit_comment_path(comment)
+          %li= link_to 'Report', new_comment_report_path(comment)
+      .clearfix
+      = comment.cooked_comment.html_safe

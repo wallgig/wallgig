@@ -16,6 +16,7 @@
 
 - if @topics.any?
   %ul.list-group= render @topics
+  .text-right= paginate @topics
 - else
   %p.text-center
     - if params[:q].present?

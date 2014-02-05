@@ -28,6 +28,9 @@ class ForumsController < ApplicationController
   end
 
   def topics
-    (@forum.try(:topics) || Topic).accessible_by(current_ability, :read).includes(:forum, user: :profile, last_commented_by: :profile)
+    topics = @forum.try(:topics) || Topic
+    topics.accessible_by(current_ability, :read)
+          .includes(:forum, user: :profile, last_commented_by: :profile)
+          .page(params[:page])
   end
 end

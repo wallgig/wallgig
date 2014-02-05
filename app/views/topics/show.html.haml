@@ -60,19 +60,16 @@
         %h4= link_to_user @topic.user
         %p= role_name_for @topic.user
       .col-sm-10
-        %ul.list-inline.pull-right
-          - if can? :update, @topic
-            %li
-              %small= link_to 'Edit', edit_topic_path(@topic)
-          %li
-            %small= link_to 'Report', new_topic_report_path(@topic)
-
-        = @topic.cooked_content.html_safe
-        %p.text-muted
-          %small
-            #{time_tag @topic.created_at, time_ago_in_words(@topic.created_at), title: @topic.created_at} ago
+        %small.pull-right
+          %ul.list-inline.text-muted
+            %li #{time_tag @topic.created_at, time_ago_in_words(@topic.created_at), title: @topic.created_at} ago
             - if @topic.created_at != @topic.updated_at
-              &middot; updated #{time_tag @topic.updated_at, time_ago_in_words(@topic.updated_at), title: @topic.updated_at} ago
+              %li updated #{time_tag @topic.updated_at, time_ago_in_words(@topic.updated_at), title: @topic.updated_at} ago
+            - if can? :update, @topic
+              %li= link_to 'Edit', edit_topic_path(@topic)
+            %li= link_to 'Report', new_topic_report_path(@topic)
+        .clearfix
+        = @topic.cooked_content.html_safe
 
 .text-center= paginate @comments
 
