@@ -65,11 +65,10 @@ class WallpapersController < ApplicationController
       if @wallpaper.save
         format.html do
           if @wallpaper.approved?
-            notice_message = 'Wallpaper was successfully created.'
+            redirect_to @wallpaper, notice: 'Wallpaper was successfully created.'
           else
-            notice_message = 'Wallpaper was successfully submitted for moderator approval.'
+            redirect_to new_wallpaper_url, notice: 'Wallpaper was successfully submitted for moderator approval.'
           end
-          redirect_to @wallpaper, notice: notice_message
         end
         format.json { render action: 'show', status: :created, location: @wallpaper }
       else

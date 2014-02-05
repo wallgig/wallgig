@@ -35,3 +35,10 @@ en:
       sw: "South West"
       s:  "South"
       se: "South East"
+
+  active_admin:
+    batch_actions:
+      labels:
+        mark_sfw: "Mark SFW"
+        mark_sketchy: "Mark Sketchy"
+        mark_nsfw: "Mark NSFW"

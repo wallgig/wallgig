@@ -5,10 +5,27 @@ ActiveAdmin.register Wallpaper do
 
   scope :pending_approval, default: true
   scope :processing
-  scope('SFW')     { |w| w.approved.processed.with_purities('sfw') }
-  scope('Sketchy') { |w| w.approved.processed.with_purities('sketchy') }
-  scope('NSFW')    { |w| w.approved.processed.with_purities('nsfw') }
+  Wallpaper.purity.options.each do |label, value|
+    scope(label) { |w| w.approved.processed.with_purities(value) }
+  end
   scope :all
+
+  Wallpaper.purity.options.each do |label, value|
+    batch_action :"mark_#{value}" do |selection|
+      Wallpaper.find(selection).each do |wallpaper|
+        wallpaper.purity = value
+        wallpaper.save
+      end
+      redirect_to :back, notice: "Wallpapers were successfully marked as #{label}."
+    end
+  end
+
+  batch_action :approve do |selection|
+    Wallpaper.find(selection).each do |wallpaper|
+      wallpaper.approve_by!(current_user)
+    end
+    redirect_to :back, notice: 'Wallpapers were successfully approved.'
+  end
 
   batch_action :reindex do |selection|
     Wallpaper.find(selection).each &:update_index
@@ -19,13 +36,6 @@ ActiveAdmin.register Wallpaper do
     Wallpaper.find(selection).each &:queue_create_thumbnails
     Wallpaper.find(selection).each &:queue_process_image
     redirect_to :back, notice: 'Wallpapers were successfully queued for reprocessing.'
-  end
-
-  batch_action :approve do |selection|
-    Wallpaper.find(selection).each do |wallpaper|
-      wallpaper.approve_by!(current_user)
-    end
-    redirect_to :back, 'Wallpapers were successfully approved.'
   end
 
   index do
