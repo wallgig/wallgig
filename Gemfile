@@ -116,6 +116,8 @@ gem 'sinatra', '>= 1.3.0', :require => nil
 gem 'doorkeeper', '~> 0.7.0'
 gem 'tire'
 gem 'redis-rails'
+gem 'pg_search'
+
 
 # utilities
 gem 'dotenv-rails'
@@ -129,9 +131,6 @@ gem 'meta-tags', :require => 'meta_tags'
 # gem 'phashion'
 gem 'draper', github: 'jianyuan/draper'
 gem 'redcarpet'
-
-gem 'chunky_png', require: false
-gem 'oily_png', '~> 1.1.0'
 
 # rack
 gem 'rack-cache', require: 'rack/cache', group: :production

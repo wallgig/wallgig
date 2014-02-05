@@ -1,11 +1,15 @@
+- title @forum.try(:name) || 'Forums'
+
 .page-header
   - if can? :create, (@forum.try(:topics).try(:new) || Topic)
     = link_to 'New topic', new_topic_path(forum: @forum), class: 'btn btn-primary pull-right'
   %h1
     - if @forum.present?  
-      = title @forum.name
+      = @forum.name
+    - elsif params[:q].present?
+      Searching for "#{params[:q]}"
     - else
-      = title 'Forums', 'All topics'
+      All topics
   - if @forum.try(:description).try(:present?)
     - cache(['forums', 'index', @forum, 'markdown_description']) do
       %p.text-muted= markdown_line @forum.description
@@ -14,6 +18,9 @@
   %ul.list-group= render @topics
 - else
   %p.text-center
-    There are no topics yet.
-    - if can? :create, (@forum.try(:topics).try(:new) || Topic)
-      = link_to 'Start the first one!', new_topic_path(forum: @forum)
+    - if params[:q].present?
+      There are no topics nor comments available that match your request.
+    - else
+      There are no topics yet.
+      - if can? :create, (@forum.try(:topics).try(:new) || Topic)
+        = link_to 'Start the first one!', new_topic_path(forum: @forum)

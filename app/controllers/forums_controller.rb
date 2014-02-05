@@ -4,7 +4,11 @@ class ForumsController < ApplicationController
   include ForumLayout
 
   def index
-    @topics = topics.latest
+    if params[:q].present?
+      @topics = topics.search_topics_and_comments(params[:q])
+    else
+      @topics = topics.latest
+    end
   end
 
   def show

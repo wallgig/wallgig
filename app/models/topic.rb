@@ -31,6 +31,11 @@ class Topic < ActiveRecord::Base
 
   include Reportable
 
+  include PgSearch
+  pg_search_scope :search_topics_and_comments, against: [:title, :content], associated_against: {
+    comments: [:comment]
+  }
+
   validates :forum_id, presence: true
   validates :user_id,  presence: true
   validates :title,    presence: true, length: { minimum: 10 }
