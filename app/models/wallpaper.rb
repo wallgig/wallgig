@@ -41,7 +41,8 @@ class Wallpaper < ActiveRecord::Base
 
   has_many :wallpaper_colors, -> { order('wallpaper_colors.percentage DESC') }, dependent: :destroy
   has_many :colors, through: :wallpaper_colors, class_name: 'Kolor'
-  belongs_to :primary_color, class_name: 'Kolor'
+  has_one :primary_wallpaper_color, -> { order('wallpaper_colors.percentage DESC') }, class_name: 'WallpaperColor'
+  has_one :primary_color, through: :primary_wallpaper_color, class_name: 'Kolor', source: :color
 
   has_many :favourites, dependent: :destroy
   has_many :favourited_users, through: :favourites, source: :wallpaper

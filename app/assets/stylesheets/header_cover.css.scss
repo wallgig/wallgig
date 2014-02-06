@@ -3,6 +3,9 @@ $navbar-height: 52px;
   height: 100px;
   margin-bottom: $navbar-height;
   position: relative;
+  background-position: center center;
+  background-repeat: no-repeat;
+  background-size: cover;
 
   &.has-cover {
     height: 200px;
