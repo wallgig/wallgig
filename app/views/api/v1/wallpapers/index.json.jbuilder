@@ -1,3 +1,10 @@
+json.pagination do
+  json.total_count @wallpapers.total_count
+  json.per_page @wallpapers.limit_value
+  json.current_page @wallpapers.current_page
+  json.total_pages @wallpapers.total_pages
+end
+
 json.wallpapers do
   json.array! @wallpapers do |wallpaper|
     json.extract! wallpaper, :id
@@ -24,12 +31,4 @@ json.wallpapers do
     json.source wallpaper.source.presence
     json.extract! wallpaper, :created_at, :updated_at
   end
-end
-
-json.pagination do
-  json.total_count @wallpapers.total_count
-  json.per_page @wallpapers.limit_value
-  json.current_page @wallpapers.current_page
-  json.total_pages @wallpapers.total_pages
-  json.next_url @wallpapers.next_page.present? ? url_for(page: @wallpapers.next_page) : nil
 end

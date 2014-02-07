@@ -21,5 +21,6 @@ json.wallpaper do
   end
   json.tags @wallpaper.tag_list
   json.source @wallpaper.source.presence
-  json.extract! @wallpaper, :created_at, :updated_at
+  json.extract! @wallpaper, :created_at, :updated_at, :comments_count
+  json.approved @wallpaper.approved?
 end
