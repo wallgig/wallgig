@@ -2,15 +2,8 @@ class Api::V1::BaseController < ApplicationController
   skip_before_action :verify_authenticity_token
   respond_to :json
 
-  rescue_from ActionController::ParameterMissing do |exception|
-    build_error_response(exception.message, :unprocessable_entity)
-  end
-
-  rescue_from ActiveRecord::RecordNotFound do |exception|
-    message = exception.message
-    message = "Couldn't find that record" if message == 'ActiveRecord::RecordNotFound'
-    build_error_response(message, :not_found)
-  end
+  rescue_from(ActionController::ParameterMissing) { |e| build_error_response(e.message, :unprocessable_entity) }
+  rescue_from(ActiveRecord::RecordNotFound)       { |e| build_error_response(e.message, :not_found) }
 
   private
 
@@ -25,7 +18,9 @@ class Api::V1::BaseController < ApplicationController
   def authenticate_user_from_token!
     user_token = params.require(:user_token)
     user = User.find_by(authentication_token: user_token)
+
     raise AccessDenied if user.blank?
+
     sign_in user, store: false
   end
 

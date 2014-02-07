@@ -22,7 +22,7 @@ class FavouritesController < ApplicationController
 
   def set_owner
     if params[:user_id].present?
-      @owner = @user = User.find_by!(username: params[:user_id])
+      @owner = @user = User.find_by_username!(params[:user_id])
       authorize! :read, @owner
     end
   end

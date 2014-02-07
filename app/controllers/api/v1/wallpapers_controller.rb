@@ -36,9 +36,8 @@ class Api::V1::WallpapersController < Api::V1::BaseController
   private
 
   def set_user
-    if params[:user_id].present?
-      @user = User.find_by!(username: params[:user_id])
-    end
+    @user = User.find_by_username!(params[:user_id]) if params[:user_id].present?
+    authorize! :read, @user
   end
 
   def set_wallpaper

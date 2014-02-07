@@ -49,7 +49,7 @@ class CollectionsController < ApplicationController
 
   def set_parent
     if params[:user_id].present?
-      @parent = User.find_by!(username: params[:user_id])
+      @parent = User.find_by_username!(params[:user_id])
     elsif params[:group_id].present?
       @parent = @group = Group.friendly.find(params[:group_id])
     end

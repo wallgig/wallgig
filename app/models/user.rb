@@ -84,10 +84,18 @@ class User < ActiveRecord::Base
   def self.find_first_by_auth_conditions(warden_conditions)
     conditions = warden_conditions.dup
     if login = conditions.delete(:login)
-      where(conditions).where(["lower(username) = lower(:login) OR lower(email) = lower(:login)", { login: login }]).first
+      where(conditions).where(['lower(username) = lower(:login) OR lower(email) = lower(:login)', { login: login }]).first
     else
       where(conditions).first
     end
+  end
+
+  def self.find_by_username!(username)
+    user = where(['lower(username) = lower(?)', username]).first
+
+    raise ActiveRecord::RecordNotFound, "Couldn't find User with username=#{username}" if user.blank?
+
+    user
   end
 
   def to_param
