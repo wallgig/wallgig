@@ -40,7 +40,7 @@
         .container
           %ul.nav.navbar-nav
             = active_link_to 'Profile', @user, active: [['users'], ['show']], wrap_tag: :li
-            = active_link_to 'Wallpapers', wallpapers_path(q: "user:#{@user.username}"), wrap_tag: :li
+            = active_link_to 'Wallpapers', user_wallpapers_path(@user), wrap_tag: :li
             = active_link_to 'Collections', user_collections_path(@user), wrap_tag: :li
             = active_link_to 'Favourites', user_favourites_path(@user), wrap_tag: :li
             / = active_link_to 'Followers', '#', wrap_tag: :li

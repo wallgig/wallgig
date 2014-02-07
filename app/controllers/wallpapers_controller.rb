@@ -1,27 +1,17 @@
 class WallpapersController < ApplicationController
   before_action :authenticate_user!, except: [:index, :show, :set_profile_cover, :toggle_favourite, :collections, :toggle_collect]
+  before_action :set_user, only: [:index]
   before_action :set_wallpaper, only: [:show, :edit, :update, :destroy, :update_purity, :history, :set_profile_cover, :toggle_favourite, :collections, :toggle_collect]
   before_action :set_available_categories, only: [:new, :edit, :create, :update]
   before_action :record_wallpaper_impression, only: :show
 
-  helper_method :search_params
+  include WallpaperSearchParams
 
-  layout 'fullscreen_wallpaper', only: :show
+  layout :resolve_layout
 
   # GET /wallpapers
   # GET /wallpapers.json
   def index
-    search_options = search_params
-    search_options[:per_page] = current_settings.per_page
-
-    if search_options[:order] == 'random'
-      search_options[:random_seed] = session[:random_seed]
-      search_options[:random_seed] = nil if search_options[:page].to_i <= 1
-      search_options[:random_seed] ||= Time.now.to_i
-      session[:random_seed] = search_options[:random_seed]
-    end
-
-
     @wallpapers = WallpaperSearch.new(search_options).wallpapers
     @wallpapers = WallpapersDecorator.new(@wallpapers, context: {
       user: current_user,
@@ -185,6 +175,12 @@ class WallpapersController < ApplicationController
 
   private
 
+  def set_user
+    if params[:user_id].present?
+      @user = User.find_by!(username: params[:user_id])
+    end
+  end
+
   def set_wallpaper
     @wallpaper = Wallpaper.find(params[:id])
     authorize! :read, @wallpaper
@@ -214,16 +210,6 @@ class WallpapersController < ApplicationController
     end
   end
 
-  def search_params(load_session = true)
-    params.permit(:q, :page, :width, :height, :order, purity: [], tags: [], exclude_tags: [], colors: []).tap do |p|
-      p.reverse_merge! session[:search_params] if load_session && p.blank? && session[:search_params].present?
-
-      # default values
-      p[:order]  ||= 'latest'
-      p[:purity] ||= current_purities
-    end
-  end
-
   def resize_params
     params.permit(:width, :height)
   end
@@ -234,5 +220,14 @@ class WallpapersController < ApplicationController
 
   def record_wallpaper_impression
     impressionist(@wallpaper)
+  end
+
+  def resolve_layout
+    case action_name
+    when 'index'
+      'user_profile' if @user.present?
+    when 'show'
+      'fullscreen_wallpaper'
+    end
   end
 end

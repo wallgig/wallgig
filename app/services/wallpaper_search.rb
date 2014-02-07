@@ -119,6 +119,15 @@ class WallpaperSearch
         end
       end
 
+      # Handle user
+      if @options[:user].present?
+        payload[:query][:bool][:must] << {
+          :term => {
+            :'user' => @options[:user]
+          }
+        }
+      end
+
       case @options[:order]
       when 'random'
         payload[:query][:bool][:must] << {

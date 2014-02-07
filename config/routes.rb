@@ -85,6 +85,7 @@ Wallgig::Application.routes.draw do
     concerns :commentable
     resources :collections, only: [:index]
     resources :favourites,  only: [:index]
+    resources :wallpapers, only: [:index]
   end
 
   # OPTIMIZE

@@ -1,11 +1,14 @@
 class Api::V1::WallpapersController < Api::V1::BaseController
   before_action :ensure_from_mashape!
   before_action :authenticate_user_from_token!, only: [:create]
+  before_action :set_user, only: [:index]
   before_action :set_wallpaper, only: [:show]
 
+  include WallpaperSearchParams
+
   def index
-    @wallpapers = WallpaperSearch.new(search_params).wallpapers
-    @wallpapers = WallpapersDecorator.new(@wallpapers, context: { search_options: search_params })
+    @wallpapers = WallpaperSearch.new(search_options).wallpapers
+    @wallpapers = WallpapersDecorator.new(@wallpapers, context: { search_options: search_options })
     respond_with @wallpapers
   end
 
@@ -32,6 +35,12 @@ class Api::V1::WallpapersController < Api::V1::BaseController
 
   private
 
+  def set_user
+    if params[:user_id].present?
+      @user = User.find_by!(username: params[:user_id])
+    end
+  end
+
   def set_wallpaper
     @wallpaper = Wallpaper.find(params[:id])
     authorize! :read, @wallpaper
@@ -39,13 +48,6 @@ class Api::V1::WallpapersController < Api::V1::BaseController
 
   def wallpaper_params
     params.require(:wallpaper).permit(:purity, :image, :image_url, :tag_list, :image_gravity, :source)
-  end
-
-  def search_params
-    params.permit(:q, :page, :width, :height, :order, purity: [], tags: [], exclude_tags: [], colors: []).tap do |p|
-      p[:order]  ||= 'latest'
-      p[:purity] ||= ['sfw']
-    end
   end
 
   def create_wallpaper_params
