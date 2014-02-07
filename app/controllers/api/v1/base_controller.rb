@@ -7,7 +7,9 @@ class Api::V1::BaseController < ApplicationController
   end
 
   rescue_from ActiveRecord::RecordNotFound do |exception|
-    build_error_response(exception.message, :not_found)
+    message = exception.message
+    message = "Couldn't find that record" if message == 'ActiveRecord::RecordNotFound'
+    build_error_response(message, :not_found)
   end
 
   private
