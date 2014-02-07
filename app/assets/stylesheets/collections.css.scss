@@ -7,7 +7,7 @@
   &.row-1 {
     height: 374px;
   }
-  li {
+  & > li {
     width: 250px;
     height: 354px;
     margin: 10px;
@@ -76,7 +76,7 @@
       background-color: rgba(0, 0, 0, 0.5);
     }
   }
-  li:hover {
+  & > li:hover {
     @include box-shadow(#666 0px 0px 5px);
     .overlay {
     }

@@ -161,10 +161,10 @@ class WallpapersController < ApplicationController
     @collection = current_user.collections.find(collection_params[:id])
 
     if @collection.collected?(@wallpaper)
-      @collection.uncollect(@wallpaper)
+      @collection.uncollect!(@wallpaper)
       @collect_status = false
     else
-      @collection.collect(@wallpaper)
+      @collection.collect!(@wallpaper)
       @collect_status = true
     end
 

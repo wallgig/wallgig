@@ -2,17 +2,20 @@
 #
 # Table name: collections
 #
-#  id                :integer          not null, primary key
-#  user_id           :integer
-#  name              :string(255)
-#  public            :boolean          default(TRUE)
-#  ancestry          :string(255)
-#  position          :integer
-#  created_at        :datetime
-#  updated_at        :datetime
-#  impressions_count :integer          default(0)
-#  owner_id          :integer
-#  owner_type        :string(255)
+#  id                       :integer          not null, primary key
+#  user_id                  :integer
+#  name                     :string(255)
+#  public                   :boolean          default(TRUE)
+#  ancestry                 :string(255)
+#  position                 :integer
+#  created_at               :datetime
+#  updated_at               :datetime
+#  impressions_count        :integer          default(0)
+#  owner_id                 :integer
+#  owner_type               :string(255)
+#  sfw_wallpapers_count     :integer          default(0)
+#  sketchy_wallpapers_count :integer          default(0)
+#  nsfw_wallpapers_count    :integer          default(0)
 #
 
 require 'spec_helper'

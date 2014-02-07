@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20140204132606) do
+ActiveRecord::Schema.define(version: 20140207220950) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -48,14 +48,17 @@ ActiveRecord::Schema.define(version: 20140204132606) do
   create_table "collections", force: true do |t|
     t.integer  "user_id"
     t.string   "name"
-    t.boolean  "public",            default: true
+    t.boolean  "public",                   default: true
     t.string   "ancestry"
     t.integer  "position"
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.integer  "impressions_count", default: 0
+    t.integer  "impressions_count",        default: 0
     t.integer  "owner_id"
     t.string   "owner_type"
+    t.integer  "sfw_wallpapers_count",     default: 0
+    t.integer  "sketchy_wallpapers_count", default: 0
+    t.integer  "nsfw_wallpapers_count",    default: 0
   end
 
   add_index "collections", ["ancestry"], name: "index_collections_on_ancestry", using: :btree

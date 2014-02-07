@@ -17,9 +17,13 @@
                 .placeholder
           .media-body
             %h5.media-heading= collection.name
-            .pull-right.text-muted
-              %span.glyphicon.glyphicon-eye-open
-              = collection.impressions_count
+            %ul.list-inline.pull-right.text-muted
+              %li
+                %span.glyphicon.glyphicon-eye-open
+                = collection.impressions_count
+              %li
+                %span.glyphicon.glyphicon-picture
+                = collection.wallpapers_count_for(current_purities)
             - if collection.owner_type == 'User'
               = link_to collection.owner do
                 = image_tag user_avatar_url(collection.owner, 20), alt: collection.owner.username
