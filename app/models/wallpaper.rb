@@ -85,6 +85,9 @@ class Wallpaper < ActiveRecord::Base
   has_paper_trail only: [:purity, :cached_tag_list, :source]
 
   # Search
+  # formula to calculate wallpaper's popularity
+  POPULARITY_SCRIPT = "doc['views'].value * 0.1 + doc['favourites'].value * 1.0"
+
   include Tire::Model::Search
   tire.settings :analysis => {
                   :analyzer => {

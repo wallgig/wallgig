@@ -1,7 +1,4 @@
 class WallpaperSearch
-  # formula to calculate wallpaper's popularity
-  POPULARITY_SCRIPT = "doc['views'].value * 0.5 + doc['favourites'].value * 1.5"
-
   def initialize(options)
     @options = options
   end
@@ -148,16 +145,14 @@ class WallpaperSearch
             :functions => [
               {
                 :script_score => {
-                  :script => POPULARITY_SCRIPT
+                  :script => Wallpaper::POPULARITY_SCRIPT
                 }
               }
             ]
           }
         }
         payload[:sort] << '_score'
-      end
-
-      if payload[:sort].empty? && @options[:q].blank?
+      else
         payload[:sort] << {
           :'created_at' => 'desc'
         }
