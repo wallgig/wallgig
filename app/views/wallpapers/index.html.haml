@@ -112,7 +112,7 @@
       .row
         .col-lg-2
           = yield :sort_by
-          = yield :purity
+          = yield :purity if user_signed_in?
 
         .col-lg-2
           = yield :colors
