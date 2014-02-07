@@ -7,4 +7,4 @@
   - else
     %h2= title 'Recent collections'
 
-= render partial: 'list', locals: { collections: @collections }
+= render partial: 'list', locals: { collections: @collections, should_apply_purity_settings: @should_apply_purity_settings }

@@ -1,4 +1,5 @@
 - title @user.username
+- myself = user_signed_in? && current_user.id == @user.id
 
 .row
   .col-lg-9
@@ -12,7 +13,7 @@
         %span.glyphicon.glyphicon-folder-open
         Collections
         %small= @collections.size
-      = render partial: 'collections/list', locals: { collections: @collections, extra_css_class: 'row-1' }
+      = render partial: 'collections/list', locals: { collections: @collections, should_apply_purity_settings: !myself, extra_css_class: 'row-1' }
 
     - if @user.wallpapers.any?
       - if @user.wallpapers.size > @wallpapers.size

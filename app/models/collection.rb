@@ -37,6 +37,13 @@ class Collection < ActiveRecord::Base
   scope :ordered, -> { order(position: :asc) }
   scope :latest,  -> { order(updated_at: :desc) }
 
+  # scope :has_wallpapers, -> { where.not(wallpapers: { id: nil }) }
+
+  scope :with_purities, -> (purities) {
+    purity_conditions = purities.map { |p| "#{counter_name_for(p)} > 0" }
+    where(purity_conditions.join(' OR '))
+  }
+
   attr_accessor :collect_status
 
   def self.ensure_consistency!
@@ -75,22 +82,23 @@ class Collection < ActiveRecord::Base
   def uncollect!(wallpaper)
     collections_wallpapers.find_by!(wallpaper_id: wallpaper.id).destroy
 
-    self.class.decrement_counter(counter_name_for(wallpaper), id)
+    self.class.decrement_counter(self.class.counter_name_for(wallpaper), id)
   end
 
   def collect!(wallpaper)
     collections_wallpapers.create!(wallpaper_id: wallpaper.id)
 
-    self.class.increment_counter(counter_name_for(wallpaper), id)
+    self.class.increment_counter(self.class.counter_name_for(wallpaper), id)
   end
 
   def wallpapers_count_for(purities)
-    purities.map { |p| read_attribute("#{p}_wallpapers_count") }.reduce(:+)
+    purities.map { |p| read_attribute(self.class.counter_name_for(p)) }.reduce(:+)
   end
 
   private
 
-  def counter_name_for(wallpaper)
-    "#{wallpaper.purity}_wallpapers_count"
+  def self.counter_name_for(wallpaper_or_purity)
+    wallpaper_or_purity = wallpaper_or_purity.purity if wallpaper_or_purity.class.name == 'Wallpaper'
+    "#{wallpaper_or_purity}_wallpapers_count"
   end
 end
