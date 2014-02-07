@@ -176,8 +176,10 @@ class WallpapersController < ApplicationController
   private
 
   def set_user
-    @user = User.find_by_username!(params[:user_id]) if params[:user_id].present?
-    authorize! :read, @user
+    if params[:user_id].present?
+      @user = User.find_by_username!(params[:user_id])
+      authorize! :read, @user
+    end
   end
 
   def set_wallpaper
