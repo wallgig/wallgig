@@ -1,7 +1,6 @@
 class Api::V1::WallpapersController < Api::V1::BaseController
   before_action :ensure_from_mashape!
   before_action :authenticate_user_from_token!, only: [:create]
-  before_action :set_user, only: [:index]
   before_action :set_wallpaper, only: [:show]
 
   include WallpaperSearchParams
@@ -34,11 +33,6 @@ class Api::V1::WallpapersController < Api::V1::BaseController
   end
 
   private
-
-  def set_user
-    @user = User.find_by_username!(params[:user_id]) if params[:user_id].present?
-    authorize! :read, @user
-  end
 
   def set_wallpaper
     @wallpaper = Wallpaper.find(params[:id])

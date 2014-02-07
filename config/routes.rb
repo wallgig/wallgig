@@ -134,7 +134,6 @@ Wallgig::Application.routes.draw do
           get :me
         end
 
-        resources :wallpapers, only: [:index]
         resources :favourites, only: [:index]
       end
 
