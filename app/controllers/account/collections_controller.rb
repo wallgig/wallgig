@@ -72,13 +72,14 @@ module Account
     end
 
     private
-      def set_collection
-        @collection = current_user.collections.find(params[:id])
-      end
 
-      # Never trust parameters from the scary internet, only allow the white list through.
-      def collection_params
-        params.require(:collection).permit(:name, :public)
-      end
+    def set_collection
+      @collection = Collection.find(params[:id])
+      authorize! :crud, @collection
+    end
+
+    def collection_params
+      params.require(:collection).permit(:name, :public)
+    end
   end
 end
