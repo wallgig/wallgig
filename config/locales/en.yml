@@ -41,4 +41,5 @@ en:
       labels:
         mark_sfw: "Mark SFW"
         mark_sketchy: "Mark Sketchy"
-        mark_nsfw: "Mark NSFW"
+        mark_nsfw: "Mark NSFW"                                                                
+    powered_by: "Powered by Hamsters"
