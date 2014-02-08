@@ -26,11 +26,11 @@
             - if search_options[:tags].try(:include?, term)
               = link_to url_for(search_options.merge(tags: (tags - [term]), exclude_tags: (exclude_tags - [term])).reject(&blank_value)), class: 'btn btn-sm btn-success' do
                 = term
-                %small= terms_to_count[term]
+                %small (#{terms_to_count[term]})
             - else
               = link_to url_for(search_options.merge(tags: (tags + [term]), exclude_tags: (exclude_tags - [term])).reject(&blank_value)), class: 'btn btn-sm btn-link' do
                 = term
-                %small= terms_to_count[term]
+                %small (#{terms_to_count[term]})
 
 - content_for :purity do
   %h5 Purity
