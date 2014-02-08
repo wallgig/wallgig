@@ -21,7 +21,7 @@ class CollectionsController < ApplicationController
                                .page(params[:page])
 
     if @should_apply_purity_settings
-      @collections = @collections.with_purities(current_purities)
+      @collections = @collections.with_purities_and_sum_gte(current_purities, 4)
     end
 
     if request.xhr?

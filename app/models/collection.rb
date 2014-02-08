@@ -40,11 +40,14 @@ class Collection < ActiveRecord::Base
   scope :ordered, -> { order(position: :asc) }
   scope :latest,  -> { order(last_added_at: :desc) }
 
-  # scope :has_wallpapers, -> { where.not(wallpapers: { id: nil }) }
-
   scope :with_purities, -> (purities) {
     purity_conditions = purities.map { |p| "#{counter_name_for(p)} > 0" }
     where(purity_conditions.join(' OR '))
+  }
+
+  scope :with_purities_and_sum_gte, -> (purities, sum_gte) {
+    purities = purities.map { |p| counter_name_for(p) }.join(' + ')
+    where(["(#{purities}) >= ?", sum_gte])
   }
 
   attr_accessor :collect_status
