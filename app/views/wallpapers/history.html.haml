@@ -19,6 +19,6 @@
             = link_to user.username, user
         %td= version.created_at
         %td= version.event.humanize
-        %td= auto_link wallpaper.try(:source)
+        %td= markdown_line wallpaper.try(:source)
         %td= wallpaper.try(:purity_text)
         %td= wallpaper.try(:cached_tag_list)
