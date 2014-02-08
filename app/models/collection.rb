@@ -77,6 +77,11 @@ class Collection < ActiveRecord::Base
     ')
   end
 
+  def self.counter_name_for(wallpaper_or_purity)
+    wallpaper_or_purity = wallpaper_or_purity.purity if wallpaper_or_purity.class.name == 'Wallpaper'
+    "#{wallpaper_or_purity}_wallpapers_count"
+  end
+
   def to_param
     "#{id}-#{name.parameterize}"
   end
@@ -101,12 +106,5 @@ class Collection < ActiveRecord::Base
 
   def wallpapers_count_for(purities)
     purities.map { |p| read_attribute(self.class.counter_name_for(p)) }.reduce(:+)
-  end
-
-  private
-
-  def self.counter_name_for(wallpaper_or_purity)
-    wallpaper_or_purity = wallpaper_or_purity.purity if wallpaper_or_purity.class.name == 'Wallpaper'
-    "#{wallpaper_or_purity}_wallpapers_count"
   end
 end
