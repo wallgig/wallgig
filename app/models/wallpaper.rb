@@ -50,12 +50,10 @@ class Wallpaper < ActiveRecord::Base
   belongs_to :category
 
   include Reportable
+  include HasPurity
 
   acts_as_votable
 
-  # Purity
-  extend Enumerize
-  enumerize :purity, in: [:sfw, :sketchy, :nsfw], default: :sfw, scope: true, predicates: true
   enumerize :image_gravity, in: Dragonfly::ImageMagick::Processors::Thumb::GRAVITIES.keys
 
   # Image
@@ -137,7 +135,6 @@ class Wallpaper < ActiveRecord::Base
   scope :processed,     -> { where(processing: false) }
   scope :visible,       -> { processed }
   scope :latest,        -> { order(created_at: :desc) }
-  scope :with_purities, -> (*purities) { where(purity: purities) }
   scope :similar_to,    -> (w) { where.not(id: w.id).where(["( SELECT SUM(((phash::bigint # ?) >> bit) & 1 ) FROM generate_series(0, 63) bit) <= 15", w.phash]) }
 
   scope :approved,         -> { where.not(approved_at: nil) }
