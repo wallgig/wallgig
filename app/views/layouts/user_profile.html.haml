@@ -1,9 +1,12 @@
 - myself = user_signed_in? && current_user == @user
+
+- content_for :use_full_container, true
+
 - content_for :pre_container do
   %header.user-profile-header
     .header-media-cover.has-avatar{:class => ('has-cover' if @user.profile.cover_wallpaper.present?), :style => @user.profile.cover_style, :data => {:spy => 'affix', offset_top: 268}}
       .media-meta
-        .container
+        .container.container-full
           .pull-right
             - if can? :update, @user
               .btn-group
@@ -37,7 +40,7 @@
                 = username_tag @user
                 %small= role_name_for @user
       %nav.navbar.navbar-default{:role => 'navigation'}
-        .container
+        .container.container-full
           %ul.nav.navbar-nav
             = active_link_to 'Profile', @user, active: [['users'], ['show']], wrap_tag: :li
             = active_link_to 'Wallpapers', user_wallpapers_path(@user), wrap_tag: :li
