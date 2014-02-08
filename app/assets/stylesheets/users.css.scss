@@ -32,6 +32,9 @@ a.user-moderator:hover {
   &, & .header-media-cover {
     height: 350px;
   }
+  &.affix, &.affix .header-media-cover {
+    height: 82px;
+  }
   .header-media-cover.affix {
     position: fixed;
     left: 0;

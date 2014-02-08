@@ -12,6 +12,7 @@ class ApplicationController < ActionController::Base
   helper_method :current_profile
   helper_method :current_purities
   helper_method :current_settings
+  helper_method :myself?
 
   rescue_from AccessDenied,         with: :access_denied_response
   rescue_from CanCan::AccessDenied, with: :access_denied_response
@@ -53,6 +54,10 @@ class ApplicationController < ActionController::Base
         UserSetting.new
       end
     end
+  end
+
+  def myself?
+    user_signed_in? && @user.present? && current_user.id == @user.id
   end
 
   def access_denied_response(exception)

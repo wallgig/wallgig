@@ -2,9 +2,22 @@
 
 - content_for :use_full_container, true
 
+- header_classes = []
+- header_cover_classes = []
+- header_cover_classes << 'has-cover' if @user.profile.cover_wallpaper.present?
+- header_cover_data = {}
+
+- if @user.present? && controller_name == 'users' && action_name == 'show'
+  - header_cover_data[:spy] = 'affix'
+  - header_cover_data[:offset_top] = 268
+- else
+  - header_classes << 'affix'
+
 - content_for :pre_container do
-  %header.user-profile-header
-    .header-media-cover.has-avatar{:class => ('has-cover' if @user.profile.cover_wallpaper.present?), :style => @user.profile.cover_style, :data => {:spy => 'affix', offset_top: 268}}
+  %header.user-profile-header{:class => header_classes}
+    .header-media-cover.has-avatar{:class => header_cover_classes,
+                                   :style => @user.profile.cover_style,
+                                   :data => header_cover_data}
       .media-meta
         .container.container-full
           .pull-right
@@ -24,6 +37,7 @@
                       %a{:href => '#', :data => {:action => 'explain-add-profile-cover'}}
                         %span.glyphicon.glyphicon-picture
                         Add profile cover
+                  %li.divider
                   %li
                     = link_to account_collections_path do
                       %span.glyphicon.glyphicon-pencil

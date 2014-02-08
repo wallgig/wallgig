@@ -5,10 +5,12 @@ class FavouritesController < ApplicationController
   layout false, except: [:index]
 
   def index
-    @wallpapers = set_owner.favourite_wallpapers
-                           .accessible_by(current_ability, :read)
-                           .with_purities(current_purities)
-                           .page(params[:page])
+    @wallpapers = @owner.favourite_wallpapers
+                        .accessible_by(current_ability, :read)
+                        .page(params[:page])
+
+    @wallpapers = @wallpapers.with_purities(current_purities) unless myself?
+
     @wallpapers = WallpapersDecorator.new(@wallpapers, context: { user: current_user })
 
     if request.xhr?
