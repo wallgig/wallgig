@@ -42,11 +42,12 @@
     %h3
       %span.glyphicon.glyphicon-comment
       Comments
-      %small= @user.comments.size
-    = simple_form_for :comment, url: user_comments_path(@user), remote: true, data: { provide: 'comments' } do |f|
-      = f.input :comment, as: :text, label: false
-      = f.submit 'Post', class: 'btn btn-block', data: { disable_with: 'Posting' }
-    %hr/
+      %small= @user.comments_count
+    - if user_signed_in?
+      = simple_form_for :comment, url: user_comments_path(@user), remote: true, data: { provide: 'comments' } do |f|
+        = f.input :comment, as: :text, label: false
+        = f.submit 'Post', class: 'btn btn-block', data: { disable_with: 'Posting' }
+      %hr/
     - comments = @user.comments.includes(:user).recent
     %div.container-comments{:class => ('hide' if comments.empty?)}
       %ul.list-unstyled.list-comment= render comments.limit(4)
