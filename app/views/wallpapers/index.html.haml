@@ -10,6 +10,7 @@
       - terms_to_count = Hash[@wallpapers.facets['tags']['terms'].map { |t| [t['term'], t['count']] }]
       - tags = search_options[:tags] || []
       - exclude_tags = search_options[:exclude_tags] || []
+      - search_options[:page] = nil # Temporary fix
       - rendered_terms = []
       - [tags, exclude_tags, @wallpapers.facets['tags']['terms']].flatten.each do |facet_or_term|
         - term = facet_or_term.try(:[], 'term') || facet_or_term
