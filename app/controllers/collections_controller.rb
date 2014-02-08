@@ -18,7 +18,7 @@ class CollectionsController < ApplicationController
 
     @collections = @collections.includes(:owner)
                                .accessible_by(current_ability, :read)
-                               .page(params[:page])
+                               .page(params[:page]).per(20)
 
     if @should_apply_purity_settings
       @collections = @collections.with_purities_and_sum_gte(current_purities, 4)
