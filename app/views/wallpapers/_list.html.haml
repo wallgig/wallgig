@@ -1,3 +1,11 @@
+- if wallpapers.has_pagination? && !wallpapers.first_page?
+  .horizontal-page-bar
+    %h3
+      .pull-left= link_to wallpapers.current_page, url_for(page: wallpapers.current_page)
+      .pull-right
+        %a{:href => '#'}
+          %span.glyphicon.glyphicon-chevron-up
+
 - if wallpapers.any?
   %ul.list-wallpaper{:class => local_assigns[:extra_css_class]}
     - wallpapers.each do |wallpaper|
