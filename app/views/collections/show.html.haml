@@ -1,3 +1,5 @@
+- content_for :use_full_container, true
+
 .page-header
   - if @collection.owner_type == 'User'
     %h2= title [@collection.owner.username, @collection.name], @collection.name
@@ -8,8 +10,15 @@
   %hr/
   %ul.list-inline
     - if can? :update, @collection
-      %li= link_to 'Edit collection', edit_account_collection_path(@collection)
-    %li= pluralize @collection.wallpapers.size, 'wallpaper'
-    %li= pluralize @collection.impressions_count, 'view'
+      %li
+        = link_to edit_account_collection_path(@collection) do
+          %span.glyphicon.glyphicon-pencil
+          Edit collection
+    %li
+      %span.glyphicon.glyphicon-eye-open
+      = @collection.impressions_count
+    %li
+      %span.glyphicon.glyphicon-picture
+      = @collection.wallpapers_count_for(current_purities)
 
 = render 'wallpapers/list', wallpapers: @wallpapers

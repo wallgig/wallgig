@@ -10,7 +10,7 @@
             More
             %span.glyphicon.glyphicon-chevron-right
       %h3
-        %span.glyphicon.glyphicon-folder-open
+        %span.glyphicon.glyphicon-folder-close
         Collections
         %small= @collections.size
       = render partial: 'collections/list', locals: { collections: @collections, should_apply_purity_settings: !myself, extra_css_class: 'row-1' }
