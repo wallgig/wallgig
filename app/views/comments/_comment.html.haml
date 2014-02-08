@@ -1,11 +1,12 @@
 %li{:data => {:comment_id => comment.id}}
-  .well.well-sm
-    %h5
-      = link_to_user comment.user
-      %small #{time_ago_in_words comment.created_at} ago
-    %p= comment.cooked_comment.html_safe
-    .text-right
-      %small
-        = link_to new_comment_report_path(comment) do
-          %small.glyphicon.glyphicon-flag
-          Report
+  .panel.panel-default
+    .panel-body
+      %small.pull-right
+        %ul.list-inline.text-muted
+          %li= link_to 'Report', new_comment_report_path(comment)
+      %h5.no-top-margin
+        = link_to_user comment.user do
+          = image_tag user_avatar_url(comment.user, 20)
+          = comment.user.username
+        %small #{time_ago_in_words comment.created_at} ago
+      %p= comment.cooked_comment.html_safe

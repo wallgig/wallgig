@@ -1,6 +1,10 @@
 module UsersHelper
-  def link_to_user(user)
-    link_to user.username, user, class: css_class_for(user), style: css_style_for_user(user)
+  def link_to_user(user, &block)
+    if block_given?
+      link_to user, class: ['link-user', css_class_for(user)], style: css_style_for_user(user), &block
+    else
+      link_to user.username, user, class: ['link-user', css_class_for(user)], style: css_style_for_user(user)
+    end
   end
 
   def username_tag(user)

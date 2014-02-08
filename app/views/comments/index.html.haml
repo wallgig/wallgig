@@ -3,7 +3,28 @@
 
 - if @comments.any?
   - @comments.each do |comment|
+    - next unless can?(:read, comment.commentable)
+    - if comment.commentable_type == 'Wallpaper'
+      - next unless comment.commentable.thumbnail_image.present? && current_purities.include?(comment.commentable.purity)
+      - comment.commentable = comment.commentable.decorate
+
+    %h4
+      - case comment.commentable_type
+      - when 'User'
+        = link_to_user comment.commentable do
+          = image_tag user_avatar_url(comment.commentable, 30), alt: comment.commentable.username
+          = comment.commentable.username
+        %small User
+      - when 'Wallpaper'
+        = link_to comment.commentable, comment.commentable
+        %small Wallpaper
+      - when 'Topic'
+        = link_to comment.commentable.title, comment.commentable
+        %small Forum Topic
+
     .row
+      .col-lg-10
+        %ul.list-unstyled.list-comment= render comment
       .col-lg-2
         .media
           - case comment.commentable_type
@@ -13,16 +34,11 @@
             .media-body
               %h4.media-heading= link_to_user comment.commentable
           - when 'Wallpaper'
-            - next unless can?(:read, comment.commentable) && comment.commentable.thumbnail_image.present? && current_purities.include?(comment.commentable.purity)
-            - wallpaper = comment.commentable.decorate
-            = link_to wallpaper, title: wallpaper.cached_tag_list, target: '_blank' do
-              = image_tag wallpaper.thumbnail_image_url, width: 250, height: 188, class: 'img-wallpaper'
-      .col-lg-10
-        %ul.list-unstyled.list-comment= render comment
-        = link_to comment.commentable, class: 'btn btn-default' do
-          %span.glyphicon.glyphicon-comment
-          Post comment
-    %hr/
+            = link_to comment.commentable, title: comment.commentable.cached_tag_list, target: '_blank' do
+              = image_tag comment.commentable.thumbnail_image_url, width: 250, height: 188, class: 'img-wallpaper img-responsive'
+
+    %hr.invisible
+
   = paginate @comments
 - else
   %p No comments yet.
