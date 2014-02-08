@@ -98,6 +98,14 @@ class User < ActiveRecord::Base
     user
   end
 
+  def self.ensure_consistency!
+    connection.execute('
+      UPDATE users SET comments_count = (
+        SELECT COUNT(*) FROM comments WHERE comments.commentable_type = \'User\' AND comments.commentable_id = users.id
+      )
+    ')
+  end
+
   def to_param
     username
   end
