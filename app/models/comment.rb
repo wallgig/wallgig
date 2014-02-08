@@ -28,7 +28,7 @@ class Comment < ActiveRecord::Base
 
   belongs_to :user
 
-  validates :comment, presence: true, length: { minimum: 20 }
+  validates :comment, presence: true, length: { minimum: 10 }
 
   before_save do
     self.cooked_comment = ApplicationController.helpers.markdown(comment) if comment_changed?
