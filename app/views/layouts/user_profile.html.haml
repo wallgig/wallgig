@@ -1,5 +1,3 @@
-- myself = user_signed_in? && current_user == @user
-
 - content_for :use_full_container, true
 
 - header_classes = []
@@ -21,7 +19,7 @@
       .media-meta
         .container.container-full
           .pull-right
-            - if myself
+            - if myself?
               .btn-group
                 %button{:type => 'button', :class => 'btn btn-lg btn-default dropdown-toggle', :data => {:toggle => 'dropdown'}}
                   %span.glyphicon.glyphicon-cog
@@ -51,7 +49,7 @@
             /     %span.glyphicon.glyphicon-plus
             /     Follow
           .media
-            - if myself
+            - if myself?
               = link_to edit_account_profile_path, class: 'pull-left' do
                 = image_tag user_avatar_url(@user, 100), alt: @user.username, class: 'media-object avatar', width: 100, height: 100
             - else

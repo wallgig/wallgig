@@ -11,7 +11,7 @@ class CollectionsController < ApplicationController
     if @user.present?
       # Viewing user's collections. They are ordered.
       @collections = @user.collections.ordered
-      @should_apply_purity_settings = false if user_signed_in? && current_user == @user
+      @should_apply_purity_settings = false if myself?
     else
       @collections = Collection.order('collections.updated_at desc')
                            
