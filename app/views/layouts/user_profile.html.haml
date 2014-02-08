@@ -8,7 +8,7 @@
       .media-meta
         .container.container-full
           .pull-right
-            - if can? :update, @user
+            - if myself
               .btn-group
                 %button{:type => 'button', :class => 'btn btn-lg btn-default dropdown-toggle', :data => {:toggle => 'dropdown'}}
                   %span.glyphicon.glyphicon-cog
@@ -24,17 +24,24 @@
                       %a{:href => '#', :data => {:action => 'explain-add-profile-cover'}}
                         %span.glyphicon.glyphicon-picture
                         Add profile cover
-                  %li.divider
                   %li
                     = link_to account_collections_path do
                       %span.glyphicon.glyphicon-pencil
                       Manage collections
+                  %li
+                    = link_to edit_account_profile_path do
+                      %span.glyphicon.glyphicon-pencil
+                      Edit profile
             / - else
             /   = link_to '#', class: 'btn btn-lg btn-primary' do
             /     %span.glyphicon.glyphicon-plus
             /     Follow
           .media
-            = image_tag user_avatar_url(@user, 100), alt: @user.username, class: 'media-object avatar pull-left', width: 100, height: 100
+            - if myself
+              = link_to edit_account_profile_path, class: 'pull-left' do
+                = image_tag user_avatar_url(@user, 100), alt: @user.username, class: 'media-object avatar', width: 100, height: 100
+            - else
+              = image_tag user_avatar_url(@user, 100), alt: @user.username, class: 'media-object avatar pull-left', width: 100, height: 100
             .media-body
               %h2.media-heading
                 = username_tag @user
