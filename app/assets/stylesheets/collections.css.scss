@@ -4,6 +4,7 @@
   margin-left: -10px;
   margin-right: -10px;
   overflow: hidden;
+  text-align: center;
   &.row-1 {
     height: 374px;
   }
@@ -12,8 +13,9 @@
     height: 354px;
     margin: 10px;
     overflow: hidden;
-    float: left;
+    display: inline-block;
     position: relative;
+    text-align: left;
     @include transition(all 0.1s ease-in);
     background-color: white;
     .row-collection {
