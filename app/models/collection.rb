@@ -33,8 +33,6 @@ class Collection < ActiveRecord::Base
 
   validates :name, presence: true
 
-  paginates_per 20
-
   scope :public,  -> { where(public: true) }
   scope :private, -> { where(public: false) }
   scope :ordered, -> { order(position: :asc) }
