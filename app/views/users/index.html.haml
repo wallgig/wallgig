@@ -4,15 +4,15 @@
     - @user_days.each do |day, users|
       %h4= time_tag day, day.to_formatted_s(:long)
       - users.each do |user|
-        = link_to user, title: user.username, data: { toggle: 'tooltip' } do
-          = image_tag user_avatar_url(user, 50), width: 50, height: 50
+        = link_to user do
+          = image_tag user_avatar_url(user, 50), width: 50, height: 50, title: user.username, data: { toggle: 'tooltip' }
   .col-lg-4
     %h2 Staff
     - @user_staff.each do |role, users|
       %h4= role
       - users.each do |user|
-        = link_to user, title: user.username, data: { toggle: 'tooltip' } do
-          = image_tag user_avatar_url(user, 50), width: 50, height: 50
+        = link_to user do
+          = image_tag user_avatar_url(user, 50), width: 50, height: 50, title: user.username, data: { toggle: 'tooltip' }
 
 - content_for(:javascript_for_page) do
   :javascript
