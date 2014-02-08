@@ -14,4 +14,5 @@ $ ->
 
       ga('send', 'pageview', url) if ga
 
-    $('[rel=next]').bind('inview', loadNextPage)
+    if Wallgig.CurrentUser.Settings.infinite_scroll
+      $('[rel=next]').bind('inview', loadNextPage)
