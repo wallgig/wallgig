@@ -16,6 +16,7 @@
 #  sfw_wallpapers_count     :integer          default(0)
 #  sketchy_wallpapers_count :integer          default(0)
 #  nsfw_wallpapers_count    :integer          default(0)
+#  last_added_at            :datetime
 #
 
 require 'spec_helper'

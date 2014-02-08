@@ -2,7 +2,7 @@
   %ul.list-collection{:class => local_assigns[:extra_css_class]}
     - collections.each do |collection|
       - cache_if(should_apply_purity_settings, ['collections', 'list-item', collection, current_purities]) do
-        - wallpapers = collection.wallpapers.accessible_by(current_ability, :read).processed.limit(4)
+        - wallpapers = collection.recently_added_wallpapers.accessible_by(current_ability, :read).processed.limit(4)
         - wallpapers = wallpapers.with_purities(current_purities) if should_apply_purity_settings
         - wallpapers = WallpapersDecorator.new(wallpapers, context: { user: current_user })
         - next if wallpapers.empty?

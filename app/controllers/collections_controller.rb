@@ -13,14 +13,12 @@ class CollectionsController < ApplicationController
       @collections = @user.collections.ordered
       @should_apply_purity_settings = false if myself?
     else
-      @collections = Collection.order('collections.updated_at desc')
-                           
+      @collections = Collection.latest
     end
 
     @collections = @collections.includes(:owner)
                                .accessible_by(current_ability, :read)
                                .page(params[:page])
-                               # .has_wallpapers
 
     if @should_apply_purity_settings
       @collections = @collections.with_purities(current_purities)
@@ -33,10 +31,9 @@ class CollectionsController < ApplicationController
 
   # GET /collections/1
   def show
-    @wallpapers = @collection.wallpapers
-                            .accessible_by(current_ability, :read)
-                            .latest
-                            .page(params[:page])
+    @wallpapers = @collection.ordered_wallpapers
+                             .accessible_by(current_ability, :read)
+                             .page(params[:page])
 
     @wallpapers = @wallpapers.with_purities(current_purities) unless user_signed_in? && @collection.owner_type == 'User' && current_user.id == @collection.owner_id
 

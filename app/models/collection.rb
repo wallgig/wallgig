@@ -16,13 +16,16 @@
 #  sfw_wallpapers_count     :integer          default(0)
 #  sketchy_wallpapers_count :integer          default(0)
 #  nsfw_wallpapers_count    :integer          default(0)
+#  last_added_at            :datetime
 #
 
 class Collection < ActiveRecord::Base
   belongs_to :owner, polymorphic: true
 
   has_many :collections_wallpapers, dependent: :destroy
-  has_many :wallpapers, -> { order('collections_wallpapers.position ASC') }, through: :collections_wallpapers
+  has_many :wallpapers, through: :collections_wallpapers
+  has_many :ordered_wallpapers,        -> { order('collections_wallpapers.position ASC') },    through: :collections_wallpapers, class_name: 'Wallpaper', source: :wallpaper
+  has_many :recently_added_wallpapers, -> { order('collections_wallpapers.created_at DESC') }, through: :collections_wallpapers, class_name: 'Wallpaper', source: :wallpaper
 
   acts_as_list scope: :owner
 
@@ -35,7 +38,7 @@ class Collection < ActiveRecord::Base
   scope :public,  -> { where(public: true) }
   scope :private, -> { where(public: false) }
   scope :ordered, -> { order(position: :asc) }
-  scope :latest,  -> { order(updated_at: :desc) }
+  scope :latest,  -> { order(last_added_at: :desc) }
 
   # scope :has_wallpapers, -> { where.not(wallpapers: { id: nil }) }
 
@@ -82,12 +85,14 @@ class Collection < ActiveRecord::Base
   def uncollect!(wallpaper)
     collections_wallpapers.find_by!(wallpaper_id: wallpaper.id).destroy
 
+    touch
     self.class.decrement_counter(self.class.counter_name_for(wallpaper), id)
   end
 
   def collect!(wallpaper)
     collections_wallpapers.create!(wallpaper_id: wallpaper.id)
 
+    touch(:last_added_at)
     self.class.increment_counter(self.class.counter_name_for(wallpaper), id)
   end
 
