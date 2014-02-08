@@ -39,7 +39,7 @@ $ ->
       $this = $(this)
       url = $this.attr 'href'
       $this.unbind 'inview'
-      $this.replaceWith('<hr /><div class="loading-spinner" />')
+      $this.replaceWith('<div class="loading-spinner" />')
       $.get url, (html) ->
         $mainContainer = $('#main > .container')
         $mainContainer.find('.loading-spinner').remove()

@@ -1,4 +1,4 @@
-- if wallpapers.has_pagination? && !wallpapers.first_page?
+- if wallpapers.has_pagination? && request.xhr?
   .horizontal-page-bar
     %h3
       .pull-left= link_to wallpapers.current_page, url_for(page: wallpapers.current_page)
