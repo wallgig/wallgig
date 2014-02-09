@@ -84,6 +84,14 @@ categories = [
             ]
         ]
       ]
+  ],
+  [
+    'Cartoons / Comics',
+      [
+        'Artists',
+        'Characters',
+        'Series'
+      ]
   ]
 ]
 

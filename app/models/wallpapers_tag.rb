@@ -16,4 +16,6 @@ class WallpapersTag < ActiveRecord::Base
   belongs_to :added_by, class_name: 'User'
 
   validates :tag_id, presence: true, uniqueness: { scope: :wallpaper_id }
+
+  delegate :name, :purity, :category_name, to: :tag
 end

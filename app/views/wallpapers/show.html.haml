@@ -1,6 +1,6 @@
-- title ["\##{@wallpaper.id}", @wallpaper.tag_list_text].reject &:blank?
+- title       ["\##{@wallpaper.id}", @wallpaper.tag_list_text].reject(&:blank?)
 - description @wallpaper.tag_list_text
-- keywords @wallpaper.tag_list_text
+- keywords    @wallpaper.tag_list_text
 
 - content_for :wallpaper_sidebar_content do
   .panel.panel-transparent
@@ -45,18 +45,18 @@
       .panel-body
         .btn-group.btn-group-justified
           - if user_signed_in? && current_user.voted_for?(@wallpaper.object)
-            = link_to toggle_favourite_wallpaper_path(@wallpaper), class: 'btn btn-favourite favourited', data: { method: :post, remote: true } do
+            %a{:class => 'btn btn-favourite favourited', :data => {:remote => true, :method => :post, :url => toggle_favourite_wallpaper_path(@wallpaper)}}
               %span.glyphicon.glyphicon-star
               Faved
           - else
-            = link_to toggle_favourite_wallpaper_path(@wallpaper), class: 'btn btn-favourite', data: { method: :post, remote: true } do
+            %a{:class => 'btn btn-favourite favourite', :data => {:remote => true, :method => :post, :url => toggle_favourite_wallpaper_path(@wallpaper)}}
               %span.glyphicon.glyphicon-star-empty
               Fav
-          = link_to collections_wallpaper_path(@wallpaper), class: 'btn btn-collect', data: { remote: true } do
+          %a{:class => 'btn btn-collect', :data => {:remote => true, :url => collections_wallpaper_path(@wallpaper)}} 
             %span.glyphicon.glyphicon-folder-close
             Collect
           .btn-group
-            = link_to '#', class: 'btn btn-default dropdown-toggle', data: { toggle: 'dropdown' } do
+            %a{:class => 'btn btn-default dropdown-toggle', :data => {:toggle => 'dropdown'}} 
               %span.glyphicon.glyphicon-list
             %ul.dropdown-menu.pull-right{:role => 'menu'}
               - if user_signed_in?
@@ -131,22 +131,15 @@
           = link_to 'Load all comments', wallpaper_comments_path(@wallpaper), class: 'btn btn-block', remote: true, data: { action: 'load-comments' }
 
 
-    / - cache ['show', @wallpaper, 'tag_list'] do
-    - if @wallpaper.tags.any?
-      .panel-body
-        %ul.list-unstyled
-          - @wallpaper.tags.each do |tag|
-            %li
-              = link_to tag, class: "purity-#{tag.purity}" do
-                %span.glyphicon.glyphicon-tag
-                = tag.name
-
-  / - @wallpaper.find_related_tags.accessible_by(current_ability, :read).processed.limit(9).in_groups_of(3, false).each do |wallpapers|
-  /   .row
-  /     - wallpapers.each do |wallpaper|
-  /       .col-xs-4
-  /         = link_to wallpaper, class: 'thumbnail' do
-  /           = image_tag wallpaper.thumbnail_image.thumb('80x80#').url, width: 80, height: 80
+    - cache ['wallpapers', 'show', @wallpaper, 'tag_list'] do
+      - if @wallpaper.ordered_tags.any?
+        .panel-body
+          %ul.list-unstyled
+            - @wallpaper.ordered_tags.each do |tag|
+              %li
+                = link_to tag, class: "purity-#{tag.purity}" do
+                  %span.glyphicon.glyphicon-tag
+                  = tag.name
 
 - content_for :wallpaper_stage_content do
   = image_tag @wallpaper.requested_image_url, width: @wallpaper.requested_image_width, height: @wallpaper.requested_image_height, class: "img-wallpaper img-#{@wallpaper.format} state-1"

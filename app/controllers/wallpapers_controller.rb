@@ -196,22 +196,7 @@ class WallpapersController < ApplicationController
     params.require(:wallpaper).permit(:purity, :image, :image_gravity, :source, :category_id, tag_ids: [])
   end
 
-  def update_wallpaper_params_with_purity
-    # TODO deprecate
-    params.require(:wallpaper).permit(:tag_list, :image_gravity, :source, :purity, :category_id)
-  end
-
-  def update_wallpaper_params_without_purity
-    # TODO deprecate
-    update_wallpaper_params_with_purity.except(:purity)
-  end
-
   def update_wallpaper_params
-    # if can? :update_purity, @wallpaper
-    #   update_wallpaper_params_with_purity
-    # else
-    #   update_wallpaper_params_without_purity
-    # end
     wallpaper_params.except(:image)
   end
 

@@ -53,7 +53,8 @@ class Wallpaper < ActiveRecord::Base
 
   # Tags relation
   has_many :wallpapers_tags, dependent: :destroy
-  has_many :tags, -> {
+  has_many :tags, through: :wallpapers_tags
+  has_many :ordered_tags, -> {
     reorder('
       CASE tags.purity
         WHEN \'sfw\' THEN 3
@@ -62,7 +63,7 @@ class Wallpaper < ActiveRecord::Base
       END DESC,
       name ASC
     ')
-  }, through: :wallpapers_tags
+  }, through: :wallpapers_tags, source: :tag
 
   include Approvable
   include HasPurity

@@ -30,6 +30,7 @@
 
 #= require_tree .
 #= require_tree ../templates/.
+#= require_self
 
 $ ->
   $(document).on 'ajax:error', (e, xhr, status, error) ->
@@ -37,3 +38,7 @@ $ ->
     bootbox.alert
       message: xhr.responseJSON.join('<br>'),
       title: 'Something went wrong'
+
+  $.rails.href = (element) ->
+    # Read data-url if present
+    element.data('url') || element.attr('href')
