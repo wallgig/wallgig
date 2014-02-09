@@ -29,6 +29,9 @@ class Ability
     # Topic
     can :read, Topic, forum: { can_read: true }, hidden: false
 
+    # Tag
+    can :read, Tag
+
     if user.persisted?
       # Wallpaper
       can :read, Wallpaper, processing: false
@@ -69,6 +72,9 @@ class Ability
       can :create,  Topic, forum: { can_post: true }
       can :comment, Topic, forum: { can_comment: true }, locked: false
       can :update,  Topic, user_id: user.id
+
+      # Tag
+      can :create, Tag, coined_by_id: user.id
     else
       # Wallpaper
       can :read, Wallpaper, processing: false, purity: 'sfw'

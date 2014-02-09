@@ -4,7 +4,15 @@ class TagsController < ApplicationController
   before_action :set_categories, only: [:new, :edit, :create, :update]
 
   def show
+    @wallpapers = @tag.wallpapers.accessible_by(current_ability, :read)
+                                 .with_purities(current_purities)
+                                 .page(params[:page])
 
+    @wallpapers = WallpapersDecorator.new(@wallpapers, context: { user: current_user })
+
+    if request.xhr?
+      render partial: 'wallpapers/list', layout: false, locals: { wallpapers: @wallpapers }
+    end
   end
 
   def new

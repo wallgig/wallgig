@@ -16,6 +16,9 @@ class Tag < ActiveRecord::Base
   belongs_to :category
   belongs_to :coined_by, class_name: 'User'
 
+  has_many :wallpapers_tags, dependent: :destroy
+  has_many :wallpapers, through: :wallpapers_tags
+
   include Approvable
   include HasPurity
 
