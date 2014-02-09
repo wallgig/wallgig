@@ -24,7 +24,7 @@ $ ->
       $modal.on 'hidden.bs.modal', (e) ->
         $(this).remove()
 
-  if $('body.wallpapers.index, body.collections.show, body.users.show, body.favourites.index').length == 1
+  if $('.list-wallpaper').length > 0
     applyLazyLoad = ->
       $('.list-wallpaper .img-wallpaper.lazy:not(.lazy-loaded)').each ->
         $this = $(this)

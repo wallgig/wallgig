@@ -49,6 +49,8 @@ class User < ActiveRecord::Base
 
   has_many :topics, dependent: :nullify
 
+  has_many :coined_tags, class_name: 'Tag', foreign_key: 'coined_by_id'
+
   # Include default devise modules. Others available are:
   # :timeoutable and :omniauthable
   devise :database_authenticatable, :registerable,

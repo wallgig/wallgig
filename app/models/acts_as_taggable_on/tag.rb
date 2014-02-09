@@ -2,8 +2,14 @@
 #
 # Table name: tags
 #
-#  id   :integer          not null, primary key
-#  name :string(255)
+#  id             :integer          not null, primary key
+#  name           :string(255)
+#  slug           :string(255)
+#  category_id    :integer
+#  purity         :string(255)
+#  coined_by_id   :integer
+#  approved_by_id :integer
+#  approved_at    :datetime
 #
 
 class ActsAsTaggableOn::Tag

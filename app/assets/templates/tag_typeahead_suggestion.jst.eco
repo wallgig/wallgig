@@ -1,0 +1,2 @@
+<p class="tag-name purity-<%= @purity %>"><%= @name %></p>
+<p class="tag-category-name"><%= @category_name %></p>

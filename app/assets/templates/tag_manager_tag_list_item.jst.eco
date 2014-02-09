@@ -1,0 +1,12 @@
+<li class="list-group-item" data-tag-id="<%= @id %>">
+  <a class="pull-right" data-action="remove">
+    <span class="glyphicon glyphicon-remove"></span>
+  </a>
+  <span class="purity-<%= @purity %>">
+    <span class="glyphicon glyphicon-tag"></span>
+    <%= @name %>
+  </span>
+  <br>
+  <%= @category_name %>
+  <input type="hidden" name="wallpaper[tag_ids][]" value="<%= @id %>">
+</li>

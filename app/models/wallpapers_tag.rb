@@ -1,0 +1,19 @@
+# == Schema Information
+#
+# Table name: wallpapers_tags
+#
+#  id           :integer          not null, primary key
+#  wallpaper_id :integer
+#  tag_id       :integer
+#  added_by_id  :integer
+#  created_at   :datetime
+#  updated_at   :datetime
+#
+
+class WallpapersTag < ActiveRecord::Base
+  belongs_to :wallpaper, inverse_of: :wallpapers_tags
+  belongs_to :tag
+  belongs_to :added_by, class_name: 'User'
+
+  validates :tag_id, presence: true, uniqueness: { scope: :wallpaper_id }
+end

@@ -36,8 +36,9 @@
 #
 
 class Wallpaper < ActiveRecord::Base
+  attr_accessor :editor # Stores the user currently editing this wallpaper
+
   belongs_to :user, counter_cache: true
-  belongs_to :approved_by, class_name: 'User'
 
   has_many :wallpaper_colors, -> { order('wallpaper_colors.percentage DESC') }, dependent: :destroy
   has_many :colors, through: :wallpaper_colors, class_name: 'Kolor'
@@ -47,10 +48,25 @@ class Wallpaper < ActiveRecord::Base
   has_many :favourites, dependent: :destroy
   has_many :favourited_users, through: :favourites, source: :wallpaper
 
+  # TODO deprecate
   belongs_to :category
 
-  include Reportable
+  # Tags relation
+  has_many :wallpapers_tags, dependent: :destroy
+  has_many :tags, -> {
+    reorder('
+      CASE tags.purity
+        WHEN \'sfw\' THEN 3
+        WHEN \'sketchy\' THEN 2
+        WHEN \'nsfw\' THEN 1
+      END DESC,
+      name ASC
+    ')
+  }, through: :wallpapers_tags
+
+  include Approvable
   include HasPurity
+  include Reportable
 
   acts_as_votable
 
@@ -71,7 +87,8 @@ class Wallpaper < ActiveRecord::Base
   acts_as_commentable
 
   # Tags
-  acts_as_taggable
+  # acts_as_taggable
+  serialize :cached_tag_list, Array
 
   # Pagination
   paginates_per 20
@@ -99,7 +116,7 @@ class Wallpaper < ActiveRecord::Base
       indexes :user_id, type: 'integer', index: 'not_analyzed'
       indexes :user,    type: 'string',  index: 'not_analyzed'
       indexes :purity,  type: 'string',  index: 'not_analyzed'
-      indexes :tags,       type: 'string', analyzer: 'string_lowercase'
+      indexes :tags,       type: 'string', analyzer: 'keyword'
       indexes :categories, type: 'string', analyzer: 'string_lowercase'
       indexes :width,   type: 'integer', index: 'not_analyzed'
       indexes :height,  type: 'integer', index: 'not_analyzed'
@@ -119,7 +136,6 @@ class Wallpaper < ActiveRecord::Base
   end
 
   # Validation
-  validates_presence_of :purity
   validates_presence_of :image
   validates_size_of :image,      maximum: 20.megabytes,                       on: :create
   validates_property :mime_type, of: :image, in: ['image/jpeg', 'image/png'], on: :create
@@ -137,9 +153,6 @@ class Wallpaper < ActiveRecord::Base
   scope :latest,        -> { order(created_at: :desc) }
   scope :similar_to,    -> (w) { where.not(id: w.id).where(["( SELECT SUM(((phash::bigint # ?) >> bit) & 1 ) FROM generate_series(0, 63) bit) <= 15", w.phash]) }
 
-  scope :approved,         -> { where.not(approved_at: nil) }
-  scope :pending_approval, -> { where(approved_at:nil) }
-
   # Callbacks
   before_validation :set_image_hash, on: :create
 
@@ -150,13 +163,15 @@ class Wallpaper < ActiveRecord::Base
 
   around_save :check_image_gravity_changed
 
-  before_save do
-    if tag_list.empty?
-      self.tag_list << 'tagme'
-    else
-      tag_list.remove('tagme')
-    end
-  end
+  before_save :set_cached_tag_list
+
+  # before_save do
+  #   if tag_list.empty?
+  #     self.tag_list << 'tagme'
+  #   else
+  #     tag_list.remove('tagme')
+  #   end
+  # end
 
   after_save :update_processing_status, if: :processing?
 
@@ -336,20 +351,17 @@ class Wallpaper < ActiveRecord::Base
     ApplicationController.helpers.markdown_line(source) if source.present?
   end
 
-  def approved?
-    approved_at.present?
+  # TODO
+  def tag_list
+    cached_tag_list
   end
 
-  def approve_by!(user)
-    self.approved_by = user
-    self.approved_at = Time.now
-    save!
+  def tag_list_text(glue = ', ')
+    tag_list.join(glue)
   end
 
-  def unapprove!
-    self.approved_by = nil
-    self.approved_at = nil
-    save!
+  def set_cached_tag_list
+    self.cached_tag_list = tags.pluck(:name)
   end
 
   private

@@ -34,7 +34,7 @@
             .media-body
               %h4.media-heading= link_to_user comment.commentable
           - when 'Wallpaper'
-            = link_to comment.commentable, title: comment.commentable.cached_tag_list, target: '_blank' do
+            = link_to comment.commentable, title: comment.commentable.tag_list_text, target: '_blank' do
               = image_tag comment.commentable.thumbnail_image_url, width: 250, height: 188, class: 'img-wallpaper img-responsive'
 
     %hr.invisible

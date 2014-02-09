@@ -1,7 +1,7 @@
 ActiveAdmin.register Wallpaper do
   config.filters = false
 
-  permit_params :purity, :tag_list, :source, :image_gravity
+  permit_params :purity, :source, :image_gravity
 
   scope :pending_approval, default: true
   scope :processing
@@ -61,7 +61,7 @@ ActiveAdmin.register Wallpaper do
     column :processing, sortable: :processing do |wallpaper|
       status_tag wallpaper.processing? ? 'Yes' : 'No'
     end
-    column 'Tags', :cached_tag_list, sortable: false
+    column 'Tags', :tag_list_text, sortable: false
     column 'Views', :impressions_count
     column 'Favourites', sortable: :favourites_count do |wallpaper|
       link_to wallpaper.favourites_count, admin_favourites_path(q: { wallpaper_id_eq: wallpaper })
@@ -70,7 +70,9 @@ ActiveAdmin.register Wallpaper do
     column :user
     column :created_at
     column :updated_at
-    actions
+    actions do |wallpaper|
+      link_to 'Edit on main site', edit_wallpaper_path(wallpaper)
+    end
   end
 
   show do
@@ -150,7 +152,7 @@ ActiveAdmin.register Wallpaper do
   form do |f|
     f.inputs do
       f.input :purity
-      f.input :tag_list
+      # f.input :tag_list
       f.input :source
       f.input :image_gravity
     end

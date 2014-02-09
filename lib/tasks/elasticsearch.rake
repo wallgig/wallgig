@@ -5,7 +5,7 @@ namespace :elasticsearch do
   desc "re-index elasticsearch"
   task :reindex => :environment do
 
-    klass = Place
+    klass = Wallpaper
     ENV['CLASS'] = klass.name
     ENV['INDEX'] = new_index = klass.tire.index.name << '_' << Time.now.strftime('%Y%m%d%H%M%S')
 

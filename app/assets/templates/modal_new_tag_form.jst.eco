@@ -1,0 +1,34 @@
+<form role="form">
+  <div class="form-inputs">
+    <div class="form-group">
+      <label for="tag_name">
+        <abbr title="required">*</abbr>
+        Tag name
+      </label>
+      <input type="text" class="form-control" id="tag_name" name="tag[name]" value="<%= @name %>" required="required">
+    </div>
+    <div class="form-group">
+      <label for="tag_purity">
+        <abbr title="required">*</abbr>
+        Purity
+      </label>
+      <select class="form-control" id="tag_purity" name="tag[purity]" required="required">
+        <option value=""></option>
+        <option selected="selected" value="sfw">SFW</option>
+        <option value="sketchy">Sketchy</option>
+        <option value="nsfw">NSFW</option>
+      </select>
+    </div>
+    <div class="form-group">
+      <label for="tag_category_id">
+        Category
+      </label>
+      <select class="form-control" id="tag_category_id" name="tag[category_id]">
+        <option value=""></option>
+        <% for category in @categories: %>
+          <option value="<%= category.id %>"><%= category.label %></option>
+        <% end %>
+      </select>
+    </div>
+  </div>
+</form>

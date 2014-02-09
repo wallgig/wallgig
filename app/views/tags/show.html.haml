@@ -1,0 +1,12 @@
+- content_for :use_full_container, true
+
+.page-header
+  %h2{:class => "purity-#{@tag.purity}"}
+    %span.glyphicon.glyphicon-tag
+    = title @tag.name
+  - if @tag.category.present?
+    %ol.breadcrumb
+      - [@tag.category.ancestors, @tag.category].flatten.each do |category|
+        %li= link_to category.name, category
+
+= render partial: 'wallpapers/list', locals: { wallpapers: @wallpapers }

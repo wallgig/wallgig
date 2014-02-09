@@ -19,19 +19,20 @@
         %li
           .btn-group
             - if search_options[:exclude_tags].try(:include?, term)
-              = link_to url_for(search_options.merge(exclude_tags: (exclude_tags - [term]), tags: (tags - [term])).reject(&blank_value)), class: 'btn btn-sm btn-danger' do
-                %span.glyphicon.glyphicon-minus
+              = link_to url_for(search_options.merge(exclude_tags: (exclude_tags - [term]), tags: (tags - [term])).reject(&blank_value)), class: 'btn btn-xs btn-danger' do
+                %span.glyphicon.glyphicon-remove
             - else
-              = link_to url_for(search_options.merge(exclude_tags: (exclude_tags + [term]), tags: (tags - [term])).reject(&blank_value)), class: 'btn btn-sm btn-default' do
-                %span.glyphicon.glyphicon-minus
+              = link_to url_for(search_options.merge(exclude_tags: (exclude_tags + [term]), tags: (tags - [term])).reject(&blank_value)), class: 'btn btn-xs btn-default' do
+                %span.glyphicon.glyphicon-remove
             - if search_options[:tags].try(:include?, term)
-              = link_to url_for(search_options.merge(tags: (tags - [term]), exclude_tags: (exclude_tags - [term])).reject(&blank_value)), class: 'btn btn-sm btn-success' do
-                = term
-                %small (#{terms_to_count[term]})
+              = link_to url_for(search_options.merge(tags: (tags - [term]), exclude_tags: (exclude_tags - [term])).reject(&blank_value)), class: 'btn btn-xs btn-success' do
+                %span.glyphicon.glyphicon-ok
             - else
-              = link_to url_for(search_options.merge(tags: (tags + [term]), exclude_tags: (exclude_tags - [term])).reject(&blank_value)), class: 'btn btn-sm btn-link' do
-                = term
-                %small (#{terms_to_count[term]})
+              = link_to url_for(search_options.merge(tags: (tags + [term]), exclude_tags: (exclude_tags - [term])).reject(&blank_value)), class: 'btn btn-xs btn-default' do
+                %span.glyphicon.glyphicon-ok
+            = link_to tag_path(term.parameterize), class: 'btn btn-xs btn-link' do
+              = term
+              %small (#{terms_to_count[term] || 0})
 
 - content_for :purity do
   %h5 Purity
@@ -109,10 +110,10 @@
 
 .well
   .row
-    .col-lg-5= yield :tags
-    .col-lg-7
+    .col-lg-6= yield :tags
+    .col-lg-6
       .row
-        .col-lg-2
+        .col-lg-1
           = yield :sort_by
           = yield :purity if user_signed_in?
 

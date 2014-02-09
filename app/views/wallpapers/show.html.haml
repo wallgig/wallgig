@@ -1,6 +1,6 @@
-- title ["\##{@wallpaper.id}", @wallpaper.cached_tag_list].reject &:blank?
-- description @wallpaper.cached_tag_list
-- keywords @wallpaper.cached_tag_list
+- title ["\##{@wallpaper.id}", @wallpaper.tag_list_text].reject &:blank?
+- description @wallpaper.tag_list_text
+- keywords @wallpaper.tag_list_text
 
 - content_for :wallpaper_sidebar_content do
   .panel.panel-transparent
@@ -132,15 +132,14 @@
 
 
     / - cache ['show', @wallpaper, 'tag_list'] do
-    - if @wallpaper.tag_list.any?
+    - if @wallpaper.tags.any?
       .panel-body
-        %ul.list-inline
-          %li
-            %span.glyphicon.glyphicon-tags
-          - @wallpaper.tag_list.each do |tag|
+        %ul.list-unstyled
+          - @wallpaper.tags.each do |tag|
             %li
-              = link_to wallpapers_path(tags: [tag]), class: 'label label-default' do
-                = tag
+              = link_to tag, class: "purity-#{tag.purity}" do
+                %span.glyphicon.glyphicon-tag
+                = tag.name
 
   / - @wallpaper.find_related_tags.accessible_by(current_ability, :read).processed.limit(9).in_groups_of(3, false).each do |wallpapers|
   /   .row
