@@ -61,7 +61,7 @@ ActiveAdmin.register Wallpaper do
     column :processing, sortable: :processing do |wallpaper|
       status_tag wallpaper.processing? ? 'Yes' : 'No'
     end
-    # column 'Tags', :cached_tag_list, sortable: false
+    column 'Tags', :tag_list_text, sortable: false
     column 'Views', :impressions_count
     column 'Favourites', sortable: :favourites_count do |wallpaper|
       link_to wallpaper.favourites_count, admin_favourites_path(q: { wallpaper_id_eq: wallpaper })
@@ -70,7 +70,9 @@ ActiveAdmin.register Wallpaper do
     column :user
     column :created_at
     column :updated_at
-    actions
+    actions do |wallpaper|
+      link_to 'Edit on main site', edit_wallpaper_path(wallpaper)
+    end
   end
 
   show do
@@ -79,7 +81,7 @@ ActiveAdmin.register Wallpaper do
         row :user
         row(:approved) { |w| status_tag w.approved? ? 'Yes' : 'No' }
         row(:purity) { |w| status_tag w.purity_text }
-        # row :tag_list
+        row :tag_list
         row :source
         row :primary_color do |wallpaper|
           content_tag :div, nil, style: "width: 50px; height: 50px; background-color: #{wallpaper.primary_color.to_html_hex}" if wallpaper.primary_color.present?

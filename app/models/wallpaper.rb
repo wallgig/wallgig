@@ -88,6 +88,7 @@ class Wallpaper < ActiveRecord::Base
 
   # Tags
   # acts_as_taggable
+  serialize :cached_tag_list, Array
 
   # Pagination
   paginates_per 20
@@ -161,6 +162,8 @@ class Wallpaper < ActiveRecord::Base
   after_create :queue_process_image
 
   around_save :check_image_gravity_changed
+
+  before_save :set_cached_tag_list
 
   # before_save do
   #   if tag_list.empty?
@@ -350,13 +353,16 @@ class Wallpaper < ActiveRecord::Base
 
   # TODO
   def tag_list
-    tags.pluck(:name)
-    # ActsAsTaggableOn::TagList.from(cached_tag_list)
+    cached_tag_list
   end
 
-  # def tag_ids=(value)
-  #   raise value
-  # end
+  def tag_list_text(glue = ', ')
+    tag_list.join(glue)
+  end
+
+  def set_cached_tag_list
+    self.cached_tag_list = tags.pluck(:name)
+  end
 
   private
 

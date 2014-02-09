@@ -1,7 +1,7 @@
 - content_for :use_full_container, true
 
 .page-header
-  %h1{:class => "purity-#{@tag.purity}"}
+  %h2{:class => "purity-#{@tag.purity}"}
     %span.glyphicon.glyphicon-tag
     = title @tag.name
   - if @tag.category.present?

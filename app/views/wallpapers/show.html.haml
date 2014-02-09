@@ -1,6 +1,6 @@
-- title ["\##{@wallpaper.id}", @wallpaper.cached_tag_list].reject &:blank?
-- description @wallpaper.cached_tag_list
-- keywords @wallpaper.cached_tag_list
+- title ["\##{@wallpaper.id}", @wallpaper.tag_list_text].reject &:blank?
+- description @wallpaper.tag_list_text
+- keywords @wallpaper.tag_list_text
 
 - content_for :wallpaper_sidebar_content do
   .panel.panel-transparent
