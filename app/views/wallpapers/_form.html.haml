@@ -11,7 +11,7 @@
   %hr/
 
   .form-inputs
-    = f.input :purity unless @wallpaper.purity_locked?
+    = f.input :purity
     = f.input :image, as: :file unless @wallpaper.persisted?
     / = f.input :category_id, collection: @available_categories, label_method: :name_for_selects, value_method: :id, include_blank: true, hint: 'Try to set the deepest possible category'
     / .form-group

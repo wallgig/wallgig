@@ -115,7 +115,7 @@ class Wallpaper < ActiveRecord::Base
       indexes :user_id, type: 'integer', index: 'not_analyzed'
       indexes :user,    type: 'string',  index: 'not_analyzed'
       indexes :purity,  type: 'string',  index: 'not_analyzed'
-      indexes :tags,       type: 'string', analyzer: 'string_lowercase'
+      indexes :tags,       type: 'string', analyzer: 'keyword'
       indexes :categories, type: 'string', analyzer: 'string_lowercase'
       indexes :width,   type: 'integer', index: 'not_analyzed'
       indexes :height,  type: 'integer', index: 'not_analyzed'
@@ -162,13 +162,13 @@ class Wallpaper < ActiveRecord::Base
 
   around_save :check_image_gravity_changed
 
-  before_save do
-    if tag_list.empty?
-      self.tag_list << 'tagme'
-    else
-      tag_list.remove('tagme')
-    end
-  end
+  # before_save do
+  #   if tag_list.empty?
+  #     self.tag_list << 'tagme'
+  #   else
+  #     tag_list.remove('tagme')
+  #   end
+  # end
 
   after_save :update_processing_status, if: :processing?
 
@@ -350,7 +350,8 @@ class Wallpaper < ActiveRecord::Base
 
   # TODO
   def tag_list
-    ActsAsTaggableOn::TagList.from(cached_tag_list)
+    tags.pluck(:name)
+    # ActsAsTaggableOn::TagList.from(cached_tag_list)
   end
 
   # def tag_ids=(value)

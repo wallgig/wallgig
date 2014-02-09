@@ -21,6 +21,7 @@ class TagsController < ApplicationController
   end
 
   def edit
+    authorize! :update, @tag
   end
 
   def create
