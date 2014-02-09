@@ -36,6 +36,8 @@
 #
 
 class Wallpaper < ActiveRecord::Base
+  attr_accessor :editor # Stores the user currently editing this wallpaper
+
   belongs_to :user, counter_cache: true
 
   has_many :wallpaper_colors, -> { order('wallpaper_colors.percentage DESC') }, dependent: :destroy
@@ -341,6 +343,10 @@ class Wallpaper < ActiveRecord::Base
   def tag_list
     ActsAsTaggableOn::TagList.from(cached_tag_list)
   end
+
+  # def tag_ids=(value)
+  #   raise value
+  # end
 
   private
 

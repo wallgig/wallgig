@@ -25,4 +25,7 @@ class Tag < ActiveRecord::Base
   delegate :name, to: :category, prefix: true, allow_nil: true
 
   validates :name, presence: true, uniqueness: { case_sensitive: false }
+
+  scope :name_like, -> (query) { where('name ILIKE ?', "#{query}%") }
+  scope :alphabetically, -> { order 'LOWER(name) ASC' }
 end

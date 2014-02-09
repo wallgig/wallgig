@@ -26,6 +26,8 @@
 #= require to-markdown
 #= require bootstrap-markdown
 
+#= require typeahead.bundle
+
 #= require_tree .
 #= require_tree ../templates/.
 
