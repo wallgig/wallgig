@@ -28,4 +28,8 @@ class Tag < ActiveRecord::Base
 
   scope :name_like, -> (query) { where('name ILIKE ?', "#{query}%") }
   scope :alphabetically, -> { order 'LOWER(name) ASC' }
+
+  def self.find_by_name(name)
+    where(['LOWER(name) = LOWER(?)', name]).first
+  end
 end

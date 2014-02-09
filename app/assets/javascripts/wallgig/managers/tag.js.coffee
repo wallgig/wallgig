@@ -34,18 +34,7 @@ class Wallgig.Managers.Tag
 
     @input.typeahead(null, dataset)
 
-  onKeydown: (e) ->
-    if e.keyCode == 13
-      e.preventDefault()
-      # TODO do something here
-      @clearInputVal()
-
-  onTypeaheadSelected: (e, tag, name) ->
-    e.preventDefault()
-    @clearInputVal()
-    @addTag(tag)
-
-  getInputVal: -> @input.typeahead('val')
+  getInputVal:   -> @input.typeahead('val')
   clearInputVal: -> @input.typeahead('val', '')
 
   tagIdExist: (tagId) -> parseInt(tagId) in @tagIds
@@ -55,19 +44,43 @@ class Wallgig.Managers.Tag
       @tagIds.splice(index, 1)
   addTagId: (tagId) -> @tagIds.push(parseInt(tagId))
 
-  onClickRemoveTag: (e) ->
-    e.preventDefault()
-    $container = $(e.currentTarget).closest('[data-tag-id]')
-    tagId = $container.data('tag-id')
-    console.log @tagIds
-    @removeTagId(tagId)
-    console.log @tagIds
-    $container.remove()
-
   addTag: (tag) ->
     return if @tagIdExist(tag.id)
 
     @list.append(JST['tag_manager_tag_list_item'](tag))
-    console.log @tagIds
     @addTagId(tag.id)
-    console.log @tagIds
+
+  addOrCreateTag: (name) ->
+    $.get '/api/v1/tags/find', name: name, (data) =>
+      if data.id
+        @addTag(data)
+      else
+        # modal = new Wallgig.Modals.NewTag(@getInputVal(), $.proxy(@addTag, @))
+        # modal.show()
+
+        bootbox.alert('This tag does not exist. <a href="/tags/new">Please go here and add!</a>')
+
+  onKeydown: (e) ->
+    if e.which == 13
+      e.preventDefault()
+
+      value = $(e.currentTarget).val()
+
+      if value.length > 0
+        @addOrCreateTag(value)
+        @clearInputVal()
+    null
+
+  onTypeaheadSelected: (e, tag, name) ->
+    e.preventDefault()
+    @clearInputVal()
+    @addOrCreateTag(tag.name)
+    null
+
+  onClickRemoveTag: (e) ->
+    e.preventDefault()
+    $container = $(e.currentTarget).closest('[data-tag-id]')
+    tagId = $container.data('tag-id')
+    @removeTagId(tagId)
+    $container.remove()
+    null

@@ -3,3 +3,4 @@
 
 window.Wallgig =
   Managers: {}
+  Modals: {}

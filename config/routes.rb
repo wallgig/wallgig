@@ -131,7 +131,11 @@ Wallgig::Application.routes.draw do
     namespace :v1 do
       resources :sessions, only: :create
 
-      resources :tags, only: [:index]
+      resources :tags, only: [:index] do
+        collection do
+          get :find
+        end
+      end
 
       resources :users, only: [:me] do
         collection do

@@ -6,9 +6,12 @@ class Api::V1::TagsController < Api::V1::BaseController
       @tags = Tag.name_like(params[:q]).includes(:category).limit(20)
     end
 
-    if search_params[:exclude_ids].present?
-      @tags = @tags.where.not(id: search_params[:exclude_ids])
-    end
+    @tags = @tags.includes(:category)
+    @tags = @tags.where.not(id: search_params[:exclude_ids]) if search_params[:exclude_ids].present?
+  end
+
+  def find
+    @tag = Tag.find_by_name(params[:name]) if params[:name].present?
   end
 
   private
