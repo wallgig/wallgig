@@ -34,7 +34,7 @@ class Wallgig.Managers.Tag
 
     @input.typeahead(null, dataset)
 
-  getInputVal:   -> @input.typeahead('val')
+  getInputVal:   -> @input.val()
   clearInputVal: -> @input.typeahead('val', '')
 
   tagIdExist: (tagId) -> parseInt(tagId) in @tagIds
@@ -51,20 +51,20 @@ class Wallgig.Managers.Tag
     @addTagId(tag.id)
 
   addOrCreateTag: (name) ->
-    $.get '/api/v1/tags/find', name: name, (data) =>
-      if data.id
-        @addTag(data)
+    $.get '/api/v1/tags/find_or_initialize', name: name, (data) =>
+      if data.tag
+        @addTag(data.tag)
       else
-        # modal = new Wallgig.Modals.NewTag(@getInputVal(), $.proxy(@addTag, @))
-        # modal.show()
+        modal = new Wallgig.Modals.NewTag(name, data.available_categories, $.proxy(@addTag, @))
+        modal.show()
 
-        bootbox.alert('This tag does not exist. <a href="/tags/new">Please go here and add!</a>')
+        # bootbox.alert('This tag does not exist. <a href="/tags/new">Please go here and add!</a>')
 
   onKeydown: (e) ->
     if e.which == 13
       e.preventDefault()
 
-      value = $(e.currentTarget).val()
+      value = @getInputVal()
 
       if value.length > 0
         @addOrCreateTag(value)
@@ -73,8 +73,8 @@ class Wallgig.Managers.Tag
 
   onTypeaheadSelected: (e, tag, name) ->
     e.preventDefault()
-    @clearInputVal()
     @addOrCreateTag(tag.name)
+    @clearInputVal()
     null
 
   onClickRemoveTag: (e) ->

@@ -259,35 +259,40 @@ $wallpaper-sidebar-width: 320px;
 }
 .purity-sfw, .btn-sfw {
   color: $btn-success-bg;
+  &:hover {
+    color: darken($btn-success-bg, 10%);
+  }
 }
 .purity-sketchy, .btn-sketchy {
   color: $btn-warning-bg;
+  &:hover {
+    color: darken($btn-warning-bg, 10%);
+  }
 }
 .purity-nsfw, .btn-nsfw {
   color: $btn-danger-bg;
+  &:hover {
+    color: darken($btn-danger-bg, 10%);
+  }
 }
 .btn-sfw {
   &.btn-active {
     @extend .btn-success;
-  }
-  &:hover {
-    color: darken($btn-success-bg, 10%);
   }
 }
 .btn-sketchy {
   &.btn-active {
     @extend .btn-warning;
   }
-  &:hover {
-    color: darken($btn-warning-bg, 10%);
-  }
 }
 .btn-nsfw {
   &.btn-active {
     @extend .btn-danger;
   }
-  &:hover {
-    color: darken($btn-danger-bg, 10%);
+}
+a.purity-sfw, a.purity-sketchy, a.purity-nsfw {
+  &, &:hover {
+    text-decoration: none;
   }
 }
 

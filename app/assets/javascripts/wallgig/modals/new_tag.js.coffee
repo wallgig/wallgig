@@ -1,10 +1,11 @@
 class Wallgig.Modals.NewTag
-  constructor: (@name, @successCallback) ->
+  constructor: (@name, @categories, @successCallback) ->
+    @form = $(JST['modal_new_tag_form'](@dataForTemplate()))
 
   show: ->
     bootbox.dialog
       title: 'New tag'
-      message: JST['modal_new_tag'](@dataForTemplate())
+      message: @form
       onEscape: -> true
       buttons:
         danger:
@@ -13,9 +14,12 @@ class Wallgig.Modals.NewTag
         success:
           label: 'Create Tag'
           className: 'btn-success'
-          callback: (e) ->
-            # TODO
-            false
+          callback: $.proxy(@onClickCreateTag, @)
 
   dataForTemplate: ->
     name: @name
+    categories: @categories
+
+  onClickCreateTag: (e) ->
+    $.post '/api/v1/tags', @form.serialize(), @successCallback
+    # false

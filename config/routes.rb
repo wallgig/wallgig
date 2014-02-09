@@ -131,9 +131,9 @@ Wallgig::Application.routes.draw do
     namespace :v1 do
       resources :sessions, only: :create
 
-      resources :tags, only: [:index] do
+      resources :tags, only: [:index, :create] do
         collection do
-          get :find
+          get :find_or_initialize
         end
       end
 

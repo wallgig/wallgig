@@ -1,6 +1,4 @@
 = simple_form_for(@wallpaper) do |f|
-  = f.error_notification
-
   - unless @wallpaper.persisted? || current_user.staff? || current_user.trusted?
     .alert.alert-warning
       %h4 Important
