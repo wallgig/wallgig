@@ -53,3 +53,52 @@ forums = [
 forums.each do |forum|
   Forum.find_or_create_by!(forum)
 end
+
+categories = [
+  [
+    'Anime / Manga',
+      [
+        'Characters',
+        'Series',
+        'Hentai / Ecchi',
+        'Movies',
+        'Visual Novels'
+      ]
+  ],
+  [
+    'Animals',
+      [
+        'Birds',
+        'Domestic / Pets'
+      ]
+  ],
+  [
+    'Art / Design',
+      [
+        [
+          'Classic',
+            [
+              'Illustrations',
+              'Paintings',
+              'Sculptures'
+            ]
+        ]
+      ]
+  ]
+]
+
+def create_categories(parent = nil, categories)
+  categories.each do |category|
+    if category.is_a?(Array)
+      category_name, children = category.shift, category.shift
+    else
+      category_name, children = category, []
+    end
+    new_category = Category.find_or_initialize_by(name: category_name)
+    new_category.parent = parent
+    new_category.save!
+    create_categories(new_category, children)
+  end
+end
+
+create_categories(nil, categories)

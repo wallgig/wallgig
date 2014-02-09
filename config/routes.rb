@@ -9,20 +9,24 @@ Wallgig::Application.routes.draw do
 
   root 'wallpapers#index'
 
-  resources :groups do
-    resources :collections
+  # resources :groups do
+  #   resources :collections
 
-    resources :favourites
+  #   resources :favourites
 
-    member do
-      get :apps
-      patch :update_apps
-      post :join
-      delete :leave
-    end
-  end
+  #   member do
+  #     get :apps
+  #     patch :update_apps
+  #     post :join
+  #     delete :leave
+  #   end
+  # end
 
+  # Categories
   resources :categories
+
+  # Tags
+  resources :tags
 
   # Account
   namespace :account do

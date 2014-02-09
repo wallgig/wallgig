@@ -37,7 +37,6 @@
 
 class Wallpaper < ActiveRecord::Base
   belongs_to :user, counter_cache: true
-  belongs_to :approved_by, class_name: 'User'
 
   has_many :wallpaper_colors, -> { order('wallpaper_colors.percentage DESC') }, dependent: :destroy
   has_many :colors, through: :wallpaper_colors, class_name: 'Kolor'
@@ -47,10 +46,16 @@ class Wallpaper < ActiveRecord::Base
   has_many :favourites, dependent: :destroy
   has_many :favourited_users, through: :favourites, source: :wallpaper
 
+  # TODO deprecate
   belongs_to :category
 
-  include Reportable
+  # Tags relation
+  has_many :wallpapers_tags, dependent: :destroy
+  has_many :tags, through: :wallpapers_tags
+
+  include Approvable
   include HasPurity
+  include Reportable
 
   acts_as_votable
 
@@ -71,7 +76,7 @@ class Wallpaper < ActiveRecord::Base
   acts_as_commentable
 
   # Tags
-  acts_as_taggable
+  # acts_as_taggable
 
   # Pagination
   paginates_per 20
@@ -119,7 +124,6 @@ class Wallpaper < ActiveRecord::Base
   end
 
   # Validation
-  validates_presence_of :purity
   validates_presence_of :image
   validates_size_of :image,      maximum: 20.megabytes,                       on: :create
   validates_property :mime_type, of: :image, in: ['image/jpeg', 'image/png'], on: :create
@@ -136,9 +140,6 @@ class Wallpaper < ActiveRecord::Base
   scope :visible,       -> { processed }
   scope :latest,        -> { order(created_at: :desc) }
   scope :similar_to,    -> (w) { where.not(id: w.id).where(["( SELECT SUM(((phash::bigint # ?) >> bit) & 1 ) FROM generate_series(0, 63) bit) <= 15", w.phash]) }
-
-  scope :approved,         -> { where.not(approved_at: nil) }
-  scope :pending_approval, -> { where(approved_at:nil) }
 
   # Callbacks
   before_validation :set_image_hash, on: :create
@@ -336,20 +337,9 @@ class Wallpaper < ActiveRecord::Base
     ApplicationController.helpers.markdown_line(source) if source.present?
   end
 
-  def approved?
-    approved_at.present?
-  end
-
-  def approve_by!(user)
-    self.approved_by = user
-    self.approved_at = Time.now
-    save!
-  end
-
-  def unapprove!
-    self.approved_by = nil
-    self.approved_at = nil
-    save!
+  # TODO
+  def tag_list
+    ActsAsTaggableOn::TagList.from(cached_tag_list)
   end
 
   private

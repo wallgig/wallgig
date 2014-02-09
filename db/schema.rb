@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20140208152055) do
+ActiveRecord::Schema.define(version: 20140209031850) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -261,8 +261,20 @@ ActiveRecord::Schema.define(version: 20140208152055) do
   add_index "taggings", ["taggable_id", "taggable_type", "context"], name: "index_taggings_on_taggable_id_and_taggable_type_and_context", using: :btree
 
   create_table "tags", force: true do |t|
-    t.string "name"
+    t.string   "name"
+    t.string   "slug"
+    t.integer  "category_id"
+    t.string   "purity"
+    t.integer  "coined_by_id"
+    t.integer  "approved_by_id"
+    t.datetime "approved_at"
   end
+
+  add_index "tags", ["approved_by_id"], name: "index_tags_on_approved_by_id", using: :btree
+  add_index "tags", ["category_id"], name: "index_tags_on_category_id", using: :btree
+  add_index "tags", ["coined_by_id"], name: "index_tags_on_coined_by_id", using: :btree
+  add_index "tags", ["purity"], name: "index_tags_on_purity", using: :btree
+  add_index "tags", ["slug"], name: "index_tags_on_slug", unique: true, using: :btree
 
   create_table "topics", force: true do |t|
     t.integer  "user_id"
@@ -457,5 +469,18 @@ ActiveRecord::Schema.define(version: 20140208152055) do
   add_index "wallpapers", ["purity"], name: "index_wallpapers_on_purity", using: :btree
   add_index "wallpapers", ["scrape_source", "scrape_id"], name: "index_wallpapers_on_scrape_source_and_scrape_id", unique: true, using: :btree
   add_index "wallpapers", ["user_id"], name: "index_wallpapers_on_user_id", using: :btree
+
+  create_table "wallpapers_tags", force: true do |t|
+    t.integer  "wallpaper_id"
+    t.integer  "tag_id"
+    t.integer  "added_by_id"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "wallpapers_tags", ["added_by_id"], name: "index_wallpapers_tags_on_added_by_id", using: :btree
+  add_index "wallpapers_tags", ["tag_id"], name: "index_wallpapers_tags_on_tag_id", using: :btree
+  add_index "wallpapers_tags", ["wallpaper_id", "tag_id"], name: "index_wallpapers_tags_on_wallpaper_id_and_tag_id", unique: true, using: :btree
+  add_index "wallpapers_tags", ["wallpaper_id"], name: "index_wallpapers_tags_on_wallpaper_id", using: :btree
 
 end
