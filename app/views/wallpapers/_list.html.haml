@@ -1,7 +1,11 @@
 - if wallpapers.has_pagination? && request.xhr?
+  - if respond_to?(:search_options)
+    - current_page_params = search_options.merge(page: wallpapers.current_page)
+  - else
+    - current_page_params = { page: wallpapers.current_page }
   .horizontal-page-bar
     %h3
-      .pull-left= link_to wallpapers.current_page, url_for(search_options.merge(page: wallpapers.current_page))
+      .pull-left= link_to wallpapers.current_page, url_for(current_page_params)
       .pull-right
         %a{:href => '#'}
           %span.glyphicon.glyphicon-chevron-up
