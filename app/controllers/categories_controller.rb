@@ -1,4 +1,6 @@
 class CategoriesController < ApplicationController
+  before_action :authenticate_admin_user! # TODO remove this
+
   before_action :set_category, only: [:show, :edit, :update, :destroy]
   before_action :set_parent_categories, only: [:edit, :update]
 

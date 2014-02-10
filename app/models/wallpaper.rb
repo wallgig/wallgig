@@ -36,8 +36,6 @@
 #
 
 class Wallpaper < ActiveRecord::Base
-  attr_accessor :editor # Stores the user currently editing this wallpaper
-
   belongs_to :user, counter_cache: true
 
   has_many :wallpaper_colors, -> { order('wallpaper_colors.percentage DESC') }, dependent: :destroy
@@ -98,7 +96,7 @@ class Wallpaper < ActiveRecord::Base
   is_impressionable counter_cache: true
 
   # Paper trail
-  has_paper_trail only: [:purity, :cached_tag_list, :source]
+  # has_paper_trail only: [:purity, :cached_tag_list, :source]
 
   # Search
   # formula to calculate wallpaper's popularity
@@ -163,16 +161,6 @@ class Wallpaper < ActiveRecord::Base
   after_create :queue_process_image
 
   around_save :check_image_gravity_changed
-
-  before_save :set_cached_tag_list
-
-  # before_save do
-  #   if tag_list.empty?
-  #     self.tag_list << 'tagme'
-  #   else
-  #     tag_list.remove('tagme')
-  #   end
-  # end
 
   after_save :update_processing_status, if: :processing?
 
@@ -363,6 +351,23 @@ class Wallpaper < ActiveRecord::Base
 
   def set_cached_tag_list
     self.cached_tag_list = tags.pluck(:name)
+  end
+
+  def update_tag_ids_by_user(new_tag_ids, user)
+    new_tag_ids.map!(&:to_i)
+
+    tag_ids_to_add    = new_tag_ids - tag_ids
+    tag_ids_to_remove = tag_ids - new_tag_ids
+
+    wallpapers_tags.where(tag_id: tag_ids_to_remove).delete_all if tag_ids_to_remove.any?
+
+    Tag.where(id: tag_ids_to_add).pluck(:id) do |tag_id|
+      wallpapers_tags.create(tag_id: tag_id, added_by_id: user.id)
+    end
+
+    set_cached_tag_list
+
+    save
   end
 
   private

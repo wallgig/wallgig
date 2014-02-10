@@ -48,11 +48,12 @@ class WallpapersController < ApplicationController
   # POST /wallpapers
   # POST /wallpapers.json
   def create
-    @wallpaper = current_user.wallpapers.new(wallpaper_params)
+    @wallpaper = current_user.wallpapers.new(create_wallpaper_params.except(:tag_ids))
     authorize! :create, @wallpaper
 
     respond_to do |format|
       if @wallpaper.save
+        @wallpaper.update_tag_ids_by_user(create_wallpaper_params[:tag_ids], current_user)
         format.html do
           if @wallpaper.approved?
             redirect_to @wallpaper, notice: 'Wallpaper was successfully created.'
@@ -71,11 +72,11 @@ class WallpapersController < ApplicationController
   # PATCH/PUT /wallpapers/1
   # PATCH/PUT /wallpapers/1.json
   def update
-    @wallpaper.editor = current_user
     authorize! :update, @wallpaper
 
     respond_to do |format|
-      if @wallpaper.update(update_wallpaper_params)
+      if @wallpaper.update(update_wallpaper_params.except(:tag_ids))
+        @wallpaper.update_tag_ids_by_user(update_wallpaper_params[:tag_ids], current_user)
         format.html { redirect_to @wallpaper, notice: 'Wallpaper was successfully updated.' }
         format.json { head :no_content }
       else
@@ -192,12 +193,12 @@ class WallpapersController < ApplicationController
     @available_categories = Category.arrange_as_array order: :name
   end
 
-  def wallpaper_params
+  def create_wallpaper_params
     params.require(:wallpaper).permit(:purity, :image, :image_gravity, :source, :category_id, tag_ids: [])
   end
 
   def update_wallpaper_params
-    wallpaper_params.except(:image)
+    create_wallpaper_params.except(:image)
   end
 
   def resize_params
