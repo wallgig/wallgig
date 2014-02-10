@@ -58,8 +58,10 @@ categories = [
   [
     'Anime / Manga',
       [
-        'Characters',
-        'Series',
+        'Anime / Manga Characters',
+        'Anime / Manga Series',
+        'Anime / Manga Movies',
+        'Anime / Manga Artists'
         'Hentai / Ecchi',
         'Movies',
         'Visual Novels'
@@ -68,8 +70,16 @@ categories = [
   [
     'Animals',
       [
+        'Amphibians',
         'Birds',
-        'Domestic / Pets'
+        'Domestic / Pets',
+        'Dinosaurs / Extinct',
+        ['Fictional Animals', ['Dragons', 'Pokemon']],
+        'Fishes / Aquatic life',
+        'Insects',
+        'Mammals',
+        'Other Animals',
+        'Reptiles'
       ]
   ],
   [
