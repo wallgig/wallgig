@@ -56,7 +56,7 @@
                     = username_tag current_user
                     %b.caret
                   %ul.dropdown-menu
-                    - if current_user.admin?
+                    - if current_user.admin? || current_user.moderator?
                       %li
                         = link_to admin_root_path do
                           %span.glyphicon.glyphicon-dashboard

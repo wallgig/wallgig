@@ -34,6 +34,16 @@
   }
 }
 
+.purity-sfw {
+  color: #5cb85c !important;
+}
+.purity-sketchy {
+  color: #f0ad4e !important;
+}
+.purity-nsfw {
+  color: #d9534f !important;
+}
+
 @import "users";
 .username-link {
   text-decoration: none !important;

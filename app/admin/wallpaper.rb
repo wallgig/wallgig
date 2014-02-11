@@ -1,5 +1,5 @@
 ActiveAdmin.register Wallpaper do
-  config.filters = false
+  # config.filters = false
 
   permit_params :purity, :source, :image_gravity
 
@@ -44,7 +44,7 @@ ActiveAdmin.register Wallpaper do
       link_to wallpaper.id, admin_wallpaper_path(wallpaper)
     end
     column 'Thumbnail' do |wallpaper|
-      link_to admin_wallpaper_path(wallpaper) do
+      link_to wallpaper.image.url, target: '_blank' do
         if wallpaper.thumbnail_image.present?
           image_tag wallpaper.thumbnail_image.url, width: 125, height: 94
         else
@@ -61,7 +61,11 @@ ActiveAdmin.register Wallpaper do
     column :processing, sortable: :processing do |wallpaper|
       status_tag wallpaper.processing? ? 'Yes' : 'No'
     end
-    column 'Tags', :tag_list_text, sortable: false
+    column 'Tags' do |wallpaper|
+      ul do
+        wallpaper.tags.map { |tag| li link_to(tag.name, admin_wallpapers_path(q: { tags_slug_eq: tag.slug }), class: "purity-#{tag.purity}") }
+      end
+    end
     column 'Views', :impressions_count
     column 'Favourites', sortable: :favourites_count do |wallpaper|
       link_to wallpaper.favourites_count, admin_favourites_path(q: { wallpaper_id_eq: wallpaper })
@@ -81,7 +85,11 @@ ActiveAdmin.register Wallpaper do
         row :user
         row(:approved) { |w| status_tag w.approved? ? 'Yes' : 'No' }
         row(:purity) { |w| status_tag w.purity_text }
-        row :tag_list
+        row 'Tags' do |wallpaper|
+          ul do
+            wallpaper.tags.map { |tag| li link_to(tag.name, admin_wallpapers_path(q: { tags_slug_eq: tag.slug }), class: "purity-#{tag.purity}") }
+          end
+        end
         row :source
         row :primary_color do |wallpaper|
           content_tag :div, nil, style: "width: 50px; height: 50px; background-color: #{wallpaper.primary_color.to_html_hex}" if wallpaper.primary_color.present?
@@ -197,7 +205,7 @@ ActiveAdmin.register Wallpaper do
 
   controller do
     def scoped_collection
-      Wallpaper.includes(:user)
+      Wallpaper.includes(:user, tags: :category)
     end
   end
 end
