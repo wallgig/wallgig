@@ -11,7 +11,7 @@ ActiveAdmin.register Collection do
 
   index do
     selectable_column
-    column('Id', sortable: :id) { |c| link_to c.id, admin_collection_path(c) }
+    id_column
     column :name
     column(:public, sortable: :public) { |c| status_tag c.public? ? 'Yes' : 'No' }
     column(:wallpapers_count) { |c| c.wallpapers.size }

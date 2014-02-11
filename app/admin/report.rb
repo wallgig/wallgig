@@ -7,7 +7,7 @@ ActiveAdmin.register Report do
   scope :closed
 
   index do
-    column :id
+    id_column
     column 'Reportable' do |report|
       link_to report.reportable, report.reportable
     end

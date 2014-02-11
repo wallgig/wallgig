@@ -1,5 +1,5 @@
 ActiveAdmin.register Wallpaper do
-  # config.filters = false
+  config.filters = false
 
   permit_params :purity, :source, :image_gravity
 
@@ -40,9 +40,7 @@ ActiveAdmin.register Wallpaper do
 
   index do
     selectable_column
-    column 'Id', sortable: :id do |wallpaper|
-      link_to wallpaper.id, admin_wallpaper_path(wallpaper)
-    end
+    id_column
     column 'Thumbnail' do |wallpaper|
       link_to wallpaper.image.url, target: '_blank' do
         if wallpaper.thumbnail_image.present?
