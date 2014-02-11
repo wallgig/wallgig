@@ -103,7 +103,7 @@ ActiveAdmin.register Wallpaper do
           status_tag wallpaper.processing? ? 'Yes' : 'No'
         end
         row :image do
-          link_to wallpaper.image.url do
+          link_to wallpaper.image.url, target: '_blank' do
             if wallpaper.thumbnail_image.present?
               image_tag wallpaper.thumbnail_image.url
             else
