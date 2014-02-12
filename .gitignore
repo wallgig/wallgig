@@ -29,5 +29,6 @@ dump.rdb
 /config/database.yml
 /config/deploy.rb
 /config/deploy/*
+/config/newrelic.yml
 
 /coverage
