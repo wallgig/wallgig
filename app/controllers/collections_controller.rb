@@ -21,7 +21,7 @@ class CollectionsController < ApplicationController
                                .page(params[:page]).per(20)
 
     if @should_apply_purity_settings
-      @collections = @collections.with_purities_and_sum_gte(current_purities, 4)
+      @collections = @collections.not_empty_for_purities(current_purities, 4)
     end
 
     if request.xhr?
@@ -35,7 +35,7 @@ class CollectionsController < ApplicationController
                              .accessible_by(current_ability, :read)
                              .page(params[:page])
 
-    @wallpapers = @wallpapers.with_purities(current_purities) unless user_signed_in? && @collection.owner_type == 'User' && current_user.id == @collection.owner_id
+    @wallpapers = @wallpapers.not_empty_for_purities(current_purities) unless user_signed_in? && @collection.owner_type == 'User' && current_user.id == @collection.owner_id
 
     @wallpapers = WallpapersFavouriteStatusPopulator.new(@wallpapers, current_user).wallpapers
     @wallpapers = WallpapersDecorator.new(@wallpapers)

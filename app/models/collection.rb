@@ -38,12 +38,9 @@ class Collection < ActiveRecord::Base
   scope :ordered, -> { order(position: :asc) }
   scope :latest,  -> { order(last_added_at: :desc) }
 
-  scope :with_purities, -> (purities) {
-    purity_conditions = purities.map { |p| "#{counter_name_for(p)} > 0" }
-    where(purity_conditions.join(' OR '))
-  }
+  scope :not_empty, -> { where('sfw_wallpapers_count > 0 OR sketchy_wallpapers_count > 0 OR nsfw_wallpapers_count > 0') }
 
-  scope :with_purities_and_sum_gte, -> (purities, sum_gte) {
+  scope :not_empty_for_purities, -> (purities, sum_gte = 0) {
     purities = purities.map { |p| counter_name_for(p) }.join(' + ')
     where(["(#{purities}) >= ?", sum_gte])
   }

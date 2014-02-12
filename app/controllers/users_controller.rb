@@ -15,31 +15,31 @@ class UsersController < ApplicationController
   end
 
   def show
-    wallpapers = @user.wallpapers
-                       .accessible_by(current_ability, :read)
-                       .with_purities(current_purities)
-                       .latest
-                       .limit(6)
-
+    # Wallpapers
+    @wallpapers = @user.wallpapers.accessible_by(current_ability, :read)
+                                  .with_purities(current_purities)
+                                  .latest
+                                  .limit(6)
     @wallpapers = WallpapersFavouriteStatusPopulator.new(@wallpapers, current_user).wallpapers
-    @wallpapers = WallpapersDecorator.new(wallpapers)
+    @wallpapers = WallpapersDecorator.new(@wallpapers)
 
-    favourite_wallpapers = @user.favourite_wallpapers
-                                .accessible_by(current_ability, :read)
-                                .with_purities(current_purities)
-                                .latest
-                                .limit(10)
+    # Favourite wallpapers
+    @favourite_wallpapers = @user.favourite_wallpapers.accessible_by(current_ability, :read)
+                                                      .with_purities(current_purities)
+                                                      .latest
+                                                      .limit(10)
     @favourite_wallpapers = WallpapersFavouriteStatusPopulator.new(@favourite_wallpapers, current_user).wallpapers
-    @favourite_wallpapers = WallpapersDecorator.new(favourite_wallpapers, context: { user: current_user })
+    @favourite_wallpapers = WallpapersDecorator.new(@favourite_wallpapers)
 
-    # OPTIMIZE
-    @collections = @user.collections
-                        .includes(:wallpapers)
-                        .accessible_by(current_ability, :read)
-                        .where({ wallpapers: { purity: current_purities }})
-                        .where.not({ wallpapers: { id: nil } })
-                        .order('collections.updated_at DESC') # FIXME
-                        .limit(6)
+    # Collections
+    @collections = @user.collections.latest
+                                    .accessible_by(current_ability, :read)
+                                    .limit(6)
+    if myself?
+      @collections = @collections.not_empty
+    else
+      @collections = @collections.not_empty_for_purities(current_purities)
+    end
   end
 
   # TODO move this under account namespace
