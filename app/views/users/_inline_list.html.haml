@@ -1,0 +1,3 @@
+- users.each do |user|
+  = link_to user, class: 'pull-left' do
+    = image_tag user_avatar_url(user, 50), width: 50, height: 50, title: user.username, data: { toggle: 'tooltip' }

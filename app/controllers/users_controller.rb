@@ -11,7 +11,7 @@ class UsersController < ApplicationController
     @user_days = @users.group_by { |u| u.created_at.to_date }
 
     @user_staff = User.staff.includes(:profile).group_by { |u| u.role_name }
-    @user_staff = [['Developer', @user_staff['Developer']], ['Admin', @user_staff['Admin']], ['Moderator', @user_staff['Moderator']]].reject { |u| u[1].blank? }
+    @user_staff = [['Developers', @user_staff['Developer']], ['Admins', @user_staff['Admin']], ['Moderators', @user_staff['Moderator']]].reject { |u| u[1].blank? }
   end
 
   def show
