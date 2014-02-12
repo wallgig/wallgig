@@ -363,8 +363,8 @@ class Wallpaper < ActiveRecord::Base
 
     wallpapers_tags.where(tag_id: tag_ids_to_remove).delete_all if tag_ids_to_remove.any?
 
-    Tag.where(id: tag_ids_to_add).pluck(:id) do |tag_id|
-      wallpapers_tags.create(tag_id: tag_id, added_by_id: user.id)
+    Tag.where(id: tag_ids_to_add).pluck(:id).each do |tag_id|
+      wallpapers_tags.create!(tag_id: tag_id, added_by_id: user.id)
     end
 
     set_cached_tag_list
