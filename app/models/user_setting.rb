@@ -14,6 +14,7 @@
 #  created_at           :datetime
 #  updated_at           :datetime
 #  screen_resolution_id :integer
+#  invisible            :boolean          default(FALSE)
 #
 
 class UserSetting < ActiveRecord::Base

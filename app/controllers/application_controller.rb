@@ -82,6 +82,6 @@ class ApplicationController < ActionController::Base
   end
 
   def track_online_user
-    users_online.track_user(current_user)
+    users_online.track_user(current_user) unless current_settings.invisible?
   end
 end

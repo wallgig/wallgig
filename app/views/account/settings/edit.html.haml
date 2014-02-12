@@ -4,9 +4,10 @@
       %h1 Edit settings
       %span.help-block Settings that reflect throughout the entire site.
     = simple_form_for @settings, url: account_settings_path, method: :patch do |f|
-      = f.error_notification
 
-      .form-inputs
+      %fieldset
+        %legend Browsing settings
+
         .form-group
           %label Purity
           .row
@@ -16,9 +17,17 @@
               = f.input :sketchy
             .col-xs-4.purity-nsfw
               = f.input :nsfw
+
         = f.input :per_page
+
         = f.input :infinite_scroll
+
         = f.association :screen_resolution
+
+      %fieldset
+        %legend Privacy settings
+
+        = f.input :invisible, hint: 'Hide my online status.'
 
       .form-actions
         = f.button :submit, 'Update settings', class: 'btn btn-primary'
