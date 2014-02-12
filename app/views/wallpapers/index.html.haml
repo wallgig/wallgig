@@ -110,10 +110,10 @@
 
 .well
   .row
-    .col-lg-6= yield :tags
-    .col-lg-6
+    .col-lg-5= yield :tags
+    .col-lg-7
       .row
-        .col-lg-1
+        .col-lg-2
           = yield :sort_by
           = yield :purity if user_signed_in?
 
