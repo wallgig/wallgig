@@ -20,15 +20,14 @@ class UsersController < ApplicationController
                                   .with_purities(current_purities)
                                   .latest
                                   .limit(6)
-    @wallpapers = WallpapersDecorator.new(wallpapers, context: { current_user: current_user })
+    @wallpapers = WallpapersDecorator.new(@wallpapers, context: { current_user: current_user })
 
     # Favourite wallpapers
     @favourite_wallpapers = @user.favourite_wallpapers.accessible_by(current_ability, :read)
                                                       .with_purities(current_purities)
                                                       .latest
                                                       .limit(10)
-    @favourite_wallpapers = WallpapersFavouriteStatusPopulator.new(@favourite_wallpapers, current_user).wallpapers
-    @favourite_wallpapers = WallpapersDecorator.new(@favourite_wallpapers)
+    @favourite_wallpapers = WallpapersDecorator.new(@favourite_wallpapers, context: { current_user: current_user })
 
     # Collections
     @collections = @user.collections.latest

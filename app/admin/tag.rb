@@ -1,11 +1,12 @@
 ActiveAdmin.register Tag, as: 'Tag' do
-  config.filters = false
-
   permit_params :name, :slug, :category_id
 
   scope :all, default: true
   scope :pending_approval
   scope :approved
+
+  filter :name
+  filter :slug
 
   batch_action :approve do |selection|
     Tag.find(selection).each do |tag|

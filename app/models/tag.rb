@@ -29,9 +29,6 @@ class Tag < ActiveRecord::Base
 
   validates :name, presence: true, uniqueness: { case_sensitive: false }
   validates :slug, presence: true, uniqueness: { case_sensitive: false }
-  validate if: :name_changed? do
-    errors.add :name, 'has already been taken' if self.class.where(slug: name.parameterize).exists?
-  end
 
   scope :name_like, -> (query) { where('name ILIKE ?', "#{query}%") }
   scope :alphabetically, -> { order 'LOWER(name) ASC' }
