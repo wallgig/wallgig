@@ -62,18 +62,17 @@
 - content_for :screen_resolutions do
   .list-facet
     - last_screen_resolution_category = nil
-    - ScreenResolution.all.each do |screen_resolution|
-      - if last_screen_resolution_category != screen_resolution.category
-        - last_screen_resolution_category = screen_resolution.category
-        %h5= screen_resolution.category_text
-      - active = [screen_resolution.width.to_s, screen_resolution.height.to_s] == [search_options[:width], search_options[:height]]
-      - css_class = active ? 'success' : 'link'
-      - if active
-        = link_to url_for(search_options.merge(width: nil, height: nil).reject(&blank_value)), class: "btn btn-xs btn-#{css_class}" do
-          = screen_resolution
-      - else
-        = link_to url_for(search_options.merge(width: screen_resolution.width, height: screen_resolution.height).reject(&blank_value)), class: "btn btn-xs btn-#{css_class}" do
-          = screen_resolution
+    - ScreenResolution.group_by_category_for_index.each do |category, screen_resolutions|
+      %h5= category
+      - screen_resolutions.each do |screen_resolution|
+        - active = [screen_resolution[:width].to_s, screen_resolution[:height].to_s] == [search_options[:width], search_options[:height]]
+        - css_class = active ? 'success' : 'link'
+        - if active
+          = link_to url_for(search_options.merge(width: nil, height: nil).reject(&blank_value)), class: "btn btn-xs btn-#{css_class}" do
+            #{screen_resolution[:width]}&times;#{screen_resolution[:height]}
+        - else
+          = link_to url_for(search_options.merge(width: screen_resolution[:width], height: screen_resolution[:height]).reject(&blank_value)), class: "btn btn-xs btn-#{css_class}" do
+            #{screen_resolution[:width]}&times;#{screen_resolution[:height]}
 
 - content_for :sort_by do
   %h5 Sort By
