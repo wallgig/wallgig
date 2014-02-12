@@ -10,6 +10,7 @@
           ago
         .comment-heading
           = link_to_user comment.user
+          = user_online_status_tag comment.user
           - if user_signed_in?
             %small.show-when-hover
               - if can? :destroy, comment

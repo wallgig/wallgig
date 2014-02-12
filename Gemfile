@@ -109,14 +109,16 @@ gem 'bourbon'
 
 # services
 gem 'newrelic_rpm'
-gem 'sidekiq', github: 'mperham/sidekiq'
-gem 'sidetiq', github: 'tobiassvn/sidetiq'
 gem 'sinatra', '>= 1.3.0', :require => nil
 gem 'doorkeeper', '~> 0.7.0'
 gem 'tire'
-gem 'redis-rails'
 gem 'pg_search'
 
+gem 'sidekiq', github: 'mperham/sidekiq'
+gem 'sidetiq', github: 'tobiassvn/sidetiq'
+
+gem 'redis-rails'
+gem 'redis-objects'
 
 # utilities
 gem 'dotenv-rails'

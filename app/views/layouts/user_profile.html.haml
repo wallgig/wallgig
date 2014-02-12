@@ -57,6 +57,7 @@
             .media-body
               %h2.media-heading.username
                 = username_tag @user
+                = user_online_status_tag @user
                 %small= role_name_for @user
       %nav.navbar.navbar-default{:role => 'navigation'}
         .container.container-full

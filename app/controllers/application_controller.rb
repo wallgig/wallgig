@@ -6,6 +6,7 @@ class ApplicationController < ActionController::Base
   protect_from_forgery with: :exception
 
   before_action :configure_permitted_parameters, if: :devise_controller?
+  before_action :track_online_user, if: :user_signed_in?
 
   helper UsersHelper
   helper_method :last_deploy_time
@@ -13,6 +14,7 @@ class ApplicationController < ActionController::Base
   helper_method :current_purities
   helper_method :current_settings
   helper_method :myself?
+  helper_method :users_online
 
   rescue_from AccessDenied,         with: :access_denied_response
   rescue_from CanCan::AccessDenied, with: :access_denied_response
@@ -73,5 +75,13 @@ class ApplicationController < ActionController::Base
         render json: response, status: :unauthorized
       end
     end
+  end
+
+  def users_online
+    @users_online ||= UsersOnlineService.new
+  end
+
+  def track_online_user
+    users_online.track_user(current_user)
   end
 end

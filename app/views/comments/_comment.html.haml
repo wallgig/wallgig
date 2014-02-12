@@ -12,5 +12,6 @@
         = link_to_user comment.user do
           = image_tag user_avatar_url(comment.user, 20)
           = comment.user.username
+        = user_online_status_tag comment.user
         %small #{time_ago_in_words comment.created_at} ago
       %p= comment.cooked_comment.html_safe
