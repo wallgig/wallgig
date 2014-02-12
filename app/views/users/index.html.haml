@@ -13,7 +13,3 @@
       - users.each do |user|
         = link_to user do
           = image_tag user_avatar_url(user, 50), width: 50, height: 50, title: user.username, data: { toggle: 'tooltip' }
-
-- content_for(:javascript_for_page) do
-  :javascript
-    $('[data-toggle=tooltip]').tooltip();

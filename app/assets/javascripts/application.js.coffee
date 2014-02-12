@@ -42,3 +42,6 @@ $ ->
   $.rails.href = (element) ->
     # Read data-url if present
     element.data('url') || element.attr('href')
+
+  if ($tooltips = $('[data-toggle=tooltip]')).length > 0
+    $tooltips.tooltip();
