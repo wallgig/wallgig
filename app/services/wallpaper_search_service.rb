@@ -4,27 +4,15 @@ class WallpaperSearchService
   end
 
   def execute
-    @wallpapers = begin
-      Wallpaper.tire.search nil,
-                            load: true,
-                            payload: build_payload,
-                            page: @options[:page],
-                            per_page: (@options[:per_page] || Wallpaper.default_per_page)
-    rescue Tire::Search::SearchRequestFailed => e
-      Rails.logger.error e.message
-      e.backtrace.each { |line| Rails.logger.error line }
-      nil
-    end
-
-    self
-  end
-
-  def wallpapers
-    @wallpapers.presence || Wallpaper.none
-  end
-
-  def facets
-    @wallpapers.facets if @wallpapers.class.name == 'Tire::Results::Collection'
+    Wallpaper.tire.search nil,
+                          load: true,
+                          payload: build_payload,
+                          page: @options[:page],
+                          per_page: (@options[:per_page] || Wallpaper.default_per_page)
+  rescue Tire::Search::SearchRequestFailed => e
+    Rails.logger.error e.message
+    e.backtrace.each { |line| Rails.logger.error line }
+    Wallpaper.none
   end
 
   private

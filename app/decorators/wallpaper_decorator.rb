@@ -51,7 +51,7 @@ class WallpaperDecorator < Draper::Decorator
         remote: true
       }
     }
-    options[:class] << ' btn-favourite favourited' if favourite_status
+    options[:class] << ' btn-favourite favourited' if context[:favourited]
 
     h.link_to url, options do
       "<span class='glyphicon glyphicon-star'></span>" \

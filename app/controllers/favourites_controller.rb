@@ -11,8 +11,7 @@ class FavouritesController < ApplicationController
 
     @wallpapers = @wallpapers.with_purities(current_purities) unless myself?
 
-    @wallpapers = WallpapersFavouriteStatusPopulator.new(@wallpapers, current_user).wallpapers
-    @wallpapers = WallpapersDecorator.new(@wallpapers)
+    @wallpapers = WallpapersDecorator.new(@wallpapers, context: { current_user: current_user })
 
     if request.xhr?
       render partial: 'wallpapers/list', layout: false, locals: { wallpapers: @wallpapers }

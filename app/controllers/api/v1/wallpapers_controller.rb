@@ -7,8 +7,7 @@ class Api::V1::WallpapersController < Api::V1::BaseController
 
   def index
     @wallpapers = WallpaperSearchService.new(search_options).wallpapers
-    @wallpapers = WallpapersFavouriteStatusPopulator.new(@wallpapers, current_user).wallpapers
-    @wallpapers = WallpapersDecorator.new(@wallpapers, context: { search_options: search_options })
+    @wallpapers = WallpapersDecorator.new(@wallpapers, context: { search_options: search_options, current_user: current_user })
     respond_with @wallpapers
   end
 

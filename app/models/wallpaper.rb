@@ -36,9 +36,6 @@
 #
 
 class Wallpaper < ActiveRecord::Base
-  # Temporary attributes
-  attr_accessor :favourite_status
-
   belongs_to :user, counter_cache: true
 
   has_many :wallpaper_colors, -> { order('wallpaper_colors.percentage DESC') }, dependent: :destroy

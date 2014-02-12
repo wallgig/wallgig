@@ -15,9 +15,26 @@ class WallpapersDecorator < Draper::CollectionDecorator
     object.kind_of?(Kaminari::PageScopeMethods) || object.kind_of?(Tire::Results::Pagination)
   end
 
+  def ids
+    object.map(&:id)
+  end
+
+  def current_user_favourited_wallpaper_ids
+    @current_user_favourited_wallpaper_ids ||= begin
+      if context[:current_user].present?
+        context[:current_user].favourite_wallpapers.where(id: ids).pluck(:id)
+      else
+        []
+      end
+    end
+  end
+
   protected
     def decorate_item(item)
-      item_decorator.call(item, context: context)
+      context_with_favourited = context.dup
+      context_with_favourited[:favourited] = current_user_favourited_wallpaper_ids.include?(item.id)
+
+      item_decorator.call(item, context: context_with_favourited)
     end
 
 end
