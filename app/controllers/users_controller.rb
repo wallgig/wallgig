@@ -8,10 +8,12 @@ class UsersController < ApplicationController
 
   def index
     @users = User.confirmed.where(created_at: 1.week.ago..Time.now).includes(:profile).newest
-    @user_days = @users.group_by { |u| u.created_at.to_date }
+    @users_group_by_day = @users.group_by { |u| u.created_at.to_date }
 
-    @user_staff = User.staff.includes(:profile).group_by { |u| u.role_name }
-    @user_staff = [['Developers', @user_staff['Developer']], ['Admins', @user_staff['Admin']], ['Moderators', @user_staff['Moderator']]].reject { |u| u[1].blank? }
+    @staff_users = User.staff.includes(:profile).group_by { |u| u.role_name }
+    @staff_users = [['Developers', @staff_users['Developer']], ['Admins', @staff_users['Admin']], ['Moderators', @staff_users['Moderator']]].reject { |u| u[1].blank? }
+
+    @online_users = users_online.online_users.includes(:profile)
   end
 
   def show

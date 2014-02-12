@@ -3,12 +3,12 @@
     .panel.panel-default
       .panel-heading
         %h4 Online users
-      .panel-body= render partial: 'inline_list', locals: { users: users_online.online_users }
+      .panel-body= render partial: 'inline_list', locals: { users: @online_users }
 
     .panel.panel-default
       .panel-heading
         %h4 Newest users
-      - @user_days.each do |day, users|
+      - @users_group_by_day.each do |day, users|
         .panel-heading
           %h5= time_tag day, day.to_formatted_s(:long)
         .panel-body= render partial: 'inline_list', locals: { users: users }
@@ -16,7 +16,7 @@
     .panel.panel-info
       .panel-heading
         %h4 Staff
-      - @user_staff.each do |role, users|
+      - @staff_users.each do |role, users|
         .panel-heading
           %h5= role
         .panel-body= render partial: 'inline_list', locals: { users: users }
