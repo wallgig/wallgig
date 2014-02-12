@@ -74,9 +74,6 @@
         text-shadow: black 1px 1px 1px;
       }
     }
-    .label {
-      background-color: rgba(0, 0, 0, 0.5);
-    }
   }
   & > li:hover {
     @include box-shadow(#666 0px 0px 5px);

@@ -2,23 +2,27 @@
 
 .page-header
   - if @collection.owner_type == 'User'
-    %h2= title [@collection.owner.username, @collection.name], @collection.name
+    %h2
+      = title [@collection.owner.username, @collection.name], @collection.name
+      - if @collection.private?
+        %small
+          %span.label.label-danger Private
     .media.media-user
       = link_to @collection.owner, class: 'pull-left' do
-        = image_tag user_avatar_url(@collection.owner, 20), alt: @collection.owner.username, class: 'media-object'
+        = image_tag user_avatar_url(@collection.owner, 20), alt: @collection.owner.username, class: 'media-object', width: 20, height: 20
       = link_to_user @collection.owner
-  %hr/
-  %ul.list-inline
-    - if can? :update, @collection
-      %li
-        = link_to edit_account_collection_path(@collection) do
-          %span.glyphicon.glyphicon-pencil
-          Edit collection
+
+%ul.list-inline
+  - if can? :update, @collection
     %li
-      %span.glyphicon.glyphicon-eye-open
-      = @collection.impressions_count
-    %li
-      %span.glyphicon.glyphicon-picture
-      = @collection.wallpapers_count_for(current_purities)
+      = link_to edit_account_collection_path(@collection) do
+        %span.glyphicon.glyphicon-pencil
+        Edit collection
+  %li
+    %span.glyphicon.glyphicon-eye-open
+    = @collection.impressions_count
+  %li
+    %span.glyphicon.glyphicon-picture
+    = @collection.wallpapers_count_for(current_purities)
 
 = render 'wallpapers/list', wallpapers: @wallpapers

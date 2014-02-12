@@ -17,7 +17,10 @@
                 - (3 - wallpapers.size).times do
                   .placeholder
             .media-body
-              %h5.media-heading= collection.name
+              %h5.media-heading
+                = collection.name
+                - if collection.private?
+                  %span.label.label-danger Private
               %ul.list-inline.pull-right.text-muted
                 %li
                   %span.glyphicon.glyphicon-eye-open

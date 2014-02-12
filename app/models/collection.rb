@@ -80,6 +80,10 @@ class Collection < ActiveRecord::Base
     "#{wallpaper_or_purity}_wallpapers_count"
   end
 
+  def private?
+    !public?
+  end
+
   def to_param
     "#{id}-#{name.parameterize}"
   end
