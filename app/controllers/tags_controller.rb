@@ -8,7 +8,8 @@ class TagsController < ApplicationController
                                  .with_purities(current_purities)
                                  .page(params[:page])
 
-    @wallpapers = WallpapersDecorator.new(@wallpapers, context: { user: current_user })
+    @wallpapers = WallpapersFavouriteStatusPopulator.new(@wallpapers, current_user).wallpapers
+    @wallpapers = WallpapersDecorator.new(@wallpapers)
 
     if request.xhr?
       render partial: 'wallpapers/list', layout: false, locals: { wallpapers: @wallpapers }

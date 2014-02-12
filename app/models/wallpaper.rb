@@ -36,6 +36,9 @@
 #
 
 class Wallpaper < ActiveRecord::Base
+  # Temporary attributes
+  attr_accessor :favourite_status
+
   belongs_to :user, counter_cache: true
 
   has_many :wallpaper_colors, -> { order('wallpaper_colors.percentage DESC') }, dependent: :destroy
@@ -86,7 +89,6 @@ class Wallpaper < ActiveRecord::Base
   acts_as_commentable
 
   # Tags
-  # acts_as_taggable
   serialize :cached_tag_list, Array
 
   # Pagination

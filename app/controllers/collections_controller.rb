@@ -37,7 +37,8 @@ class CollectionsController < ApplicationController
 
     @wallpapers = @wallpapers.with_purities(current_purities) unless user_signed_in? && @collection.owner_type == 'User' && current_user.id == @collection.owner_id
 
-    @wallpapers = WallpapersDecorator.new(@wallpapers, context: { user: current_user })
+    @wallpapers = WallpapersFavouriteStatusPopulator.new(@wallpapers, current_user).wallpapers
+    @wallpapers = WallpapersDecorator.new(@wallpapers)
 
     if request.xhr?
       render partial: 'wallpapers/list', layout: false, locals: { wallpapers: @wallpapers }

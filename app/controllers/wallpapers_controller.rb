@@ -13,10 +13,8 @@ class WallpapersController < ApplicationController
   # GET /wallpapers.json
   def index
     @wallpapers = WallpaperSearchService.new(search_options).wallpapers
-    @wallpapers = WallpapersDecorator.new(@wallpapers, context: {
-      user: current_user,
-      search_options: search_options
-    })
+    @wallpapers = WallpapersFavouriteStatusPopulator.new(@wallpapers, current_user).wallpapers
+    @wallpapers = WallpapersDecorator.new(@wallpapers, context: { search_options: search_options })
 
     if request.xhr?
       render partial: 'list', layout: false, locals: { wallpapers: @wallpapers }
