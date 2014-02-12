@@ -1,4 +1,4 @@
-class WallpaperSearch
+class WallpaperSearchService
   def initialize(options)
     @options = options
   end

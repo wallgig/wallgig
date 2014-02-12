@@ -1,4 +1,4 @@
-class WallpaperCollectionStatus
+class WallpaperCollectionStatusPopulator
   def initialize(collections, wallpaper)
     @collections = collections
     @wallpaper = wallpaper

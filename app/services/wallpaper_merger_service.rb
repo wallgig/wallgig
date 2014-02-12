@@ -1,15 +1,7 @@
-class WallpaperMerger
-  def self.from(from_wallpaper)
-    new(from_wallpaper)
-  end
-
-  def initialize(from_wallpaper)
+class WallpaperMergerService
+  def initialize(from_wallpaper, to_wallpaper)
     @from_wallpaper = from_wallpaper
-  end
-
-  def to(to_wallpaper)
     @to_wallpaper = to_wallpaper
-    self
   end
 
   def execute

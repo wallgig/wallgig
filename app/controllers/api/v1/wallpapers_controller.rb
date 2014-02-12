@@ -6,7 +6,7 @@ class Api::V1::WallpapersController < Api::V1::BaseController
   include WallpaperSearchParams
 
   def index
-    @wallpapers = WallpaperSearch.new(search_options).wallpapers
+    @wallpapers = WallpaperSearchService.new(search_options).wallpapers
     @wallpapers = WallpapersDecorator.new(@wallpapers, context: { search_options: search_options })
     respond_with @wallpapers
   end

@@ -12,7 +12,7 @@ class WallpapersController < ApplicationController
   # GET /wallpapers
   # GET /wallpapers.json
   def index
-    @wallpapers = WallpaperSearch.new(search_options).wallpapers
+    @wallpapers = WallpaperSearchService.new(search_options).wallpapers
     @wallpapers = WallpapersDecorator.new(@wallpapers, context: {
       user: current_user,
       search_options: search_options
@@ -152,7 +152,7 @@ class WallpapersController < ApplicationController
 
   def collections
     @collections = current_user.collections.ordered
-    @collections = WallpaperCollectionStatus.new(@collections, @wallpaper).collections
+    @collections = WallpaperCollectionStatusPopulator.new(@collections, @wallpaper).collections
 
     respond_to do |format|
       format.json
