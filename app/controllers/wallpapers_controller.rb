@@ -150,7 +150,7 @@ class WallpapersController < ApplicationController
 
   def collections
     @collections = current_user.collections.ordered
-    @collections = WallpaperCollectionStatusPopulator.new(@collections, @wallpaper).collections
+    @collections = WallpaperCollectionStatusPopulator.new(@wallpaper, @collections).collections
 
     respond_to do |format|
       format.json

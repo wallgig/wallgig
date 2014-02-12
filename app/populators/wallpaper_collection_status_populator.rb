@@ -1,7 +1,7 @@
 class WallpaperCollectionStatusPopulator
-  def initialize(collections, wallpaper)
-    @collections = collections
+  def initialize(wallpaper, collections)
     @wallpaper = wallpaper
+    @collections = collections
   end
 
   def collection_ids
