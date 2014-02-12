@@ -1,6 +1,6 @@
 - content_for :content do
   .row
-    .col-lg-2
+    .col-md-2
       .page-subheader
         %h3= link_to 'Forums', forums_path
       %p
@@ -14,7 +14,7 @@
         = link_to 'All topics', forums_path, class: "list-group-item #{'active' if @forum.blank? && @topic.try(:forum).blank?}"
         - @forum_list.each do |forum|
           = link_to forum.name, forum, class: 'list-group-item', style: css_styles_for_forum(forum, (@forum || @topic.try(:forum)) != forum)
-    .col-lg-10
+    .col-md-10
       = yield
 
 = render template: 'layouts/application'

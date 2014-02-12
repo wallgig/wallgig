@@ -1,7 +1,7 @@
 # Adapted from http://deathofagremmie.com/2011/12/17/who-s-online-with-redis-python-a-slight-return/
 class UsersOnlineService
   USERS_ONLINE_KEY = 'users_online'
-  TIME_TO_LIVE = 10.minute
+  TIME_TO_LIVE = 10.minutes
 
   def track_user(user)
     redis.zadd(USERS_ONLINE_KEY, max, user.id)
