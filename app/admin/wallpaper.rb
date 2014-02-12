@@ -50,9 +50,7 @@ ActiveAdmin.register Wallpaper do
         end
       end
     end
-    column 'Approved', sortable: :approved_at do |wallpaper|
-      status_tag wallpaper.approved? ? 'Yes' : 'No'
-    end
+    column('Approved') { |wallpaper| status_tag wallpaper.approved? ? 'Yes' : 'No' }
     column 'Purity', sortable: :purity do |wallpaper|
       status_tag wallpaper.purity_text
     end
@@ -70,6 +68,8 @@ ActiveAdmin.register Wallpaper do
     end
     column 'Comments', :comments_count
     column :user
+    column :approved_by
+    column :approved_at
     column :created_at
     column :updated_at
     actions do |wallpaper|
@@ -203,7 +203,7 @@ ActiveAdmin.register Wallpaper do
 
   controller do
     def scoped_collection
-      Wallpaper.includes(:user, tags: :category)
+      Wallpaper.includes(:user, :approved_by, tags: :category)
     end
   end
 end

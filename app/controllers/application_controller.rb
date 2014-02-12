@@ -78,7 +78,7 @@ class ApplicationController < ActionController::Base
   end
 
   def users_online
-    @users_online ||= UsersOnlineService.new
+    @users_online ||= ::UsersOnlineService.new
   end
 
   def track_online_user

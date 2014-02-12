@@ -356,6 +356,7 @@ class Wallpaper < ActiveRecord::Base
   end
 
   def update_tag_ids_by_user(new_tag_ids, user)
+    new_tag_ids ||= []
     new_tag_ids.map!(&:to_i)
 
     tag_ids_to_add    = new_tag_ids - tag_ids
