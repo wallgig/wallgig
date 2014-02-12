@@ -135,3 +135,4 @@ gem 'redcarpet'
 
 # rack
 gem 'rack-cache', require: 'rack/cache', group: :production
+gem 'rack-mini-profiler'
