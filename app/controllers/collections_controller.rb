@@ -35,7 +35,7 @@ class CollectionsController < ApplicationController
                              .accessible_by(current_ability, :read)
                              .page(params[:page])
 
-    @wallpapers = @wallpapers.not_empty_for_purities(current_purities) unless user_signed_in? && @collection.owner_type == 'User' && current_user.id == @collection.owner_id
+    @wallpapers = @wallpapers.not_empty_for_purities(current_purities) unless myself?(@collection.owner)
 
     @wallpapers = WallpapersFavouriteStatusPopulator.new(@wallpapers, current_user).wallpapers
     @wallpapers = WallpapersDecorator.new(@wallpapers)

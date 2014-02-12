@@ -56,8 +56,9 @@ class ApplicationController < ActionController::Base
     end
   end
 
-  def myself?
-    user_signed_in? && @user.present? && current_user.id == @user.id
+  def myself?(user = nil)
+    user ||= @user
+    user_signed_in? && user.present? && user.class.name == 'User' && current_user.id == user.id
   end
 
   def access_denied_response(exception)
