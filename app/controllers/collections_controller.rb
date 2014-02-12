@@ -16,7 +16,7 @@ class CollectionsController < ApplicationController
       @collections = Collection.latest
     end
 
-    @collections = @collections.includes(:owner)
+    @collections = @collections.includes(owner: :profile)
                                .accessible_by(current_ability, :read)
                                .page(params[:page]).per(20)
 
