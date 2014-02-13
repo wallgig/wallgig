@@ -137,7 +137,7 @@ Wallgig::Application.routes.draw do
         end
       end
 
-      resources :users, only: [:me] do
+      resources :users, only: [:index] do
         collection do
           get :me
         end

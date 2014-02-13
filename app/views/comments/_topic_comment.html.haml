@@ -17,4 +17,4 @@
             %li= link_to 'Edit', edit_comment_path(comment)
           %li= link_to 'Report', new_comment_report_path(comment)
       .clearfix
-      = comment.cooked_comment.html_safe
+      %div{:data => {:provide => 'wgtext'}}= comment.cooked_comment.html_safe

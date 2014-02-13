@@ -45,3 +45,7 @@ $ ->
 
   if ($tooltips = $('[data-toggle=tooltip]')).length > 0
     $tooltips.tooltip();
+
+
+  if ($wgtextEnabled = $('[data-provide=wgtext]')).length > 0
+    (new Wallgig.Managers.WGText($wgtextEnabled)).execute()

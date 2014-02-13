@@ -15,6 +15,8 @@
 #
 
 class UserProfile < ActiveRecord::Base
+  AVATAR_SIZES = [20, 30, 40, 50, 100, 200]
+
   belongs_to :user
   belongs_to :cover_wallpaper, class_name: 'Wallpaper'
 

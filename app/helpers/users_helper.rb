@@ -29,7 +29,13 @@ module UsersHelper
     user.profile.title.presence || user.role_name
   end
 
-  def user_avatar_url(user, size = 200)
+  def user_avatar_url(user, size = nil)
+    if size.present?
+      size = size.to_i
+      size = nil unless UserProfile::AVATAR_SIZES.include?(size)
+    end
+    size ||= 200
+
     avatar = user.profile.avatar
     if avatar.present?
       avatar.thumb("#{size}x#{size}#").url
