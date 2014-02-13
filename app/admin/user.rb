@@ -17,21 +17,33 @@ ActiveAdmin.register User do
 
   index do
     selectable_column
-    column('Avatar') do |u|
-      link_to admin_user_path(u) do
-        image_tag user_avatar_url(u, 50), width: 25, height: 25
+    column('Avatar') do |user|
+      link_to admin_user_path(user) do
+        image_tag user_avatar_url(user, 50), width: 25, height: 25
       end
     end
-    column('Username', sortable: :username) { |u| link_to username_tag(u), admin_user_path(u), class: 'username-link' }
-    column('Role') { |u| role_name_for(u) }
+    column('Username', sortable: :username) { |user| link_to username_tag(user), admin_user_path(user), class: 'username-link' }
+    column('Role') { |user| role_name_for(user) }
+    column('Title') { |user| user.profile.title }
+    column 'Cover' do |user|
+      link_to user.profile.cover_wallpaper.image.url, target: '_blank' do
+        if user.profile.cover_wallpaper.thumbnail_image.present?
+          image_tag user.profile.cover_wallpaper.thumbnail_image.url, width: 100, height: 75
+        else
+          'Processing'
+        end
+      end if user.profile.cover_wallpaper.present?
+    end
+    column('Country', sortable: 'user_profiles.country_code') { |user| user.profile.country_code }
     column :wallpapers_count
     column :sign_in_count
     column :current_sign_in_at
-    column('Confirmed', sortable: :confirmed_at) { |u| status_tag u.confirmed? ? 'Yes' : 'No' }
+    column('Confirmed', sortable: :confirmed_at) { |user| status_tag user.confirmed? ? 'Yes' : 'No' }
     column :created_at
     column :updated_at
     actions do |user|
       link_to 'Pretend', pretend_admin_user_path(user), data: { method: :post, confirm: 'Are you sure?' }
+      link_to 'View settings', admin_user_settings_path(q: { user_id_eq: user.id })
     end
   end
 
@@ -55,12 +67,8 @@ ActiveAdmin.register User do
   end
 
   controller do
-    def resource
-      User.find_by!(username: params[:id])
-    end
-
-    def scoped_collection
-      User.includes(:profile)
+    def find_resource
+      scoped_collection.find_by!(username: params[:id])
     end
   end
 end
