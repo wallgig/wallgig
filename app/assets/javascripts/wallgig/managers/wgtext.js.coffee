@@ -30,10 +30,12 @@ class Wallgig.Managers.WGText
       avatar_size: @AVATAR_SIZE
       usernames:   @usernames.join(',')
 
-    $.get '/api/v1/users', params, (users) =>
-      for user in users
-        @elements.find('[data-username=' + user.username + ']')
-                 .replaceWith(@template_user(user))
+    $.get '/api/v1/users', params, $.proxy(@renderUsernames, @)
+
+  renderUsernames: (users) ->
+    for user in users
+      @elements.find('[data-username=' + user.username.toLowerCase() + ']')
+               .replaceWith(@template_user(user))
 
   execute: ->
     @prepareUsernames()
