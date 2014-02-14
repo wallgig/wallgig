@@ -5,7 +5,6 @@ class CategoriesController < ApplicationController
     @categories = Category.roots.alphabetically
 
     @tags = Tag.includes(:category)
-               .not_empty_for_purities(current_purities)
                .with_purities(current_purities)
                .most_wallpapers_first(current_purities)
                .page(params[:page])
@@ -18,7 +17,6 @@ class CategoriesController < ApplicationController
 
     @tags = Tag.includes(:category)
                .in_category_and_subtree(@category)
-               .not_empty_for_purities(current_purities)
                .with_purities(current_purities)
                .most_wallpapers_first(current_purities)
                .page(params[:page])
