@@ -7,6 +7,9 @@ Wallgig::Application.routes.draw do
     resources :reports, only: [:new, :create]
   end
 
+  # Handle forums
+  match '*path', to: redirect('http://wallgig.net/forums'), via: :all, constraints: { subdomain: 'forums' }
+
   root 'wallpapers#index'
 
   # resources :groups do
