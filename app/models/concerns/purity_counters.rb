@@ -10,8 +10,18 @@ module PurityCounters
       }
 
       scope :not_empty_for_purities, -> (purities, sum_gte = 0) {
+        if sum_gte > 0
+          purities = purities.map { |p| counter_name_for(p) }.join(' + ')
+          where(["(#{purities}) >= ?", sum_gte])
+        else
+          purities = purities.map { |p| "#{counter_name_for(p)} > 0" }.join(' OR ')
+          where("(#{purities})")
+        end
+      }
+
+      scope :"most_#{collection_name}_first", -> (purities) {
         purities = purities.map { |p| counter_name_for(p) }.join(' + ')
-        where(["(#{purities}) >= ?", sum_gte])
+        order("(#{purities}) DESC")
       }
 
       define_singleton_method :counter_name_for do |purity|

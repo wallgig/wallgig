@@ -4,9 +4,9 @@ class CategoriesController < ApplicationController
   def index
     @categories = Category.roots.alphabetically
     @tags = Tag.includes(:category)
-               .not_empty
+               .not_empty_for_purities(current_purities)
                .with_purities(current_purities)
-               .order(wallpapers_count: :desc)
+               .most_wallpapers_first(current_purities)
                .page(params[:page])
   end
 
@@ -14,10 +14,10 @@ class CategoriesController < ApplicationController
     @ancestors = @category.ancestors
     @categories = @category.children.alphabetically
     @tags = Tag.includes(:category)
-               .in_category(@category)
-               .not_empty
+               .in_category_and_subtree(@category)
+               .not_empty_for_purities(current_purities)
                .with_purities(current_purities)
-               .order(wallpapers_count: :desc)
+               .most_wallpapers_first(current_purities)
                .page(params[:page])
 
     render action: 'index'
