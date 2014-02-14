@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20140214141728) do
+ActiveRecord::Schema.define(version: 20140214143539) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -474,7 +474,6 @@ ActiveRecord::Schema.define(version: 20140214141728) do
   add_index "wallpapers", ["phash"], name: "index_wallpapers_on_phash", using: :btree
   add_index "wallpapers", ["primary_color_id"], name: "index_wallpapers_on_primary_color_id", using: :btree
   add_index "wallpapers", ["purity"], name: "index_wallpapers_on_purity", using: :btree
-  add_index "wallpapers", ["scrape_source", "scrape_id"], name: "index_wallpapers_on_scrape_source_and_scrape_id", unique: true, using: :btree
   add_index "wallpapers", ["user_id"], name: "index_wallpapers_on_user_id", using: :btree
 
   create_table "wallpapers_tags", force: true do |t|
