@@ -27,7 +27,7 @@
             Root
       - @categories.each do |category|
         = link_to category, class: 'list-group-item' do
-          %span.badge= category.tags_count
+          %span.badge= category.tags_count_for(current_purities)
           %span.glyphicon.glyphicon-folder-close
           = category.name
 
@@ -53,6 +53,6 @@
                   = tag.category_name
                 - else
                   = link_to tag.category_name, tag.category
-            %td.text-center= tag.wallpapers_count
+            %td.text-center= tag.wallpapers_count_for(current_purities)
 
     .text-center= paginate @tags

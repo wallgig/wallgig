@@ -3,6 +3,7 @@ class CategoriesController < ApplicationController
 
   def index
     @categories = Category.roots.alphabetically
+
     @tags = Tag.includes(:category)
                .not_empty_for_purities(current_purities)
                .with_purities(current_purities)
@@ -12,7 +13,9 @@ class CategoriesController < ApplicationController
 
   def show
     @ancestors = @category.ancestors
+
     @categories = @category.children.alphabetically
+
     @tags = Tag.includes(:category)
                .in_category_and_subtree(@category)
                .not_empty_for_purities(current_purities)

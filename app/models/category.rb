@@ -2,16 +2,18 @@
 #
 # Table name: categories
 #
-#  id              :integer          not null, primary key
-#  name            :string(255)
-#  slug            :string(255)
-#  wikipedia_title :string(255)
-#  raw_content     :text
-#  cooked_content  :text
-#  ancestry        :string(255)
-#  created_at      :datetime
-#  updated_at      :datetime
-#  tags_count      :integer
+#  id                 :integer          not null, primary key
+#  name               :string(255)
+#  slug               :string(255)
+#  wikipedia_title    :string(255)
+#  raw_content        :text
+#  cooked_content     :text
+#  ancestry           :string(255)
+#  created_at         :datetime
+#  updated_at         :datetime
+#  sfw_tags_count     :integer          default(0)
+#  sketchy_tags_count :integer          default(0)
+#  nsfw_tags_count    :integer          default(0)
 #
 
 require 'wikipedia_client'
@@ -24,6 +26,9 @@ class Category < ActiveRecord::Base
   extend FriendlyId
   friendly_id :name, use: :slugged
 
+  include PurityCounters
+  has_purity_counters :tags
+
   validates :name, presence: true
 
   scope :alphabetically, -> { order 'LOWER(name) ASC' }
@@ -32,9 +37,26 @@ class Category < ActiveRecord::Base
 
   def self.ensure_consistency!
     connection.execute('
-      UPDATE categories SET tags_count = (
-        SELECT COUNT(*) FROM tags WHERE tags.category_id = categories.id
-      )
+      UPDATE categories c
+      SET
+        sfw_tags_count = (
+          SELECT     COUNT(*)
+          FROM       tags t
+          WHERE      t.category_id = c.id
+            AND      t.purity = \'sfw\'
+        ),
+        sketchy_tags_count = (
+          SELECT     COUNT(*)
+          FROM       tags t
+          WHERE      t.category_id = c.id
+            AND      t.purity = \'sketchy\'
+        ),
+        nsfw_tags_count = (
+          SELECT     COUNT(*)
+          FROM       tags t
+          WHERE      t.category_id = c.id
+            AND      t.purity = \'nsfw\'
+        )
     ')
   end
 
