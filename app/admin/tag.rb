@@ -31,8 +31,6 @@ ActiveAdmin.register Tag do
     column :coined_by
     column :approved_by
     column :approved_at
-    column :created_at
-    column :updated_at
     actions do |tag|
       link_to 'Wallpapers', admin_wallpapers_path(scope: :all, q: { tags_id_eq: tag.id })
     end
