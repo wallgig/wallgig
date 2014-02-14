@@ -4,10 +4,13 @@
   %h2{:class => "purity-#{@tag.purity}"}
     %span.glyphicon.glyphicon-tag
     = title @tag.name
-  - if @tag.category.present?
-    %ol.breadcrumb
-      %li= link_to 'Categories', categories_path
+  %ol.breadcrumb
+    %li= link_to 'Categories', categories_path
+    - if @tag.category.present?
       - [@tag.category.ancestors, @tag.category].flatten.each do |category|
         %li= link_to category.name, category
+    %li.active
+      %span.glyphicon.glyphicon-tag
+      = @tag.name
 
 = render partial: 'wallpapers/list', locals: { wallpapers: @wallpapers }

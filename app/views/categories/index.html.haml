@@ -1,9 +1,9 @@
 .page-header
   %h2
     - if @category.present?
-      = @category.name
+      = title @category.name
     - else
-      Categories
+      = title 'Categories'
   - if @category.present?
     %ol.breadcrumb
       %li= link_to 'Categories', categories_path
