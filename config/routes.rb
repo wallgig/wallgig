@@ -23,7 +23,7 @@ Wallgig::Application.routes.draw do
   # end
 
   # Categories
-  resources :categories
+  resources :categories, only: [:index, :show]
 
   # Tags
   resources :tags

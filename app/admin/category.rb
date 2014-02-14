@@ -1,4 +1,6 @@
 ActiveAdmin.register Category do
+  config.filters = false
+
   menu parent: 'Tags'
 
   permit_params :name, :slug, :parent_id
@@ -7,6 +9,7 @@ ActiveAdmin.register Category do
     selectable_column
     column :name
     column :slug
+    column('Parent') { |category| category.parent.name if category.parent.present? }
     column :tags_count
     actions do |category|
       link_to 'Tags', admin_tags_path(q: { category_id_eq: category.id })

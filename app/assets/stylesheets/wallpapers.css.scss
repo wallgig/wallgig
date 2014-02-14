@@ -258,9 +258,9 @@ $wallpaper-sidebar-width: 320px;
 .btn-group-purity {
 }
 .purity-sfw, .btn-sfw {
-  color: $btn-success-bg;
+  color: $text-color;
   &:hover {
-    color: darken($btn-success-bg, 10%);
+    color: lighten($text-color, 10%);
   }
 }
 .purity-sketchy, .btn-sketchy {

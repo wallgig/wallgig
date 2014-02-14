@@ -31,8 +31,10 @@ class Tag < ActiveRecord::Base
   validates :name, presence: true, uniqueness: { case_sensitive: false }
   validates :slug, presence: true, uniqueness: { case_sensitive: false }
 
-  scope :name_like, -> (query) { where('name ILIKE ?', "#{query}%") }
+  scope :name_like,      -> (query) { where('name ILIKE ?', "#{query}%") }
   scope :alphabetically, -> { order 'LOWER(name) ASC' }
+  scope :not_empty,      -> { where('wallpapers_count > 0') }
+  scope :in_category,    -> (category) { where(category_id: category.subtree_ids) if category.present? }
 
   before_validation :set_slug, if: :name_changed?
 
