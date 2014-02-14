@@ -8,11 +8,11 @@
               = link_to comment, class: 'destroy-comment', data: { method: :delete, confirm: 'Are you sure?' } do
                 %span.glyphicon.glyphicon-trash
           %li= link_to 'Report', new_comment_report_path(comment)
-      %h4.no-top-margin
+      %h4
         = link_to_user comment.user do
           = image_tag user_avatar_url(comment.user, 30), width: 30, height: 30
           = comment.user.username
         = user_online_status_tag comment.user
         %small #{time_ago_in_words comment.created_at} ago
-      %hr.invisible/
+      %br/
       %div{:data => {:provide => 'wgtext'}}= comment.cooked_comment.html_safe

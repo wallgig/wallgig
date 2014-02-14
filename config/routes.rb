@@ -129,6 +129,8 @@ Wallgig::Application.routes.draw do
   # API
   namespace :api, defaults: {format: 'json'} do
     namespace :v1 do
+      resources :categories, only: :index
+
       resources :sessions, only: :create
 
       resources :tags, only: [:index, :create] do

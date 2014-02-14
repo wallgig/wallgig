@@ -23,6 +23,8 @@ class Category < ActiveRecord::Base
 
   validates :name, presence: true
 
+  scope :alphabetically, -> { order 'LOWER(name) ASC' }
+
   before_save :fetch_wikipedia_content, if: proc { |c| c.raw_content.blank? && c.wikipedia_title.present? }
 
   def fetch_wikipedia_content
