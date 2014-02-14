@@ -1,0 +1,9 @@
+<div data-parent-category-id="<%= @parentId %>">
+  <select class="form-control" data-provide="category-selection">
+    <option value=""></option>
+    <% for category in @categories: %>
+      <option value="<%= category.id %>"><%= category.name %></option>
+    <% end %>
+  </select>
+  <div data-provide="category-children"></div>
+</div>

@@ -51,14 +51,14 @@ class Wallgig.Managers.Tag
     @addTagId(tag.id)
 
   addOrCreateTag: (name) ->
-    $.get '/api/v1/tags/find_or_initialize', name: name, (data) =>
+    params =
+      q: name
+    $.get '/api/v1/tags/find', params, (data) =>
       if data.tag
         @addTag(data.tag)
       else
-        modal = new Wallgig.Modals.NewTag(name, data.available_categories, $.proxy(@addTag, @))
+        modal = new Wallgig.Modals.NewTag(name, $.proxy(@addTag, @))
         modal.show()
-
-        # bootbox.alert('This tag does not exist. <a href="/tags/new">Please go here and add!</a>')
 
   onKeydown: (e) ->
     if e.which == 13

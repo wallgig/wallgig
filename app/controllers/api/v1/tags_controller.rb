@@ -12,9 +12,8 @@ class Api::V1::TagsController < Api::V1::BaseController
     @tags = @tags.where.not(id: search_params[:exclude_ids]) if search_params[:exclude_ids].present?
   end
 
-  def find_or_initialize
-    @tag = Tag.find_by_name(params[:name]) if params[:name].present?
-    @available_categories = Category.arrange_as_array(order: :name) if @tag.blank?
+  def find
+    @tag = Tag.where(slug: params[:q].parameterize).first if params[:q].present?
   end
 
   def create
@@ -24,7 +23,7 @@ class Api::V1::TagsController < Api::V1::BaseController
     if @tag.save
       render action: 'show', status: :created
     else
-      render json: @tag.errors, status: :unprocessable_entity
+      render json: @tag.errors.full_messages, status: :unprocessable_entity
     end
   end
 

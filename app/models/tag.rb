@@ -35,10 +35,6 @@ class Tag < ActiveRecord::Base
 
   before_validation :set_slug, if: :name_changed?
 
-  def self.find_by_name(name)
-    where(['LOWER(name) = LOWER(?)', name]).first
-  end
-
   def set_slug
     self.slug = name.parameterize
   end

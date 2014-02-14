@@ -33,19 +33,21 @@
 #= require_self
 
 $ ->
-  $(document).on 'ajax:error', (e, xhr, status, error) ->
+  # Handle ajax errors
+  $(document).ajaxError (e, xhr, status, error) ->
     return unless xhr.status == 422
     bootbox.alert
       message: xhr.responseJSON.join('<br>'),
       title: 'Something went wrong'
 
+  # Read data-url if present
   $.rails.href = (element) ->
-    # Read data-url if present
     element.data('url') || element.attr('href')
 
+  # Handle tooltips
   if ($tooltips = $('[data-toggle=tooltip]')).length > 0
     $tooltips.tooltip();
 
-
+  # Handle WGText
   if ($wgtextEnabled = $('[data-provide=wgtext]')).length > 0
     (new Wallgig.Managers.WGText($wgtextEnabled)).execute()

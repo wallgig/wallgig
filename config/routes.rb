@@ -135,7 +135,7 @@ Wallgig::Application.routes.draw do
 
       resources :tags, only: [:index, :create] do
         collection do
-          get :find_or_initialize
+          get :find
         end
       end
 
