@@ -31,19 +31,15 @@ class Collection < ActiveRecord::Base
 
   is_impressionable counter_cache: true
 
+  include PurityCounters
+  has_purity_counters :wallpapers
+
   validates :name, presence: true
 
   scope :public,  -> { where(public: true) }
   scope :private, -> { where(public: false) }
   scope :ordered, -> { order(position: :asc) }
   scope :latest,  -> { order(last_added_at: :desc) }
-
-  scope :not_empty, -> { where('sfw_wallpapers_count > 0 OR sketchy_wallpapers_count > 0 OR nsfw_wallpapers_count > 0') }
-
-  scope :not_empty_for_purities, -> (purities, sum_gte = 0) {
-    purities = purities.map { |p| counter_name_for(p) }.join(' + ')
-    where(["(#{purities}) >= ?", sum_gte])
-  }
 
   attr_accessor :collect_status
 
@@ -72,11 +68,6 @@ class Collection < ActiveRecord::Base
     ')
   end
 
-  def self.counter_name_for(wallpaper_or_purity)
-    wallpaper_or_purity = wallpaper_or_purity.purity if wallpaper_or_purity.class.name == 'Wallpaper'
-    "#{wallpaper_or_purity}_wallpapers_count"
-  end
-
   def private?
     !public?
   end
@@ -101,9 +92,5 @@ class Collection < ActiveRecord::Base
 
     touch(:last_added_at)
     self.class.increment_counter(self.class.counter_name_for(wallpaper), id)
-  end
-
-  def wallpapers_count_for(purities)
-    purities.map { |p| read_attribute(self.class.counter_name_for(p)) }.reduce(:+)
   end
 end
