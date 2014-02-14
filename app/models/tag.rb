@@ -35,6 +35,14 @@ class Tag < ActiveRecord::Base
 
   before_validation :set_slug, if: :name_changed?
 
+  def self.ensure_consistency!
+    connection.execute('
+      UPDATE tags SET wallpapers_count = (
+        SELECT COUNT(*) FROM wallpapers_tags WHERE wallpapers_tags.tag_id = tags.id
+      )
+    ')
+  end
+
   def set_slug
     self.slug = name.parameterize
   end

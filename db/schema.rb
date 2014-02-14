@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20140212021419) do
+ActiveRecord::Schema.define(version: 20140214021005) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -268,6 +268,7 @@ ActiveRecord::Schema.define(version: 20140212021419) do
     t.integer  "coined_by_id"
     t.integer  "approved_by_id"
     t.datetime "approved_at"
+    t.integer  "wallpapers_count", default: 0
   end
 
   add_index "tags", ["approved_by_id"], name: "index_tags_on_approved_by_id", using: :btree
