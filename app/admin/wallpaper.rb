@@ -59,7 +59,7 @@ ActiveAdmin.register Wallpaper do
     end
     column 'Tags' do |wallpaper|
       ul do
-        wallpaper.tags.map { |tag| li link_to(tag.name, admin_wallpapers_path(q: { tags_slug_eq: tag.slug }), class: "purity-#{tag.purity}") }
+        wallpaper.tags.map { |tag| li link_to(tag.name, url_for(params.merge(q: { tags_id_eq: tag.id })), class: "purity-#{tag.purity}") }
       end
     end
     column 'Views', :impressions_count

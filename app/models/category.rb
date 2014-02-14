@@ -18,7 +18,7 @@ require 'wikipedia_client'
 class Category < ActiveRecord::Base
   has_many :tags, dependent: :nullify
 
-  has_ancestry
+  has_ancestry orphan_strategy: :adopt
 
   extend FriendlyId
   friendly_id :name, use: :slugged

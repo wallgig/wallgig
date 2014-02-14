@@ -1,4 +1,4 @@
-ActiveAdmin.register Tag, as: 'Tag' do
+ActiveAdmin.register Tag do
   permit_params :name, :slug, :category_id
 
   scope :all, default: true
@@ -24,15 +24,18 @@ ActiveAdmin.register Tag, as: 'Tag' do
     selectable_column
     id_column
     column(:name) { |tag| span tag.name, class: "purity-#{tag.purity}" }
-    column('Approved') { |tag| status_tag tag.approved? ? 'Yes' : 'No' }
     column :slug
+    column('Approved') { |tag| status_tag tag.approved? ? 'Yes' : 'No' }
     column :category
+    column :wallpapers_count
     column :coined_by
     column :approved_by
     column :approved_at
     column :created_at
     column :updated_at
-    default_actions
+    actions do |tag|
+      link_to 'Wallpapers', admin_wallpapers_path(scope: :all, q: { tags_id_eq: tag.id })
+    end
   end
 
   form do |f|
