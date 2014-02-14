@@ -16,7 +16,7 @@
 #
 
 class Tag < ActiveRecord::Base
-  belongs_to :category, counter_cache: true
+  belongs_to :category
   belongs_to :coined_by, class_name: 'User'
 
   has_many :wallpapers_tags, dependent: :destroy
