@@ -49,7 +49,10 @@
                 = tag.name
             %td.text-center
               - if tag.category.present?
-                = link_to tag.category_name, tag.category
+                - if tag.category == @category
+                  = tag.category_name
+                - else
+                  = link_to tag.category_name, tag.category
             %td.text-center= tag.wallpapers_count
 
     .text-center= paginate @tags
