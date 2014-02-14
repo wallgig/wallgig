@@ -27,7 +27,9 @@ ActiveAdmin.register Tag do
     column :slug
     column('Approved') { |tag| status_tag tag.approved? ? 'Yes' : 'No' }
     column :category
-    column :wallpapers_count
+    column :sfw_wallpapers_count
+    column :sketchy_wallpapers_count
+    column :nsfw_wallpapers_count
     column :coined_by
     column :approved_by
     column :approved_at

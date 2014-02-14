@@ -10,7 +10,9 @@ ActiveAdmin.register Category do
     column :name
     column :slug
     column('Parent') { |category| category.parent.name if category.parent.present? }
-    column :tags_count
+    column :sfw_tags_count
+    column :sketchy_tags_count
+    column :nsfw_tags_count
     actions do |category|
       link_to 'Tags', admin_tags_path(q: { category_id_eq: category.id })
     end
