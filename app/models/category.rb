@@ -16,6 +16,8 @@
 require 'wikipedia_client'
 
 class Category < ActiveRecord::Base
+  has_many :tags, dependent: :nullify
+
   has_ancestry
 
   extend FriendlyId

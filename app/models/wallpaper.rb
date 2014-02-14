@@ -46,6 +46,9 @@ class Wallpaper < ActiveRecord::Base
   has_many :favourites, dependent: :destroy
   has_many :favourited_users, through: :favourites, source: :wallpaper
 
+  has_many :collections_wallpapers, dependent: :destroy
+  has_many :collections, through: :collections_wallpapers
+
   # TODO deprecate
   belongs_to :category
 
