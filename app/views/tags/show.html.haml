@@ -4,6 +4,11 @@
   %h2{:class => "purity-#{@tag.purity}"}
     %span.glyphicon.glyphicon-tag
     = title @tag.name
+    - if user_signed_in?
+      - if current_user.subscribed_to?(@tag)
+        = link_to 'Unsubscribe', nil, data: { provide: 'subscribe-button', method: :post, remote: true, url: toggle_tag_subscription_path(@tag) }
+      - else
+        = link_to 'Subscribe', nil, data: { provide: 'subscribe-button', method: :post, remote: true, url: toggle_tag_subscription_path(@tag) }
   %ol.breadcrumb
     %li= link_to 'Categories', categories_path
     - if @tag.category.present?

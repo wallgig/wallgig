@@ -8,7 +8,11 @@ Wallgig::Application.routes.draw do
   end
 
   concern :subscribable do
-    resource :subscription
+    resource :subscription, only: [] do
+      member do
+        post :toggle
+      end
+    end
   end
 
   # Old forums subdomain

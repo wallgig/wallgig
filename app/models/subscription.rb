@@ -14,4 +14,6 @@
 class Subscription < ActiveRecord::Base
   belongs_to :user
   belongs_to :subscribable, polymorphic: true
+
+  validates :user_id, presence: true, uniqueness: { scope: [:subscribable_id, :subscribable_type] }
 end

@@ -51,6 +51,9 @@ class User < ActiveRecord::Base
 
   has_many :coined_tags, class_name: 'Tag', foreign_key: 'coined_by_id'
 
+  has_many :subscriptions, dependent: :destroy
+  include Subscribable
+
   # Include default devise modules. Others available are:
   # :timeoutable and :omniauthable
   devise :database_authenticatable, :registerable,
@@ -150,6 +153,10 @@ class User < ActiveRecord::Base
 
   def staff?
     developer? || admin? || moderator?
+  end
+
+  def subscribed_to?(subscribable)
+    subscriptions.where(subscribable: subscribable).exists?
   end
 
   private
