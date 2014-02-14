@@ -11,6 +11,7 @@
 #  ancestry        :string(255)
 #  created_at      :datetime
 #  updated_at      :datetime
+#  tags_count      :integer
 #
 
 require 'spec_helper'

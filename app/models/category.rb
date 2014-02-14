@@ -27,6 +27,14 @@ class Category < ActiveRecord::Base
 
   before_save :fetch_wikipedia_content, if: proc { |c| c.raw_content.blank? && c.wikipedia_title.present? }
 
+  def self.ensure_consistency!
+    connection.execute('
+      UPDATE categories SET tags_count = (
+        SELECT COUNT(*) FROM tags WHERE tags.category_id = categories.id
+      )
+    ')
+  end
+
   def fetch_wikipedia_content
     self.cooked_content = WikipediaClient.new(wikipedia_title).extract if wikipedia_title.present?
   end

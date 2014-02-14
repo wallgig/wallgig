@@ -2,18 +2,19 @@
 #
 # Table name: tags
 #
-#  id             :integer          not null, primary key
-#  name           :string(255)
-#  slug           :string(255)
-#  category_id    :integer
-#  purity         :string(255)
-#  coined_by_id   :integer
-#  approved_by_id :integer
-#  approved_at    :datetime
+#  id               :integer          not null, primary key
+#  name             :string(255)
+#  slug             :string(255)
+#  category_id      :integer
+#  purity           :string(255)
+#  coined_by_id     :integer
+#  approved_by_id   :integer
+#  approved_at      :datetime
+#  wallpapers_count :integer          default(0)
 #
 
 class Tag < ActiveRecord::Base
-  belongs_to :category
+  belongs_to :category, counter_cache: true
   belongs_to :coined_by, class_name: 'User'
 
   has_many :wallpapers_tags, dependent: :destroy
