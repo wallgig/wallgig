@@ -111,6 +111,8 @@ Wallgig::Application.routes.draw do
 
   resources :users, only: [:index, :show] do
     concerns :commentable
+    concerns :subscribable
+
     resources :collections, only: [:index]
     resources :favourites,  only: [:index]
     resources :wallpapers, only: [:index]

@@ -76,6 +76,10 @@ class Ability
 
       # Tag
       can :create, Tag, coined_by_id: user.id
+
+      # Subscription
+      can :crud, Subscription, user_id: user.id
+      cannot :create, Subscription, subscribable_id: user.id, subscribable_type: 'User'
     else
       # Wallpaper
       can :read, Wallpaper, processing: false, purity: 'sfw'
