@@ -137,9 +137,10 @@
           %ul.list-unstyled
             - @wallpaper.ordered_tags.each do |tag|
               %li
-                = link_to tag, class: "purity-#{tag.purity}" do
-                  %span.glyphicon.glyphicon-tag
-                  = tag.name
+                .btn-group
+                  = link_to tag, class: "btn btn-xs btn-default purity-#{tag.purity}" do
+                    %span.glyphicon.glyphicon-tag
+                  = link_to tag.name, wallpapers_path(tags: [tag.name]), class: "btn btn-xs btn-link purity-#{tag.purity}"
 
 - content_for :wallpaper_stage_content do
   = image_tag @wallpaper.requested_image_url, width: @wallpaper.requested_image_width, height: @wallpaper.requested_image_height, class: "img-wallpaper img-#{@wallpaper.format} state-1"

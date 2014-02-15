@@ -117,7 +117,7 @@ class Wallpaper < ActiveRecord::Base
       indexes :user_id,              type: 'integer', index: 'not_analyzed'
       indexes :user,                 type: 'string',  index: 'not_analyzed'
       indexes :purity,               type: 'string',  index: 'not_analyzed'
-      indexes :tags,                 type: 'string',  index: 'not_analyzed', analyzer: 'keyword'
+      indexes :tags,                 type: 'string',  analyzer: 'keyword'
       indexes :categories,           type: 'string',  analyzer: 'string_lowercase'
       indexes :width,                type: 'integer', index: 'not_analyzed'
       indexes :height,               type: 'integer', index: 'not_analyzed'
