@@ -1,16 +1,26 @@
 - content_for(:use_full_container, true)
 
+- content_for :mark_all_as_read_button do
+  - if @subscription.present?
+    = link_to mark_read_subscription_path(@subscription), data: { method: :post }, class: 'btn btn-info btn-lg pull-right' do
+      %span.glyphicon.glyphicon-ok
+      Mark all as read
+  - else
+    = link_to mark_type_read_subscriptions_path(type: @subscribable_type.underscore), data: { method: :post }, class: 'btn btn-info btn-lg pull-right' do
+      %span.glyphicon.glyphicon-ok
+      Mark all as read
+
 .page-header
   %h2= title 'Subscriptions'
 
 .row
   .col-md-2
     %ul.nav.nav-pills
-      = active_link_to subscriptions_path, wrap_tag: :li, active: (params[:action] == 'index' || @subscription.try(:subscribable_type) == 'User') do
+      = active_link_to subscriptions_path, wrap_tag: :li, active: (@subscribable_type == 'User') do
         Uploads
-      / = active_link_to collections_subscriptions_path, wrap_tag: :li, active: params[:action] == 'collections' do
+      / = active_link_to collections_subscriptions_path, wrap_tag: :li, active: (@subscribable_type == 'Collection') do
       /   Collections
-      = active_link_to tags_subscriptions_path, wrap_tag: :li, active: (params[:action] == 'tags' || @subscription.try(:subscribable_type) == 'Tag') do
+      = active_link_to tags_subscriptions_path, wrap_tag: :li, active: (@subscribable_type == 'Tag') do
         Tags
     %br/
     .list-group
@@ -26,4 +36,6 @@
             %span.glyphicon.glyphicon-tag
             = subscription.subscribable.name
   .col-md-10
+    = yield :mark_all_as_read_button
     = render partial: 'wallpapers/list', locals: { wallpapers: @wallpapers }
+    = yield :mark_all_as_read_button

@@ -85,6 +85,11 @@ Wallgig::Application.routes.draw do
     collection do
       get :collections
       get :tags
+      post :mark_type_read
+    end
+
+    member do
+      post :mark_read
     end
   end
 

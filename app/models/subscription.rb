@@ -22,4 +22,12 @@ class Subscription < ActiveRecord::Base
   end
 
   scope :by_type, -> (type) { where(subscribable_type: type) }
+
+  def self.mark_all_as_read!
+    update_all(last_visited_at: Time.now)
+  end
+
+  def mark_all_as_read!
+    update_attribute(:last_visited_at, Time.now)
+  end
 end
