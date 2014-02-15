@@ -51,7 +51,7 @@ class WallpaperSearchService
           payload[:query][:bool][:must] << {
             :term => {
               :'tags' => {
-                :value => tag.downcase
+                :value => tag
               }
             }
           }
@@ -64,7 +64,7 @@ class WallpaperSearchService
           payload[:query][:bool][:must_not] << {
             :term => {
               :'tags' => {
-                :value => tag.downcase
+                :value => tag
               }
             }
           }
