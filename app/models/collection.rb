@@ -27,6 +27,8 @@ class Collection < ActiveRecord::Base
   has_many :ordered_wallpapers,        -> { order('collections_wallpapers.position ASC') },    through: :collections_wallpapers, class_name: 'Wallpaper', source: :wallpaper
   has_many :recently_added_wallpapers, -> { order('collections_wallpapers.created_at DESC') }, through: :collections_wallpapers, class_name: 'Wallpaper', source: :wallpaper
 
+  include Subscribable
+
   acts_as_list scope: :owner
 
   is_impressionable counter_cache: true

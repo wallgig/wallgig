@@ -7,7 +7,15 @@ Wallgig::Application.routes.draw do
     resources :reports, only: [:new, :create]
   end
 
-  # Handle forums
+  concern :subscribable do
+    resource :subscription, only: [] do
+      member do
+        post :toggle
+      end
+    end
+  end
+
+  # Old forums subdomain
   match '*path', to: redirect('http://wallgig.net/forums'), via: :all, constraints: { subdomain: 'forums' }
 
   root 'wallpapers#index'
@@ -29,7 +37,9 @@ Wallgig::Application.routes.draw do
   resources :categories, only: [:index, :show]
 
   # Tags
-  resources :tags
+  resources :tags, only: [:show] do
+    concerns :subscribable
+  end
 
   # Account
   namespace :account do
@@ -55,7 +65,9 @@ Wallgig::Application.routes.draw do
   end
 
   # Collections
-  resources :collections, only: [:index, :show]
+  resources :collections, only: [:index, :show] do
+    concerns :subscribable
+  end
 
   # Comments
   resources :comments, only: [:index, :edit, :update, :destroy] do
@@ -67,6 +79,19 @@ Wallgig::Application.routes.draw do
 
   # Forums
   resources :forums, only: [:index, :show]
+
+  # Subscriptions
+  resources :subscriptions, only: [:index, :show] do
+    collection do
+      get :collections
+      get :tags
+      post :mark_type_read
+    end
+
+    member do
+      post :mark_read
+    end
+  end
 
   # Topics
   resources :topics do
@@ -98,6 +123,8 @@ Wallgig::Application.routes.draw do
 
   resources :users, only: [:index, :show] do
     concerns :commentable
+    concerns :subscribable
+
     resources :collections, only: [:index]
     resources :favourites,  only: [:index]
     resources :wallpapers, only: [:index]
@@ -113,6 +140,7 @@ Wallgig::Application.routes.draw do
   resources :wallpapers do
     concerns :commentable
     concerns :reportable
+    concerns :subscribable
 
     collection do
       post :save_search_params

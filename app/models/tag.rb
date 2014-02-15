@@ -26,6 +26,7 @@ class Tag < ActiveRecord::Base
 
   include Approvable
   include HasPurity
+  include Subscribable
 
   extend FriendlyId
   friendly_id :name, use: :slugged

@@ -154,6 +154,58 @@ class Wallpaper < ActiveRecord::Base
   scope :latest,        -> { order(created_at: :desc) }
   scope :similar_to,    -> (w) { where.not(id: w.id).where(["( SELECT SUM(((phash::bigint # ?) >> bit) & 1 ) FROM generate_series(0, 63) bit) <= 15", w.phash]) }
 
+  scope :subscribed_users_by_user, -> (user) {
+    where(['
+      wallpapers.user_id IN (
+        SELECT s.subscribable_id
+        FROM   subscriptions s
+        WHERE  s.user_id = ?
+          AND  s.subscribable_type = \'User\'
+          AND  s.last_visited_at < wallpapers.created_at
+      )
+    ', user.id])
+  }
+
+  scope :subscribed_collections_by_user, -> (user) {
+    where(['
+      wallpapers.id IN (
+        SELECT     cw.wallpaper_id
+        FROM       subscriptions s
+        INNER JOIN collections_wallpapers cw
+        ON         cw.collection_id = s.subscribable_id
+        WHERE      s.user_id = ?
+          AND      s.subscribable_type = \'Collection\'
+          AND      s.last_visited_at < wallpapers.created_at
+      )
+    ', user.id])
+  }
+
+  scope :subscribed_tags_by_user, -> (user) {
+    where(['
+      wallpapers.id IN (
+        SELECT     wt.wallpaper_id
+        FROM       subscriptions s
+        INNER JOIN wallpapers_tags wt
+        ON         wt.tag_id = s.subscribable_id
+        WHERE      s.user_id = ?
+          AND      s.subscribable_type = \'Tag\'
+          AND      s.last_visited_at < wallpapers.created_at
+      )
+    ', user.id])
+  }
+
+  scope :in_subscription, -> (subscription) {
+    case subscription.subscribable_type
+    when 'User'
+      where(['user_id = ? AND wallpapers.created_at > ?', subscription.subscribable_id, subscription.last_visited_at])
+    when 'Tag'
+      joins(:tags).where(tags: { id: subscription.subscribable_id }).where('wallpapers.created_at > ?', subscription.last_visited_at)
+    when 'Collection'
+    else
+      none
+    end
+  }
+
   # Callbacks
   before_validation :set_image_hash, on: :create
 

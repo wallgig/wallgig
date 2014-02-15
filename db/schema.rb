@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20140214143539) do
+ActiveRecord::Schema.define(version: 20140214230234) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -249,6 +249,18 @@ ActiveRecord::Schema.define(version: 20140214143539) do
     t.integer "height"
     t.string  "category"
   end
+
+  create_table "subscriptions", force: true do |t|
+    t.integer  "user_id"
+    t.integer  "subscribable_id"
+    t.string   "subscribable_type"
+    t.datetime "last_visited_at"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "subscriptions", ["subscribable_id", "subscribable_type"], name: "index_subscriptions_on_subscribable_id_and_subscribable_type", using: :btree
+  add_index "subscriptions", ["user_id"], name: "index_subscriptions_on_user_id", using: :btree
 
   create_table "taggings", force: true do |t|
     t.integer  "tag_id"

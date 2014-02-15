@@ -1,0 +1,8 @@
+- if current_user.subscribed_to?(subscribable)
+  %a.btn.btn-lg.btn-subscription.subscribed{:data => {:provide => 'subscribe-button', :url => url_for([:toggle, subscribable, :subscription])}}
+    %span.glyphicon.glyphicon-minus
+    Unsubscribe
+- else
+  %a.btn.btn-lg.btn-subscription{:data => {:provide => 'subscribe-button', :url => url_for([:toggle, subscribable, :subscription])}}
+    %span.glyphicon.glyphicon-plus
+    Subscribe

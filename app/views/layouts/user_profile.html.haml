@@ -44,10 +44,9 @@
                     = link_to edit_account_profile_path do
                       %span.glyphicon.glyphicon-pencil
                       Edit profile
-            / - else
-            /   = link_to '#', class: 'btn btn-lg btn-primary' do
-            /     %span.glyphicon.glyphicon-plus
-            /     Follow
+            - else
+              - if can?(:subscribe, @user)
+                = render partial: 'shared/buttons/subscribe', locals: { subscribable: @user }
           .media
             - if myself?
               = link_to edit_account_profile_path, class: 'pull-left' do
