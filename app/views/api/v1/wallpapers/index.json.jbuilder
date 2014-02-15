@@ -10,7 +10,7 @@ json.wallpapers do
     json.extract! wallpaper, :id
     json.url wallpaper_url(wallpaper, protocol: :http)
     if wallpaper.user.present?
-      json.owner do
+      json.user do
         json.extract! wallpaper.user, :id, :username
       end
     end

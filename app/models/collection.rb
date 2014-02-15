@@ -20,7 +20,7 @@
 #
 
 class Collection < ActiveRecord::Base
-  belongs_to :owner, polymorphic: true
+  belongs_to :user
 
   has_many :collections_wallpapers, dependent: :destroy
   has_many :wallpapers, through: :collections_wallpapers
@@ -29,7 +29,7 @@ class Collection < ActiveRecord::Base
 
   include Subscribable
 
-  acts_as_list scope: :owner
+  acts_as_list scope: :user
 
   is_impressionable counter_cache: true
 

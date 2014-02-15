@@ -16,7 +16,7 @@ ActiveAdmin.register Collection do
     column(:public, sortable: :public) { |c| status_tag c.public? ? 'Yes' : 'No' }
     column(:wallpapers_count) { |c| c.wallpapers.size }
     column 'Views', :impressions_count
-    column :owner
+    column :user
     column :created_at
     column :updated_at
     actions
@@ -27,7 +27,7 @@ ActiveAdmin.register Collection do
       attributes_table_for collection do
         row :name
         row :public
-        row :owner
+        row :user
         row :impressions_count
         row(:wallpapers_count) { |c| c.wallpapers.count }
         row :created_at
@@ -47,7 +47,7 @@ ActiveAdmin.register Collection do
 
   controller do
     def scoped_collection
-      Collection.includes(:owner)
+      Collection.includes(:user)
     end
   end
 end

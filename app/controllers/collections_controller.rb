@@ -16,7 +16,7 @@ class CollectionsController < ApplicationController
       @collections = Collection.latest
     end
 
-    @collections = @collections.includes(owner: :profile)
+    @collections = @collections.includes(user: :profile)
                                .accessible_by(current_ability, :read)
                                .page(params[:page]).per(20)
 
@@ -35,7 +35,7 @@ class CollectionsController < ApplicationController
                              .accessible_by(current_ability, :read)
                              .page(params[:page])
 
-    @wallpapers = @wallpapers.with_purities(current_purities) unless myself?(@collection.owner)
+    @wallpapers = @wallpapers.with_purities(current_purities) unless myself?(@collection.user)
 
     @wallpapers = WallpapersDecorator.new(@wallpapers, context: { current_user: current_user })
 

@@ -9,18 +9,16 @@
         = link_to edit_account_collection_path(@collection), class: 'btn btn-default btn-lg' do
           %span.glyphicon.glyphicon-pencil
           Edit collection
-  - if @collection.owner_type == 'User'
-    %h2
-      = title [@collection.owner.username, @collection.name], @collection.name
-      - if @collection.private?
-        %small
-          %span.label.label-danger Private
+  %h2
+    = title [@collection.user.username, @collection.name], @collection.name
+    - if @collection.private?
+      %small
+        %span.label.label-danger Private
   %ul.list-inline
-    - if @collection.owner_type == 'User'
-      %li
-        = link_to_user @collection.owner do
-          = image_tag user_avatar_url(@collection.owner, 20), alt: @collection.owner.username, width: 20, height: 20
-          = @collection.owner.username
+    %li
+      = link_to_user @collection.user do
+        = image_tag user_avatar_url(@collection.user, 20), alt: @collection.user.username, width: 20, height: 20
+        = @collection.user.username
     %li
       %span.glyphicon.glyphicon-eye-open
       = @collection.impressions_count

@@ -81,7 +81,7 @@ Wallgig::Application.routes.draw do
   resources :forums, only: [:index, :show]
 
   # Search
-  get 'search/*query' => 'wallpapers#index'
+  # get 'search/*query' => 'wallpapers#index'
 
   # Subscriptions
   resources :subscriptions, only: [:index, :show] do

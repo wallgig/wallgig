@@ -44,7 +44,7 @@ class Ability
       can :crud, Favourite, user_id: user.id
 
       # Collection
-      can :crud, Collection, owner_id: user.id, owner_type: 'User'
+      can :crud, Collection, user_id: user.id
 
       # Comment
       can :crud, Comment, user_id: user.id
@@ -80,7 +80,7 @@ class Ability
       # Subscription
       can :crud, Subscription, user_id: user.id
       can :subscribe, :all
-      cannot :subscribe, Collection, owner_id: user.id, owner_type: 'User'
+      cannot :subscribe, Collection, user_id: user.id
       cannot :subscribe, User, id: user.id
     else
       # Wallpaper
