@@ -65,7 +65,9 @@ Wallgig::Application.routes.draw do
   end
 
   # Collections
-  resources :collections, only: [:index, :show]
+  resources :collections, only: [:index, :show] do
+    concerns :subscribable
+  end
 
   # Comments
   resources :comments, only: [:index, :edit, :update, :destroy] do
@@ -79,7 +81,7 @@ Wallgig::Application.routes.draw do
   resources :forums, only: [:index, :show]
 
   # Subscriptions
-  resources :subscriptions
+  resources :subscriptions, only: [:index]
 
   # Topics
   resources :topics do

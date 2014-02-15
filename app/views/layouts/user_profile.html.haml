@@ -45,7 +45,7 @@
                       %span.glyphicon.glyphicon-pencil
                       Edit profile
             - else
-              - if user_signed_in?
+              - if can?(:subscribe, @user)
                 = render partial: 'shared/buttons/subscribe', locals: { subscribable: @user }
           .media
             - if myself?

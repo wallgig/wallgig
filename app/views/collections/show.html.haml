@@ -1,28 +1,31 @@
 - content_for :use_full_container, true
 
 .page-header
+  - if user_signed_in?
+    .pull-right
+      - if can?(:subscribe, @collection)
+        = render partial: 'shared/buttons/subscribe', locals: { subscribable: @collection }
+      - if can?(:update, @collection)
+        = link_to edit_account_collection_path(@collection), class: 'btn btn-default btn-lg' do
+          %span.glyphicon.glyphicon-pencil
+          Edit collection
   - if @collection.owner_type == 'User'
     %h2
       = title [@collection.owner.username, @collection.name], @collection.name
       - if @collection.private?
         %small
           %span.label.label-danger Private
-    .media.media-user
-      = link_to @collection.owner, class: 'pull-left' do
-        = image_tag user_avatar_url(@collection.owner, 20), alt: @collection.owner.username, class: 'media-object', width: 20, height: 20
-      = link_to_user @collection.owner
-
-%ul.list-inline
-  - if can? :update, @collection
+  %ul.list-inline
+    - if @collection.owner_type == 'User'
+      %li
+        = link_to_user @collection.owner do
+          = image_tag user_avatar_url(@collection.owner, 20), alt: @collection.owner.username, width: 20, height: 20
+          = @collection.owner.username
     %li
-      = link_to edit_account_collection_path(@collection) do
-        %span.glyphicon.glyphicon-pencil
-        Edit collection
-  %li
-    %span.glyphicon.glyphicon-eye-open
-    = @collection.impressions_count
-  %li
-    %span.glyphicon.glyphicon-picture
-    = @collection.wallpapers_count_for(current_purities)
+      %span.glyphicon.glyphicon-eye-open
+      = @collection.impressions_count
+    %li
+      %span.glyphicon.glyphicon-picture
+      = @collection.wallpapers_count_for(current_purities)
 
 = render 'wallpapers/list', wallpapers: @wallpapers

@@ -79,7 +79,9 @@ class Ability
 
       # Subscription
       can :crud, Subscription, user_id: user.id
-      cannot :create, Subscription, subscribable_id: user.id, subscribable_type: 'User'
+      can :subscribe, :all
+      cannot :subscribe, Collection, owner_id: user.id, owner_type: 'User'
+      cannot :subscribe, User, id: user.id
     else
       # Wallpaper
       can :read, Wallpaper, processing: false, purity: 'sfw'

@@ -11,16 +11,12 @@ class SubscriptionsController < ApplicationController
 
   def toggle
     if @subscription.present?
-      authorize! :destroy, @subscription
-
       @subscription.destroy
       @subscription_state = false
 
       render action: 'status'
     else
       @subscription = current_user.subscriptions.new(subscribable: @subscribable)
-      authorize! :create, @subscription
-
       @subscription_state = true
 
       if @subscription.save
@@ -43,13 +39,16 @@ class SubscriptionsController < ApplicationController
   private
 
   def set_subscribable
-    if params[:user_id].present?
-      @subscribable = User.find_by_username!(params[:user_id])
+    if params[:collection_id].present?
+      @subscribable = Collection.find(params[:collection_id])
     elsif params[:tag_id].present?
       @subscribable = Tag.friendly.find(params[:tag_id])
+    elsif params[:user_id].present?
+      @subscribable = User.find_by_username!(params[:user_id])
     end
 
     authorize! :read, @subscribable
+    authorize! :subscribe, @subscribable
   end
 
   def set_subscription
