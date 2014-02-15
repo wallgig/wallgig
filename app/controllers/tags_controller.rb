@@ -6,7 +6,8 @@ class TagsController < ApplicationController
   def show
     @wallpapers = @tag.wallpapers.accessible_by(current_ability, :read)
                                  .with_purities(current_purities)
-                                 .page(params[:page])
+                                 .latest
+                                 .limit(current_settings.per_page)
 
     @wallpapers = WallpapersDecorator.new(@wallpapers, context: { current_user: current_user })
 

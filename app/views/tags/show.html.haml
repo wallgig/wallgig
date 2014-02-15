@@ -17,3 +17,5 @@
     = @tag.name
 
 = render partial: 'wallpapers/list', locals: { wallpapers: @wallpapers }
+- if @wallpapers.any?
+  = link_to 'More wallpapers', wallpapers_path(tags: [@tag.name]), class: 'btn btn-lg btn-default btn-block'
