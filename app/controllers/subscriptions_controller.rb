@@ -6,7 +6,17 @@ class SubscriptionsController < ApplicationController
   respond_to :json, only: [:toggle]
 
   def index
-    @subscriptions = Subscription.all
+    @subscriptions = current_user.subscriptions.by_type('User')
+
+    @wallpapers = Wallpaper.subscribed_by(current_user)
+                           .accessible_by(current_ability, :read)
+                           .with_purities(current_purities)
+                           .page(params[:page])
+    @wallpapers = WallpapersDecorator.new(@wallpapers, context: { current_user: current_user })
+
+    if request.xhr?
+      render partial: 'wallpapers/list', layout: false, locals: { wallpapers: @wallpapers }
+    end
   end
 
   def toggle
@@ -52,6 +62,10 @@ class SubscriptionsController < ApplicationController
   end
 
   def set_subscription
-    @subscription = current_user.subscriptions.find_by(subscribable: @subscribable)
+    if @subscribable.present?
+      @subscription = current_user.subscriptions.find_by(subscribable: @subscribable)
+    else
+      @subscription = current_user.subscriptions.find(params[:id])
+    end
   end
 end

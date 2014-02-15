@@ -1,23 +1,20 @@
-%h1 Listing subscriptions
+- content_for(:use_full_container, true)
 
-%table
-  %tr
-    %th User
-    %th Subscribable
-    %th Last visited at
-    %th
-    %th
-    %th
+.page-header
+  %h2= title 'Subscriptions'
 
-  - @subscriptions.each do |subscription|
-    %tr
-      %td= subscription.user
-      %td= subscription.subscribable
-      %td= subscription.last_visited_at
-      %td= link_to 'Show', subscription
-      %td= link_to 'Edit', edit_subscription_path(subscription)
-      %td= link_to 'Destroy', subscription, :method => :delete, :data => { :confirm => 'Are you sure?' }
-
-%br
-
-= link_to 'New Subscription', new_subscription_path
+.row
+  .col-md-3
+    %ul.nav.nav-pills.nav-justified
+      = active_link_to subscriptions_path, wrap_tag: :li do
+        Uploads
+      = active_link_to collections_subscriptions_path, wrap_tag: :li do
+        Collections
+      = active_link_to tags_subscriptions_path, wrap_tag: :li do
+        Tags 
+    .list-group
+      - @subscriptions.each do |subscription|
+        = active_link_to subscription, class: 'list-group-item' do
+          = subscription.subscribable
+  .col-md-9
+    = render partial: 'wallpapers/list', locals: { wallpapers: @wallpapers }

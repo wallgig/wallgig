@@ -1,15 +1,1 @@
-%p#notice= notice
-
-%p
-  %b User:
-  = @subscription.user
-%p
-  %b Subscribable:
-  = @subscription.subscribable
-%p
-  %b Last visited at:
-  = @subscription.last_visited_at
-
-= link_to 'Edit', edit_subscription_path(@subscription)
-\|
-= link_to 'Back', subscriptions_path
+= debug @subscription

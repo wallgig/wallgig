@@ -154,6 +154,18 @@ class Wallpaper < ActiveRecord::Base
   scope :latest,        -> { order(created_at: :desc) }
   scope :similar_to,    -> (w) { where.not(id: w.id).where(["( SELECT SUM(((phash::bigint # ?) >> bit) & 1 ) FROM generate_series(0, 63) bit) <= 15", w.phash]) }
 
+  scope :subscribed_by, -> (user) {
+    where(['
+      wallpapers.user_id IN (
+        SELECT s.subscribable_id
+        FROM subscriptions s
+        WHERE s.user_id = ?
+          AND s.subscribable_type = \'User\'
+          AND s.last_visited_at < wallpapers.created_at
+      )
+    ', user.id])
+  }
+
   # Callbacks
   before_validation :set_image_hash, on: :create
 

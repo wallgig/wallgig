@@ -81,7 +81,12 @@ Wallgig::Application.routes.draw do
   resources :forums, only: [:index, :show]
 
   # Subscriptions
-  resources :subscriptions, only: [:index]
+  resources :subscriptions, only: [:index, :show] do
+    collection do
+      get :collections
+      get :tags
+    end
+  end
 
   # Topics
   resources :topics do

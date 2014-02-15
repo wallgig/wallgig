@@ -20,4 +20,6 @@ class Subscription < ActiveRecord::Base
   before_create do
     self.last_visited_at = Time.now
   end
+
+  scope :by_type, -> (type) { where(subscribable_type: type) }
 end
