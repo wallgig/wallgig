@@ -11,8 +11,6 @@
 #  created_at               :datetime
 #  updated_at               :datetime
 #  impressions_count        :integer          default(0)
-#  owner_id                 :integer
-#  owner_type               :string(255)
 #  sfw_wallpapers_count     :integer          default(0)
 #  sketchy_wallpapers_count :integer          default(0)
 #  nsfw_wallpapers_count    :integer          default(0)
