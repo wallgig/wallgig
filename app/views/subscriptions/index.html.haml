@@ -4,17 +4,26 @@
   %h2= title 'Subscriptions'
 
 .row
-  .col-md-3
-    %ul.nav.nav-pills.nav-justified
-      = active_link_to subscriptions_path, wrap_tag: :li do
+  .col-md-2
+    %ul.nav.nav-pills
+      = active_link_to subscriptions_path, wrap_tag: :li, active: (params[:action] == 'index' || @subscription.try(:subscribable_type) == 'User') do
         Uploads
-      = active_link_to collections_subscriptions_path, wrap_tag: :li do
-        Collections
-      = active_link_to tags_subscriptions_path, wrap_tag: :li do
-        Tags 
+      / = active_link_to collections_subscriptions_path, wrap_tag: :li, active: params[:action] == 'collections' do
+      /   Collections
+      = active_link_to tags_subscriptions_path, wrap_tag: :li, active: (params[:action] == 'tags' || @subscription.try(:subscribable_type) == 'Tag') do
+        Tags
+    %br/
     .list-group
       - @subscriptions.each do |subscription|
         = active_link_to subscription, class: 'list-group-item' do
-          = subscription.subscribable
-  .col-md-9
+          - case subscription.subscribable_type
+          - when 'User'
+            = image_tag user_avatar_url(subscription.subscribable, 20), width: 20, height: 20
+            = username_tag subscription.subscribable
+          - when 'Collection'
+
+          - when 'Tag'
+            %span.glyphicon.glyphicon-tag
+            = subscription.subscribable.name
+  .col-md-10
     = render partial: 'wallpapers/list', locals: { wallpapers: @wallpapers }

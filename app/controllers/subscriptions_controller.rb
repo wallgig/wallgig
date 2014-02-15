@@ -1,21 +1,55 @@
 class SubscriptionsController < ApplicationController
   before_action :authenticate_user!
-  before_action :set_subscribable, except: [:index]
-  before_action :set_subscription, except: [:index]
+  before_action :set_subscribable, except: [:index, :collections, :tags]
+  before_action :set_subscription, except: [:index, :collections, :tags]
 
   respond_to :json, only: [:toggle]
 
   def index
-    @subscriptions = current_user.subscriptions.by_type('User')
-
-    @wallpapers = Wallpaper.subscribed_by(current_user)
+    @wallpapers = Wallpaper.subscribed_users_by_user(current_user)
                            .accessible_by(current_ability, :read)
                            .with_purities(current_purities)
                            .page(params[:page])
+
+    render_index('User')
+  end
+
+  def collections
+    @wallpapers = Wallpaper.subscribed_collections_by_user(current_user)
+                           .accessible_by(current_ability, :read)
+                           .with_purities(current_purities)
+                           .page(params[:page])
+
+    render_index('Collection')
+  end
+
+  def tags
+    @wallpapers = Wallpaper.subscribed_tags_by_user(current_user)
+                           .accessible_by(current_ability, :read)
+                           .with_purities(current_purities)
+                           .page(params[:page])
+
+    render_index('Tag')
+  end
+
+  def show
+    @wallpapers = Wallpaper.in_subscription(@subscription)
+                           .accessible_by(current_ability, :read)
+                           .with_purities(current_purities)
+                           .page(params[:page])
+
+    render_index(@subscription.subscribable_type)
+  end
+
+  def render_index(subscribable_type)
+    @subscriptions = current_user.subscriptions.by_type(subscribable_type)
+
     @wallpapers = WallpapersDecorator.new(@wallpapers, context: { current_user: current_user })
 
     if request.xhr?
       render partial: 'wallpapers/list', layout: false, locals: { wallpapers: @wallpapers }
+    else
+      render action: 'index'
     end
   end
 
