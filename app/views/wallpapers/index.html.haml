@@ -18,6 +18,8 @@
         - rendered_terms << term
         %li
           .btn-group
+            = link_to tag_path(term.parameterize), class: 'btn btn-xs btn-default' do
+              %span.glyphicon.glyphicon-tag
             - if search_options[:exclude_tags].try(:include?, term)
               = link_to url_for(search_options.merge(exclude_tags: (exclude_tags - [term]), tags: (tags - [term])).reject(&blank_value)), class: 'btn btn-xs btn-danger' do
                 %span.glyphicon.glyphicon-remove
@@ -26,13 +28,13 @@
                 %span.glyphicon.glyphicon-remove
             - if search_options[:tags].try(:include?, term)
               = link_to url_for(search_options.merge(tags: (tags - [term]), exclude_tags: (exclude_tags - [term])).reject(&blank_value)), class: 'btn btn-xs btn-success' do
-                %span.glyphicon.glyphicon-ok
+                = term
+                %small (#{terms_to_count[term] || 0})
             - else
-              = link_to url_for(search_options.merge(tags: (tags + [term]), exclude_tags: (exclude_tags - [term])).reject(&blank_value)), class: 'btn btn-xs btn-default' do
-                %span.glyphicon.glyphicon-ok
-            = link_to tag_path(term.parameterize), class: 'btn btn-xs btn-link' do
-              = term
-              %small (#{terms_to_count[term] || 0})
+              = link_to url_for(search_options.merge(tags: (tags + [term]), exclude_tags: (exclude_tags - [term])).reject(&blank_value)), class: 'btn btn-xs btn-link' do
+                = term
+                %small (#{terms_to_count[term] || 0})
+
 
 - content_for :purity do
   %h5 Purity
