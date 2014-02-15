@@ -1,3 +1,7 @@
-// Place all the styles related to the Subscriptions controller here.
-// They will automatically be included in application.css.
-// You can use Sass (SCSS) here: http://sass-lang.com/
+.btn-subscription {
+  @extend .btn-primary;
+
+  &.subscribed {
+    @extend .btn-default;
+  }
+}

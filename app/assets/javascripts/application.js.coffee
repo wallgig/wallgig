@@ -51,3 +51,7 @@ $ ->
   # Handle WGText
   if ($wgtextEnabled = $('[data-provide=wgtext]')).length > 0
     (new Wallgig.Managers.WGText($wgtextEnabled)).execute()
+
+  # Handle subscribe button
+  if ($subscribeButtons = $('[data-provide=subscribe-button]')).length > 0
+    (new Wallgig.Managers.SubscribeButton($subscribeButtons)).execute()

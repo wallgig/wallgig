@@ -3,28 +3,26 @@ class SubscriptionsController < ApplicationController
   before_action :set_subscribable, except: [:index]
   before_action :set_subscription, except: [:index]
 
+  respond_to :json, only: [:toggle]
+
   def index
     @subscriptions = Subscription.all
   end
 
   def toggle
     if @subscription.present?
-      destroy
+      @subscription.destroy
+      @subscription_state = false
+
+      render action: 'status'
     else
-      create
-    end
-  end
+      @subscription = current_user.subscriptions.new(subscribable: @subscribable)
+      @subscription_state = true
 
-  def create
-    @subscription = current_user.subscriptions.new(subscribable: @subscribable)
-
-    respond_to do |format|
       if @subscription.save
-        format.html { redirect_to @subscribable, notice: 'Subscription was successfully created.' }
-        format.json { render action: 'show', status: :created, location: @subscription }
-      els
-        format.html { redirect_to @subscribable, notice: 'Cannot create subscription.' }
-        format.json { render json: @subscription.errors.full_messages, status: :unprocessable_entity }
+        render action: 'status'
+      else
+        render json: @subscription.errors.full_messages, status: :unprocessable_entity
       end
     end
   end
@@ -34,7 +32,7 @@ class SubscriptionsController < ApplicationController
 
     respond_to do |format|
       format.html { redirect_to @subscribable, notice: 'Subscription was successfully destroyed.' }
-      format.json { head :no_content }
+      format.json
     end
   end
 

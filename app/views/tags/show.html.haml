@@ -1,21 +1,19 @@
 - content_for :use_full_container, true
 
 .page-header
+  - if user_signed_in?
+    .pull-right= render partial: 'shared/buttons/subscribe', locals: { subscribable: @tag }
   %h2{:class => "purity-#{@tag.purity}"}
     %span.glyphicon.glyphicon-tag
     = title @tag.name
-    - if user_signed_in?
-      - if current_user.subscribed_to?(@tag)
-        = link_to 'Unsubscribe', nil, data: { provide: 'subscribe-button', method: :post, remote: true, url: toggle_tag_subscription_path(@tag) }
-      - else
-        = link_to 'Subscribe', nil, data: { provide: 'subscribe-button', method: :post, remote: true, url: toggle_tag_subscription_path(@tag) }
-  %ol.breadcrumb
-    %li= link_to 'Categories', categories_path
-    - if @tag.category.present?
-      - [@tag.category.ancestors, @tag.category].flatten.each do |category|
-        %li= link_to category.name, category
-    %li.active
-      %span.glyphicon.glyphicon-tag
-      = @tag.name
+
+%ol.breadcrumb
+  %li= link_to 'Categories', categories_path
+  - if @tag.category.present?
+    - [@tag.category.ancestors, @tag.category].flatten.each do |category|
+      %li= link_to category.name, category
+  %li.active
+    %span.glyphicon.glyphicon-tag
+    = @tag.name
 
 = render partial: 'wallpapers/list', locals: { wallpapers: @wallpapers }

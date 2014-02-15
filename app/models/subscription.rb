@@ -16,4 +16,8 @@ class Subscription < ActiveRecord::Base
   belongs_to :subscribable, polymorphic: true
 
   validates :user_id, presence: true, uniqueness: { scope: [:subscribable_id, :subscribable_type] }
+
+  before_create do
+    self.last_visited_at = Time.now
+  end
 end
