@@ -11,6 +11,7 @@
 #  closed_at       :datetime
 #  created_at      :datetime
 #  updated_at      :datetime
+#  reasons         :text
 #
 
 class Report < ActiveRecord::Base
@@ -18,11 +19,20 @@ class Report < ActiveRecord::Base
   belongs_to :user
   belongs_to :closed_by, class_name: 'User'
 
+  serialize :reasons, Array
+
   validates :reportable, presence: true
-  validates :description, presence: true
 
   scope :closed, -> { where.not(closed_at: nil) }
   scope :open,   -> { where(closed_at: nil) }
+
+  def available_reasons
+    @available_reasons ||= begin
+      ReportReason.where(reportable_type: reportable_type)
+                  .alphabetically
+                  .pluck(:reason)
+    end
+  end
 
   def closed?
     closed_at.present?

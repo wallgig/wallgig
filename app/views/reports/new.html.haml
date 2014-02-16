@@ -1,12 +1,17 @@
 .row
   .col-md-6.col-md-offset-3
-    %h1= title 'New report'
-    %h3= @reportable
+    .page-header
+      %h1= title 'New report'
 
-    - case @reportable.class.name
-    - when 'Comment'
-      %ul.list-unstyled.list-comment= render @reportable
+    .well.text-center
+      .page-subheader
+        %h4= @reportable
+      - case @reportable.class.name
+      - when 'Comment'
+        %ul.list-unstyled.list-comment.text-left= render @reportable
 
-    %p Could you tell to us what is wrong with this #{@reportable.class.name.underscore.humanize.downcase}?
+      - when 'Wallpaper'
+        - @reportable = @reportable.decorate
+        = @reportable.thumbnail_image_tag
 
     = render 'form'

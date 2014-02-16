@@ -1,18 +1,26 @@
 ActiveAdmin.register Report do
+  config.filters = false
   config.sort_order = 'created_at_asc'
+
   menu label: proc { "Reports (#{Report.open.count})" }
   actions :index, :show
 
   scope(:open, default: true) { |reports| reports.open }
   scope :closed
+  scope :all
 
   index do
     id_column
     column 'Reportable' do |report|
-      link_to report.reportable, report.reportable
+      link_to report.reportable, [:admin, report.reportable]
     end
     column 'Reported by' do |report|
-      link_to report.user.username, report.user if report.user.present?
+      link_to report.user.username, [:admin, report.user] if report.user.present?
+    end
+    column :reasons do |report|
+      ul do
+        report.reasons.map { |reason| li reason }
+      end
     end
     column :description, sortable: false
     if current_scope.id == 'closed'

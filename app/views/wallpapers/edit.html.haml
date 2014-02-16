@@ -4,7 +4,7 @@
       %h1= title 'Editing wallpaper'
 
     - if @wallpaper.image.present?
-      .well.text-center= image_tag @wallpaper.image.thumb('400x300').url
+      .well.text-center= @wallpaper.thumbnail_image_tag
 
     = render 'form'
 

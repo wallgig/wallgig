@@ -11,6 +11,7 @@
 #  closed_at       :datetime
 #  created_at      :datetime
 #  updated_at      :datetime
+#  reasons         :text
 #
 
 require 'spec_helper'

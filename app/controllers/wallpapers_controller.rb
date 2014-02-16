@@ -41,6 +41,7 @@ class WallpapersController < ApplicationController
   # GET /wallpapers/1/edit
   def edit
     authorize! :update, @wallpaper
+    @wallpaper = @wallpaper.decorate
   end
 
   # POST /wallpapers
@@ -71,6 +72,7 @@ class WallpapersController < ApplicationController
   # PATCH/PUT /wallpapers/1.json
   def update
     authorize! :update, @wallpaper
+    @wallpaper = @wallpaper.decorate
 
     respond_to do |format|
       if @wallpaper.update(update_wallpaper_params.except(:tag_ids))

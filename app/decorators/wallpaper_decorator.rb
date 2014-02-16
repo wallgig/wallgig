@@ -37,6 +37,10 @@ class WallpaperDecorator < Draper::Decorator
     end
   end
 
+  def thumbnail_image_tag
+    h.image_tag(thumbnail_image_url, width: 250, height: 188, alt: to_s)
+  end
+
   def resolution
     "#{image_width}&times;#{image_height}".html_safe
   end
