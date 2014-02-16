@@ -28,7 +28,7 @@
               %span.glyphicon.glyphicon-tag
               = wallpapers_tag.name
             %br/
-            = wallpapers_tag.tag.category_name
+            .text-muted= wallpapers_tag.tag.category_name
             = hidden_field_tag 'wallpaper[tag_ids][]', wallpapers_tag.tag_id, id: nil
   
     = f.input :source, hint: 'Enter URL or Artist'

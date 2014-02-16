@@ -1,2 +1,7 @@
-<p class="tag-name purity-<%= @purity %>"><%= @name %></p>
-<p class="tag-category-name"><%= @category_name %></p>
+<p class="tag-name purity-<%= @purity %>">
+  <span class="glyphicon glyphicon-tag"></span>
+  <%= @name %>
+</p>
+<p class="tag-category-name text-muted">
+  <%= @category_name %>
+</p>
