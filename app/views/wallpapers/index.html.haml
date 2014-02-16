@@ -53,13 +53,17 @@
   %h5 Colors
   %ul.list-inline.list-color
     - colors = search_options[:colors] || []
-    - Colorscore::Palette::DEFAULT.each do |hex|
-      - if colors.include?(hex)
-        %li.active
-          = link_to '', url_for(search_options.merge(colors: (colors - [hex])).reject(&blank_value)), style: "background-color: \##{hex}"
-      - else
-        %li
-          = link_to '', url_for(search_options.merge(colors: (colors + [hex])).reject(&blank_value)), style: "background-color: \##{hex}"
+    - @wallpapers.facets['colors']['terms'].each do |term|
+      - hex, count = term['term'], term['count']
+      %li
+        - if colors.include?(hex)
+          = link_to url_for(search_options.merge(colors: (colors - [hex])).reject(&blank_value)), class: 'btn btn-xs btn-success' do
+            %span.color-square{style: "background-color: \##{hex}"}
+            (#{count})
+        - else
+          = link_to url_for(search_options.merge(colors: (colors + [hex])).reject(&blank_value)), class: 'btn btn-xs btn-link' do
+            %span.color-square{style: "background-color: \##{hex}"}
+            (#{count})
 
 - content_for :screen_resolutions do
   .list-facet
@@ -114,13 +118,14 @@
     .col-lg-5= yield :tags
     .col-lg-7
       .row
+        .col-lg-3
+          = yield :colors
+
         .col-lg-2
           = yield :sort_by
           = yield :purity if user_signed_in?
 
-        .col-lg-2
-          = yield :colors
-        .col-lg-8
+        .col-lg-7
           = yield :screen_resolutions
           = yield :query_string
 

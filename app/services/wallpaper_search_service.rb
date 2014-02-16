@@ -164,6 +164,12 @@ class WallpaperSearchService
             :field => 'tags',
             :size => 20
           }
+        },
+        :colors => {
+          :terms => {
+            :field => 'colors.hex',
+            :size => 20
+          }
         }
       }
 
