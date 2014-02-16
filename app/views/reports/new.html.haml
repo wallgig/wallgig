@@ -1,15 +1,12 @@
-- case @reportable.class.name
-- when 'Comment'
-  %h1 Comment
-  .well.well-sm
-    %h5
-      = link_to_user @reportable.user
-      %small #{time_ago_in_words @reportable.created_at} ago
-    %p= @reportable.comment
+.row
+  .col-md-6.col-md-offset-3
+    %h1= title 'New report'
+    %h3= @reportable
 
-- else
-  %h1= @reportable
+    - case @reportable.class.name
+    - when 'Comment'
+      %ul.list-unstyled.list-comment= render @reportable
 
-%h3 New report
-%p Could you tell to us what is wrong with this #{@reportable.class.name.underscore.humanize.downcase}?
-= render 'form'
+    %p Could you tell to us what is wrong with this #{@reportable.class.name.underscore.humanize.downcase}?
+
+    = render 'form'

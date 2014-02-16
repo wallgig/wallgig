@@ -1,21 +1,13 @@
 class ReportsController < ApplicationController
+  before_action :authenticate_user!
   before_action :set_reportable, only: [:new, :create]
 
-  # GET /reports
-  # GET /reports.json
-  def index
-    @reports = Report.all
-  end
-
-  # GET /reports/new
   def new
     @report = @reportable.reports.new
     @report.user = current_user
     authorize! :create, @report
   end
 
-  # POST /reports
-  # POST /reports.json
   def create
     @report = @reportable.reports.new(report_params)
     @report.user = current_user
@@ -33,20 +25,21 @@ class ReportsController < ApplicationController
   end
 
   private
-    def set_reportable
-      if params[:wallpaper_id].present?
-        @reportable = Wallpaper.find(params[:wallpaper_id])
-        authorize! :read, @reportable
-      elsif params[:comment_id].present?
-        @reportable = Comment.find(params[:comment_id])
-        authorize! :read, @reportable
-      elsif params[:forum_topic_id].present?
-        @reportable = ForumTopic.find(params[:forum_topic_id])
-        authorize! :read, @reportable
-      end
-    end
 
-    def report_params
-      params.require(:report).permit(:description)
+  def set_reportable
+    if params[:comment_id].present?
+      @reportable = Comment.find(params[:comment_id])
+      authorize! :read, @reportable
+    elsif params[:topic_id].present?
+      @reportable = Topic.find(params[:topic_id])
+      authorize! :read, @reportable
+    elsif params[:wallpaper_id].present?
+      @reportable = Wallpaper.find(params[:wallpaper_id])
+      authorize! :read, @reportable
     end
+  end
+
+  def report_params
+    params.require(:report).permit(:description)
+  end
 end

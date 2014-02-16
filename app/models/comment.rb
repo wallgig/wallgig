@@ -37,6 +37,10 @@ class Comment < ActiveRecord::Base
   after_create  :update_last_comment_on_create
   after_destroy :update_last_comment_on_destroy
 
+  def to_s
+    "Comment \##{id}"
+  end
+
   def update_last_comment_on_create
     if commentable_type == 'Topic'
       self.commentable.update_columns last_commented_at: created_at, last_commented_by_id: user_id

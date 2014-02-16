@@ -14,6 +14,9 @@ class Ability
     # Collection
     can :read, Collection, public: true
 
+    # Comment
+    can :read, Comment
+
     # Favourite
     can :read, Favourite, wallpaper: { processing: false, purity: 'sfw' }
 
@@ -68,6 +71,9 @@ class Ability
 
       # Forum
       can :post, Forum, can_post: true
+
+      # Report
+      can :create, Report
 
       # Topic
       can :create,  Topic, forum: { can_post: true }

@@ -52,6 +52,10 @@ class Topic < ActiveRecord::Base
     self.cooked_content = ApplicationController.helpers.markdown(content) if content_changed?
   end
 
+  def to_s
+    title
+  end
+
   def pin!
     update_attribute(:pinned, true)
   end
