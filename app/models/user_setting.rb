@@ -45,4 +45,8 @@ class UserSetting < ActiveRecord::Base
   def needs_screen_resolution?
     screen_width.blank? || screen_height.blank?
   end
+
+  def display_ads?
+    user.staff?
+  end
 end

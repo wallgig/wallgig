@@ -73,12 +73,18 @@
         .clearfix
         = @topic.cooked_content.html_safe
 
+- if current_settings.display_ads?
+  = render partial: 'shared/chitika', locals: { type: :wide }
+
 .text-center= paginate @comments
 
 .panel.panel-default
   = render partial: 'comments/topic_comment', collection: @comments, as: :comment
 
 .text-center= paginate @comments
+
+- if current_settings.display_ads?
+  = render partial: 'shared/chitika', locals: { type: :wide }
 
 - if can? :comment, @topic
   = simple_form_for :comment, url: topic_comments_path(@topic), data: { provide: 'comments' } do |f|
