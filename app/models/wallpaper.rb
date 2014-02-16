@@ -394,7 +394,7 @@ class Wallpaper < ActiveRecord::Base
     ApplicationController.helpers.markdown_line(source) if source.present?
   end
 
-  # TODO
+  # TODO deprecate
   def tag_list
     cached_tag_list
   end
@@ -405,6 +405,12 @@ class Wallpaper < ActiveRecord::Base
 
   def set_cached_tag_list
     self.cached_tag_list = tags.pluck(:name)
+  end
+
+  # Save cached tag list
+  def cache_tag_list
+    set_cached_tag_list
+    save
   end
 
   def update_tag_ids_by_user(new_tag_ids, user)
@@ -420,9 +426,7 @@ class Wallpaper < ActiveRecord::Base
       wallpapers_tags.create!(tag_id: tag_id, added_by_id: user.id)
     end
 
-    set_cached_tag_list
-
-    save
+    cache_tag_list
   end
 
   private

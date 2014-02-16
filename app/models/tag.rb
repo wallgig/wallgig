@@ -42,6 +42,7 @@ class Tag < ActiveRecord::Base
   scope :in_category_and_subtree, -> (category) { where(category_id: category.subtree_ids) if category.present? }
 
   before_validation :set_slug, if: :name_changed?
+  after_save :queue_update_tagged_wallpapers, if: :name_changed?
 
   def self.ensure_consistency!
     connection.execute('
@@ -76,5 +77,13 @@ class Tag < ActiveRecord::Base
 
   def set_slug
     self.slug = name.parameterize
+  end
+
+  def queue_update_tagged_wallpapers
+    UpdateTaggedWallpapers.perform_async(id)
+  end
+
+  def update_tagged_wallpapers
+    wallpapers.find_each(&:cache_tag_list)
   end
 end
