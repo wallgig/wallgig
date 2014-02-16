@@ -24,7 +24,6 @@
 #  scrape_source         :string(255)
 #  scrape_id             :string(255)
 #  image_hash            :string(255)
-#  category_id           :integer
 #  cached_votes_total    :integer          default(0)
 #  cached_votes_score    :integer          default(0)
 #  cached_votes_up       :integer          default(0)
@@ -48,9 +47,6 @@ class Wallpaper < ActiveRecord::Base
 
   has_many :collections_wallpapers, dependent: :destroy
   has_many :collections, through: :collections_wallpapers
-
-  # TODO deprecate
-  belongs_to :category
 
   # Tags relation
   has_many :wallpapers_tags, dependent: :destroy
@@ -385,8 +381,16 @@ class Wallpaper < ActiveRecord::Base
   end
 
   def category_list
-    return nil unless category.present?
-    category.ancestors.pluck(:name) << category.name
+    category_ids =
+      tags
+        .where.not(category_id: nil)
+        .includes(:category)
+        .reject { |tag| tag.category.blank? }
+        .map { |tag| tag.category.ancestor_ids << tag.category_id }
+        .flatten
+        .uniq
+
+    Category.where(id: category_ids).pluck(:name)
   end
 
   def cooked_source

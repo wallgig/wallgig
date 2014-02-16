@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20140216033213) do
+ActiveRecord::Schema.define(version: 20140216184518) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -468,7 +468,6 @@ ActiveRecord::Schema.define(version: 20140216033213) do
     t.string   "scrape_source"
     t.string   "scrape_id"
     t.string   "image_hash"
-    t.integer  "category_id"
     t.integer  "cached_votes_total",              default: 0
     t.integer  "cached_votes_score",              default: 0
     t.integer  "cached_votes_up",                 default: 0
@@ -486,7 +485,6 @@ ActiveRecord::Schema.define(version: 20140216033213) do
   add_index "wallpapers", ["cached_votes_total"], name: "index_wallpapers_on_cached_votes_total", using: :btree
   add_index "wallpapers", ["cached_votes_up"], name: "index_wallpapers_on_cached_votes_up", using: :btree
   add_index "wallpapers", ["cached_weighted_score"], name: "index_wallpapers_on_cached_weighted_score", using: :btree
-  add_index "wallpapers", ["category_id"], name: "index_wallpapers_on_category_id", using: :btree
   add_index "wallpapers", ["image_hash"], name: "index_wallpapers_on_image_hash", using: :btree
   add_index "wallpapers", ["phash"], name: "index_wallpapers_on_phash", using: :btree
   add_index "wallpapers", ["primary_color_id"], name: "index_wallpapers_on_primary_color_id", using: :btree

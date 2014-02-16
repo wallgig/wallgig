@@ -7,6 +7,7 @@ ActiveAdmin.register Category do
 
   index do
     selectable_column
+    id_column
     column :name
     column :slug
     column('Parent') { |category| category.parent.name if category.parent.present? }

@@ -2,7 +2,6 @@ class WallpapersController < ApplicationController
   before_action :authenticate_user!, except: [:index, :show, :set_profile_cover, :toggle_favourite, :collections, :toggle_collect]
   before_action :set_user, only: [:index]
   before_action :set_wallpaper, only: [:show, :edit, :update, :destroy, :update_purity, :history, :set_profile_cover, :toggle_favourite, :collections, :toggle_collect]
-  before_action :set_available_categories, only: [:new, :edit, :create, :update]
   before_action :record_wallpaper_impression, only: :show
 
   include WallpaperSearchParams
@@ -189,12 +188,8 @@ class WallpapersController < ApplicationController
     authorize! :read, @wallpaper
   end
 
-  def set_available_categories
-    @available_categories = Category.arrange_as_array order: :name
-  end
-
   def create_wallpaper_params
-    params.require(:wallpaper).permit(:purity, :image, :image_gravity, :source, :category_id, tag_ids: [])
+    params.require(:wallpaper).permit(:purity, :image, :image_gravity, :source, tag_ids: [])
   end
 
   def update_wallpaper_params

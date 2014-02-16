@@ -24,7 +24,6 @@
 #  scrape_source         :string(255)
 #  scrape_id             :string(255)
 #  image_hash            :string(255)
-#  category_id           :integer
 #  cached_votes_total    :integer          default(0)
 #  cached_votes_score    :integer          default(0)
 #  cached_votes_up       :integer          default(0)
