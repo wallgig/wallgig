@@ -47,6 +47,6 @@ class UserSetting < ActiveRecord::Base
   end
 
   def display_ads?
-    user.staff?
+    true
   end
 end
