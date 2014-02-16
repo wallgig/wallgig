@@ -68,8 +68,8 @@
             - if @topic.created_at != @topic.updated_at
               %li updated #{time_tag @topic.updated_at, time_ago_in_words(@topic.updated_at), title: @topic.updated_at} ago
             - if can? :update, @topic
-              %li= link_to 'Edit', edit_topic_path(@topic)
-            %li= link_to 'Report', new_topic_report_path(@topic)
+              %li= link_to 'Edit', edit_topic_path(@topic), class: 'text-muted'
+            %li= link_to 'Report', new_topic_report_path(@topic), class: 'text-muted'
         .clearfix
         = @topic.cooked_content.html_safe
 
