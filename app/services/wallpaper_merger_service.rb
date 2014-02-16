@@ -8,10 +8,11 @@ class WallpaperMergerService
     Wallpaper.transaction do
       @to_wallpaper.source ||= @from_wallpaper.source
 
-      merge_tags
-      merge_comments
-      merge_favourites
-      merge_impressions
+      move_tags
+      move_comments
+      move_favourites
+      move_impressions
+      move_collections_wallpapers
 
       @from_wallpaper.destroy
 
@@ -21,31 +22,44 @@ class WallpaperMergerService
 
   private
 
-  def merge_tags
+  def move_tags
     from_tag_ids = @from_wallpaper.wallpapers_tags.pluck(:tag_id)
     to_tag_ids   = @to_wallpaper.wallpapers_tags.pluck(:tag_id)
 
-    tags_ids_to_add = from_tag_ids - to_tag_ids
-    tags_ids_to_add.each do |tag_id|
-      @to_wallpaper.wallpapers_tags.create!(tag_id: tag_id)
-    end
+    tag_ids_to_move = from_tag_ids - to_tag_ids
+
+    @from_wallpaper.wallpapers_tags
+      .where(tag_id: tag_ids_to_move)
+      .update_all(wallpaper_id: @to_wallpaper.id)
   end
 
-  def merge_comments
-    Comment.where(commentable: @from_wallpaper).update_all(commentable_id: @to_wallpaper.id)
+  def move_comments
+    @from_wallpaper.comments.update_all(commentable_id: @to_wallpaper.id)
   end
 
-  def merge_favourites
-    from_user_ids = @from_wallpaper.votes.up.by_type(User)
-    to_user_ids   = @to_wallpaper.votes.up.by_type(User)
+  def move_favourites
+    from_voter_ids = @from_wallpaper.votes.up.by_type(User).pluck(:voter_id)
+    to_voter_ids   = @to_wallpaper.votes.up.by_type(User).pluck(:voter_id)
 
-    user_ids_to_add = from_user_ids - to_user_ids
-    User.find(user_ids_to_add).each do |user|
-      @to_wallpaper.liked_by user
-    end
+    voter_ids_to_move = from_voter_ids - to_voter_ids
+
+    @from_wallpaper.votes.up.by_type(User)
+      .where(voter_id: voter_ids_to_move)
+      .update_all(votable_id: @to_wallpaper.id)
   end
 
-  def merge_impressions
-    Impression.where(impressionable: @from_wallpaper).update_all(impressionable_id: @to_wallpaper.id)
+  def move_impressions
+    @from_wallpaper.impressions.update_all(impressionable_id: @to_wallpaper.id)
+  end
+
+  def move_collections_wallpapers
+    from_collection_ids = @from_wallpaper.collections_wallpapers.pluck(:collection_id)
+    to_collection_ids   = @to_wallpaper.collections_wallpapers.pluck(:collection_id)
+
+    collection_ids_to_move = from_collection_ids - to_collection_ids
+
+    @from_wallpaper.collections_wallpapers
+      .where(collection_id: collection_ids_to_move)
+      .update_all(wallpaper_id: @to_wallpaper.id)
   end
 end
