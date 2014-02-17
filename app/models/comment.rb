@@ -60,6 +60,14 @@ class Comment < ActiveRecord::Base
 
   def notify
     case commentable_type
+    when 'User'
+      if user_id != commentable_id
+        notifications.create({
+          user_id: commentable_id,
+          message: I18n.t('comments.notifications.user.message', username: user.username)
+        })
+      end
+
     when 'Wallpaper'
       # Make sure we're not receiving notifications on our own comments
       if user_id != commentable.user_id

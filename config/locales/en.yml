@@ -46,6 +46,8 @@ en:
 
   comments:
     notifications:
+      user:
+        message: "@%{username} posted a comment on your profile"
       wallpaper:
         message: "@%{username} posted a comment on your wallpaper with ID %{id}"
 
