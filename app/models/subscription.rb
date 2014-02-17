@@ -24,6 +24,8 @@ class Subscription < ActiveRecord::Base
     self.last_visited_at = Time.now
   end
 
+  after_create :notify
+
   scope :by_type, -> (type) { where(subscribable_type: type) }
 
   def self.mark_all_as_read!
