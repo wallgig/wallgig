@@ -22,7 +22,7 @@
               wallgig
           .collapse.navbar-collapse#navbar-collapse
             %ul.nav.navbar-nav
-              %li= link_to 'Tags<sup>NEW</sup>'.html_safe, categories_path
+              %li= link_to 'Tags', categories_path
               %li= link_to 'Collections', collections_path
               %li= link_to 'Comments', comments_path
               %li
@@ -57,10 +57,22 @@
                 %li
                   %div= link_to 'Upload', new_wallpaper_path, class: 'btn btn-primary btn-upload'
                 %li
-                  = link_to notifications_url do
+                  %a{:class => 'dropdown-toggle', :data => {:toggle => 'dropdown'}}
                     %span.glyphicon.glyphicon-bell
-                    - if (unread_notifications_count = current_user.notifications.unread.count) > 0
-                      %span.badge= unread_notifications_count
+                    - if current_user.notifications.unread.any?
+                      %span.badge= current_user.notifications.unread.count
+                  %ul.dropdown-menu{:data => {:provide => 'notifications'}}
+                    - if current_user.notifications.unread.any?
+                      %li.dropdown-header Notifications
+                      - current_user.notifications.unread.limit(5).each do |notification|
+                        %li
+                          = link_to notification.to_actual_model, data: { notification_id: notification.id } do
+                            %span{:data => {:provide => 'wgtext'}}= notification.message
+                            = time_ago_tag notification.created_at
+                    - else
+                      %li.dropdown-header No new notifications
+                    %li.divider
+                    %li= link_to 'View all notifications', notifications_url
                 %li.dropdown
                   %a{:class => 'dropdown-toggle', :data => {:toggle => 'dropdown'}}
                     = username_tag current_user

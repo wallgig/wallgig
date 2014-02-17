@@ -2,14 +2,15 @@ class Wallgig.Managers.Notifications
   constructor: (@elements) ->
 
   execute: ->
-    @elements.on 'click', '.unread[data-mark-read-url]', $.proxy(@onClick, @)
+    @elements.on 'click', '[data-notification-id]', $.proxy(@onClick, @)
 
   onClick: (e) ->
     e.preventDefault()
 
     $currentTarget = $(e.currentTarget)
-    url            = $currentTarget.attr('href')
-    markReadUrl    = $currentTarget.data('mark-read-url')
+    url = $currentTarget.attr('href')
+    id  = $currentTarget.data('notification-id')
+    markReadUrl = "/notifications/#{id}/mark_as_read"
 
     $.ajax
       type: 'POST'

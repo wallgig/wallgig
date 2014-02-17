@@ -1,7 +1,7 @@
 - options = {}
 - options[:class] = ['list-group-item']
 - options[:class] << 'unread' unless notification.read?
-- options[:data] = { mark_read_url: mark_as_read_notification_path(notification) } unless notification.read?
+- options[:data] = { notification_id: notification.id }
 
 = link_to notification.to_actual_model, options do
   %small.pull-right= time_ago_tag notification.created_at
