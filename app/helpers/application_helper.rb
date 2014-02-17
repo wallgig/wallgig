@@ -63,4 +63,13 @@ module ApplicationHelper
     markdown.render(text).html_safe
   end
 
+  def time_ago_tag(date_or_time, options = {})
+    options.reverse_merge!({
+      data: { provide: 'time-ago' },
+      title: date_or_time.getutc.iso8601
+    })
+
+    time_tag(date_or_time, options)
+  end
+
 end

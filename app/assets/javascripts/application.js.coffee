@@ -12,20 +12,29 @@
 #
 #= require jquery
 #= require jquery_ujs
+
+# Bootstrap
 #= require bootstrap
+
+# Notifications
+#= require jquery.bootstrap-growl
+#= require bootbox
+
+# Utilities
 #= require panzoom
+#= require selectize
 #= require jquery.inview
 #= require spin
 #= require ladda
-#= require selectize
-#= require jquery.bootstrap-growl
 #= require jquery.cookie
-#= require bootbox
+#= require jquery.timeago
 
+# Markdown
 #= require markdown
 #= require to-markdown
 #= require bootstrap-markdown
 
+# Typeahead
 #= require typeahead.bundle
 
 #= require_tree .
@@ -55,3 +64,7 @@ $ ->
   # Handle subscribe button
   if ($subscribeButtons = $('[data-provide=subscribe-button]')).length > 0
     (new Wallgig.Managers.SubscribeButton($subscribeButtons)).execute()
+
+  # Handle time ago
+  if ($timeAgo = $('[data-provide=time-ago]')).length > 0
+    $timeAgo.timeago()
