@@ -4,7 +4,7 @@ class CreateNotifications < ActiveRecord::Migration
       t.references :user, index: true
       t.references :notifiable, polymorphic: true, index: true
       t.text :message
-      t.boolean :read, default: false
+      t.boolean :read, null: false, default: false
 
       t.timestamps
     end

@@ -181,7 +181,7 @@ ActiveRecord::Schema.define(version: 20140217211840) do
     t.integer  "notifiable_id"
     t.string   "notifiable_type"
     t.text     "message"
-    t.boolean  "read",            default: false
+    t.boolean  "read",            default: false, null: false
     t.datetime "created_at"
     t.datetime "updated_at"
   end

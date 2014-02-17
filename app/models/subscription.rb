@@ -15,7 +15,10 @@ class Subscription < ActiveRecord::Base
   belongs_to :user
   belongs_to :subscribable, polymorphic: true
 
-  validates :user_id, presence: true, uniqueness: { scope: [:subscribable_id, :subscribable_type] }
+  include Notifiable
+
+  validates :subscribable, presence: true
+  validates :user, presence: true, uniqueness: { scope: [:subscribable_id, :subscribable_type] }
 
   before_create do
     self.last_visited_at = Time.now
@@ -29,5 +32,14 @@ class Subscription < ActiveRecord::Base
 
   def mark_all_as_read!
     update_attribute(:last_visited_at, Time.now)
+  end
+
+  def notify
+    if subscribable_type == 'User'
+      notifications.create({
+        user:    subscribable,
+        message: I18n.t('subscriptions.notifications.user.message', username: user.username)
+      })
+    end
   end
 end

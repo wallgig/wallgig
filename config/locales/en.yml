@@ -43,3 +43,16 @@ en:
         mark_sketchy: "Mark Sketchy"
         mark_nsfw: "Mark NSFW"                                                                
     powered_by: "Powered by Hamsters"
+
+  subscriptions:
+    notifications:
+      user:
+        message: "@%{username} is now subscribed to your uploads"
+
+  notifications:
+    title: "Notifications"
+    empty: "You do not have any notifications yet."
+    actions:
+      mark_all_as_read: "Mark all as read"
+    flashes:
+      marked_as_read: "Successfully marked all notifications as read."

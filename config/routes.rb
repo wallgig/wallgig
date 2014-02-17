@@ -80,6 +80,13 @@ Wallgig::Application.routes.draw do
   # Forums
   resources :forums, only: [:index, :show]
 
+  # Notifications
+  resources :notifications, only: [:index] do
+    collection do
+      post :mark_as_read
+    end
+  end
+
   # Search
   # get 'search/*query' => 'wallpapers#index'
 

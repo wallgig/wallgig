@@ -7,7 +7,7 @@
 #  notifiable_id   :integer
 #  notifiable_type :string(255)
 #  message         :text
-#  read            :boolean          default(FALSE)
+#  read            :boolean          default(FALSE), not null
 #  created_at      :datetime
 #  updated_at      :datetime
 #
