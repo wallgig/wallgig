@@ -56,6 +56,11 @@
               - if user_signed_in?
                 %li
                   %div= link_to 'Upload', new_wallpaper_path, class: 'btn btn-primary btn-upload'
+                %li
+                  = link_to notifications_url do
+                    %span.glyphicon.glyphicon-bell
+                    - if (unread_notifications_count = current_user.notifications.unread.count) > 0
+                      %span.badge= unread_notifications_count
                 %li.dropdown
                   %a{:class => 'dropdown-toggle', :data => {:toggle => 'dropdown'}}
                     = username_tag current_user
