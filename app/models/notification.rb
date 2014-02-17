@@ -23,6 +23,10 @@ class Notification < ActiveRecord::Base
   scope :latest, -> { order(created_at: :desc) }
   scope :unread, -> { where(read: false) }
 
+  def self.mark_as_read
+    update_all(read: true)
+  end
+
   def to_actual_model
     case notifiable_type
     when 'Subscription'
@@ -30,7 +34,7 @@ class Notification < ActiveRecord::Base
     end
   end
 
-  def self.mark_as_read
-    update_all(read: true)
+  def mark_as_read
+    update_attribute(:read, true)
   end
 end

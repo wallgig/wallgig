@@ -68,3 +68,7 @@ $ ->
   # Handle time ago
   if ($timeAgo = $('[data-provide=time-ago]')).length > 0
     $timeAgo.timeago()
+
+  # Handle notifications
+  if ($notifications = $('[data-provide=notifications]')).length > 0
+    (new Wallgig.Managers.Notifications($notifications)).execute()

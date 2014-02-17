@@ -1,6 +1,8 @@
-- css_classes = ['list-group-item']
-- css_classes << 'list-group-item-info' unless notification.read?
+- options = {}
+- options[:class] = ['list-group-item']
+- options[:class] << 'unread' unless notification.read?
+- options[:data] = { mark_read_url: mark_as_read_notification_path(notification) } unless notification.read?
 
-= link_to notification.to_actual_model, class: css_classes, target: '_blank' do
+= link_to notification.to_actual_model, options do
   %small.pull-right= time_ago_tag notification.created_at
-  = notification.message
+  %div{:data => {:provide => 'wgtext'}}= notification.message
