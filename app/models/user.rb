@@ -54,6 +54,8 @@ class User < ActiveRecord::Base
   has_many :subscriptions, dependent: :destroy
   include Subscribable
 
+  has_many :notifications, dependent: :destroy
+
   # Include default devise modules. Others available are:
   # :timeoutable and :omniauthable
   devise :database_authenticatable, :registerable,
