@@ -64,9 +64,11 @@
       .col-sm-10
         %small.pull-right
           %ul.list-inline.text-muted
-            %li #{time_tag @topic.created_at, time_ago_in_words(@topic.created_at), title: @topic.created_at} ago
+            %li= time_ago_tag @topic.created_at
             - if @topic.created_at != @topic.updated_at
-              %li updated #{time_tag @topic.updated_at, time_ago_in_words(@topic.updated_at), title: @topic.updated_at} ago
+              %li
+                updated
+                = time_ago_tag @topic.updated_at
             - if can? :update, @topic
               %li= link_to 'Edit', edit_topic_path(@topic), class: 'text-muted'
             %li= link_to 'Report', new_topic_report_path(@topic), class: 'text-muted'

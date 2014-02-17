@@ -39,8 +39,10 @@
                   %b.caret
                 %ul.dropdown-menu
                   - if last_deploy_time.present?
-                    %li.disabled
-                      %a{:href => '#'} Deployed #{time_ago_in_words last_deploy_time} ago
+                    %li.dropdown-header
+                      deployed
+                      = time_ago_tag Time.now
+                    %li.divider
                   %li
                     %a{:href => 'https://github.com/wallgig/wallgig/issues', :target => '_blank'} Issue tracker
                   %li

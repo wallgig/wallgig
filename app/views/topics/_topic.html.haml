@@ -19,6 +19,4 @@
             last comment by
             = link_to_user topic.last_commented_by
             = user_online_status_tag topic.last_commented_by
-        %li
-          = time_tag topic.updated_at, title: topic.updated_at do
-            #{time_ago_in_words topic.last_commented_at || topic.created_at} ago
+        %li= time_ago_tag(topic.last_commented_at || topic.created_at)

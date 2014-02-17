@@ -5,9 +5,7 @@
         = image_tag user_avatar_url(comment.user, 30), alt: comment.user.username, class: 'media-object'
     .col-sm-10
       .comment-meta
-        = time_tag comment.created_at, title: comment.created_at, class: 'pull-right' do
-          = time_ago_in_words(comment.created_at)
-          ago
+        = time_ago_tag comment.created_at, class: 'pull-right'
         .comment-heading
           = link_to_user comment.user
           = user_online_status_tag comment.user
