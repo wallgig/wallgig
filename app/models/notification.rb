@@ -29,6 +29,8 @@ class Notification < ActiveRecord::Base
 
   def to_actual_model
     case notifiable_type
+    when 'Comment'
+      notifiable.commentable
     when 'Subscription'
       notifiable.subscribable
     end
