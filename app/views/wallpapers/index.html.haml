@@ -2,8 +2,8 @@
 
 - blank_value = lambda { |_,v| v.blank? }
 
-- # Reset page number
-- search_options[:page] = nil
+- # Reset page number and random seed
+- search_options[:page] = search_options[:random_seed] = nil
 
 - content_for :faceted_tags do
   - tags, exclude_tags = search_options[:tags], search_options[:exclude_tags]
