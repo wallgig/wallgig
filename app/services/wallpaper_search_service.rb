@@ -71,6 +71,32 @@ class WallpaperSearchService
         end
       end
 
+      # Handle categories
+      if @options[:categories].present?
+        @options[:categories].each do |tag|
+          payload[:query][:bool][:must] << {
+            :term => {
+              :'categories' => {
+                :value => tag
+              }
+            }
+          }
+        end
+      end
+
+      # Handle tag exclusions
+      if @options[:exclude_categories].present?
+        @options[:exclude_categories].each do |tag|
+          payload[:query][:bool][:must_not] << {
+            :term => {
+              :'categories' => {
+                :value => tag
+              }
+            }
+          }
+        end
+      end
+
       # Handle purity
       payload[:query][:bool][:must] << {
         :terms => {
@@ -163,6 +189,12 @@ class WallpaperSearchService
           :terms => {
             :field => 'tags',
             :size => 20
+          }
+        },
+        :categories => {
+          :terms => {
+            :field => 'categories',
+            :size => 10
           }
         },
         :colors => {

@@ -2,7 +2,7 @@
 
 - blank_value = lambda { |_,v| v.blank? }
 
-- content_for :tags do
+- content_for :faceted_tags do
   %h5 Tags
   - if @wallpapers.facets.any?
     %ul.list-facet.list-facet-tags
@@ -35,21 +35,40 @@
                 = term
                 %small (#{terms_to_count[term] || 0})
 
+- content_for :faceted_categories do
+  %h5 Categories
+  - if @wallpapers.facets.any?
+    %ul.list-facet.list-facet-categories
+      - # OPTIMIZE
+      - terms_to_count = Hash[@wallpapers.facets['categories']['terms'].map { |t| [t['term'], t['count']] }]
+      - categories = search_options[:categories] || []
+      - exclude_categories = search_options[:exclude_categories] || []
+      - search_options[:page] = nil # Temporary fix
+      - rendered_terms = []
+      - [categories, exclude_categories, @wallpapers.facets['categories']['terms']].flatten.each do |facet_or_term|
+        - term = facet_or_term.try(:[], 'term') || facet_or_term
+        - next if rendered_terms.include? term
+        - rendered_terms << term
+        %li
+          .btn-group
+            = link_to category_path(term.parameterize), class: 'btn btn-xs btn-default' do
+              %span.glyphicon.glyphicon-folder-close
+            - if exclude_categories.include?(term)
+              = link_to url_for(search_options.merge(exclude_categories: (exclude_categories - [term]), categories: (categories - [term])).reject(&blank_value)), class: 'btn btn-xs btn-danger' do
+                %span.glyphicon.glyphicon-remove
+            - else
+              = link_to url_for(search_options.merge(exclude_categories: (exclude_categories + [term]), categories: (categories - [term])).reject(&blank_value)), class: 'btn btn-xs btn-default' do
+                %span.glyphicon.glyphicon-remove
+            - if search_options[:categories].try(:include?, term)
+              = link_to url_for(search_options.merge(categories: (categories - [term]), exclude_categories: (exclude_categories - [term])).reject(&blank_value)), class: 'btn btn-xs btn-success' do
+                = term
+                %small (#{terms_to_count[term] || 0})
+            - else
+              = link_to url_for(search_options.merge(categories: (categories + [term]), exclude_categories: (exclude_categories - [term])).reject(&blank_value)), class: 'btn btn-xs btn-link' do
+                = term
+                %small (#{terms_to_count[term] || 0})
 
-- content_for :purity do
-  %h5 Purity
-  %ul.list-facet
-    - {'sfw' => 'SFW', 'sketchy' => 'Sketchy', 'nsfw' => 'NSFW'}.each do |value, label|
-      - active = (search_options[:purity].blank? && value == 'sfw') || search_options[:purity].include?(value)
-      %li
-        - if active
-          = link_to label, url_for(search_options.merge(purity: (search_options[:purity] - [value])).reject(&blank_value)),
-                    class: "btn btn-sm btn-block btn-#{value} btn-active"
-        - else
-          = link_to label, url_for(search_options.merge(purity: (search_options[:purity] + [value])).reject(&blank_value)),
-                    class: "btn btn-sm btn-block btn-#{value}"
-
-- content_for :colors do
+- content_for :faceted_colors do
   %h5 Colors
   %ul.list-inline.list-color
     - colors = search_options[:colors] || []
@@ -65,68 +84,80 @@
             %span.color-square{style: "background-color: \##{hex}"}
             (#{count})
 
-- content_for :screen_resolutions do
-  .list-facet
-    - last_screen_resolution_category = nil
-    - ScreenResolution.group_by_category_for_index.each do |category, screen_resolutions|
-      %h5= category
-      - screen_resolutions.each do |screen_resolution|
-        - active = [screen_resolution[:width].to_s, screen_resolution[:height].to_s] == [search_options[:width], search_options[:height]]
-        - css_class = active ? 'success' : 'link'
-        - if active
-          = link_to url_for(search_options.merge(width: nil, height: nil).reject(&blank_value)), class: "btn btn-xs btn-#{css_class}" do
-            #{screen_resolution[:width]}&times;#{screen_resolution[:height]}
-        - else
-          = link_to url_for(search_options.merge(width: screen_resolution[:width], height: screen_resolution[:height]).reject(&blank_value)), class: "btn btn-xs btn-#{css_class}" do
-            #{screen_resolution[:width]}&times;#{screen_resolution[:height]}
+.panel.panel-default
+  .panel-body
+    %ul.list-inline.no-bottom-margin
+      %li
+        .btn-group
+          - {'latest' => 'Latest', 'popular' => 'Popular', 'random' => 'Random'}.each do |value, label|
+            - if search_options[:order] == value
+              = link_to label, url_for(search_options.merge(order: nil).reject(&blank_value)), class: 'btn btn-sm btn-primary'
+            - else
+              = link_to label, url_for(search_options.merge(order: value).reject(&blank_value)), class: 'btn btn-sm btn-default'
 
-- content_for :sort_by do
-  %h5 Sort By
-  %ul.list-facet
-    - {'latest' => 'Latest', 'popular' => 'Popular', 'random' => 'Random'}.each do |value, label|
-      - if search_options[:order] == value
-        %li.active
-          = link_to url_for(search_options.merge(order: nil).reject(&blank_value)), class: "btn btn-sm btn-block btn-primary" do
-            = label
-      - else
+      - # Only show purity settings for signed in users
+      - if user_signed_in?
         %li
-          = link_to url_for(search_options.merge(order: value).reject(&blank_value)), class: "btn btn-sm btn-block" do
-            = label
+          .btn-group
+            - Wallpaper.purity.options.each do |label, value|
+              - active = (search_options[:purity].blank? && value == 'sfw') || search_options[:purity].include?(value)
+              - if active
+                = link_to label, url_for(search_options.merge(purity: (search_options[:purity] - [value])).reject(&blank_value)),
+                          class: "btn btn-sm btn-#{value} btn-active"
+              - else
+                = link_to label, url_for(search_options.merge(purity: (search_options[:purity] + [value])).reject(&blank_value)),
+                          class: "btn btn-sm btn-#{value} btn-default"
 
-- content_for :query_string do
-  .row
-    .col-lg-8
-      %h5 Query string
-      = form_tag url_for, method: :get do
-        - search_options.reject(&blank_value).each do |k, v|
-          = hidden_field_tag k, v
-        .input-group
-          = text_field_tag :q, search_options[:q], class: 'form-control input-md', placeholder: 'e.g. width:>1920 height:>1080'
-          .input-group-btn
-            = submit_tag 'Search', class: 'btn btn-default btn-md'
-    .col-lg-4
-      %h5 Settings
-      .btn-group
-        = link_to 'Save settings', save_search_params_wallpapers_path, class: 'btn btn-md btn-info', data: { action: 'save_settings', method: :post, remote: true, type: :json, params: search_options, disable_with: 'Saving&hellip;' }
-        %button{:type => 'button', :class => 'btn btn-md btn-info dropdown-toggle', :data => {:toggle => 'dropdown'}}
-          %span.caret
-        %ul.dropdown-menu
-          %li= link_to 'Clear settings', save_search_params_wallpapers_path, data: { action: 'save_settings', method: :post, remote: true, type: :json, disable_with: 'Clearing&hellip;' }
+      %li
+        .btn-group
+          - if search_options[:resolution_exactness] == 'exactly'
+            = link_to 'Exactly', url_for(search_options.merge(resolution_exactness: 'at_least').reject(&blank_value)),
+                      class: "btn btn-sm btn-default"
+          - else
+            = link_to 'At least', url_for(search_options.merge(resolution_exactness: 'exactly').reject(&blank_value)),
+                      class: "btn btn-sm btn-default"
 
-.well
-  .row
-    .col-lg-5= yield :tags
-    .col-lg-7
-      .row
-        .col-lg-3
-          = yield :colors
+          .btn-group
+            %button.btn.btn-sm.btn-default.dropdown-toggle{:type => 'button', :data => {:toggle => 'dropdown'}}
+              - if search_options[:width].present? && search_options[:height].present?
+                #{search_options[:width]}&times;#{search_options[:height]}
+              - else
+                All
+              %span.caret
+            %ul.dropdown-menu{:role => 'menu'}
+              - ScreenResolution.group_by_category_for_index.each do |category, resolutions|
+                %li.dropdown-header= category
+                - resolutions.each do |resolution|
+                  %li
+                    = link_to "#{resolution[:width]}&times;#{resolution[:height]}".html_safe,
+                               url_for(search_options.merge(width: resolution[:width], height: resolution[:height]).reject(&blank_value))
 
-        .col-lg-2
-          = yield :sort_by
-          = yield :purity if user_signed_in?
+      - if user_signed_in?
+        %li
+          = link_to 'Edit settings', edit_account_settings_path, class: 'btn btn-link btn-sm'
+        / .btn-group
+        /   = link_to 'Save settings', save_search_params_wallpapers_path, class: 'btn btn-sm btn-info', data: { action: 'save_settings', method: :post, remote: true, type: :json, params: search_options, disable_with: 'Saving&hellip;' }
+        /   %button{:type => 'button', :class => 'btn btn-sm btn-info dropdown-toggle', :data => {:toggle => 'dropdown'}}
+        /     %span.caret
+        /   %ul.dropdown-menu
+        /     %li= link_to 'Clear settings', save_search_params_wallpapers_path, data: { action: 'save_settings', method: :post, remote: true, type: :json, disable_with: 'Clearing&hellip;' }
 
-        .col-lg-7
-          = yield :screen_resolutions
-          = yield :query_string
+  .panel-body
+    .row
+      .col-md-6
+        = yield :faceted_tags
+      .col-md-4
+        = yield :faceted_categories
+      .col-md-2
+        = yield :faceted_colors
+
+  .panel-body
+    = form_tag url_for, method: :get do
+      - search_options.reject(&blank_value).each do |k, v|
+        = hidden_field_tag k, v
+      .input-group
+        = text_field_tag :q, search_options[:q], class: 'form-control input-md', placeholder: 'e.g. width:>1920 height:>1080'
+        .input-group-btn
+          = submit_tag 'Search', class: 'btn btn-default btn-md'
 
 = render partial: 'list', locals: { wallpapers: @wallpapers }
