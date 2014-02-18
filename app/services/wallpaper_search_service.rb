@@ -105,18 +105,31 @@ class WallpaperSearchService
       }
 
       # Handle width and height
-      [:width, :height].each do |a|
-        if @options[a].present?
-          payload[:query][:bool][:must] << {
-            :range => {
-              a => {
-                :gte => @options[a],
-                :boost => 2.0
+      if @options[:resolution_exactness] == 'at_least'
+        [:width, :height].each do |a|
+          if @options[a].present?
+            payload[:query][:bool][:must] << {
+              :range => {
+                a => {
+                  :gte => @options[a],
+                  :boost => 2.0
+                }
               }
             }
-          }
+          end
+        end
+      else
+        [:width, :height].each do |a|
+          if @options[a].present?
+            payload[:query][:bool][:must] << {
+              :term => {
+                a => @options[a]
+              }
+            }
+          end
         end
       end
+
 
       # Handle colors
       if @options[:colors].present?

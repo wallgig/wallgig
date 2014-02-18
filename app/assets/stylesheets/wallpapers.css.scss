@@ -231,17 +231,11 @@ $wallpaper-sidebar-width: 320px;
   }
 }
 
-.list-color {
-  @extend .list-inline;
-  li {
-    padding: 0;
-    a {
-      .color-square {
-        display: inline-block;
-        width: 14px;
-        height: 14px;
-      }
-    }
+.faceted_colors {
+  .color-square {
+    display: inline-block;
+    width: 16px;
+    height: 16px;
   }
 }
 

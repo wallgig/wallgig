@@ -4,85 +4,95 @@
 
 - content_for :faceted_tags do
   %h5 Tags
-  - if @wallpapers.facets.any?
-    %ul.list-facet.list-facet-tags
-      - # OPTIMIZE
-      - terms_to_count = Hash[@wallpapers.facets['tags']['terms'].map { |t| [t['term'], t['count']] }]
-      - tags = search_options[:tags] || []
-      - exclude_tags = search_options[:exclude_tags] || []
-      - search_options[:page] = nil # Temporary fix
-      - rendered_terms = []
-      - [tags, exclude_tags, @wallpapers.facets['tags']['terms']].flatten.each do |facet_or_term|
-        - term = facet_or_term.try(:[], 'term') || facet_or_term
-        - next if rendered_terms.include? term
-        - rendered_terms << term
-        %li
-          .btn-group
-            = link_to tag_path(term.parameterize), class: 'btn btn-xs btn-default' do
-              %span.glyphicon.glyphicon-tag
-            - if search_options[:exclude_tags].try(:include?, term)
-              = link_to url_for(search_options.merge(exclude_tags: (exclude_tags - [term]), tags: (tags - [term])).reject(&blank_value)), class: 'btn btn-xs btn-danger' do
-                %span.glyphicon.glyphicon-remove
-            - else
-              = link_to url_for(search_options.merge(exclude_tags: (exclude_tags + [term]), tags: (tags - [term])).reject(&blank_value)), class: 'btn btn-xs btn-default' do
-                %span.glyphicon.glyphicon-remove
-            - if search_options[:tags].try(:include?, term)
-              = link_to url_for(search_options.merge(tags: (tags - [term]), exclude_tags: (exclude_tags - [term])).reject(&blank_value)), class: 'btn btn-xs btn-success' do
-                = term
-                %small (#{terms_to_count[term] || 0})
-            - else
-              = link_to url_for(search_options.merge(tags: (tags + [term]), exclude_tags: (exclude_tags - [term])).reject(&blank_value)), class: 'btn btn-xs btn-link' do
-                = term
-                %small (#{terms_to_count[term] || 0})
+
+  - if @wallpapers.facets['tags']['terms'].any?
+    - tags, exclude_tags = search_options[:tags], search_options[:exclude_tags]
+
+    - @wallpapers.facets['tags']['terms'].in_groups_of(4, false).each do |terms|
+      .row
+        - terms.each do |term|
+          - label, count = term['term'], (term['count'] || 0)
+          .col-md-6.col-lg-3
+            .btn-group
+              = link_to tag_path(label.parameterize), class: 'btn btn-xs btn-default' do
+                %span.glyphicon.glyphicon-tag
+
+              - if exclude_tags.include?(label)
+                = link_to url_for(search_options.merge(exclude_tags: (exclude_tags - [label]), tags: (tags - [label])).reject(&blank_value)), class: 'btn btn-xs btn-danger' do
+                  %span.glyphicon.glyphicon-remove
+              - else
+                = link_to url_for(search_options.merge(exclude_tags: (exclude_tags + [label]), tags: (tags - [label])).reject(&blank_value)), class: 'btn btn-xs btn-default' do
+                  %span.glyphicon.glyphicon-remove
+
+              - if tags.include?(label)
+                = link_to url_for(search_options.merge(tags: (tags - [label]), exclude_tags: (exclude_tags - [label])).reject(&blank_value)), class: 'btn btn-xs btn-success' do
+                  = label
+                  %small (#{count})
+              - else
+                = link_to url_for(search_options.merge(tags: (tags + [label]), exclude_tags: (exclude_tags - [label])).reject(&blank_value)), class: 'btn btn-xs btn-link' do
+                  = label
+                  %small (#{count})
+
+  - else
+    %small.text-muted No tags
 
 - content_for :faceted_categories do
   %h5 Categories
-  - if @wallpapers.facets.any?
-    %ul.list-facet.list-facet-categories
-      - # OPTIMIZE
-      - terms_to_count = Hash[@wallpapers.facets['categories']['terms'].map { |t| [t['term'], t['count']] }]
-      - categories = search_options[:categories] || []
-      - exclude_categories = search_options[:exclude_categories] || []
-      - search_options[:page] = nil # Temporary fix
-      - rendered_terms = []
-      - [categories, exclude_categories, @wallpapers.facets['categories']['terms']].flatten.each do |facet_or_term|
-        - term = facet_or_term.try(:[], 'term') || facet_or_term
-        - next if rendered_terms.include? term
-        - rendered_terms << term
-        %li
-          .btn-group
-            = link_to category_path(term.parameterize), class: 'btn btn-xs btn-default' do
-              %span.glyphicon.glyphicon-folder-close
-            - if exclude_categories.include?(term)
-              = link_to url_for(search_options.merge(exclude_categories: (exclude_categories - [term]), categories: (categories - [term])).reject(&blank_value)), class: 'btn btn-xs btn-danger' do
-                %span.glyphicon.glyphicon-remove
-            - else
-              = link_to url_for(search_options.merge(exclude_categories: (exclude_categories + [term]), categories: (categories - [term])).reject(&blank_value)), class: 'btn btn-xs btn-default' do
-                %span.glyphicon.glyphicon-remove
-            - if search_options[:categories].try(:include?, term)
-              = link_to url_for(search_options.merge(categories: (categories - [term]), exclude_categories: (exclude_categories - [term])).reject(&blank_value)), class: 'btn btn-xs btn-success' do
-                = term
-                %small (#{terms_to_count[term] || 0})
-            - else
-              = link_to url_for(search_options.merge(categories: (categories + [term]), exclude_categories: (exclude_categories - [term])).reject(&blank_value)), class: 'btn btn-xs btn-link' do
-                = term
-                %small (#{terms_to_count[term] || 0})
+
+  - if @wallpapers.facets['categories']['terms'].any?
+    - categories, exclude_categories = search_options[:categories], search_options[:exclude_categories]
+
+    - @wallpapers.facets['categories']['terms'].in_groups_of(2, false).each do |terms|
+      .row
+        - terms.each do |term|
+          - label, count = term['term'], (term['count'] || 0)
+          .col-lg-6
+            .btn-group
+              = link_to tag_path(label.parameterize), class: 'btn btn-xs btn-default' do
+                %span.glyphicon.glyphicon-folder-close
+
+              - if exclude_categories.include?(label)
+                = link_to url_for(search_options.merge(exclude_categories: (exclude_categories - [label]), categories: (categories - [label])).reject(&blank_value)), class: 'btn btn-xs btn-danger' do
+                  %span.glyphicon.glyphicon-remove
+              - else
+                = link_to url_for(search_options.merge(exclude_categories: (exclude_categories + [label]), categories: (categories - [label])).reject(&blank_value)), class: 'btn btn-xs btn-default' do
+                  %span.glyphicon.glyphicon-remove
+
+              - if categories.include?(label)
+                = link_to url_for(search_options.merge(categories: (categories - [label]), exclude_categories: (exclude_categories - [label])).reject(&blank_value)), class: 'btn btn-xs btn-success' do
+                  = label
+                  %small (#{count})
+              - else
+                = link_to url_for(search_options.merge(categories: (categories + [label]), exclude_categories: (exclude_categories - [label])).reject(&blank_value)), class: 'btn btn-xs btn-link' do
+                  = label
+                  %small (#{count})
+
+  - else
+    %small.text-muted No categories
 
 - content_for :faceted_colors do
   %h5 Colors
-  %ul.list-inline.list-color
-    - colors = search_options[:colors] || []
-    - @wallpapers.facets['colors']['terms'].each do |term|
-      - hex, count = term['term'], term['count']
-      %li
-        - if colors.include?(hex)
-          = link_to url_for(search_options.merge(colors: (colors - [hex])).reject(&blank_value)), class: 'btn btn-xs btn-success' do
-            %span.color-square{style: "background-color: \##{hex}"}
-            (#{count})
-        - else
-          = link_to url_for(search_options.merge(colors: (colors + [hex])).reject(&blank_value)), class: 'btn btn-xs btn-link' do
-            %span.color-square{style: "background-color: \##{hex}"}
-            (#{count})
+
+  - if @wallpapers.facets['colors']['terms'].any?
+    - colors = search_options[:colors]
+
+    - @wallpapers.facets['colors']['terms'].in_groups_of(4, false).each do |terms|
+      .row
+        - terms.each do |term|
+          - hex, count = term['term'], (term['count'] || 0)
+
+          .col-lg-3.col-xs-6
+            - if colors.include?(hex)
+              = link_to url_for(search_options.merge(colors: (colors - [hex])).reject(&blank_value)), class: 'btn btn-xs btn-success' do
+                %span.color-square{style: "background-color: \##{hex}"}
+                (#{count})
+            - else
+              = link_to url_for(search_options.merge(colors: (colors + [hex])).reject(&blank_value)), class: 'btn btn-xs btn-link' do
+                %span.color-square{style: "background-color: \##{hex}"}
+                (#{count})
+
+  - else
+    %small.text-muted No colors
 
 .panel.panel-default
   .panel-body
@@ -148,7 +158,7 @@
         = yield :faceted_tags
       .col-md-4
         = yield :faceted_categories
-      .col-md-2
+      .col-md-2.faceted_colors
         = yield :faceted_colors
 
   .panel-body
