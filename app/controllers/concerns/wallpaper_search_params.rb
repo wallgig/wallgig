@@ -44,9 +44,6 @@ module WallpaperSearchParams
         session[:random_seed] = search_options[:random_seed]
       end
 
-      # Reset page
-      search_options[:page] = nil
-
       search_options
     end
   end
