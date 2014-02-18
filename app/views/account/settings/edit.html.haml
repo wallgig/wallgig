@@ -22,7 +22,10 @@
 
         = f.input :infinite_scroll
 
-        = f.association :screen_resolution
+      %fieldset
+        %legend Search settings
+
+        = f.association :screen_resolution, include_blank: 'All'
 
       %fieldset
         %legend Privacy settings

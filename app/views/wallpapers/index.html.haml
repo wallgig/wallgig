@@ -142,6 +142,15 @@
                     = link_to "#{resolution[:width]}&times;#{resolution[:height]}".html_safe,
                                url_for(search_options.merge(width: resolution[:width], height: resolution[:height]).reject(&blank_value))
 
+      %li
+        .btn-group
+          %button.btn.btn-sm.btn-default.dropdown-toggle{:type => 'button', :data => {:toggle => 'dropdown'}}
+            = search_options[:per_page]
+            %span.caret
+          %ul.dropdown-menu{:role => 'menu'}
+            - UserSetting.per_page.options.each do |label, value|
+              %li= link_to label, url_for(search_options.merge(per_page: value).reject(&blank_value))
+
       - if user_signed_in?
         %li
           = link_to 'Edit settings', edit_account_settings_path, class: 'btn btn-link btn-sm'
