@@ -48,7 +48,7 @@
           - label, count = term['term'], (term['count'] || 0)
           .col-lg-6
             .btn-group
-              = link_to tag_path(label.parameterize), class: 'btn btn-xs btn-default' do
+              = link_to category_path(label.parameterize), class: 'btn btn-xs btn-default' do
                 %span.glyphicon.glyphicon-folder-close
 
               - if exclude_categories.include?(label)
