@@ -31,6 +31,7 @@ module Account
           :sfw, :sketchy, :nsfw,
           :per_page,
           :infinite_scroll,
+          :resolution_exactness,
           :screen_resolution_id,
           aspect_ratios: []
         )

@@ -16,6 +16,7 @@
 #  screen_resolution_id :integer
 #  invisible            :boolean          default(FALSE)
 #  aspect_ratios        :text
+#  resolution_exactness :string(255)      default("at_least")
 #
 
 require 'spec_helper'
