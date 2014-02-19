@@ -128,7 +128,8 @@ class Wallpaper < ActiveRecord::Base
       indexes :favourites,           type: 'integer', index: 'not_analyzed' # TODO
       indexes :favourites_today,     type: 'integer', index: 'not_analyzed' # TODO
       indexes :favourites_this_week, type: 'integer', index: 'not_analyzed' # TODO
-      indexes :approved, type: 'boolean'
+      indexes :approved,             type: 'boolean'
+      indexes :aspect_ratio,         type: 'float'
     end
   end
 
@@ -233,14 +234,18 @@ class Wallpaper < ActiveRecord::Base
   end
 
   def update_processing_status
-    if has_image_sizes?
+    if has_thumbnails?
       self.processing = false
       save
     end
   end
 
-  def has_image_sizes?
+  def has_thumbnails?
     image.present? && thumbnail_image.present?
+  end
+
+  def has_image_sizes?
+    image_width.present? && image_height.present?
   end
 
   def extract_colors
@@ -301,6 +306,10 @@ class Wallpaper < ActiveRecord::Base
     format == :landscape
   end
 
+  def aspect_ratio
+    (image_width.to_f / image_height.to_f).round(2) if has_image_sizes?
+  end
+
   def to_indexed_json
     {
       user_id:              user_id,
@@ -312,15 +321,14 @@ class Wallpaper < ActiveRecord::Base
       height:               image_height,
       source:               source,
       views:                impressions_count,
-      views_today:          impressionist_count(start_date: Time.now.beginning_of_day),
-      views_this_week:      impressionist_count(start_date: Time.now.beginning_of_week),
+      # views_today:          impressionist_count(start_date: Time.now.beginning_of_day),
+      # views_this_week:      impressionist_count(start_date: Time.now.beginning_of_week),
       favourites:           cached_votes_total,
-      favourites_today:     favourites.where('created_at >= ?', Time.now.beginning_of_day).size, # FIXME
-      favourites_this_week: favourites.where('created_at >= ?', Time.now.beginning_of_week).size, # FIXME
+      # favourites_today:     favourites.where('created_at >= ?', Time.now.beginning_of_day).size, # FIXME
+      # favourites_this_week: favourites.where('created_at >= ?', Time.now.beginning_of_week).size, # FIXME
       colors:               wallpaper_colors.includes(:color).map { |color| { hex: color.hex, percentage: (color.percentage * 10).ceil } },
-      created_at:           created_at,
-      updated_at:           updated_at,
-      approved:             approved?
+      approved:             approved?,
+      aspect_ratio:         aspect_ratio
     }.to_json
   end
 

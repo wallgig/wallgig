@@ -25,6 +25,7 @@ en:
       sfw: "SFW"
       sketchy: "Sketchy"
       nsfw: "NSFW"
+
     image_gravity:
       nw: "North West"
       n:  "North"
@@ -35,6 +36,17 @@ en:
       sw: "South West"
       s:  "South"
       se: "South East"
+
+    aspect_ratios:
+      "1_33": "4:3"
+      "1_25": "5:4"
+      "1_77": "16:9"
+      "1_60": "16:10"
+      "1_70": "Netbook"
+      "2_50": "Dual"
+      "3_20": "Dual wide"
+      "1_01": "Widescreen"
+      "0_99": "Portrait"
 
   active_admin:
     batch_actions:

@@ -1,36 +1,39 @@
-.row
-  .col-lg-4.col-lg-offset-4
-    .page-header
-      %h1 Edit settings
-      %span.help-block Settings that reflect throughout the entire site.
-    = simple_form_for @settings, url: account_settings_path, method: :patch do |f|
+.page-header
+  %h1 Edit settings
+  %span.help-block Settings that reflect throughout the entire site.
 
-      %fieldset
-        %legend Browsing settings
+  = simple_form_for @settings, url: account_settings_path, method: :patch do |f|
+    .row
+      .col-md-6
+        %fieldset
+          %legend Browsing settings
 
-        .form-group
-          %label Purity
-          .row
-            .col-xs-4.purity-sfw
-              = f.input :sfw
-            .col-xs-4.purity-sketchy
-              = f.input :sketchy
-            .col-xs-4.purity-nsfw
-              = f.input :nsfw
+          .form-group
+            %label Purity
+            .row
+              .col-xs-4.purity-sfw
+                = f.input :sfw
+              .col-xs-4.purity-sketchy
+                = f.input :sketchy
+              .col-xs-4.purity-nsfw
+                = f.input :nsfw
 
-        = f.input :per_page
+          = f.input :per_page
 
-        = f.input :infinite_scroll
+          = f.input :infinite_scroll
 
-      %fieldset
-        %legend Search settings
+        %fieldset
+          %legend Privacy settings
 
-        = f.association :screen_resolution, include_blank: 'All'
+          = f.input :invisible, hint: 'Hide my online status.'
 
-      %fieldset
-        %legend Privacy settings
+      .col-md-6
+        %fieldset
+          %legend Search settings
 
-        = f.input :invisible, hint: 'Hide my online status.'
+          = f.association :screen_resolution, include_blank: 'All'
 
-      .form-actions
-        = f.button :submit, 'Update settings', class: 'btn btn-primary'
+          = f.input :aspect_ratios, as: :check_boxes, hint: 'Select none for all'
+
+    .form-actions
+      = f.button :submit, 'Update settings', class: 'btn btn-primary btn-lg'

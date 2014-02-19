@@ -73,24 +73,24 @@ class WallpaperSearchService
 
       # Handle categories
       if @options[:categories].present?
-        @options[:categories].each do |tag|
+        @options[:categories].each do |category|
           payload[:query][:bool][:must] << {
             :term => {
               :'categories' => {
-                :value => tag
+                :value => category
               }
             }
           }
         end
       end
 
-      # Handle tag exclusions
+      # Handle categories exclusions
       if @options[:exclude_categories].present?
-        @options[:exclude_categories].each do |tag|
+        @options[:exclude_categories].each do |category|
           payload[:query][:bool][:must_not] << {
             :term => {
               :'categories' => {
-                :value => tag
+                :value => category
               }
             }
           }
@@ -130,7 +130,6 @@ class WallpaperSearchService
         end
       end
 
-
       # Handle colors
       if @options[:colors].present?
         @options[:colors].each do |color|
@@ -162,6 +161,17 @@ class WallpaperSearchService
             :'user' => @options[:user]
           }
         }
+      end
+
+      # Handle aspect ratios
+      if @options[:aspect_ratios].present?
+        @options[:aspect_ratios].each do |aspect_ratio|
+          payload[:query][:bool][:must] << {
+            :term => {
+              :'aspect_ratio' => aspect_ratio.tr('_', '.').to_f
+            }
+          }
+        end
       end
 
       case @options[:order]

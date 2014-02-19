@@ -25,7 +25,15 @@ module Account
     end
 
     def settings_params
-      params.require(:user_setting).permit(:sfw, :sketchy, :nsfw, :per_page, :infinite_scroll, :screen_resolution_id)
+      params
+        .require(:user_setting)
+        .permit(
+          :sfw, :sketchy, :nsfw,
+          :per_page,
+          :infinite_scroll,
+          :screen_resolution_id,
+          aspect_ratios: []
+        )
     end
   end
 end
