@@ -84,6 +84,7 @@ Wallgig::Application.routes.draw do
   resources :notifications, only: [:index] do
     collection do
       post :mark_as_read
+      delete :purge
     end
 
     member do

@@ -3,14 +3,18 @@
 
 
 - if @notifications.any?
-  %p
-    = link_to mark_as_read_notifications_url, method: :post, class: 'btn btn-info' do
+  .page-subheader
+    = link_to mark_as_read_notifications_path, method: :post, class: 'btn btn-info' do
       %span.glyphicon.glyphicon-ok
-      = t('notifications.actions.mark_all_as_read')
+      = t 'notifications.actions.mark_all_as_read'
+
+    = link_to purge_notifications_path, method: :delete, class: 'btn btn-danger' do
+      %span.glyphicon.glyphicon-trash
+      = t 'notifications.actions.purge'
 
   %ul.list-group.list-group-notifications{:data => {:provide => 'notifications'}}= render @notifications
 
   = paginate @notifications
 
 - else
-  .alert.alert-info= t('notifications.empty')
+  .alert.alert-info= t 'notifications.empty'

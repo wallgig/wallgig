@@ -68,9 +68,11 @@ en:
     empty: "You do not have any notifications yet."
     actions:
       mark_all_as_read: "Mark all as read"
+      purge: "Purge read notifications"
     flashes:
       marked_all_as_read: "Successfully marked all notifications as read."
       marked_as_read: "Successfully marked notification as read."
+      purged: "Successfully purged read notifications."
 
   subscriptions:
     notifications:

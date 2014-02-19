@@ -23,6 +23,14 @@ class NotificationsController < ApplicationController
         format.json { head :no_content }
       end
     end
+  end
 
+  def purge
+    current_user.notifications.delete_all
+
+    respond_to do |format|
+      format.html { redirect_to notifications_url, notice: I18n.t('notifications.flashes.purged') }
+      format.json { head :no_content }
+    end
   end
 end
