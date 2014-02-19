@@ -56,6 +56,15 @@ class Topic < ActiveRecord::Base
     title
   end
 
+  def cache_key
+    if persisted? && (timestamp = self[:last_commented_at])
+      timestamp = timestamp.utc.to_s(cache_timestamp_format)
+      "#{super}-#{timestamp}"
+    else
+      "#{super}"
+    end
+  end
+
   def pin!
     update_attribute(:pinned, true)
   end

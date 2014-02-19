@@ -27,12 +27,9 @@ class Forum < ActiveRecord::Base
   validates :name, presence: true
 
   scope :ordered, -> { order(position: :asc) }
+  scope :list,    -> (current_ability) { accessible_by(current_ability, :read).ordered }
 
   def self.uncategorized
-    friendly.find('uncategorized')
-  end
-
-  def self.list(current_ability)
-    Forum.accessible_by(current_ability, :read).ordered
+    find_by!(slug: 'uncategorized')
   end
 end
