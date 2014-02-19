@@ -1,6 +1,8 @@
 class CategoriesController < ApplicationController
   before_action :set_category, only: [:show]
 
+  helper_method :search_params
+
   def index
     @categories = Category.roots.alphabetically
 
@@ -28,5 +30,15 @@ class CategoriesController < ApplicationController
 
   def set_category
     @category = Category.friendly.find(params[:id])
+  end
+
+  def search_params
+    params.permit(purity: []).tap do |p|
+      p[:purity] = Array.wrap(p[:purity]).select { |p| ['sfw', 'sketchy', 'nsfw'].include?(p) }.presence
+    end
+  end
+
+  def current_purities
+    search_params[:purity] || super
   end
 end

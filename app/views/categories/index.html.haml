@@ -1,58 +1,83 @@
+- blank_value = lambda { |_,v| v.blank? }
+
 .page-header
   %h2
     - if @category.present?
+      %span.glyphicon.glyphicon-folder-close
       = title @category.name
     - else
-      = title 'Categories'
+      %span.glyphicon.glyphicon-tags
+      = title 'Tags'
   - if @category.present?
     %ol.breadcrumb
-      %li= link_to 'Categories', categories_path
+      %li
+        = link_to categories_path(params: search_params) do
+          %span.glyphicon.glyphicon-tags
+          Tags
       - @ancestors.each do |ancestor|
-        %li= link_to ancestor.name, ancestor
+        %li= link_to ancestor.name, category_path(ancestor, params: search_params)
       %li.active= @category.name
 
 .row
-  .col-md-4
+  .col-md-3
     .page-subheader
-      %h4 Children
+      %h4 Subcategories
     .list-group
       - if @category.present?
         - if @category.parent.present?
-          = link_to @category.parent, class: 'list-group-item' do
+          = link_to category_path(@category.parent, params: search_params), class: 'list-group-item' do
             %span.glyphicon.glyphicon-chevron-up
             = @category.parent.name
         - else
-          = link_to categories_path, class: 'list-group-item' do
+          = link_to categories_path(params: search_params), class: 'list-group-item' do
             %span.glyphicon.glyphicon-chevron-up
             Root
       - @categories.each do |category|
-        = link_to category, class: 'list-group-item' do
+        = link_to category_path(category, params: search_params), class: 'list-group-item' do
           %span.badge= category.tags_count_for(current_purities)
           %span.glyphicon.glyphicon-folder-close
           = category.name
 
-  .col-md-8
+  .col-md-9
     .page-subheader
+
+      .btn-group.pull-right
+        - Wallpaper.purity.options.each do |label, value|
+          - active = current_purities.include?(value)
+          - if active
+            = link_to label, url_for(search_params.merge(purity: (current_purities - [value])).reject(&blank_value)),
+                      class: "btn btn-sm btn-#{value} btn-active"
+          - else
+            = link_to label, url_for(search_params.merge(purity: (current_purities + [value])).reject(&blank_value)),
+                      class: "btn btn-sm btn-#{value} btn-default"
       %h4 Tags
-    %table.table.table-responsive.table-hover
-      %thead
-        %tr
-          %th Tag name
-          %th.text-center Category
-          %th.text-center Wallpapers count
-      %tbody
-        - @tags.each do |tag|
-          %tr{:class => "purity-#{tag.purity}"}
-            %td
-              = link_to tag, class: "purity-#{tag.purity}" do
-                %span.glyphicon.glyphicon-tag
-                = tag.name
-            %td.text-center
-              - if tag.category.present?
-                - if tag.category == @category
-                  = tag.category_name
-                - else
-                  = link_to tag.category_name, tag.category
-            %td.text-center= tag.wallpapers_count_for(current_purities)
+
+    .table-responsive
+      %table.table.table-hover
+        %thead
+          %tr
+            %th Tag name
+            %th
+            %th.text-right Category
+            %th.text-center
+              %span.glyphicon.glyphicon-picture{:title => 'Wallpapers count', :data => {:toggle => 'tooltip'}}
+        %tbody
+          - @tags.each do |tag|
+            %tr{:class => "purity-#{tag.purity}"}
+              %td
+                = link_to tag, class: "purity-#{tag.purity}" do
+                  %span.glyphicon.glyphicon-tag
+                  = tag.name
+              %td.text-right
+                = link_to wallpapers_path(tags: [tag.name]), class: 'btn btn-xs btn-default' do
+                  %span.glyphicon.glyphicon-search
+                  Use in search
+              %td.text-right
+                - if tag.category.present?
+                  - if tag.category == @category
+                    = tag.category_name
+                  - else
+                    = link_to tag.category_name, tag.category
+              %td.text-center= tag.wallpapers_count_for(current_purities)
 
     .text-center= paginate @tags

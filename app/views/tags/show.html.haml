@@ -8,7 +8,10 @@
     = title @tag.name
 
 %ol.breadcrumb
-  %li= link_to 'Categories', categories_path
+  %li
+    = link_to categories_path do
+      %span.glyphicon.glyphicon-tags
+      Tags
   - if @tag.category.present?
     - [@tag.category.ancestors, @tag.category].flatten.each do |category|
       %li= link_to category.name, category
