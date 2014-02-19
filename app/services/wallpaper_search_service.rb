@@ -49,9 +49,11 @@ class WallpaperSearchService
       if @options[:tags].present?
         @options[:tags].each do |tag|
           payload[:query][:bool][:must] << {
-            :term => {
-              :'tags' => {
-                :value => tag
+            :constant_score => {
+              :filter => {
+                :term => {
+                  :'tags' => tag
+                }
               }
             }
           }
@@ -62,9 +64,11 @@ class WallpaperSearchService
       if @options[:exclude_tags].present?
         @options[:exclude_tags].each do |tag|
           payload[:query][:bool][:must_not] << {
-            :term => {
-              :'tags' => {
-                :value => tag
+            :constant_score => {
+              :filter => {
+                :term => {
+                  :'tags' => tag
+                }
               }
             }
           }
@@ -75,9 +79,11 @@ class WallpaperSearchService
       if @options[:categories].present?
         @options[:categories].each do |category|
           payload[:query][:bool][:must] << {
-            :term => {
-              :'categories' => {
-                :value => category
+            :constant_score => {
+              :filter => {
+                :term => {
+                  :'categories' => category
+                }
               }
             }
           }
@@ -88,9 +94,11 @@ class WallpaperSearchService
       if @options[:exclude_categories].present?
         @options[:exclude_categories].each do |category|
           payload[:query][:bool][:must_not] << {
-            :term => {
-              :'categories' => {
-                :value => category
+            :constant_score => {
+              :filter => {
+                :term => {
+                  :'categories' => category
+                }
               }
             }
           }
@@ -99,8 +107,12 @@ class WallpaperSearchService
 
       # Handle purity
       payload[:query][:bool][:must] << {
-        :terms => {
-          :'purity' => @options[:purity] || ['sfw']
+        :constant_score => {
+          :filter => {
+            :terms => {
+              :'purity' => @options[:purity]
+            }
+          }
         }
       }
 
@@ -122,8 +134,12 @@ class WallpaperSearchService
         [:width, :height].each do |a|
           if @options[a].present?
             payload[:query][:bool][:must] << {
-              :term => {
-                a => @options[a]
+              :constant_score => {
+                :filter => {
+                  :term => {
+                    a => @options[a]
+                  }
+                }
               }
             }
           end
@@ -134,9 +150,11 @@ class WallpaperSearchService
       if @options[:colors].present?
         @options[:colors].each do |color|
           payload[:query][:bool][:must] << {
-            :term => {
-              :'colors.hex' => {
-                :value => color
+            :constant_score => {
+              :filter => {
+                :term => {
+                  :'colors.hex' => color
+                }
               }
             }
           }
@@ -157,8 +175,12 @@ class WallpaperSearchService
       # Handle user
       if @options[:user].present?
         payload[:query][:bool][:must] << {
-          :term => {
-            :'user' => @options[:user]
+          :constant_score => {
+            :filter => {
+              :term => {
+                :'user' => @options[:user]
+              }
+            }
           }
         }
       end
@@ -166,8 +188,12 @@ class WallpaperSearchService
       # Handle aspect ratios
       if @options[:aspect_ratios].present?
         payload[:query][:bool][:must] << {
-          :terms => {
-            :'aspect_ratio' => Array.wrap(@options[:aspect_ratios]).map { |aspect_ratio| aspect_ratio.tr('_', '.').to_f }
+          :constant_score => {
+            :filter => {
+              :terms => {
+                :'aspect_ratio' => Array.wrap(@options[:aspect_ratios]).map { |aspect_ratio| aspect_ratio.tr('_', '.').to_f }
+              }
+            }
           }
         }
       end
