@@ -96,43 +96,6 @@ class Wallpaper < ActiveRecord::Base
   # Paper trail
   # has_paper_trail only: [:purity, :cached_tag_list, :source]
 
-  # Search
-  # formula to calculate wallpaper's popularity
-  POPULARITY_SCRIPT = "doc['views'].value * 0.1 + doc['favourites'].value * 1.0"
-
-  include Tire::Model::Search
-  tire.settings :analysis => {
-                  :analyzer => {
-                    :'string_lowercase' => {
-                      :tokenizer => 'keyword',
-                      :filter => 'lowercase'
-                    }
-                  }
-                } do
-    tire.mapping do
-      indexes :user_id,              type: 'integer', index: 'not_analyzed'
-      indexes :user,                 type: 'string',  index: 'not_analyzed'
-      indexes :purity,               type: 'string',  index: 'not_analyzed'
-      indexes :tags,                 type: 'string',  analyzer: 'keyword'
-      indexes :categories,           type: 'string',  analyzer: 'keyword'
-      indexes :width,                type: 'integer', index: 'not_analyzed'
-      indexes :height,               type: 'integer', index: 'not_analyzed'
-      indexes :source,               type: 'string'
-      indexes :colors do
-        indexes :hex,                type: 'string',  index: 'not_analyzed', analyzer: 'keyword'
-        indexes :percentage,         type: 'integer', index: 'not_analyzed'
-      end
-      indexes :views,                type: 'integer', index: 'not_analyzed'
-      indexes :views_today,          type: 'integer', index: 'not_analyzed'
-      indexes :views_this_week,      type: 'integer', index: 'not_analyzed'
-      indexes :favourites,           type: 'integer', index: 'not_analyzed' # TODO
-      indexes :favourites_today,     type: 'integer', index: 'not_analyzed' # TODO
-      indexes :favourites_this_week, type: 'integer', index: 'not_analyzed' # TODO
-      indexes :approved,             type: 'boolean'
-      indexes :aspect_ratio,         type: 'float'
-    end
-  end
-
   # Validation
   validates_presence_of :image
   validates_size_of :image,      maximum: 20.megabytes,                       on: :create
@@ -218,6 +181,71 @@ class Wallpaper < ActiveRecord::Base
   unless Rails.env.test?
     after_save :update_index, unless: :processing?
     after_destroy :update_index
+  end
+
+  # Search
+  # formula to calculate wallpaper's popularity
+  POPULARITY_SCRIPT = "doc['views'].value * 0.1 + doc['favourites'].value * 1.0"
+
+  include Tire::Model::Search
+  tire.settings :analysis => {
+                  :analyzer => {
+                    :'string_lowercase' => {
+                      :tokenizer => 'keyword',
+                      :filter => 'lowercase'
+                    }
+                  }
+                } do
+    tire.mapping do
+      indexes :user_id,              type: 'integer'
+      indexes :user,                 type: 'string',  analyzer: 'keyword', index: 'not_analyzed'
+      indexes :purity,               type: 'string',  analyzer: 'keyword', index: 'not_analyzed'
+      indexes :tags,                 type: 'string',  analyzer: 'keyword'
+      indexes :categories,           type: 'string',  analyzer: 'keyword'
+      indexes :width,                type: 'integer'
+      indexes :height,               type: 'integer'
+      indexes :source,               type: 'string'
+      indexes :colors do
+        indexes :hex,                type: 'string',  analyzer: 'keyword', index: 'not_analyzed'
+        indexes :percentage,         type: 'integer'
+      end
+      indexes :views,                type: 'integer'
+      # indexes :views_today,          type: 'integer'
+      # indexes :views_this_week,      type: 'integer'
+      indexes :favourites,           type: 'integer'
+      # indexes :favourites_today,     type: 'integer' # TODO
+      # indexes :favourites_this_week, type: 'integer' # TODO
+      indexes :approved,             type: 'boolean'
+      indexes :approved_at,          type: 'date'
+      indexes :created_at,           type: 'date'
+      indexes :updated_at,           type: 'date'
+      indexes :aspect_ratio,         type: 'float'
+    end
+  end
+
+  def to_indexed_json
+    {
+      user_id:              user_id,
+      user:                 user.try(:username),
+      purity:               purity,
+      tags:                 tag_list,
+      categories:           category_list,
+      width:                image_width,
+      height:               image_height,
+      source:               source,
+      colors:               wallpaper_colors.includes(:color).map { |color| { hex: color.hex, percentage: (color.percentage * 10).ceil } },
+      views:                impressions_count,
+      # views_today:          impressionist_count(start_date: Time.now.beginning_of_day),
+      # views_this_week:      impressionist_count(start_date: Time.now.beginning_of_week),
+      favourites:           cached_votes_total,
+      # favourites_today:     favourites.where('created_at >= ?', Time.now.beginning_of_day).size, # FIXME
+      # favourites_this_week: favourites.where('created_at >= ?', Time.now.beginning_of_week).size, # FIXME
+      approved:             approved?,
+      approved_at:          approved_at,
+      created_at:           created_at,
+      updated_at:           updated_at,
+      aspect_ratio:         aspect_ratio
+    }.to_json
   end
 
   def self.ensure_consistency!
@@ -308,28 +336,6 @@ class Wallpaper < ActiveRecord::Base
 
   def aspect_ratio
     (image_width.to_f / image_height.to_f).round(2) if has_image_sizes?
-  end
-
-  def to_indexed_json
-    {
-      user_id:              user_id,
-      user:                 user.try(:username),
-      purity:               purity,
-      tags:                 tag_list,
-      categories:           category_list,
-      width:                image_width,
-      height:               image_height,
-      source:               source,
-      views:                impressions_count,
-      # views_today:          impressionist_count(start_date: Time.now.beginning_of_day),
-      # views_this_week:      impressionist_count(start_date: Time.now.beginning_of_week),
-      favourites:           cached_votes_total,
-      # favourites_today:     favourites.where('created_at >= ?', Time.now.beginning_of_day).size, # FIXME
-      # favourites_this_week: favourites.where('created_at >= ?', Time.now.beginning_of_week).size, # FIXME
-      colors:               wallpaper_colors.includes(:color).map { |color| { hex: color.hex, percentage: (color.percentage * 10).ceil } },
-      approved:             approved?,
-      aspect_ratio:         aspect_ratio
-    }.to_json
   end
 
   def to_s

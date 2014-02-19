@@ -201,7 +201,7 @@ class WallpaperSearchService
         payload[:sort] << '_score'
       else
         payload[:sort] << {
-          :'_id' => 'desc'
+          :'approved_at' => 'desc'
         }
       end
 
