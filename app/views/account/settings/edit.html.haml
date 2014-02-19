@@ -31,6 +31,8 @@
         %fieldset
           %legend Search settings
 
+          = f.input :resolution_exactness, include_blank: false
+
           = f.association :screen_resolution, include_blank: 'All'
 
           = f.input :aspect_ratios, as: :check_boxes, hint: 'Select none for all'

@@ -16,6 +16,7 @@
 #  screen_resolution_id :integer
 #  invisible            :boolean          default(FALSE)
 #  aspect_ratios        :text
+#  resolution_exactness :string(255)      default("at_least")
 #
 
 class UserSetting < ActiveRecord::Base
@@ -29,7 +30,13 @@ class UserSetting < ActiveRecord::Base
   serialize :aspect_ratios, Array
   enumerize :aspect_ratios, in: %w(1_33 1_25 1_77 1_60 1_70 2_50 3_20 1_01 0_99), multiple: true
 
+  enumerize :resolution_exactness, in: [:at_least, :exactly], default: :at_least
+
   before_save :set_screen_resolution, if: proc { |s| s.screen_width_changed? || s.screen_height_changed? }
+
+  validates :user, presence: true
+  validates :per_page, presence: true
+  validates :resolution_exactness, presence: true
 
   def purities
     out = []
