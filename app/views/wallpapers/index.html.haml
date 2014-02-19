@@ -200,6 +200,27 @@
       %li
         .btn-group
           %button.btn.btn-sm.btn-default.dropdown-toggle{:type => 'button', :data => {:toggle => 'dropdown'}}
+            - case search_options[:aspect_ratios].size
+            - when 0
+              All
+            - when 1
+              = t search_options[:aspect_ratios].first, scope: [:enumerize, :aspect_ratios]
+            - else
+              Multiple
+            %span.caret
+          %ul.dropdown-menu{:role => 'menu'}
+            - UserSetting.aspect_ratios.options.each do |label, value|
+              %li
+                - if search_options[:aspect_ratios].include?(value)
+                  = link_to url_for(search_options.merge(aspect_ratios: search_options[:aspect_ratios] - [value]).reject(&blank_value)) do
+                    %span.glyphicon.glyphicon-ok
+                    = label
+                - else
+                  = link_to label, url_for(search_options.merge(aspect_ratios: search_options[:aspect_ratios] + [value]).reject(&blank_value))
+
+      %li
+        .btn-group
+          %button.btn.btn-sm.btn-default.dropdown-toggle{:type => 'button', :data => {:toggle => 'dropdown'}}
             = search_options[:per_page]
             %span.caret
           %ul.dropdown-menu{:role => 'menu'}

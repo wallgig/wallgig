@@ -15,6 +15,7 @@
 #  updated_at           :datetime
 #  screen_resolution_id :integer
 #  invisible            :boolean          default(FALSE)
+#  aspect_ratios        :text
 #
 
 # Read about factories at https://github.com/thoughtbot/factory_girl

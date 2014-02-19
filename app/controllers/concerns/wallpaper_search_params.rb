@@ -6,7 +6,16 @@ module WallpaperSearchParams
   end
 
   def search_params(load_session = true)
-    params.permit(:q, :page, :per_page, :width, :height, :order, :user, :resolution_exactness, purity: [], exclude_categories: [], categories: [], tags: [], exclude_tags: [], colors: [])
+    params.permit(
+      :q,:page, :per_page, :width, :height, :order, :user, :resolution_exactness,
+      purity: [],
+      categories: [],
+      exclude_categories: [],
+      tags: [],
+      exclude_tags: [],
+      colors: [],
+      aspect_ratios: []
+    )
   end
 
   def search_options
@@ -17,11 +26,9 @@ module WallpaperSearchParams
       search_options[:order]  ||= 'latest'
 
       # Ensure array
-      search_options[:tags]               ||= []
-      search_options[:exclude_tags]       ||= []
-      search_options[:categories]         ||= []
-      search_options[:exclude_categories] ||= []
-      search_options[:colors]             ||= []
+      %i(categories exclude_categories tags exclude_tags colors).each do |key|
+        search_options[key] ||= []
+      end
 
       # TODO move to UserSetting model
       search_options[:purity] ||= current_purities
@@ -33,6 +40,13 @@ module WallpaperSearchParams
       # TODO move to UserSetting model
       search_options[:resolution_exactness] = nil unless ['exactly', 'at_least'].include?(search_options[:resolution_exactness])
       search_options[:resolution_exactness] ||= 'at_least'
+
+      # Validate aspect ratios
+      if search_options[:aspect_ratios].nil?
+        search_options[:aspect_ratios] = current_settings.aspect_ratios.to_a
+      else
+        search_options[:aspect_ratios].select! { |aspect_ratio| UserSetting.aspect_ratios.find_value(aspect_ratio).present? }
+      end
 
       search_options[:user] = @user.username if @user.present?
 
