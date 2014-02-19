@@ -1,6 +1,6 @@
 - if wallpapers.has_pagination? && request.xhr?
   - if respond_to?(:search_options)
-    - current_page_params = search_options.merge(page: wallpapers.current_page).reject lambda { |_,v| v.blank? }
+    - current_page_params = search_options.merge(page: wallpapers.current_page).reject { |_,v| v.blank? }
   - else
     - current_page_params = { page: wallpapers.current_page }
   .horizontal-page-bar

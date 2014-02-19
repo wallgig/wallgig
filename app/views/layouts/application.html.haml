@@ -25,18 +25,12 @@
               %li= link_to 'Tags', categories_path
               %li= link_to 'Collections', collections_path
               %li= link_to 'Comments', comments_path
-              %li
-                %a{:class => 'dropdown-toggle', :data => {:toggle => 'dropdown'}}
-                  Community
-                  %b.caret
-                %ul.dropdown-menu
-                  %li= link_to 'Users', users_path
-                  %li= link_to 'Forums', forums_path
-                  %li= link_to 'IRC Chat', irc_url(current_user)
+              %li= link_to 'Users', users_path
+              %li= link_to 'Forums', forums_path
+              %li= link_to 'Chat', irc_url(current_user)
               %li
                 %a{:class => 'dropdown-toggle', :data => {:toggle => 'dropdown'}}
                   %span.glyphicon.glyphicon-wrench
-                  %b.caret
                 %ul.dropdown-menu
                   - if last_deploy_time.present?
                     %li.dropdown-header
@@ -76,9 +70,9 @@
                     %li.divider
                     %li= link_to 'View all notifications', notifications_url
                 %li.dropdown
-                  %a{:class => 'dropdown-toggle', :data => {:toggle => 'dropdown'}}
+                  %a.dropdown-toggle{:data => {:toggle => 'dropdown'}}
                     = username_tag current_user
-                    %b.caret
+                    %span.caret
                   %ul.dropdown-menu
                     - if current_user.admin? || current_user.moderator?
                       %li

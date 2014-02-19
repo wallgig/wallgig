@@ -165,13 +165,11 @@ class WallpaperSearchService
 
       # Handle aspect ratios
       if @options[:aspect_ratios].present?
-        @options[:aspect_ratios].each do |aspect_ratio|
-          payload[:query][:bool][:must] << {
-            :term => {
-              :'aspect_ratio' => aspect_ratio.tr('_', '.').to_f
-            }
+        payload[:query][:bool][:must] << {
+          :terms => {
+            :'aspect_ratio' => Array.wrap(@options[:aspect_ratios]).map { |aspect_ratio| aspect_ratio.tr('_', '.').to_f }
           }
-        end
+        }
       end
 
       case @options[:order]
