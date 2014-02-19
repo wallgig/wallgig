@@ -1,14 +1,13 @@
 .page-header
   %h2= title t('notifications.title')
 
-
 - if @notifications.any?
   .page-subheader
     = link_to mark_as_read_notifications_path, method: :post, class: 'btn btn-info' do
       %span.glyphicon.glyphicon-ok
       = t 'notifications.actions.mark_all_as_read'
 
-    = link_to purge_notifications_path, method: :delete, class: 'btn btn-danger' do
+    = link_to purge_notifications_path, method: :delete, confirm: 'Are you sure?', class: 'btn btn-danger' do
       %span.glyphicon.glyphicon-trash
       = t 'notifications.actions.purge'
 
