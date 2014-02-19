@@ -42,7 +42,8 @@ class Tag < ActiveRecord::Base
   scope :in_category_and_subtree, -> (category) { where(category_id: category.subtree_ids) if category.present? }
 
   before_validation :set_slug, if: :name_changed?
-  after_save :queue_update_tagged_wallpapers, if: :name_changed?
+
+  after_commit :queue_update_tagged_wallpapers, if: :name_changed?
 
   def self.ensure_consistency!
     connection.execute('

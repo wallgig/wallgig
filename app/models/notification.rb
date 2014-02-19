@@ -32,7 +32,7 @@ class Notification < ActiveRecord::Base
     when 'Comment'
       notifiable.commentable
     when 'Subscription'
-      notifiable.subscribable
+      notifiable.user
     end
   end
 
