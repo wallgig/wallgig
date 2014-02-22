@@ -61,8 +61,7 @@ class Wallpaper < ActiveRecord::Base
     ')
   }, through: :wallpapers_tags, source: :tag
 
-  has_many :subscriptions_wallpaper, dependent: :destroy
-  has_many :subscriptions, through: :subscriptions_wallpaper, dependent: :destroy
+  has_many :subscriptions_wallpapers, dependent: :destroy
 
   include Approvable
   include HasPurity
@@ -184,6 +183,8 @@ class Wallpaper < ActiveRecord::Base
     after_save :update_index, unless: :processing?
     after_destroy :update_index
   end
+
+  after_commit :queue_notify_subscribers, if: :approved_changed?
 
   # Search
   # formula to calculate wallpaper's popularity
@@ -447,6 +448,10 @@ class Wallpaper < ActiveRecord::Base
     end
 
     cache_tag_list
+  end
+
+  def queue_notify_subscribers
+    NotifySubscribers.perform_async('User', user_id, id, approved?)
   end
 
   private

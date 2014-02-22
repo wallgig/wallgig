@@ -15,8 +15,8 @@ class Subscription < ActiveRecord::Base
   belongs_to :user
   belongs_to :subscribable, polymorphic: true
 
-  has_many :subscriptions_wallpaper, dependent: :destroy
-  has_many :wallpapers, through: :subscriptions_wallpaper
+  has_many :subscriptions_wallpapers, dependent: :destroy
+  has_many :wallpapers, through: :subscriptions_wallpapers
 
   include Notifiable
 
