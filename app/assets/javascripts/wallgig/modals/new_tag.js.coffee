@@ -61,6 +61,13 @@ class Wallgig.Modals.NewTag
       @tagCategoryIdInput.val(selectedId)
 
       @fetchCategories(selectedId)
+    else
+      $parent = $container.parent().closest('[data-parent-category-id]')
+      if $parent.length > 0
+        $parent.find('> [data-provide=category-selection]').trigger('change')
+      else
+        $container.find('[data-provide=category-children]').empty()
+        @tagCategoryIdInput.val('')
 
     null
 
