@@ -18,6 +18,6 @@
           - if can? :update, comment
             %li= link_to 'Edit', edit_comment_path(comment), class: 'text-muted'
           %li= link_to 'Report', new_comment_report_path(comment), class: 'text-muted'
-          %li= link_to "##{comment.id}", url_for(anchor: "comment_#{comment.id}"), class: 'text-muted'
+          %li= link_to "##{comment.id}", url_for(page: params[:page] || 1, anchor: "comment_#{comment.id}"), class: 'text-muted'
       .clearfix
       %div{:data => {:provide => 'wgtext'}}= comment.cooked_comment.html_safe
