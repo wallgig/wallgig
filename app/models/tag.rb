@@ -34,6 +34,9 @@ class Tag < ActiveRecord::Base
   include PurityCounters
   has_purity_counters :wallpapers
 
+  include PgSearch
+  pg_search_scope :search_names, against: :name
+
   validates :name, presence: true, uniqueness: { case_sensitive: false }
   validates :slug, presence: true, uniqueness: { case_sensitive: false }
 

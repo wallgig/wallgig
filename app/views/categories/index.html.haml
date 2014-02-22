@@ -20,8 +20,7 @@
 
 .row
   .col-md-3
-    .page-subheader
-      %h4 Subcategories
+    %p= render partial: 'shared/forms/search', locals: { url: categories_path(search_params.except(:q)) }
     .list-group
       - if @category.present?
         - if @category.parent.present?

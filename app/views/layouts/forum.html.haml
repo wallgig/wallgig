@@ -3,13 +3,7 @@
     .col-md-2
       .page-subheader
         %h3= link_to 'Forums', forums_path
-      %p
-        = form_tag forums_path, method: :get, role: 'search' do
-          .input-group
-            = text_field_tag :q, params[:q], class: 'form-control', placeholder: 'Search'
-            .input-group-btn
-              %button.btn.btn-default{:type => 'submit'}
-                %span.glyphicon.glyphicon-search
+      %p= render partial: 'shared/forms/search', locals: { url: forums_path }
       .list-group
         = link_to 'All topics', forums_path, class: "list-group-item #{'active' if @forum.blank? && @topic.try(:forum).blank?}"
         - @forum_list.each do |forum|
