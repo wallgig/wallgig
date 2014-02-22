@@ -48,7 +48,6 @@ class Wallpaper < ActiveRecord::Base
   has_many :collections_wallpapers, dependent: :destroy
   has_many :collections, through: :collections_wallpapers
 
-  # Tags relation
   has_many :wallpapers_tags, dependent: :destroy
   has_many :tags, through: :wallpapers_tags
   has_many :ordered_tags, -> {
@@ -61,6 +60,9 @@ class Wallpaper < ActiveRecord::Base
       name ASC
     ')
   }, through: :wallpapers_tags, source: :tag
+
+  has_many :subscriptions_wallpaper, dependent: :destroy
+  has_many :subscriptions, through: :subscriptions_wallpaper, dependent: :destroy
 
   include Approvable
   include HasPurity
