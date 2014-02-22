@@ -19,4 +19,10 @@ class WallpapersTag < ActiveRecord::Base
   validates :tag_id, presence: true, uniqueness: { scope: :wallpaper_id }
 
   delegate :name, :purity, :category_name, to: :tag
+
+  after_commit :queue_update_wallpaper_tags, on: :destroy
+
+  def queue_update_wallpaper_tags
+    CacheWallpaperTags.perform_async(wallpaper_id: wallpaper_id)
+  end
 end

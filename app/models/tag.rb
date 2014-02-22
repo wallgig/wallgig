@@ -43,7 +43,7 @@ class Tag < ActiveRecord::Base
 
   before_validation :set_slug, if: :name_changed?
 
-  after_commit :queue_update_tagged_wallpapers, if: :name_changed?
+  after_commit :queue_update_wallpaper_tags, on: [:create, :update]
 
   def self.ensure_consistency!
     connection.execute('
@@ -80,11 +80,7 @@ class Tag < ActiveRecord::Base
     self.slug = name.parameterize
   end
 
-  def queue_update_tagged_wallpapers
-    UpdateTaggedWallpapers.perform_async(id)
-  end
-
-  def update_tagged_wallpapers
-    wallpapers.find_each(&:cache_tag_list)
+  def queue_update_wallpaper_tags
+    CacheWallpaperTags.perform_async(tag_id: id)
   end
 end

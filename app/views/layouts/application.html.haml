@@ -35,7 +35,7 @@
                   - if last_deploy_time.present?
                     %li.dropdown-header
                       deployed
-                      = time_ago_tag Time.now
+                      = time_ago_tag last_deploy_time
                     %li.divider
                   %li
                     %a{:href => 'https://github.com/wallgig/wallgig/issues', :target => '_blank'} Issue tracker
