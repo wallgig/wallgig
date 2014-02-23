@@ -41,7 +41,7 @@ $ ->
       $this.unbind 'inview'
       $this.replaceWith('<div class="loading-spinner" />')
       $.get url, (html) ->
-        $mainContainer = $('[data-provide=wallpaper-list]')
+        $mainContainer = $('.list-wallpaper:first').parent()
         $mainContainer.find('.loading-spinner').remove()
         $mainContainer.append(html)
         applyLazyLoad()

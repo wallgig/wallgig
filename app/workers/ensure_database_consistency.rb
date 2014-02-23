@@ -7,6 +7,7 @@ class EnsureDatabaseConsistency
   def perform
     Category.ensure_consistency!
     Collection.ensure_consistency!
+    Subscription.ensure_consistency!
     Tag.ensure_consistency!
     User.ensure_consistency!
   end
