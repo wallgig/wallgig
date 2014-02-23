@@ -322,3 +322,14 @@ a.purity-sfw, a.purity-sketchy, a.purity-nsfw {
     text-decoration: none;
   }
 }
+
+/* Faceted search */
+.btn-group-tag {
+  width: 100%;
+  .btn-link {
+    max-width: 75%;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+}
