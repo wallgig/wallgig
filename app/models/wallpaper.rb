@@ -287,7 +287,10 @@ class Wallpaper < ActiveRecord::Base
   end
 
   def aspect_ratio
-    (image_width.to_f / image_height.to_f).round(2) if has_image_sizes?
+    if has_image_sizes?
+      factor = 100.0
+      ((image_width.to_f / image_height.to_f) * factor).floor / factor
+    end
   end
 
   def to_s
