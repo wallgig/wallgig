@@ -17,7 +17,6 @@ class Notification < ActiveRecord::Base
   belongs_to :notifiable, polymorphic: true
 
   validates :user, presence: true
-  validates :notifiable, presence: true
   validates :message, presence: true
 
   scope :latest, -> { order(created_at: :desc) }

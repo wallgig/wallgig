@@ -19,6 +19,7 @@ class Wallgig.Managers.Notifications
       success: ->
         $currentTarget.removeClass('unread')
 
-    redirect = () ->
-      document.location.href = url
-    setTimeout redirect, 100
+    if url.length > 0
+      redirect = () ->
+        document.location.href = url
+      setTimeout redirect, 100
