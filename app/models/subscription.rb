@@ -40,7 +40,7 @@ class Subscription < ActiveRecord::Base
     when 'Collection'
       relation.includes(subscribable: { user: :profile })
     else
-      relation
+      relation.includes(:subscribable)
     end
   }
   scope :most_wallpapers_first, -> { order(subscriptions_wallpapers_count: :desc) }
