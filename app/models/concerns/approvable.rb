@@ -11,6 +11,10 @@ module Approvable
     approved_at.present?
   end
 
+  def approved_changed?
+    approved_by_changed?
+  end
+
   def approve_by!(user)
     self.approved_by = user
     self.approved_at = Time.now

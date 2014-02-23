@@ -1,40 +1,56 @@
 - content_for(:use_full_container, true)
 
 - content_for :mark_all_as_read_button do
-  - if @subscription.present?
-    = link_to mark_read_subscription_path(@subscription), data: { method: :post }, class: 'btn btn-info btn-lg pull-right' do
-      %span.glyphicon.glyphicon-ok
-      Mark all as read
-  - else
-    = link_to mark_type_read_subscriptions_path(type: @subscribable_type.underscore), data: { method: :post }, class: 'btn btn-info btn-lg pull-right' do
-      %span.glyphicon.glyphicon-ok
-      Mark all as read
+  - if @wallpapers.any?
+    - if @subscription.present?
+      = link_to mark_read_subscription_path(@subscription), method: :post, class: 'btn btn-info' do
+        %span.glyphicon.glyphicon-ok
+        Mark all as read
+    - else
+      = link_to mark_type_read_subscriptions_path(type: @subscribable_type.underscore), method: :post, class: 'btn btn-info' do
+        %span.glyphicon.glyphicon-ok
+        Mark all as read
 
 .page-header
   %h2= title 'Subscriptions'
 
+  %ul.nav.nav-pills
+    = active_link_to subscriptions_path, wrap_tag: :li, active: @subscribable_type == 'User' do
+      %span.glyphicon.glyphicon-upload
+      Uploads
+    = active_link_to collections_subscriptions_path, wrap_tag: :li, active: @subscribable_type == 'Collection' do
+      %span.glyphicon.glyphicon-folder-close
+      Collections
+    = active_link_to tags_subscriptions_path, wrap_tag: :li, active: @subscribable_type == 'Tag' do
+      %span.glyphicon.glyphicon-tags
+      Tags
+
 .row
   .col-md-2
-    %ul.nav.nav-pills
-      = active_link_to subscriptions_path, wrap_tag: :li, active: (@subscribable_type == 'User') do
-        Uploads
-      / = active_link_to collections_subscriptions_path, wrap_tag: :li, active: (@subscribable_type == 'Collection') do
-      /   Collections
-      = active_link_to tags_subscriptions_path, wrap_tag: :li, active: (@subscribable_type == 'Tag') do
-        Tags
-    %br/
     .list-group
+      - case @subscribable_type
+      - when 'User'
+        = active_link_to 'All uploads', subscriptions_path, class: 'list-group-item', active: :exclusive
+      - when 'Collection'
+        = active_link_to 'All collection', collections_subscriptions_path, class: 'list-group-item'
+      - when 'Tag'
+        = active_link_to 'All tags', tags_subscriptions_path, class: 'list-group-item'
       - @subscriptions.each do |subscription|
         = active_link_to subscription, class: 'list-group-item' do
-          - case subscription.subscribable_type
+          - case @subscribable_type
           - when 'User'
             = image_tag user_avatar_url(subscription.subscribable, 20), width: 20, height: 20
             = username_tag subscription.subscribable
           - when 'Collection'
-
+            = subscription.subscribable.name
+            &mdash;
+            = username_tag subscription.subscribable.user
           - when 'Tag'
             %span.glyphicon.glyphicon-tag
             = subscription.subscribable.name
+
+          - if subscription.subscriptions_wallpapers_count > 0
+            %span.badge= subscription.subscriptions_wallpapers_count
   .col-md-10
     = yield :mark_all_as_read_button
     = render partial: 'wallpapers/list', locals: { wallpapers: @wallpapers }

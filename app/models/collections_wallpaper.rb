@@ -18,4 +18,10 @@ class CollectionsWallpaper < ActiveRecord::Base
   validates :wallpaper_id,  presence: true, uniqueness: { scope: :collection_id }
 
   acts_as_list
+
+  after_commit :queue_notify_subscribers
+
+  def queue_notify_subscribers
+    NotifySubscribers.perform_async('Collection', collection_id, wallpaper_id, destroyed?)
+  end
 end

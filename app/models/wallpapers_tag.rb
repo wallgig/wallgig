@@ -21,8 +21,13 @@ class WallpapersTag < ActiveRecord::Base
   delegate :name, :purity, :category_name, to: :tag
 
   after_commit :queue_update_wallpaper_tags, on: :destroy
+  after_commit :queue_notify_subscribers
 
   def queue_update_wallpaper_tags
     CacheWallpaperTags.perform_async(wallpaper_id: wallpaper_id)
+  end
+
+  def queue_notify_subscribers
+    NotifySubscribers.perform_async('Tag', tag_id, wallpaper_id, destroyed?)
   end
 end

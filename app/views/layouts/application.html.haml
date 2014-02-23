@@ -91,6 +91,11 @@
                       = link_to user_favourites_path(current_user) do
                         %span.glyphicon.glyphicon-star
                         Favourites
+                    %li
+                      = link_to subscriptions_path do
+                        %span.glyphicon.glyphicon-plus
+                        Subscriptions
+                        %span.label.label-success New
                     %li.divider
                     %li
                       = link_to account_collections_path do
@@ -107,7 +112,7 @@
                         Edit settings
                     %li
                       = link_to edit_user_registration_path do
-                        %span.glyphicon.glyphicon-cog
+                        %span.glyphicon.glyphicon-user
                         Edit account
                     %li
                       = link_to destroy_user_session_path, method: :delete do

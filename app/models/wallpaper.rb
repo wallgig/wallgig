@@ -48,7 +48,6 @@ class Wallpaper < ActiveRecord::Base
   has_many :collections_wallpapers, dependent: :destroy
   has_many :collections, through: :collections_wallpapers
 
-  # Tags relation
   has_many :wallpapers_tags, dependent: :destroy
   has_many :tags, through: :wallpapers_tags
   has_many :ordered_tags, -> {
@@ -61,6 +60,9 @@ class Wallpaper < ActiveRecord::Base
       name ASC
     ')
   }, through: :wallpapers_tags, source: :tag
+
+  has_many :subscriptions_wallpapers, dependent: :destroy
+  has_many :subscriptions, through: :subscriptions_wallpapers
 
   include Approvable
   include HasPurity
@@ -114,58 +116,6 @@ class Wallpaper < ActiveRecord::Base
   scope :latest,        -> { order(created_at: :desc) }
   scope :similar_to,    -> (w) { where.not(id: w.id).where(["( SELECT SUM(((phash::bigint # ?) >> bit) & 1 ) FROM generate_series(0, 63) bit) <= 15", w.phash]) }
 
-  scope :subscribed_users_by_user, -> (user) {
-    where(['
-      wallpapers.user_id IN (
-        SELECT s.subscribable_id
-        FROM   subscriptions s
-        WHERE  s.user_id = ?
-          AND  s.subscribable_type = \'User\'
-          AND  s.last_visited_at < wallpapers.created_at
-      )
-    ', user.id])
-  }
-
-  scope :subscribed_collections_by_user, -> (user) {
-    where(['
-      wallpapers.id IN (
-        SELECT     cw.wallpaper_id
-        FROM       subscriptions s
-        INNER JOIN collections_wallpapers cw
-        ON         cw.collection_id = s.subscribable_id
-        WHERE      s.user_id = ?
-          AND      s.subscribable_type = \'Collection\'
-          AND      s.last_visited_at < wallpapers.created_at
-      )
-    ', user.id])
-  }
-
-  scope :subscribed_tags_by_user, -> (user) {
-    where(['
-      wallpapers.id IN (
-        SELECT     wt.wallpaper_id
-        FROM       subscriptions s
-        INNER JOIN wallpapers_tags wt
-        ON         wt.tag_id = s.subscribable_id
-        WHERE      s.user_id = ?
-          AND      s.subscribable_type = \'Tag\'
-          AND      s.last_visited_at < wallpapers.created_at
-      )
-    ', user.id])
-  }
-
-  scope :in_subscription, -> (subscription) {
-    case subscription.subscribable_type
-    when 'User'
-      where(['user_id = ? AND wallpapers.created_at > ?', subscription.subscribable_id, subscription.last_visited_at])
-    when 'Tag'
-      joins(:tags).where(tags: { id: subscription.subscribable_id }).where('wallpapers.created_at > ?', subscription.last_visited_at)
-    when 'Collection'
-    else
-      none
-    end
-  }
-
   # Callbacks
   before_validation :set_image_hash, on: :create
 
@@ -182,6 +132,8 @@ class Wallpaper < ActiveRecord::Base
     after_save :update_index, unless: :processing?
     after_destroy :update_index
   end
+
+  after_commit :queue_notify_subscribers, if: :approved_changed?
 
   # Search
   # formula to calculate wallpaper's popularity
@@ -445,6 +397,10 @@ class Wallpaper < ActiveRecord::Base
     end
 
     cache_tag_list
+  end
+
+  def queue_notify_subscribers
+    NotifySubscribers.perform_async('User', user_id, id, approved?)
   end
 
   private
