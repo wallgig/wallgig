@@ -12,7 +12,7 @@ module Approvable
   end
 
   def approved_changed?
-    approved_by_changed?
+    approved_at_changed?
   end
 
   def approve_by!(user)

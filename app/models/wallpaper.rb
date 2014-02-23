@@ -133,7 +133,7 @@ class Wallpaper < ActiveRecord::Base
     after_destroy :update_index
   end
 
-  after_commit :queue_notify_subscribers, if: :approved_changed?
+  after_commit :queue_notify_subscribers
 
   # Search
   # formula to calculate wallpaper's popularity
@@ -400,7 +400,7 @@ class Wallpaper < ActiveRecord::Base
   end
 
   def queue_notify_subscribers
-    NotifySubscribers.perform_async('User', user_id, id, approved?)
+    NotifySubscribers.perform_async('User', user_id, id, persisted? && approved?)
   end
 
   private
