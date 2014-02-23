@@ -2,23 +2,24 @@
 #
 # Table name: subscriptions
 #
-#  id                :integer          not null, primary key
-#  user_id           :integer
-#  subscribable_id   :integer
-#  subscribable_type :string(255)
-#  last_visited_at   :datetime
-#  created_at        :datetime
-#  updated_at        :datetime
+#  id                             :integer          not null, primary key
+#  user_id                        :integer
+#  subscribable_id                :integer
+#  subscribable_type              :string(255)
+#  last_visited_at                :datetime
+#  created_at                     :datetime
+#  updated_at                     :datetime
+#  subscriptions_wallpapers_count :integer          default(0)
 #
 
 class Subscription < ActiveRecord::Base
+  include Notifiable
+
   belongs_to :user
   belongs_to :subscribable, polymorphic: true
 
   has_many :subscriptions_wallpapers, dependent: :destroy
   has_many :wallpapers, -> { order(created_at: :desc) }, through: :subscriptions_wallpapers
-
-  include Notifiable
 
   validates :subscribable, presence: true
   validates :user, presence: true, uniqueness: { scope: [:subscribable_id, :subscribable_type] }
@@ -29,8 +30,9 @@ class Subscription < ActiveRecord::Base
 
   after_create :notify
 
-  scope :by_type, -> (type) {
-    relation = where(subscribable_type: type)
+  scope :by_type, -> (type) { where(subscribable_type: type) }
+  scope :by_type_with_includes, -> (type) {
+    relation = by_type(type)
 
     case type
     when 'User'
@@ -41,13 +43,18 @@ class Subscription < ActiveRecord::Base
       relation
     end
   }
+  scope :most_wallpapers_first, -> { order(subscriptions_wallpapers_count: :desc) }
 
-  def self.mark_all_as_read!
-    update_all(last_visited_at: Time.now)
+  def self.ensure_consistency!
+    connection.execute('
+      UPDATE subscriptions SET subscriptions_wallpapers_count = (
+        SELECT COUNT(*) FROM subscriptions_wallpapers WHERE subscriptions_wallpapers.subscription_id = subscriptions.id
+      )
+    ')
   end
 
   def mark_all_as_read!
-    update_attribute(:last_visited_at, Time.now)
+    subscriptions_wallpapers.destroy_all
   end
 
   def notify

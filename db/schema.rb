@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20140222145502) do
+ActiveRecord::Schema.define(version: 20140223031450) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -275,6 +275,7 @@ ActiveRecord::Schema.define(version: 20140222145502) do
     t.datetime "last_visited_at"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.integer  "subscriptions_wallpapers_count", default: 0
   end
 
   add_index "subscriptions", ["subscribable_id", "subscribable_type"], name: "index_subscriptions_on_subscribable_id_and_subscribable_type", using: :btree

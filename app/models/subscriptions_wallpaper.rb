@@ -10,7 +10,7 @@
 #
 
 class SubscriptionsWallpaper < ActiveRecord::Base
-  belongs_to :subscription
+  belongs_to :subscription, counter_cache: true
   belongs_to :wallpaper
 
   validates :subscription_id, presence: true

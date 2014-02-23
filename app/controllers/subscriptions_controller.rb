@@ -1,7 +1,7 @@
 class SubscriptionsController < ApplicationController
   before_action :authenticate_user!
-  before_action :set_subscribable, except: [:index, :collections, :tags]
-  before_action :set_subscription, except: [:index, :collections, :tags, :mark_type_read]
+  before_action :set_subscribable, only: [:toggle, :destroy]
+  before_action :set_subscription, only: [:show, :toggle, :destroy, :mark_read]
 
   respond_to :json, only: [:toggle]
 
@@ -17,33 +17,33 @@ class SubscriptionsController < ApplicationController
     render_index 'Tag'
   end
 
+  def show
+    render_index @subscription.subscribable_type
+  end
+
   def render_index(subscribable_type)
     @subscribable_type = subscribable_type
 
-    @wallpapers = current_user.subscribed_wallpapers_by_subscribable_type(@subscribable_type)
-                              .accessible_by(current_ability, :read)
-                              .with_purities(current_purities)
-                              .page(params[:page])
+    # Load wallpapers
+    if @subscription.present?
+      @wallpapers = @subscription.wallpapers
+    else
+      @wallpapers = current_user.subscribed_wallpapers_by_subscribable_type(@subscribable_type)
+    end
+    @wallpapers = @wallpapers.accessible_by(current_ability, :read)
+                             .with_purities(current_purities)
+                             .page(params[:page])
     @wallpapers = WallpapersDecorator.new(@wallpapers, context: { current_user: current_user })
 
-    @subscriptions = current_user.subscriptions.by_type(@subscribable_type)
+    # Load other subscriptions for sidebar
+    @subscriptions = current_user.subscriptions.by_type_with_includes(@subscribable_type)
+                                               .most_wallpapers_first
 
     if request.xhr?
       render partial: 'wallpapers/list', layout: false, locals: { wallpapers: @wallpapers }
     else
       render action: 'index'
     end
-  end
-
-  def show
-    @subscribable_type = @subscription.subscribable_type
-
-    @wallpapers = @subscription.wallpapers
-                               .accessible_by(current_ability, :read)
-                               .with_purities(current_purities)
-                               .page(params[:page])
-
-    render_index
   end
 
   def toggle
@@ -77,9 +77,9 @@ class SubscriptionsController < ApplicationController
     subscriptions_params = params.permit(:type)
     raise AccessDenied unless ['user', 'collection', 'tag'].include?(subscriptions_params[:type])
 
-    current_user.subscriptions.by_type(subscriptions_params[:type].camelize).mark_all_as_read!
+    current_user.subscriptions.by_type(subscriptions_params[:type].camelize).find_each(&:mark_all_as_read!)
 
-    redirect_to :back, notice: 'Subscription was successfully marked as read.'
+    redirect_to :back, notice: 'Subscriptions were successfully marked as read.'
   end
 
   def mark_read
@@ -99,10 +99,8 @@ class SubscriptionsController < ApplicationController
       @subscribable = User.find_by_username!(params[:user_id])
     end
 
-    if @subscribable.present?
-      authorize! :read, @subscribable
-      authorize! :subscribe, @subscribable
-    end
+    authorize! :read, @subscribable
+    authorize! :subscribe, @subscribable
   end
 
   def set_subscription
@@ -111,9 +109,5 @@ class SubscriptionsController < ApplicationController
     else
       @subscription = current_user.subscriptions.find(params[:id])
     end
-  end
-
-  def current_purities
-    ['sfw', 'sketchy', 'nsfw']
   end
 end
