@@ -143,7 +143,7 @@ class User < ActiveRecord::Base
   end
 
   def favourite_wallpapers
-    get_voted Wallpaper
+    get_up_voted(Wallpaper)
   end
 
   def role_name

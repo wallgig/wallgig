@@ -1,14 +1,12 @@
 class FavouritesController < ApplicationController
   before_action :authenticate_user!, except: [:index]
-  before_action :set_owner
-
-  layout false, except: [:index]
+  before_action :set_user
 
   def index
-    @wallpapers = @owner.favourite_wallpapers
-                        .accessible_by(current_ability, :read)
-                        .page(params[:page])
-
+    @wallpapers = @user.favourite_wallpapers
+                       .order('votes.created_at DESC')
+                       .accessible_by(current_ability, :read)
+                       .page(params[:page])
     @wallpapers = @wallpapers.with_purities(current_purities) unless myself?
 
     @wallpapers = WallpapersDecorator.new(@wallpapers, context: { current_user: current_user })
@@ -22,10 +20,8 @@ class FavouritesController < ApplicationController
 
   private
 
-  def set_owner
-    if params[:user_id].present?
-      @owner = @user = User.find_by_username!(params[:user_id])
-      authorize! :read, @owner
-    end
+  def set_user
+    @user = User.find_by_username!(params[:user_id])
+    authorize! :read, @user
   end
 end
