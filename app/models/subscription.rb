@@ -16,7 +16,7 @@ class Subscription < ActiveRecord::Base
   belongs_to :subscribable, polymorphic: true
 
   has_many :subscriptions_wallpapers, dependent: :destroy
-  has_many :wallpapers, through: :subscriptions_wallpapers
+  has_many :wallpapers, -> { order(created_at: :desc) }, through: :subscriptions_wallpapers
 
   include Notifiable
 
@@ -29,7 +29,18 @@ class Subscription < ActiveRecord::Base
 
   after_create :notify
 
-  scope :by_type, -> (type) { where(subscribable_type: type) }
+  scope :by_type, -> (type) {
+    relation = where(subscribable_type: type)
+
+    case type
+    when 'User'
+      relation.includes(subscribable: :profile)
+    when 'Collection'
+      relation.includes(subscribable: { user: :profile })
+    else
+      relation
+    end
+  }
 
   def self.mark_all_as_read!
     update_all(last_visited_at: Time.now)

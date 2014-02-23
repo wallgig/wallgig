@@ -62,6 +62,7 @@ class Wallpaper < ActiveRecord::Base
   }, through: :wallpapers_tags, source: :tag
 
   has_many :subscriptions_wallpapers, dependent: :destroy
+  has_many :subscriptions, through: :subscriptions_wallpapers
 
   include Approvable
   include HasPurity

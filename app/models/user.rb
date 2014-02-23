@@ -161,6 +161,12 @@ class User < ActiveRecord::Base
     subscriptions.where(subscribable: subscribable).exists?
   end
 
+  def subscribed_wallpapers_by_subscribable_type(subscribable_type)
+    Wallpaper.joins(:subscriptions)
+             .merge(subscriptions)
+             .where(subscriptions: { subscribable_type: subscribable_type })
+  end
+
   private
 
   def generate_authentication_token

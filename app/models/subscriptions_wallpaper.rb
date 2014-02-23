@@ -5,7 +5,6 @@
 #  id              :integer          not null, primary key
 #  subscription_id :integer
 #  wallpaper_id    :integer
-#  read            :boolean          default(FALSE)
 #  created_at      :datetime
 #  updated_at      :datetime
 #
