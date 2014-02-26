@@ -33,6 +33,21 @@
 #  approved_by_id        :integer
 #  approved_at           :datetime
 #
+# Indexes
+#
+#  index_wallpapers_on_approved_at            (approved_at)
+#  index_wallpapers_on_approved_by_id         (approved_by_id)
+#  index_wallpapers_on_cached_votes_down      (cached_votes_down)
+#  index_wallpapers_on_cached_votes_score     (cached_votes_score)
+#  index_wallpapers_on_cached_votes_total     (cached_votes_total)
+#  index_wallpapers_on_cached_votes_up        (cached_votes_up)
+#  index_wallpapers_on_cached_weighted_score  (cached_weighted_score)
+#  index_wallpapers_on_image_hash             (image_hash)
+#  index_wallpapers_on_phash                  (phash)
+#  index_wallpapers_on_primary_color_id       (primary_color_id)
+#  index_wallpapers_on_purity                 (purity)
+#  index_wallpapers_on_user_id                (user_id)
+#
 
 class Wallpaper < ActiveRecord::Base
   belongs_to :user, counter_cache: true

@@ -13,6 +13,12 @@
 #  updated_at       :datetime
 #  cooked_comment   :text
 #
+# Indexes
+#
+#  index_comments_on_commentable_id    (commentable_id)
+#  index_comments_on_commentable_type  (commentable_type)
+#  index_comments_on_user_id           (user_id)
+#
 
 class Comment < ActiveRecord::Base
   include ActsAsCommentable::Comment

@@ -17,6 +17,12 @@
 #  last_commented_at    :datetime
 #  last_commented_by_id :integer
 #
+# Indexes
+#
+#  index_topics_on_forum_id              (forum_id)
+#  index_topics_on_last_commented_by_id  (last_commented_by_id)
+#  index_topics_on_user_id               (user_id)
+#
 
 # Read about factories at https://github.com/thoughtbot/factory_girl
 

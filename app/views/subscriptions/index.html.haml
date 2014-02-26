@@ -49,8 +49,8 @@
             %span.glyphicon.glyphicon-tag
             = subscription.subscribable.name
 
-          - if subscription.subscriptions_wallpapers_count > 0
-            %span.badge= subscription.subscriptions_wallpapers_count
+          - if (count = subscription.subscriptions_wallpapers_count_for(current_purities)) > 0
+            %span.badge= count
   .col-md-10
     = yield :mark_all_as_read_button
     = render partial: 'wallpapers/list', locals: { wallpapers: @wallpapers }

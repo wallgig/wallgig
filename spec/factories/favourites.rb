@@ -9,6 +9,12 @@
 #  created_at    :datetime
 #  updated_at    :datetime
 #
+# Indexes
+#
+#  index_favourites_on_collection_id  (collection_id)
+#  index_favourites_on_user_id        (user_id)
+#  index_favourites_on_wallpaper_id   (wallpaper_id)
+#
 
 FactoryGirl.define do
   factory :favourite do

@@ -15,6 +15,11 @@
 #  sketchy_tags_count :integer          default(0)
 #  nsfw_tags_count    :integer          default(0)
 #
+# Indexes
+#
+#  index_categories_on_ancestry  (ancestry)
+#  index_categories_on_slug      (slug) UNIQUE
+#
 
 # Read about factories at https://github.com/thoughtbot/factory_girl
 

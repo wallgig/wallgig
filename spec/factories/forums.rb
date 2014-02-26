@@ -15,6 +15,10 @@
 #  can_post    :boolean          default(TRUE)
 #  can_comment :boolean          default(TRUE)
 #
+# Indexes
+#
+#  index_forums_on_slug  (slug)
+#
 
 # Read about factories at https://github.com/thoughtbot/factory_girl
 

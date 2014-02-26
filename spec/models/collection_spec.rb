@@ -16,6 +16,11 @@
 #  nsfw_wallpapers_count    :integer          default(0)
 #  last_added_at            :datetime
 #
+# Indexes
+#
+#  index_collections_on_ancestry  (ancestry)
+#  index_collections_on_user_id   (user_id)
+#
 
 require 'spec_helper'
 

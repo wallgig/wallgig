@@ -13,6 +13,11 @@
 #  title                    :string(255)
 #  avatar_uid               :string(255)
 #
+# Indexes
+#
+#  index_user_profiles_on_cover_wallpaper_id  (cover_wallpaper_id)
+#  index_user_profiles_on_user_id             (user_id) UNIQUE
+#
 
 # Read about factories at https://github.com/thoughtbot/factory_girl
 

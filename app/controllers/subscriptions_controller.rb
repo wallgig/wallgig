@@ -37,7 +37,7 @@ class SubscriptionsController < ApplicationController
 
     # Load other subscriptions for sidebar
     @subscriptions = current_user.subscriptions.by_type_with_includes(@subscribable_type)
-                                               .most_wallpapers_first
+                                               .most_subscriptions_wallpapers_first(current_purities)
 
     if request.xhr?
       render partial: 'wallpapers/list', layout: false, locals: { wallpapers: @wallpapers }

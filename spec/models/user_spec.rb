@@ -32,6 +32,16 @@
 #  comments_count         :integer          default(0)
 #  trusted                :boolean          default(FALSE)
 #
+# Indexes
+#
+#  index_users_on_authentication_token  (authentication_token) UNIQUE
+#  index_users_on_confirmation_token    (confirmation_token) UNIQUE
+#  index_users_on_discourse_user_id     (discourse_user_id)
+#  index_users_on_email                 (email) UNIQUE
+#  index_users_on_reset_password_token  (reset_password_token) UNIQUE
+#  index_users_on_unlock_token          (unlock_token) UNIQUE
+#  index_users_on_username              (username) UNIQUE
+#
 
 require 'spec_helper'
 
