@@ -117,23 +117,6 @@ class User < ActiveRecord::Base
     username
   end
 
-  def reset_authentication_token
-    self.authentication_token = generate_authentication_token
-  end
-
-  def reset_authentication_token!
-    reset_authentication_token
-    save validate: false
-  end
-
-  def ensure_authentication_token
-    reset_authentication_token if authentication_token.blank?
-  end
-
-  def ensure_authentication_token!
-    reset_authentication_token! if authentication_token.blank?
-  end
-
   def settings
     super || build_settings
   end
@@ -146,32 +129,64 @@ class User < ActiveRecord::Base
     get_up_voted(Wallpaper)
   end
 
-  def role_name
-    return 'Developer' if developer?
-    return 'Admin'     if admin?
-    return 'Moderator' if moderator?
-    'Member'
+  module AuthenticationTokenMethods
+    def reset_authentication_token
+      self.authentication_token = generate_authentication_token
+    end
+
+    def reset_authentication_token!
+      reset_authentication_token
+      save validate: false
+    end
+
+    def ensure_authentication_token
+      reset_authentication_token if authentication_token.blank?
+    end
+
+    def ensure_authentication_token!
+      reset_authentication_token! if authentication_token.blank?
+    end
+
+    def generate_authentication_token
+      loop do
+        token = Devise.friendly_token
+        break token unless self.class.where(authentication_token: token).exists?
+      end
+    end
+    private :generate_authentication_token
   end
 
-  def staff?
-    developer? || admin? || moderator?
-  end
+  module RoleMethods
+    def role_name
+      return 'Developer' if developer?
+      return 'Admin'     if admin?
+      return 'Moderator' if moderator?
+      'Member'
+    end
 
-  def subscribed_to?(subscribable)
-    subscriptions.where(subscribable: subscribable).exists?
-  end
-
-  def subscribed_wallpapers_by_subscribable_type(subscribable_type)
-    Wallpaper.where(id: subscriptions.select(:subscribable_id)
-                                     .where(subscribable_type: subscribable_type))
-  end
-
-  private
-
-  def generate_authentication_token
-    loop do
-      token = Devise.friendly_token
-      break token unless self.class.where(authentication_token: token).exists?
+    def staff?
+      developer? || admin? || moderator?
     end
   end
+
+  module SubscriptionMethods
+    def subscribed_to?(subscribable)
+      subscriptions.where(subscribable: subscribable).exists?
+    end
+
+    def subscribed_wallpapers_by_subscribable_type(subscribable_type)
+      subscription_ids_rel = subscriptions.select(:id)
+                                          .where(subscribable_type: subscribable_type)
+
+      wallpaper_ids_rel = SubscriptionsWallpaper.select(:wallpaper_id)
+                                                .where(subscription_id: subscription_ids_rel)
+
+      Wallpaper.where(id: wallpaper_ids_rel)
+    end
+  end
+
+  include AuthenticationTokenMethods
+  include RoleMethods
+  include SubscriptionMethods
+
 end

@@ -29,9 +29,10 @@
 ### Steps
 1. Install [Virtualbox](http://virtualbox.com) and [Vagrant](http://vagrantup.com).
 2. Copy **.env.example** to **.env** and make changes accordingly.
-3. Run `vagrant up` to download and set up the virtual machine (VM) automatically.
-4. Run `vagrant ssh` to ssh into that machine. For Windows users, you should be using a Unix-like shell such as MinGW or Git Shell.
-5. Inside the VM, run `bundle install` to install dependencies.
-6. To start, run `foreman start`. This will boot up Sidekiq, Redis and Puma in development mode.
-7. You can now access the app from [http://localhost:3000](http://localhost:3000)
-8. Start hacking!
+3. Run `vagrant plugin install vagrant-berkshelf` to install the required berkshelf plugin for vagrant.
+4. Run `vagrant up` to download and set up the virtual machine (VM) automatically. For Windows users, the VirtualBox GUI should be launched with administrator privileges first and kept open.
+5. Run `vagrant ssh` to ssh into that machine. For Windows users, you should be using a Unix-like shell such as MinGW or Git Shell.
+6. Inside the VM, run `bundle install` to install dependencies.
+7. To start, run `foreman start`. This will boot up Sidekiq, Redis and Puma in development mode.
+8. You can now access the app from [http://localhost:3000](http://localhost:3000)
+9. Start hacking!
