@@ -75,14 +75,13 @@ class User < ActiveRecord::Base
             length: { minimum: 3, maximum: 20 }
 
   # Scopes
-  scope :confirmed, -> { where.not(confirmed_at: nil) }
-  scope :trusted,   -> { where(trusted: true) }
-  scope :newest,    -> { order(created_at: :desc) }
-  scope :staff,     -> { where(['developer = :bool OR admin = :bool OR moderator = :bool', { bool: true }]) }
+  scope :confirmed,      -> { where.not(confirmed_at: nil) }
+  scope :trusted,        -> { where(trusted: true) }
+  scope :newest,         -> { order(created_at: :desc) }
+  scope :staff,          -> { where(['developer = :bool OR admin = :bool OR moderator = :bool', { bool: true }]) }
+  scope :alphabetically, -> { order(username: :asc) }
 
   # Callbacks
-  before_save :ensure_authentication_token
-
   before_create do
     build_profile
     build_settings
@@ -130,6 +129,12 @@ class User < ActiveRecord::Base
   end
 
   module AuthenticationTokenMethods
+    def self.included(base)
+      base.class_eval do
+        before_save :ensure_authentication_token
+      end
+    end
+
     def reset_authentication_token
       self.authentication_token = generate_authentication_token
     end
@@ -188,5 +193,4 @@ class User < ActiveRecord::Base
   include AuthenticationTokenMethods
   include RoleMethods
   include SubscriptionMethods
-
 end

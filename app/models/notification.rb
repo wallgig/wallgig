@@ -20,6 +20,7 @@ class Notification < ActiveRecord::Base
   validates :message, presence: true
 
   scope :latest, -> { order(created_at: :desc) }
+  scope :read,   -> { where(read: true) }
   scope :unread, -> { where(read: false) }
 
   def self.mark_as_read
