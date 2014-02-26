@@ -162,9 +162,8 @@ class User < ActiveRecord::Base
   end
 
   def subscribed_wallpapers_by_subscribable_type(subscribable_type)
-    Wallpaper.joins(:subscriptions)
-             .merge(subscriptions)
-             .where(subscriptions: { subscribable_type: subscribable_type })
+    Wallpaper.where(id: subscriptions.select(:subscribable_id)
+                                     .where(subscribable_type: subscribable_type))
   end
 
   private
