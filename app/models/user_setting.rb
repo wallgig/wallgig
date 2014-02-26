@@ -25,6 +25,9 @@
 #
 
 class UserSetting < ActiveRecord::Base
+  PURITY_KEYS        = [:sfw, :sketchy, :nsfw]
+  PURITY_STRING_KEYS = ['sfw', 'sketchy', 'nsfw']
+
   extend Enumerize
 
   belongs_to :user

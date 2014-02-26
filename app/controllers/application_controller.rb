@@ -6,16 +6,12 @@ class ApplicationController < ActionController::Base
   protect_from_forgery with: :exception
 
   before_action :configure_permitted_parameters,       if: :devise_controller?
-  before_action :track_online_user,                    if: :user_signed_in?
-  before_action :authorize_rack_mini_profiler_request, if: proc { user_signed_in? && current_user.developer? }
 
   helper UsersHelper
   helper_method :last_deploy_time
   helper_method :current_profile
-  helper_method :current_purities
   helper_method :current_settings
   helper_method :myself?
-  helper_method :users_online
 
   rescue_from AccessDenied,         with: :access_denied_response
   rescue_from CanCan::AccessDenied, with: :access_denied_response
@@ -43,10 +39,6 @@ class ApplicationController < ActionController::Base
         UserProfile.new
       end
     end
-  end
-
-  def current_purities
-    current_settings.purities
   end
 
   def current_settings
@@ -78,15 +70,66 @@ class ApplicationController < ActionController::Base
     end
   end
 
-  def users_online
-    @users_online ||= ::UsersOnlineService.new
+  module PurityMethods
+    def self.included(base)
+      base.class_eval do
+        helper_method :current_purities
+        helper_method :purity_params
+      end
+    end
+
+    def purity_params
+      params
+        .permit(purity: [])
+        .tap do |p|
+          Array.wrap(p[:purity])
+               .select { |purity| UserSetting::PURITY_STRING_KEYS.include?(purity) }
+               .presence
+        end
+    end
+
+    # Current viewable purities
+    # Signed in users may override this via query string.
+    def current_purities
+      (user_signed_in? && purity_params[:purity]) || current_settings.purities
+    end
   end
 
-  def track_online_user
-    users_online.track_user(current_user) unless current_settings.invisible?
+  module DebugMethods
+    def self.included(base)
+      base.class_eval do
+        before_action :authorize_rack_mini_profiler_request
+      end
+    end
+
+    def authorize_rack_mini_profiler_request
+      if user_signed_in? && current_user.developer?
+        Rack::MiniProfiler.authorize_request
+      end
+    end
   end
 
-  def authorize_rack_mini_profiler_request
-    Rack::MiniProfiler.authorize_request
+  module UserOnlineMethods
+    def self.included(base)
+      base.class_eval do
+        before_action :track_online_user
+        helper_method :users_online
+      end
+    end
+
+    def users_online
+      @users_online ||= ::UsersOnlineService.new
+    end
+
+    # Track signed in and visible users
+    def track_online_user
+      if user_signed_in? && !current_settings.invisible?
+        users_online.track_user(current_user)
+      end
+    end
   end
+
+  include PurityMethods
+  include DebugMethods
+  include UserOnlineMethods
 end
