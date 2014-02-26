@@ -6,6 +6,10 @@
 #  reportable_type :string(255)
 #  reason          :string(255)
 #
+# Indexes
+#
+#  index_report_reasons_on_reportable_type  (reportable_type)
+#
 
 class ReportReason < ActiveRecord::Base
   validates :reason,          presence: true

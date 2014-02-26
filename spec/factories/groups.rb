@@ -18,6 +18,12 @@
 #  text_color  :string(255)
 #  position    :integer
 #
+# Indexes
+#
+#  index_groups_on_access    (access)
+#  index_groups_on_owner_id  (owner_id)
+#  index_groups_on_slug      (slug) UNIQUE
+#
 
 # Read about factories at https://github.com/thoughtbot/factory_girl
 

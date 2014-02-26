@@ -9,6 +9,12 @@
 #  updated_at :datetime
 #  role       :string(255)
 #
+# Indexes
+#
+#  index_users_groups_on_group_id  (group_id)
+#  index_users_groups_on_role      (role)
+#  index_users_groups_on_user_id   (user_id)
+#
 
 # Read about factories at https://github.com/thoughtbot/factory_girl
 

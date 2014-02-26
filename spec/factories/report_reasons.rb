@@ -6,6 +6,10 @@
 #  reportable_type :string(255)
 #  reason          :string(255)
 #
+# Indexes
+#
+#  index_report_reasons_on_reportable_type  (reportable_type)
+#
 
 # Read about factories at https://github.com/thoughtbot/factory_girl
 

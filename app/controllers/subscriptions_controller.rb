@@ -37,7 +37,7 @@ class SubscriptionsController < ApplicationController
 
     # Load other subscriptions for sidebar
     @subscriptions = current_user.subscriptions.by_type_with_includes(@subscribable_type)
-                                               .most_wallpapers_first
+                                               .most_subscriptions_wallpapers_first(current_purities)
 
     if request.xhr?
       render partial: 'wallpapers/list', layout: false, locals: { wallpapers: @wallpapers }
@@ -110,4 +110,17 @@ class SubscriptionsController < ApplicationController
       @subscription = current_user.subscriptions.find(params[:id])
     end
   end
+
+  # TODO refactor
+  def purity_params
+    params.permit(purity: []).tap do |p|
+      p[:purity] = Array.wrap(p[:purity]).select { |p| ['sfw', 'sketchy', 'nsfw'].include?(p) }.presence
+    end
+  end
+  helper_method :purity_params
+
+  def current_purities
+    purity_params[:purity] || super
+  end
+
 end

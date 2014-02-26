@@ -15,6 +15,10 @@
 #  can_post    :boolean          default(TRUE)
 #  can_comment :boolean          default(TRUE)
 #
+# Indexes
+#
+#  index_forums_on_slug  (slug)
+#
 
 class Forum < ActiveRecord::Base
   has_many :topics

@@ -15,6 +15,11 @@
 #  sketchy_tags_count :integer          default(0)
 #  nsfw_tags_count    :integer          default(0)
 #
+# Indexes
+#
+#  index_categories_on_ancestry  (ancestry)
+#  index_categories_on_slug      (slug) UNIQUE
+#
 
 require 'spec_helper'
 

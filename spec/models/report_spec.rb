@@ -13,6 +13,12 @@
 #  updated_at      :datetime
 #  reasons         :text
 #
+# Indexes
+#
+#  index_reports_on_closed_by_id                       (closed_by_id)
+#  index_reports_on_reportable_id_and_reportable_type  (reportable_id,reportable_type)
+#  index_reports_on_user_id                            (user_id)
+#
 
 require 'spec_helper'
 

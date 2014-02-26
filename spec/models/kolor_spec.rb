@@ -8,6 +8,10 @@
 #  blue  :integer
 #  hex   :string(255)
 #
+# Indexes
+#
+#  index_colors_on_hex  (hex) UNIQUE
+#
 
 require 'spec_helper'
 

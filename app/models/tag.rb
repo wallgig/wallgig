@@ -14,6 +14,14 @@
 #  sketchy_wallpapers_count :integer          default(0)
 #  nsfw_wallpapers_count    :integer          default(0)
 #
+# Indexes
+#
+#  index_tags_on_approved_by_id  (approved_by_id)
+#  index_tags_on_category_id     (category_id)
+#  index_tags_on_coined_by_id    (coined_by_id)
+#  index_tags_on_purity          (purity)
+#  index_tags_on_slug            (slug) UNIQUE
+#
 
 class Tag < ActiveRecord::Base
   belongs_to :category

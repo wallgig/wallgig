@@ -1,5 +1,3 @@
-- blank_value = lambda { |_,v| v.blank? }
-
 .page-header
   %h2
     - if @category.present?
@@ -21,6 +19,7 @@
 .row
   .col-md-3
     %p= render partial: 'shared/forms/search', locals: { url: categories_path(search_params.except(:q)) }
+    %p= render partial: 'shared/buttons/purity_toggles', locals: { purity_params: search_params }
     .list-group
       - if @category.present?
         - if @category.parent.present?
@@ -40,15 +39,6 @@
   .col-md-9
     .page-subheader
 
-      .btn-group.pull-right
-        - Wallpaper.purity.options.each do |label, value|
-          - active = current_purities.include?(value)
-          - if active
-            = link_to label, url_for(search_params.merge(purity: (current_purities - [value])).reject(&blank_value)),
-                      class: "btn btn-sm btn-#{value} btn-active"
-          - else
-            = link_to label, url_for(search_params.merge(purity: (current_purities + [value])).reject(&blank_value)),
-                      class: "btn btn-sm btn-#{value} btn-default"
       %h4 Tags
 
     .table-responsive
