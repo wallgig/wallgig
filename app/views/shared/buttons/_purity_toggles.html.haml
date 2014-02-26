@@ -1,0 +1,8 @@
+.btn-group.btn-group-justified
+  - Wallpaper.purity.options.each do |label, value|
+    - if current_purities.include?(value)
+      = link_to label, url_for(purity_params.merge(purity: (current_purities - [value])).reject { |_,v| v.blank? }),
+                class: "btn btn-sm btn-#{value} btn-active"
+    - else
+      = link_to label, url_for(purity_params.merge(purity: (current_purities + [value])).reject { |_,v| v.blank? }),
+                class: "btn btn-sm btn-#{value} btn-default"

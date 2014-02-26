@@ -12,6 +12,7 @@
         Mark all as read
 
 .page-header
+
   %h2= title 'Subscriptions'
 
   %ul.nav.nav-pills
@@ -27,6 +28,8 @@
 
 .row
   .col-md-2
+    %p= render partial: 'shared/buttons/purity_toggles', locals: { purity_params: purity_params }
+
     .list-group
       - case @subscribable_type
       - when 'User'
