@@ -38,7 +38,7 @@ module Account
     end
 
     def profile_params
-      params.require(:user_profile).permit(:avatar)
+      params.require(:user_profile).permit(:avatar, :country_code)
     end
 
     def title_and_color_params

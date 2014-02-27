@@ -6,7 +6,7 @@
 #  user_id                  :integer
 #  cover_wallpaper_id       :integer
 #  cover_wallpaper_y_offset :integer
-#  country_code             :string(255)
+#  country_code             :string(2)
 #  created_at               :datetime
 #  updated_at               :datetime
 #  username_color_hex       :string(255)
@@ -30,6 +30,8 @@ class UserProfile < ActiveRecord::Base
   validates_property :mime_type, of: :avatar, in: ['image/jpeg', 'image/png', 'image/gif']
   validates_property :width,     of: :avatar, in: (50..500)
   validates_property :height,    of: :avatar, in: (50..500)
+
+  validates :country_code, inclusion: { in: ISO3166::Country::Names.map { |_, code| code }, allow_blank: true }
 
   before_save :nilify_cover_wallpaper_y_offset, if: :cover_wallpaper_id_changed?
 
@@ -55,5 +57,11 @@ class UserProfile < ActiveRecord::Base
 
   def title=(value)
     write_attribute :title, value.presence
+  end
+
+  # Check if we need to detect this User's country code
+  # User can hide his/her country by setting the country code to an empty string ""
+  def needs_country_code?
+    country_code.nil?
   end
 end

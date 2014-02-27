@@ -20,6 +20,12 @@
 # available at http://guides.rubyonrails.org/i18n.html.
 
 en:
+  simple_form:
+    labels:
+      user_profile:
+        country_code: "Country"
+        title: "Custom title"
+
   enumerize:
     purity:
       sfw: "SFW"

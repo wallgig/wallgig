@@ -5,6 +5,7 @@
         = image_tag user_avatar_url(comment.user, 50), alt: comment.user.username, width: 50, height: 50
       %h4
         = link_to_user comment.user
+        = flag_tag_for comment.user
         = user_online_status_tag comment.user
       %p= role_name_for(comment.user)
     .col-sm-10

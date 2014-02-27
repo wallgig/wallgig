@@ -8,6 +8,7 @@
         = time_ago_tag comment.created_at, class: 'pull-right'
         .comment-heading
           = link_to_user comment.user
+          = flag_tag_for comment.user
           = user_online_status_tag comment.user
           - if user_signed_in?
             %small.show-when-hover

@@ -59,6 +59,7 @@
           = image_tag user_avatar_url(@topic.user, 50), alt: @topic.user.username, width: 50, height: 50
         %h4
           = link_to_user @topic.user
+          = flag_tag_for @topic.user
           = user_online_status_tag @topic.user
         %p= role_name_for @topic.user
       .col-sm-10

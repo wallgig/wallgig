@@ -129,7 +129,23 @@ class ApplicationController < ActionController::Base
     end
   end
 
+  module CountryMethods
+    def self.included(base)
+      base.class_eval do
+        before_action :update_user_country
+      end
+    end
+
+    def update_user_country
+      if user_signed_in? && current_profile.needs_country_code?
+        country_code = request.location.try(:country_code)
+        current_profile.update(country_code: country_code) if country_code.present?
+      end
+    end
+  end
+
   include PurityMethods
   include DebugMethods
   include UserOnlineMethods
+  include CountryMethods
 end
