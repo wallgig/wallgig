@@ -3,10 +3,11 @@
     .page-header
       %h1 Edit profile
     = simple_form_for @profile, url: account_profile_path, method: :patch do |f|
-      = f.error_notification
 
       .form-inputs
         = f.input :avatar, as: :file
+
+        = f.input :country_code, collection: ActionView::Helpers::FormOptionsHelper::COUNTRIES
 
         - if can? :update_title_and_color, @profile
           = f.input :title

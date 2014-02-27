@@ -164,13 +164,15 @@ GEM
     colorscore (0.0.4)
       color
     connection_pool (1.2.0)
-    country_select (1.2.0)
+    countries (0.9.3)
+      currencies (~> 0.4.2)
     coveralls (0.7.0)
       multi_json (~> 1.3)
       rest-client
       simplecov (>= 0.7)
       term-ansicolor
       thor
+    currencies (0.4.2)
     database_cleaner (1.2.0)
     debug_inspector (0.0.2)
     devise (3.2.2)
@@ -216,6 +218,7 @@ GEM
       actionpack (>= 3.0)
     friendly_id (5.0.1)
       activerecord (~> 4.0.0)
+    geocoder (1.1.9)
     guard (1.8.1)
       formatador (>= 0.2.4)
       listen (>= 1.0.0)
@@ -511,7 +514,7 @@ DEPENDENCIES
   coffee-rails (~> 4.0.0)
   color
   colorscore
-  country_select
+  countries
   coveralls
   database_cleaner
   devise
@@ -525,6 +528,7 @@ DEPENDENCIES
   ffaker
   foreman
   friendly_id (~> 5.0.0)
+  geocoder
   guard
   guard-rspec
   guard-sidekiq

@@ -31,6 +31,8 @@ class UserProfile < ActiveRecord::Base
   validates_property :width,     of: :avatar, in: (50..500)
   validates_property :height,    of: :avatar, in: (50..500)
 
+  validates :country_code, inclusion: { in: ActionView::Helpers::FormOptionsHelper::COUNTRIES.map(&:last), allow_blank: true }
+
   before_save :nilify_cover_wallpaper_y_offset, if: :cover_wallpaper_id_changed?
 
   def nilify_cover_wallpaper_y_offset
@@ -55,5 +57,10 @@ class UserProfile < ActiveRecord::Base
 
   def title=(value)
     write_attribute :title, value.presence
+  end
+
+  # User can hide his/her country by setting the country code to an empty string ""
+  def country_code_detected?
+    !country_code.nil?
   end
 end
