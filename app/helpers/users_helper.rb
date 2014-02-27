@@ -47,4 +47,9 @@ module UsersHelper
   def user_online_status_tag(user)
     '<span class="glyphicon glyphicon-asterisk icon-user-online"></span>'.html_safe if users_online.online?(user)
   end
+
+  def flag_tag_for(user)
+    return if user.settings.country_code.blank?
+    content_tag :span, nil, class: "flag flag-#{user.settings.country_code.downcase}"
+  end
 end

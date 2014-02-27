@@ -137,8 +137,9 @@ class ApplicationController < ActionController::Base
     end
 
     def update_user_country
-      if user_signed_in? && current_profile.country_code_detected?
-        current_profile.update(country_code: request.location.try(:country_code))
+      if user_signed_in? && current_profile.needs_country_code?
+        country_code = request.location.try(:country_code)
+        current_profile.update(country_code: country_code) if country_code.present?
       end
     end
   end

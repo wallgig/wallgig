@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20140226225921) do
+ActiveRecord::Schema.define(version: 20140227020321) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -350,7 +350,7 @@ ActiveRecord::Schema.define(version: 20140226225921) do
     t.integer  "user_id"
     t.integer  "cover_wallpaper_id"
     t.integer  "cover_wallpaper_y_offset"
-    t.string   "country_code"
+    t.string   "country_code",             limit: 2
     t.datetime "created_at"
     t.datetime "updated_at"
     t.string   "username_color_hex"

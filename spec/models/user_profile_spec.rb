@@ -6,7 +6,7 @@
 #  user_id                  :integer
 #  cover_wallpaper_id       :integer
 #  cover_wallpaper_y_offset :integer
-#  country_code             :string(255)
+#  country_code             :string(2)
 #  created_at               :datetime
 #  updated_at               :datetime
 #  username_color_hex       :string(255)
