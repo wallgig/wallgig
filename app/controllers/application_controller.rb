@@ -73,8 +73,8 @@ class ApplicationController < ActionController::Base
   module PurityMethods
     def self.included(base)
       base.class_eval do
-        helper_method :current_purities
         helper_method :purity_params
+        helper_method :current_purities
       end
     end
 

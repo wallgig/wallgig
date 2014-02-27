@@ -8,7 +8,6 @@ module WallpaperSearchParams
   def search_params(load_session = true)
     params.permit(
       :q,:page, :per_page, :width, :height, :order, :user, :resolution_exactness,
-      purity: [],
       categories: [],
       exclude_categories: [],
       tags: [],
@@ -31,12 +30,8 @@ module WallpaperSearchParams
       search_options[:order] = nil unless ['latest', 'popular', 'random'].include?(search_options[:order])
       search_options[:order] ||= 'latest'
 
-      # Validate purity
-      # Only signed in users may change purity settings
-      if user_signed_in? && search_options[:purity].present?
-        search_options[:purity] = Array.wrap(search_options[:purity]).select { |p| ['sfw', 'sketchy', 'nsfw'].include?(p) }.presence
-      end
-      search_options[:purity] ||= current_purities
+      # Set purity
+      search_options[:purity] = current_purities
 
       # Validate per page
       search_options[:per_page] = UserSetting.per_page.find_value(search_options[:per_page]) if search_options[:per_page].present?
