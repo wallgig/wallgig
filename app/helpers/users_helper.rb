@@ -50,6 +50,7 @@ module UsersHelper
 
   def flag_tag_for(user)
     return if user.profile.country_code.blank?
-    content_tag :span, nil, class: "flag flag-#{user.profile.country_code.downcase}"
+    country_name = ISO3166::Country.find_country_by_alpha2(user.profile.country_code).name
+    content_tag :span, nil, class: "flag flag-#{user.profile.country_code.downcase}", data: { country: country_name }
   end
 end
