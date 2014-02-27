@@ -32,7 +32,8 @@ module WallpaperSearchParams
       search_options[:order] ||= 'latest'
 
       # Validate purity
-      if search_options[:purity].present?
+      # Only signed in users may change purity settings
+      if user_signed_in? && search_options[:purity].present?
         search_options[:purity] = Array.wrap(search_options[:purity]).select { |p| ['sfw', 'sketchy', 'nsfw'].include?(p) }.presence
       end
       search_options[:purity] ||= current_purities

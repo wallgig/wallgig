@@ -29,14 +29,11 @@ class CategoriesController < ApplicationController
     @category = Category.friendly.find(params[:id])
   end
 
+  # TODO refactor
   def search_params
     params.permit(:q, purity: []).tap do |p|
       p[:purity] = Array.wrap(p[:purity]).select { |p| ['sfw', 'sketchy', 'nsfw'].include?(p) }.presence
     end
-  end
-
-  def current_purities
-    search_params[:purity] || super
   end
 
   def tag_collection_scope
