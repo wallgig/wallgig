@@ -3,39 +3,27 @@
 .row
   .col-lg-9
     - if @collections.any?
-      - if @user.collections.size > @collections.size
-        %h3
-          = link_to user_collections_path(@user), class: 'btn btn-link pull-right' do
-            More
-            %span.glyphicon.glyphicon-chevron-right
       %h3
         %span.glyphicon.glyphicon-folder-close
-        Collections
-        %small= @collections.size
+        = link_to 'Collections', user_collections_path(@user)
+        %small= @user.collections.accessible_by(current_ability, :read).count
+
       = render partial: 'collections/list', locals: { collections: @collections, should_apply_purity_settings: !myself?, extra_css_class: 'row-1' }
 
     - if @user.wallpapers.any?
-      - if @user.wallpapers.size > @wallpapers.size
-        %h3
-          = link_to wallpapers_path(q: "user:#{@user.username}"), class: 'btn btn-link pull-right' do
-            More
-            %span.glyphicon.glyphicon-chevron-right
       %h3
         %span.glyphicon.glyphicon-cloud-upload
-        Uploads
-        %small= @user.wallpapers.size
+        = link_to 'Uploads', user_wallpapers_path(@user)
+        %small= @user.wallpapers.accessible_by(current_ability, :read).count
+
       = render partial: 'wallpapers/list', locals: { wallpapers: @wallpapers, extra_css_class: 'row-1' }
 
     - if @favourite_wallpapers.any?
-      - if @user.favourite_wallpapers.size > @favourite_wallpapers.size
-        %h3
-          = link_to user_favourites_path(@user), class: 'btn btn-link pull-right' do
-            More
-            %span.glyphicon.glyphicon-chevron-right
       %h3
         %span.glyphicon.glyphicon-star
-        Favourites
-        %small= @user.favourite_wallpapers.size
+        = link_to 'Favourites', user_favourites_path(@user)
+        %small= @user.favourite_wallpapers.count
+
       = render partial: 'wallpapers/list', locals: { wallpapers: @favourite_wallpapers, extra_css_class: 'row-2' }
 
   .col-lg-3
