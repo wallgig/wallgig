@@ -1,3 +1,4 @@
+- title [@collection.user.username, @collection.name]
 - content_for :use_full_container, true
 
 .page-header
@@ -10,20 +11,27 @@
           %span.glyphicon.glyphicon-pencil
           Edit collection
   %h2
-    = title [@collection.user.username, @collection.name], @collection.name
-    - if @collection.private?
-      %small
+    = @collection.name
+    %small
+      - if @collection.private?
         %span.label.label-danger Private
   %ul.list-inline
-    %li
-      = link_to_user @collection.user do
-        = image_tag user_avatar_url(@collection.user, 20), alt: @collection.user.username, width: 20, height: 20
-        = @collection.user.username
     %li
       %span.glyphicon.glyphicon-eye-open
       = @collection.impressions_count
     %li
       %span.glyphicon.glyphicon-picture
       = @collection.wallpapers_count_for(current_purities)
+  %ol.breadcrumb
+    %li
+      = link_to_user @collection.user do
+        = image_tag user_avatar_url(@collection.user, 20), alt: @collection.user.username, width: 20, height: 20
+        = @collection.user.username
+    %li
+      = link_to user_collections_path(@collection.user) do
+        %span.glyphicon.glyphicon-folder-close
+        Collections
+    %li= @collection.name
+
 
 = render 'wallpapers/list', wallpapers: @wallpapers
