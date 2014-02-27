@@ -16,13 +16,13 @@
   %h2= title 'Subscriptions'
 
   %ul.nav.nav-pills
-    = active_link_to subscriptions_path, wrap_tag: :li, active: @subscribable_type == 'User' do
+    = active_link_to subscriptions_path(params: purity_params), wrap_tag: :li, active: @subscribable_type == 'User' do
       %span.glyphicon.glyphicon-upload
       Uploads
-    = active_link_to collections_subscriptions_path, wrap_tag: :li, active: @subscribable_type == 'Collection' do
+    = active_link_to collections_subscriptions_path(params: purity_params), wrap_tag: :li, active: @subscribable_type == 'Collection' do
       %span.glyphicon.glyphicon-folder-close
       Collections
-    = active_link_to tags_subscriptions_path, wrap_tag: :li, active: @subscribable_type == 'Tag' do
+    = active_link_to tags_subscriptions_path(params: purity_params), wrap_tag: :li, active: @subscribable_type == 'Tag' do
       %span.glyphicon.glyphicon-tags
       Tags
 
@@ -33,13 +33,13 @@
     .list-group
       - case @subscribable_type
       - when 'User'
-        = active_link_to 'All uploads', subscriptions_path, class: 'list-group-item', active: :exclusive
+        = active_link_to 'All uploads', subscriptions_path(params: purity_params), class: 'list-group-item', active: :exclusive
       - when 'Collection'
-        = active_link_to 'All collection', collections_subscriptions_path, class: 'list-group-item'
+        = active_link_to 'All collection', collections_subscriptions_path(params: purity_params), class: 'list-group-item'
       - when 'Tag'
-        = active_link_to 'All tags', tags_subscriptions_path, class: 'list-group-item'
+        = active_link_to 'All tags', tags_subscriptions_path(params: purity_params), class: 'list-group-item'
       - @subscriptions.each do |subscription|
-        = active_link_to subscription, class: 'list-group-item' do
+        = active_link_to subscription_path(subscription, params: purity_params), class: 'list-group-item' do
           - case @subscribable_type
           - when 'User'
             = image_tag user_avatar_url(subscription.subscribable, 20), width: 20, height: 20
