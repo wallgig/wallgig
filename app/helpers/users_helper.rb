@@ -49,7 +49,7 @@ module UsersHelper
   end
 
   def flag_tag_for(user)
-    return if user.settings.country_code.blank?
-    content_tag :span, nil, class: "flag flag-#{user.settings.country_code.downcase}"
+    return if user.profile.country_code.blank?
+    content_tag :span, nil, class: "flag flag-#{user.profile.country_code.downcase}"
   end
 end
