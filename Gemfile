@@ -108,7 +108,7 @@ gem 'bourbon'
 
 # services
 gem 'newrelic_rpm'
-gem 'sinatra', '>= 1.3.0', :require => nil
+gem 'sinatra', '>= 1.3.0', require: false
 gem 'doorkeeper', '~> 0.7.0'
 gem 'tire'
 gem 'pg_search'
