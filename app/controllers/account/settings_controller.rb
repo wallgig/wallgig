@@ -33,6 +33,7 @@ module Account
           :infinite_scroll,
           :resolution_exactness,
           :screen_resolution_id,
+          :invisible,
           aspect_ratios: []
         )
     end
