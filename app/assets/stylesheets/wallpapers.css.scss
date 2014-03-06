@@ -318,6 +318,7 @@ a.purity-sfw, a.purity-sketchy, a.purity-nsfw {
 }
 
 .horizontal-page-bar {
+  @include clearfix;
   a {
     text-decoration: none;
   }

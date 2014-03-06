@@ -45,7 +45,7 @@ class WallpaperDecorator < Draper::Decorator
     "#{image_width}&times;#{image_height}".html_safe
   end
 
-  def favourite_button
+  def favourite_button_for_list
     options = {
       class: 'btn btn-sm pull-left',
       data: {

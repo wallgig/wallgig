@@ -3,6 +3,7 @@
     - current_page_params = search_options.merge(page: wallpapers.current_page).reject { |_,v| v.blank? }
   - else
     - current_page_params = { page: wallpapers.current_page }
+
   .horizontal-page-bar
     %h3
       .pull-left= link_to wallpapers.current_page, url_for(current_page_params)
@@ -13,19 +14,18 @@
 - if wallpapers.any?
   %ul.list-wallpaper{:class => local_assigns[:extra_css_class]}
     - wallpapers.each do |wallpaper|
-      / # - next unless can?(:read, wallpaper) && wallpaper.thumbnail_image.present?
       %li{:class => "purity-#{wallpaper.purity}", :data => {:wallpaper_id => wallpaper.id}}
         = link_to wallpaper.path_with_resolution, title: wallpaper.tag_list_text, target: '_blank' do
           = image_tag nil, width: 250, height: 188, class: 'img-wallpaper lazy', data: { src: wallpaper.thumbnail_image_url }
+
         .overlay.overlay-bottom
           %strong= wallpaper.resolution
-          = wallpaper.favourite_button
+
+          = wallpaper.favourite_button_for_list
+
           .btn.btn-sm.pull-right
             %span.glyphicon.glyphicon-eye-open
             = wallpaper.impressions_count
-          -# = link_to '#', class: 'btn btn-sm btn-collect pull-right', data: { action: 'collect' } do
-          -#   %span.glyphicon.glyphicon-folder-open
-          -#   = wallpaper.favourites.size
 
   = wallpapers.link_to_next_page
 
