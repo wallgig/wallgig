@@ -18,10 +18,25 @@ module Account
       end
     end
 
+    def update_screen_resolution
+      width  = params.require(:width)
+      height = params.require(:height)
+
+      respond_to do |format|
+        if @settings.update(screen_width: width, screen_height: height)
+          format.html { redirect_to root_url }
+          format.json { head :no_content }
+        else
+          format.html { render action: 'edit' }
+          format.json { render json: @settings.errors, status: :unprocessable_entity }
+        end
+      end
+    end
+
     private
 
     def set_settings
-      @settings = current_user.settings
+      @settings = current_settings
     end
 
     def settings_params

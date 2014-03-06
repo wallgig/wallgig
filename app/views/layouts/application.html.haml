@@ -141,7 +141,7 @@
 
     - if user_signed_in? && current_settings.needs_screen_resolution?
       :javascript
-        $.post('#{update_screen_resolution_user_path}', {
+        $.post('#{update_screen_resolution_account_settings_path}', {
           'width': window.screen.width,
           'height': window.screen.height
         });

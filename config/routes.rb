@@ -61,7 +61,11 @@ Wallgig::Application.routes.draw do
     end
 
     # Settings
-    resource :settings, only: [:edit, :update]
+    resource :settings, only: [:edit, :update] do
+      member do
+        post :update_screen_resolution
+      end
+    end
   end
 
   # Collections
@@ -143,11 +147,6 @@ Wallgig::Application.routes.draw do
     resources :collections, only: [:index]
     resources :favourites,  only: [:index]
     resources :wallpapers, only: [:index]
-  end
-
-  # OPTIMIZE
-  resource :user do
-    post 'update_screen_resolution'
   end
 
   # Wallpapers
