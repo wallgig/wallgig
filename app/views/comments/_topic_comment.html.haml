@@ -18,6 +18,10 @@
               = time_ago_tag comment.updated_at
           - if can? :update, comment
             %li= link_to 'Edit', edit_comment_path(comment), class: 'text-muted'
+          - if can? :destroy, comment
+            %li
+              = link_to comment, class: 'text-muted', data: { method: :delete, confirm: 'Are you sure?' } do
+                %span.glyphicon.glyphicon-trash
           %li= link_to 'Report', new_comment_report_path(comment), class: 'text-muted'
           %li= link_to "##{comment.id}", url_for(page: params[:page] || 1, anchor: "comment_#{comment.id}"), class: 'text-muted'
       .clearfix

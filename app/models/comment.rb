@@ -54,13 +54,17 @@ class Comment < ActiveRecord::Base
 
   def update_last_comment_on_create
     if commentable_type == 'Topic'
-      self.commentable.update_columns last_commented_at: created_at, last_commented_by_id: user_id
+      commentable.update_columns last_commented_at: created_at, last_commented_by_id: user_id
     end
   end
 
   def update_last_comment_on_destroy
     if commentable_type == 'Topic'
-      self.commentable.comments.last.update_last_comment_on_create
+      if last_comment = commentable.comments.last
+        last_comment.update_last_comment_on_create
+      else
+        commentable.update_columns last_commented_at: nil, last_commented_by_id: nil
+      end
     end
   end
 

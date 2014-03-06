@@ -60,7 +60,7 @@ $ ->
   # Handle WGText
   bindWGText = -> (new Wallgig.Managers.WGText($('[data-provide=wgtext]'))).execute()
   bindWGText()
-  $(document).ajaxSuccess bindWGText
+  # $(document).ajaxSuccess bindWGText
 
   # Handle subscribe button
   bindSubscribeButtons = -> (new Wallgig.Managers.SubscribeButton($('[data-provide=subscribe-button]'))).execute()
