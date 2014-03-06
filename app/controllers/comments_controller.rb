@@ -7,7 +7,7 @@ class CommentsController < ApplicationController
     if @parent.present?
       render partial: partial_name, collection: @parent.comments.recent, as: :comment
     else
-      @comments = Comment.includes(:commentable).latest.page(params[:page])
+      @comments = Comment.includes(:commentable).latest.page(params[:page]).per(10)
     end
   end
 
