@@ -50,25 +50,43 @@ $ ->
       title: 'Something went wrong'
 
   # Read data-url if present
-  $.rails.href = (element) ->
-    element.data('url') || element.attr('href')
+  $.rails.href = (element) -> element.data('url') || element.attr('href')
 
   # Handle tooltips
-  if ($tooltips = $('[data-toggle=tooltip]')).length > 0
-    $tooltips.tooltip();
+  bindTooltips = -> $('[data-toggle=tooltip]').tooltip()
+  bindTooltips()
+  $(document).ajaxSuccess bindTooltips
 
   # Handle WGText
-  if ($wgtextEnabled = $('[data-provide=wgtext]')).length > 0
-    (new Wallgig.Managers.WGText($wgtextEnabled)).execute()
+  bindWGText = -> (new Wallgig.Managers.WGText($('[data-provide=wgtext]'))).execute()
+  bindWGText()
+  $(document).ajaxSuccess bindWGText
 
   # Handle subscribe button
-  if ($subscribeButtons = $('[data-provide=subscribe-button]')).length > 0
-    (new Wallgig.Managers.SubscribeButton($subscribeButtons)).execute()
+  bindSubscribeButtons = -> (new Wallgig.Managers.SubscribeButton($('[data-provide=subscribe-button]'))).execute()
+  bindSubscribeButtons()
 
   # Handle time ago
-  if ($timeAgo = $('[data-provide=time-ago]')).length > 0
-    $timeAgo.timeago()
+  bindTimeAgo = -> $('[data-provide=time-ago]').timeago()
+  bindTimeAgo()
+  $(document).ajaxSuccess bindTimeAgo
 
   # Handle notifications
-  if ($notifications = $('[data-provide=notifications]')).length > 0
-    (new Wallgig.Managers.Notifications($notifications)).execute()
+  bindNotifications = -> (new Wallgig.Managers.Notifications($('[data-provide=notifications]'))).execute()
+  bindTimeAgo()
+
+  # Handle user online status tooltip
+  bindUserOnlineTooltip = ->
+    $('.icon-user-online').tooltip
+      title: 'Online'
+  bindUserOnlineTooltip()
+  $(document).ajaxSuccess bindUserOnlineTooltip
+
+  # Country flag tooltip
+  bindUserCountryFlagTooltip = ->
+    $('.flag').each ->
+      $this = $(this)
+      $this.tooltip
+        title: $this.data('country')
+  bindUserCountryFlagTooltip()
+  $(document).ajaxSuccess bindUserCountryFlagTooltip
