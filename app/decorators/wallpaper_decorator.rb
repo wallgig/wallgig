@@ -59,7 +59,7 @@ class WallpaperDecorator < Draper::Decorator
 
     h.content_tag :a, options do
       "<span class='glyphicon glyphicon-star'></span>" \
-      "<span class='count'>#{cached_votes_total}</span>".html_safe
+      "<span class='count'>#{favourites_count}</span>".html_safe
     end
   end
 

@@ -4,7 +4,6 @@ class FavouritesController < ApplicationController
 
   def index
     @wallpapers = @user.favourite_wallpapers
-                       .order('votes.created_at DESC')
                        .accessible_by(current_ability, :read)
                        .page(params[:page])
     @wallpapers = @wallpapers.with_purities(current_purities) unless myself?

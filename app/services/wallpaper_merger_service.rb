@@ -38,14 +38,14 @@ class WallpaperMergerService
   end
 
   def move_favourites
-    from_voter_ids = @from_wallpaper.votes.up.by_type(User).pluck(:voter_id)
-    to_voter_ids   = @to_wallpaper.votes.up.by_type(User).pluck(:voter_id)
+    from_user_ids = @from_wallpaper.favourites.pluck(:user_id)
+    to_user_ids   = @to_wallpaper.favourites.pluck(:user_id)
 
-    voter_ids_to_move = from_voter_ids - to_voter_ids
+    user_ids_to_move = from_user_ids - to_user_ids
 
-    @from_wallpaper.votes.up.by_type(User)
-      .where(voter_id: voter_ids_to_move)
-      .update_all(votable_id: @to_wallpaper.id)
+    @from_wallpaper.favourites
+      .where(user_id: user_ids_to_move)
+      .update_all(wallpaper_id: @to_wallpaper.id)
   end
 
   def move_impressions

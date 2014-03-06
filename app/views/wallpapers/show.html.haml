@@ -22,7 +22,7 @@
           = @wallpaper.impressions_count
         %li
           %span.glyphicon.glyphicon-star
-          %span.fav-count= @wallpaper.likes.size
+          %span.fav-count= @wallpaper.favourites_count
       %ul.list-inline
         %li
           %span.glyphicon.glyphicon-picture
@@ -44,7 +44,7 @@
     - if user_signed_in?
       .panel-body
         .btn-group.btn-group-justified
-          - if user_signed_in? && current_user.voted_for?(@wallpaper.object)
+          - if user_signed_in? && current_user.favourited?(@wallpaper.object)
             %a{:class => 'btn btn-favourite favourited', :data => {:remote => true, :method => :post, :url => toggle_favourite_wallpaper_path(@wallpaper)}}
               %span.glyphicon.glyphicon-star
               Faved

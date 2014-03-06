@@ -136,11 +136,11 @@ class WallpapersController < ApplicationController
   end
 
   def toggle_favourite
-    if current_user.voted_for?(@wallpaper)
-      @wallpaper.unliked_by current_user
+    if current_user.favourited?(@wallpaper)
+      current_user.unfavourite(@wallpaper)
       @fav_status = false
     else
-      @wallpaper.liked_by current_user
+      current_user.favourite(@wallpaper)
       @fav_status = true
     end
 

@@ -49,8 +49,9 @@ class User < ActiveRecord::Base
   has_many :collections, dependent: :destroy
 
   has_many :wallpapers, dependent: :nullify
-  # has_many :favourites, dependent: :destroy
-  # has_many :favourite_wallpapers, -> { reorder('favourites.created_at DESC') }, through: :favourites, source: :wallpaper
+
+  has_many :favourites, dependent: :destroy
+  has_many :favourite_wallpapers, -> { order("#{Favourite.quoted_table_name}.created_at DESC") }, through: :favourites, source: :wallpaper
 
   has_many :owned_groups, class_name: 'Group', foreign_key: 'owner_id'
 
@@ -134,9 +135,9 @@ class User < ActiveRecord::Base
     super || build_profile
   end
 
-  def favourite_wallpapers
-    get_up_voted(Wallpaper)
-  end
+  # def favourite_wallpapers
+  #   get_up_voted(Wallpaper)
+  # end
 
   module AuthenticationTokenMethods
     def self.included(base)
@@ -200,7 +201,22 @@ class User < ActiveRecord::Base
     end
   end
 
+  module FavouritingMethods
+    def favourited?(wallpaper)
+      favourites.where(wallpaper: wallpaper).exists?
+    end
+
+    def favourite(wallpaper)
+      favourites.create(wallpaper: wallpaper)
+    end
+
+    def unfavourite(wallpaper)
+      favourites.where(wallpaper: wallpaper).first.try(:destroy)
+    end
+  end
+
   include AuthenticationTokenMethods
   include RoleMethods
   include SubscriptionMethods
+  include FavouritingMethods
 end

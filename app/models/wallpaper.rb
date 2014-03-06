@@ -204,7 +204,7 @@ class Wallpaper < ActiveRecord::Base
       views:                impressions_count,
       # views_today:          impressionist_count(start_date: Time.now.beginning_of_day),
       # views_this_week:      impressionist_count(start_date: Time.now.beginning_of_week),
-      favourites:           cached_votes_total,
+      favourites:           favourites_count,
       # favourites_today:     favourites.where('created_at >= ?', Time.now.beginning_of_day).size, # FIXME
       # favourites_this_week: favourites.where('created_at >= ?', Time.now.beginning_of_week).size, # FIXME
       approved:             approved?,
