@@ -124,7 +124,7 @@
               = image_tag user_avatar_url(current_user, 30), alt: current_user.username, class: 'media-object'
             .col-sm-10
               = f.input :comment, as: :text, label: false, placeholder: 'Your comment', input_html: { data: { focus_placeholder: 'Shift+Enter for newline. Enter to post.' } }
-      - comments = @wallpaper.comments.includes(:user).recent
+      - comments = @wallpaper.comments.includes(:user).latest
       .panel-body.container-comments{:class => ('hide' if comments.empty?)}
         %ul.list-unstyled.list-comment= render partial: 'comments/wallpaper_comment', collection: comments.limit(4), as: :comment
         - if comments.size > 4

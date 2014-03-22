@@ -67,13 +67,14 @@ class User < ActiveRecord::Base
 
   has_many :notifications, dependent: :destroy
 
+  has_many :comments_made, class_name: 'Comment', dependent: :destroy
+  include Commentable
+
   # Include default devise modules. Others available are:
   # :timeoutable and :omniauthable
   devise :database_authenticatable, :registerable,
          :recoverable, :rememberable, :trackable, :validatable,
          :confirmable, :lockable
-
-  acts_as_commentable
 
   acts_as_voter
 

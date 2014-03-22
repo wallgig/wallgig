@@ -21,8 +21,6 @@
 #
 
 class Comment < ActiveRecord::Base
-  include ActsAsCommentable::Comment
-
   belongs_to :user
   belongs_to :commentable, polymorphic: true, counter_cache: true
 
@@ -36,8 +34,8 @@ class Comment < ActiveRecord::Base
   validates :commentable, presence: true
   validates :comment,     presence: true, length: { minimum: 10 }
 
-  scope :latest, -> { reorder('created_at DESC') }
-  default_scope  -> { order('created_at ASC') }
+  scope :latest, -> { order(created_at: :desc) }
+  scope :oldest, -> { order(created_at: :asc) }
 
   before_save do
     self.cooked_comment = ApplicationController.helpers.markdown(comment) if comment_changed?

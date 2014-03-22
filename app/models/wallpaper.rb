@@ -99,7 +99,7 @@ class Wallpaper < ActiveRecord::Base
   end
 
   # Comments
-  acts_as_commentable
+  include Commentable
 
   # Tags
   serialize :cached_tag_list, Array

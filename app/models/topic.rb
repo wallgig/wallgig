@@ -33,7 +33,7 @@ class Topic < ActiveRecord::Base
 
   has_paper_trail
 
-  acts_as_commentable
+  include Commentable
 
   include Reportable
 
