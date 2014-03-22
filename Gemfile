@@ -104,6 +104,7 @@ gem 'eco'
 # assets
 gem 'bootstrap-sass', '~> 3.1.0'
 gem 'bourbon'
+gem 'font-awesome-rails'
 
 # services
 gem 'sinatra', '>= 1.3.0', require: false

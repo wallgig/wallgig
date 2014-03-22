@@ -45,7 +45,7 @@ module UsersHelper
   end
 
   def user_online_status_tag(user)
-    '<span class="glyphicon glyphicon-asterisk icon-user-online"></span>'.html_safe if users_online.online?(user)
+    '<span class="icon-user-online"></span>'.html_safe if users_online.online?(user)
   end
 
   def flag_tag_for(user)
