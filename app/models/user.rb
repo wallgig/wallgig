@@ -46,40 +46,73 @@
 class User < ActiveRecord::Base
   attr_accessor :login
 
-  has_many :collections, dependent: :destroy
+  # Collections
+  has_many :collections,
+    dependent: :destroy
 
-  has_many :wallpapers, dependent: :nullify
+  # Wallpapers
+  has_many :wallpapers,
+    dependent: :nullify
 
-  has_many :favourites, dependent: :destroy
-  has_many :favourite_wallpapers, -> { order("#{Favourite.quoted_table_name}.created_at DESC") }, through: :favourites, source: :wallpaper
+  # Favourites
+  has_many :favourites,
+    dependent: :destroy
+  has_many :favourite_wallpapers,
+    -> { order("#{Favourite.quoted_table_name}.\"created_at\" DESC") },
+    through: :favourites,
+    source: :wallpaper
 
-  has_many :owned_groups, class_name: 'Group', foreign_key: 'owner_id'
+  # Profile
+  has_one :profile,
+    class_name: 'UserProfile',
+    dependent: :destroy
 
-  has_one :profile,  class_name: 'UserProfile', dependent: :destroy
-  has_one :settings, class_name: 'UserSetting', dependent: :destroy
+  # Settings
+  has_one :settings,
+    class_name: 'UserSetting',
+    dependent: :destroy
 
-  has_many :topics, dependent: :nullify
+  # Forum topics
+  has_many :topics,
+    dependent: :destroy
 
-  has_many :coined_tags, class_name: 'Tag', foreign_key: 'coined_by_id'
+  # Coined tags
+  has_many :coined_tags,
+    class_name: 'Tag',
+    foreign_key: 'coined_by_id',
+    dependent: :nullify
 
-  has_many :subscriptions, dependent: :destroy
+  # Subscriptions and subscribers
+  has_many :subscriptions,
+    dependent: :destroy
+  has_many :user_subscriptions,
+    through: :subscriptions,
+    source: :subscribable,
+    source_type: 'User'
+
   include Subscribable
 
+  # Notifications
   has_many :notifications, dependent: :destroy
 
+  # Comments made
   has_many :comments_made, class_name: 'Comment', dependent: :destroy
+
+  # Comments
   include Commentable
 
-  # Include default devise modules. Others available are:
-  # :timeoutable and :omniauthable
+  # Voter
+  acts_as_voter
+
+  # Devise authentication
   devise :database_authenticatable, :registerable,
          :recoverable, :rememberable, :trackable, :validatable,
          :confirmable, :lockable
 
-  acts_as_voter
-
+  # Views
   is_impressionable
 
+  # Validation
   validates :username,
             presence: true,
             uniqueness: { case_sensitive: false },
@@ -99,29 +132,31 @@ class User < ActiveRecord::Base
     build_settings
   end
 
-  def self.find_first_by_auth_conditions(warden_conditions)
-    conditions = warden_conditions.dup
-    if login = conditions.delete(:login)
-      where(conditions).where(['lower(username) = lower(:login) OR lower(email) = lower(:login)', { login: login }]).first
-    else
-      where(conditions).first
+  class << self
+    def find_first_by_auth_conditions(warden_conditions)
+      conditions = warden_conditions.dup
+      if login = conditions.delete(:login)
+        where(conditions).where(['lower(username) = lower(:login) OR lower(email) = lower(:login)', { login: login }]).first
+      else
+        where(conditions).first
+      end
     end
-  end
 
-  def self.find_by_username!(username)
-    user = where(['lower(username) = lower(?)', username]).first
+    def find_by_username!(username)
+      user = where(['lower(username) = lower(?)', username]).first
 
-    raise ActiveRecord::RecordNotFound, "Couldn't find User with username=#{username}" if user.blank?
+      raise ActiveRecord::RecordNotFound, "Couldn't find User with username=#{username}" if user.blank?
 
-    user
-  end
+      user
+    end
 
-  def self.ensure_consistency!
-    connection.execute('
-      UPDATE users SET comments_count = (
-        SELECT COUNT(*) FROM comments WHERE comments.commentable_type = \'User\' AND comments.commentable_id = users.id
-      )
-    ')
+    def ensure_consistency!
+      connection.execute('
+        UPDATE users SET comments_count = (
+          SELECT COUNT(*) FROM comments WHERE comments.commentable_type = \'User\' AND comments.commentable_id = users.id
+        )
+      ')
+    end
   end
 
   def to_param
@@ -195,6 +230,14 @@ class User < ActiveRecord::Base
                                                 .where(subscription_id: subscription_ids_rel)
 
       Wallpaper.where(id: wallpaper_ids_rel)
+    end
+
+    def followings_count
+      user_subscriptions.count
+    end
+
+    def followers_count
+      subscribers.count
     end
   end
 

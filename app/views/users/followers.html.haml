@@ -1,0 +1,4 @@
+.page-header
+  %h3= title [@user.username, 'Followers'], 'Followers'
+
+= render partial: 'inline_list', locals: { users: @followers }

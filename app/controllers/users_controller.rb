@@ -1,10 +1,11 @@
 class UsersController < ApplicationController
-  before_action :set_user, only: [:show]
+  before_action :set_user, except: :index
 
   impressionist actions: [:show]
 
-  layout 'user_profile', only: :show
+  layout 'user_profile', except: :index
 
+  # GET /users
   def index
     @users = User.confirmed
                  .where(created_at: 1.week.ago.beginning_of_day..Time.now.end_of_day)
@@ -19,6 +20,7 @@ class UsersController < ApplicationController
                                 .includes(:profile)
   end
 
+  # GET /users/1
   def show
     # Wallpapers
     @wallpapers = @user.wallpapers.accessible_by(current_ability, :read)
@@ -43,6 +45,16 @@ class UsersController < ApplicationController
     else
       @collections = @collections.not_empty_for_purities(current_purities)
     end
+  end
+
+  # GET /users/1/following
+  def following
+    @following = @user.user_subscriptions.includes(:profile)
+  end
+
+  # GET /users/1/followers
+  def followers
+    @followers = @user.subscribers.includes(:profile)
   end
 
   private

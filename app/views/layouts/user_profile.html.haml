@@ -79,7 +79,14 @@
               - if @user.favourites_count > 0
                 %span.badge= @user.favourites_count
 
-            / = active_link_to 'Followers', '#', wrap_tag: :li
-            / = active_link_to 'Following', '#', wrap_tag: :li
+            = active_link_to following_user_path(@user), wrap_tag: :li do
+              Following
+              - if @user.followings_count > 0
+                %span.badge= @user.followings_count
+
+            = active_link_to followers_user_path(@user), wrap_tag: :li do
+              Followers
+              - if @user.followers_count > 0
+                %span.badge= @user.followers_count
 
 = render template: 'layouts/application'

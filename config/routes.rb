@@ -147,6 +147,11 @@ Wallgig::Application.routes.draw do
     resources :collections, only: [:index]
     resources :favourites,  only: [:index]
     resources :wallpapers, only: [:index]
+
+    member do
+      get :following
+      get :followers
+    end
   end
 
   # Wallpapers
