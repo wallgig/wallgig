@@ -136,10 +136,6 @@ class User < ActiveRecord::Base
     super || build_profile
   end
 
-  # def favourite_wallpapers
-  #   get_up_voted(Wallpaper)
-  # end
-
   module AuthenticationTokenMethods
     def self.included(base)
       base.class_eval do
@@ -214,10 +210,21 @@ class User < ActiveRecord::Base
     def unfavourite(wallpaper)
       favourites.where(wallpaper: wallpaper).first.try(:destroy)
     end
+
+    def favourites_count
+      favourites.count
+    end
+  end
+
+  module CollectionMethods
+    def public_collections_count
+      collections.public.count
+    end
   end
 
   include AuthenticationTokenMethods
   include RoleMethods
   include SubscriptionMethods
   include FavouritingMethods
+  include CollectionMethods
 end

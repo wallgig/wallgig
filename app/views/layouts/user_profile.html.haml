@@ -63,9 +63,22 @@
         .container.container-full
           %ul.nav.navbar-nav
             = active_link_to 'Profile', @user, active: [['users'], ['show']], wrap_tag: :li
-            = active_link_to 'Wallpapers', user_wallpapers_path(@user), wrap_tag: :li
-            = active_link_to 'Collections', user_collections_path(@user), wrap_tag: :li
-            = active_link_to 'Favourites', user_favourites_path(@user), wrap_tag: :li
+
+            = active_link_to user_wallpapers_path(@user), wrap_tag: :li do
+              Wallpapers
+              - if @user.wallpapers_count > 0
+                %span.badge= @user.wallpapers_count
+
+            = active_link_to user_collections_path(@user), wrap_tag: :li do
+              Collections
+              - if @user.public_collections_count > 0
+                %span.badge= @user.public_collections_count
+
+            = active_link_to user_favourites_path(@user), wrap_tag: :li do
+              Favourites
+              - if @user.favourites_count > 0
+                %span.badge= @user.favourites_count
+
             / = active_link_to 'Followers', '#', wrap_tag: :li
             / = active_link_to 'Following', '#', wrap_tag: :li
 

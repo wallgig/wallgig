@@ -1,12 +1,12 @@
 - title @user.username
 
 .row
-  .col-lg-9
+  .col-lg-8
     - if @collections.any?
       %h3
         %span.glyphicon.glyphicon-folder-close
         = link_to 'Collections', user_collections_path(@user)
-        %small= @user.collections.accessible_by(current_ability, :read).count
+        %small= @user.public_collections_count
 
       = render partial: 'collections/list', locals: { collections: @collections, should_apply_purity_settings: !myself?, extra_css_class: 'row-1' }
 
@@ -14,7 +14,7 @@
       %h3
         %span.glyphicon.glyphicon-cloud-upload
         = link_to 'Uploads', user_wallpapers_path(@user)
-        %small= @user.wallpapers.accessible_by(current_ability, :read).count
+        %small= @user.wallpapers_count
 
       = render partial: 'wallpapers/list', locals: { wallpapers: @wallpapers, extra_css_class: 'row-1' }
 
@@ -22,20 +22,21 @@
       %h3
         %span.glyphicon.glyphicon-star
         = link_to 'Favourites', user_favourites_path(@user)
-        %small= @user.favourite_wallpapers.count
+        %small= @user.favourites_count
 
       = render partial: 'wallpapers/list', locals: { wallpapers: @favourite_wallpapers, extra_css_class: 'row-2' }
 
-  .col-lg-3
+  .col-lg-4
     %h3
       %span.glyphicon.glyphicon-comment
       Comments
       %small= @user.comments_count
     - if user_signed_in?
-      = simple_form_for :comment, url: user_comments_path(@user), remote: true, data: { provide: 'comments' } do |f|
-        = f.input :comment, as: :text, label: false
-        = f.submit 'Post', class: 'btn btn-block', data: { disable_with: 'Posting' }
-      %hr/
+      .well.well-sm
+        = simple_form_for :comment, url: user_comments_path(@user), remote: true, data: { provide: 'comments' } do |f|
+          = f.input :comment, as: :text, label: false
+          = f.submit 'Post', class: 'btn btn-block btn-primary', data: { disable_with: 'Posting' }
+
     - comments = @user.comments.includes(:user).latest
     %div.container-comments{:class => ('hide' if comments.empty?)}
       %ul.list-unstyled.list-comment= render comments.limit(4)
