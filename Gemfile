@@ -106,7 +106,6 @@ gem 'bootstrap-sass', '~> 3.1.0'
 gem 'bourbon'
 
 # services
-gem 'newrelic_rpm'
 gem 'sinatra', '>= 1.3.0', require: false
 gem 'doorkeeper', '~> 0.7.0'
 gem 'tire'
@@ -119,6 +118,8 @@ gem 'sidetiq', github: 'tobiassvn/sidetiq'
 
 gem 'redis-rails'
 gem 'redis-objects'
+
+gem 'rollbar' # rollbar error notification
 
 # utilities
 gem 'dotenv-rails'
