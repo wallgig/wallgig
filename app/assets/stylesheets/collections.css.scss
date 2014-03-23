@@ -43,25 +43,16 @@
     }
     a {
       text-decoration: none;
+      white-space: nowrap;
+    }
+    .list-inline {
+      font-size: smaller;
+      li {
+        padding-right: 0;
+      }
     }
   }
   & > li:hover {
     @include box-shadow(#666 0px 0px 5px);
-    .overlay {
-    }
-    .overlay-bottom {
-      bottom: 0;
-    }
-    .overlay-left, .overlay-right {
-      opacity: 1;
-    }
-  }
-  .purity-sfw {
-  }
-  .purity-sketchy {
-    border: 3px solid #fda500;
-  }
-  .purity-nsfw {
-    border: 3px solid #bf0600;
   }
 }
