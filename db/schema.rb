@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20140306015345) do
+ActiveRecord::Schema.define(version: 20140323174059) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -101,6 +101,27 @@ ActiveRecord::Schema.define(version: 20140306015345) do
   add_index "comments", ["commentable_id"], name: "index_comments_on_commentable_id", using: :btree
   add_index "comments", ["commentable_type"], name: "index_comments_on_commentable_type", using: :btree
   add_index "comments", ["user_id"], name: "index_comments_on_user_id", using: :btree
+
+  create_table "donation_goals", force: true do |t|
+    t.string  "name"
+    t.date    "starts_on", null: false
+    t.date    "ends_on"
+    t.integer "cents",     null: false
+  end
+
+  create_table "donations", force: true do |t|
+    t.integer  "user_id"
+    t.string   "email"
+    t.string   "currency",         limit: 3,                null: false
+    t.integer  "cents",                                     null: false
+    t.integer  "base_cents",                                null: false
+    t.boolean  "anonymous",                  default: true, null: false
+    t.datetime "donated_at"
+    t.integer  "donation_goal_id"
+  end
+
+  add_index "donations", ["donation_goal_id"], name: "index_donations_on_donation_goal_id", using: :btree
+  add_index "donations", ["user_id"], name: "index_donations_on_user_id", using: :btree
 
   create_table "favourites", force: true do |t|
     t.integer  "user_id"

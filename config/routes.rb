@@ -81,6 +81,9 @@ Wallgig::Application.routes.draw do
     end
   end
 
+  # Donations
+  resources :donations, only: [:index]
+
   # Forums
   resources :forums, only: [:index, :show]
 
@@ -202,7 +205,7 @@ Wallgig::Application.routes.draw do
   end
 
   # Oauth
-  use_doorkeeper
+  # use_doorkeeper
 
   # Admin routes
   authenticate :user, -> (user) { user.developer? } do

@@ -1,0 +1,81 @@
+.row
+  .col-lg-6.col-lg-offset-3
+    .page-header
+      %h1= title 'Donations'
+
+    %p
+      Wallgig runs on your generous donations.
+      Your contribution will help pay for hosting costs.
+    %p
+      Please help us reach our monthly goal.
+      Any amount will help. Thank you for your support!
+
+    .page-subheader
+      %h3 Current goal
+    .panel.panel-default
+      .panel-heading= @donation_goal.name
+      .panel-body.text-center
+        .progress.progress-striped.active
+          .progress-bar.progress-bar-success{:style => "width: #{@donation_goal.percentage_complete}%"}
+            #{@donation_goal.percentage_complete}%
+        %ul.list-inline
+          %li
+            %strong Collected:
+            = number_to_currency(@donation_goal.collected)
+          %li
+            %strong Goal:
+            = number_to_currency(@donation_goal.amount)
+
+    .page-subheader
+      %h3 Donate!
+
+
+      .row
+        .col-md-6
+          = form_tag 'https://www.paypal.com/cgi-bin/webscr', target: '_top' do
+            = hidden_field_tag 'cmd', '_s-xclick'
+            = hidden_field_tag 'hosted_button_id', '5SX4R4RU95EVN'
+            = submit_tag 'Donate any amount', class: 'btn btn-primary btn-lg btn-block'
+
+        .col-md-2
+          = form_tag 'https://www.paypal.com/cgi-bin/webscr', target: '_top' do
+            = hidden_field_tag 'cmd', '_s-xclick'
+            = hidden_field_tag 'hosted_button_id', 'X478EEM34RCQN'
+            = submit_tag '$5', class: 'btn btn-primary btn-lg btn-block'
+
+        .col-md-2
+          = form_tag 'https://www.paypal.com/cgi-bin/webscr', target: '_top' do
+            = hidden_field_tag 'cmd', '_s-xclick'
+            = hidden_field_tag 'hosted_button_id', '3RAKNDQQERVLC'
+            = submit_tag '$10', class: 'btn btn-primary btn-lg btn-block'
+
+        .col-md-2
+          = form_tag 'https://www.paypal.com/cgi-bin/webscr', target: '_top' do
+            = hidden_field_tag 'cmd', '_s-xclick'
+            = hidden_field_tag 'hosted_button_id', 'FA564AL5CH7H6'
+            = submit_tag '$20', class: 'btn btn-primary btn-lg btn-block'
+
+    .page-subheader
+      %h3 Donations received
+    %table.table
+      %thead
+        %tr
+          %th Date
+          %th User
+          %th.text-right Currency
+          %th.text-right Amount
+      %tbody
+        - @donations.each do |donation|
+          %tr
+            %td= donation.donated_at.try(:to_date)
+            %td
+              - if donation.anonymous?
+                Anonymous
+              - elsif donation.user.present?
+                = link_to_user donation.user
+              - elsif donation.email.present?
+                = anonymize_email donation.email
+              - else
+                Anonymous
+            %td.text-right= donation.currency
+            %td.text-right= number_to_currency(donation.amount, format: '%n')

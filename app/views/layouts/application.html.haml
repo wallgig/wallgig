@@ -21,6 +21,12 @@
             = link_to root_path, class: 'navbar-brand' do
               wallgig
           .collapse.navbar-collapse#navbar-collapse
+            %ul.nav.navbar-nav
+              %li
+                = link_to donations_path do
+                  Donate!
+                  - cache('donation_goal', expires_in: 30.minutes) do
+                    %small (#{DonationGoal.current.percentage_complete}% goal)
             %ul.nav.navbar-nav.navbar-right
               %li
                 = link_to wallpapers_path do
@@ -40,6 +46,10 @@
                   Community
                 %ul.dropdown-menu
                   %li
+                    = link_to forums_path do
+                      = fa_icon_tag('bullhorn')
+                      Forums
+                  %li
                     = link_to comments_path do
                       = fa_icon_tag('comments')
                       Comments
@@ -47,10 +57,6 @@
                     = link_to users_path do
                       = fa_icon_tag('users')
                       Users
-                  %li
-                    = link_to forums_path do
-                      = fa_icon_tag('bullhorn')
-                      Forums
                   %li
                     = link_to irc_url(current_user) do
                       = fa_icon_tag('bullhorn')
@@ -68,16 +74,15 @@
               /       %a{:href => 'https://github.com/wallgig/wallgig/issues', :target => '_blank'} Issue tracker
               /     %li
               /       %a{:href => 'https://github.com/wallgig/wallgig', :target => '_blank'} Source code on GitHub
-              / %li
-              /   <form action="https://www.paypal.com/cgi-bin/webscr" method="post" target="_top" style="margin-top: 12px; margin-left: 10px">
-              /   <input type="hidden" name="cmd" value="_s-xclick">
-              /   <input type="hidden" name="hosted_button_id" value="MGHTWLTMG7GRJ">
-              /   <input type="image" src="https://www.paypalobjects.com/en_US/i/btn/btn_donate_LG.gif" border="0" name="submit" alt="PayPal - The safer, easier way to pay online!">
-              /   <img alt="" border="0" src="https://www.paypalobjects.com/en_GB/i/scr/pixel.gif" width="1" height="1">
-              /   </form>
               - if user_signed_in?
                 %li
-                  %div= link_to 'Upload', new_wallpaper_path, class: 'btn btn-primary btn-upload'
+                  = link_to new_wallpaper_path do
+                    = fa_icon_tag('upload')
+                    Upload
+                %li
+                  = link_to subscriptions_path do
+                    = fa_icon_tag('plus')
+                    Subscriptions
                 %li
                   %a.dropdown-toggle{:data => {:toggle => 'dropdown'}}
                     = fa_icon_tag('bell')
@@ -121,10 +126,6 @@
                       = link_to user_favourites_path(current_user) do
                         = fa_icon_tag('star')
                         Favourites
-                    %li
-                      = link_to subscriptions_path do
-                        = fa_icon_tag('plus')
-                        Subscriptions
                     %li.divider
                     %li
                       = link_to account_collections_path do
