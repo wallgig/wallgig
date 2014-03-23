@@ -73,7 +73,7 @@ $ ->
 
   # Handle notifications
   bindNotifications = -> (new Wallgig.Managers.Notifications($('[data-provide=notifications]'))).execute()
-  bindTimeAgo()
+  bindNotifications()
 
   # Handle user online status tooltip
   bindUserOnlineTooltip = ->
