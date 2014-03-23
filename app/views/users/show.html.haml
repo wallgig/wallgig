@@ -4,7 +4,7 @@
   .col-lg-8
     - if @collections.any?
       %h3
-        %span.glyphicon.glyphicon-folder-close
+        %span.fa.fa-folder
         = link_to 'Collections', user_collections_path(@user)
         %small= @user.public_collections_count
 
@@ -12,7 +12,7 @@
 
     - if @user.wallpapers.any?
       %h3
-        %span.glyphicon.glyphicon-cloud-upload
+        = fa_icon_tag('upload')
         = link_to 'Uploads', user_wallpapers_path(@user)
         %small= @user.wallpapers_count
 
@@ -20,7 +20,7 @@
 
     - if @favourite_wallpapers.any?
       %h3
-        %span.glyphicon.glyphicon-star
+        = fa_icon_tag('star')
         = link_to 'Favourites', user_favourites_path(@user)
         %small= @user.favourites_count
 
@@ -28,7 +28,7 @@
 
   .col-lg-4
     %h3
-      %span.glyphicon.glyphicon-comment
+      = fa_icon_tag('comments')
       Comments
       %small= @user.comments_count
     - if user_signed_in?

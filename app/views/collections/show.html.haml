@@ -8,7 +8,7 @@
         = render partial: 'shared/buttons/subscribe', locals: { subscribable: @collection }
       - if can?(:update, @collection)
         = link_to edit_account_collection_path(@collection), class: 'btn btn-default btn-lg' do
-          %span.glyphicon.glyphicon-pencil
+          %span.fa.fa-pencil
           Edit collection
   %h2
     = @collection.name
@@ -17,10 +17,10 @@
         %span.label.label-danger Private
   %ul.list-inline
     %li
-      %span.glyphicon.glyphicon-eye-open
+      %span.fa.fa-eye
       = @collection.impressions_count
     %li
-      %span.glyphicon.glyphicon-picture
+      %span.fa.fa-picture-o
       = @collection.wallpapers_count_for(current_purities)
   %ol.breadcrumb
     %li
@@ -29,9 +29,11 @@
         = @collection.user.username
     %li
       = link_to user_collections_path(@collection.user) do
-        %span.glyphicon.glyphicon-folder-close
+        %span.fa.fa-folder-open
         Collections
-    %li= @collection.name
+    %li
+      %span.fa.fa-folder-open
+      = @collection.name
 
 
 = render 'wallpapers/list', wallpapers: @wallpapers

@@ -4,9 +4,9 @@ $ ->
     $('.btn-favourite').on 'ajax:success', (e, data) ->
       $this = $(this)
       if data.fav_status
-        $this.addClass('favourited').html('<span class="glyphicon glyphicon-star"></span> Faved')
+        $this.addClass('favourited').html('<span class="fa fa-star"></span> Faved')
       else
-        $this.removeClass('favourited').html('<span class="glyphicon glyphicon-star-empty"></span> Fav')
+        $this.removeClass('favourited').html('<span class="fa fa-star-o"></span> Fav')
 
       $('.fav-count').text(data.fav_count)
 

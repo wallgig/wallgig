@@ -1,20 +1,25 @@
 .page-header
   %h2
     - if @category.present?
-      %span.glyphicon.glyphicon-folder-close
+      %span.fa.fa-folder-open-o
       = title @category.name
     - else
-      %span.glyphicon.glyphicon-tags
+      %span.fa.fa-tags
       = title 'Tags'
   - if @category.present?
     %ol.breadcrumb
       %li
         = link_to categories_path(params: search_params) do
-          %span.glyphicon.glyphicon-tags
+          %span.fa.fa-tags
           Tags
       - @ancestors.each do |ancestor|
-        %li= link_to ancestor.name, category_path(ancestor, params: search_params)
-      %li.active= @category.name
+        %li
+          = link_to category_path(ancestor, params: search_params) do
+            %span.fa.fa-folder-open-o
+            = ancestor.name
+      %li.active
+        %span.fa.fa-folder-open-o
+        = @category.name
 
 .row
   .col-md-3
@@ -24,16 +29,16 @@
       - if @category.present?
         - if @category.parent.present?
           = link_to category_path(@category.parent, params: search_params), class: 'list-group-item' do
-            %span.glyphicon.glyphicon-chevron-up
+            %span.fa.fa-level-up
             = @category.parent.name
         - else
           = link_to categories_path(params: search_params), class: 'list-group-item' do
-            %span.glyphicon.glyphicon-chevron-up
+            %span.fa.fa-level-up
             Root
       - @categories.each do |category|
         = link_to category_path(category, params: search_params), class: 'list-group-item' do
           %span.badge= category.tags_count_for(current_purities)
-          %span.glyphicon.glyphicon-folder-close
+          %span.fa.fa-folder-o
           = category.name
 
   .col-md-9
@@ -49,17 +54,17 @@
             %th
             %th.text-right Category
             %th.text-center
-              %span.glyphicon.glyphicon-picture{:title => 'Wallpapers count', :data => {:toggle => 'tooltip'}}
+              %span.fa.fa-picture-o{:title => 'Wallpapers count', :data => {:toggle => 'tooltip'}}
         %tbody
           - @tags.each do |tag|
             %tr{:class => "purity-#{tag.purity}"}
               %td
                 = link_to tag, class: "purity-#{tag.purity}" do
-                  %span.glyphicon.glyphicon-tag
+                  %span.fa.fa-tag
                   = tag.name
               %td.text-right
                 = link_to wallpapers_path(tags: [tag.name]), class: 'btn btn-xs btn-default' do
-                  %span.glyphicon.glyphicon-search
+                  %span.fa.fa-search
                   Use in search
               %td.text-right
                 - if tag.category.present?

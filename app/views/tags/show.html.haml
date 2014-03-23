@@ -4,19 +4,22 @@
   - if user_signed_in?
     .pull-right= render partial: 'shared/buttons/subscribe', locals: { subscribable: @tag }
   %h2{:class => "purity-#{@tag.purity}"}
-    %span.glyphicon.glyphicon-tag
+    = fa_icon_tag('tag')
     = title @tag.name
 
 %ol.breadcrumb
   %li
     = link_to categories_path do
-      %span.glyphicon.glyphicon-tags
+      = fa_icon_tag('tags')
       Tags
   - if @tag.category.present?
     - [@tag.category.ancestors, @tag.category].flatten.each do |category|
-      %li= link_to category.name, category
+      %li
+        = link_to category do
+          = fa_icon_tag('folder-open-o')
+          = category.name
   %li.active
-    %span.glyphicon.glyphicon-tag
+    = fa_icon_tag('tag')
     = @tag.name
 
 = render partial: 'wallpapers/list', locals: { wallpapers: @wallpapers }

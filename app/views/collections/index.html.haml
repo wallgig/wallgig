@@ -3,7 +3,7 @@
 .page-header
   - if @user.present?
     %h3
-      %span.glyphicon.glyphicon-folder-close
+      %span.fa.fa-folder
       = title [@user.username, 'Collections'], 'Collections'
       %small= @collections.size
   - else

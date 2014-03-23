@@ -1,5 +1,5 @@
 <p class="tag-name purity-<%= @purity %>">
-  <span class="glyphicon glyphicon-tag"></span>
+  <span class="fa fa-tag"></span>
   <%= @name %>
 </p>
 <p class="tag-category-name text-muted">

@@ -6,47 +6,47 @@
     - if can? :moderate, @topic
       .btn-group
         %button{:type => 'button', :class => 'btn btn-default dropdown-toggle', :data => {:toggle => 'dropdown'}}
-          %span.glyphicon.glyphicon-wrench
+          = fa_icon_tag('wrench')
         %ul.dropdown-menu.pull-right{:role => 'menu'}
           %li
             - if @topic.pinned?
               = link_to unpin_topic_path(@topic), method: :patch do
-                %span.glyphicon.glyphicon-pushpin
+                = fa_icon_tag('thumb-tack')
                 Unpin topic
             - else
               = link_to pin_topic_path(@topic), method: :patch do
-                %span.glyphicon.glyphicon-pushpin
+                = fa_icon_tag('thumb-tack')
                 Pin topic
           %li
             - if @topic.locked?
               = link_to unlock_topic_path(@topic), method: :patch do
-                %span.glyphicon.glyphicon-lock
+                = fa_icon_tag('unlock')
                 Unlock topic
             - else
               = link_to lock_topic_path(@topic), method: :patch do
-                %span.glyphicon.glyphicon-lock
+                = fa_icon_tag('lock')
                 Lock topic
           %li
             - if @topic.hidden?
               = link_to unhide_topic_path(@topic), method: :patch do
-                %span.glyphicon.glyphicon-eye-close
+                = fa_icon_tag('eye')
                 Unhide topic
             - else
               = link_to hide_topic_path(@topic), method: :patch do
-                %span.glyphicon.glyphicon-eye-open
+                = fa_icon_tag('eye-slash')
                 Hide topic
           - if can? :update, @topic
             %li
               = link_to edit_topic_path(@topic) do
-                %span.glyphicon.glyphicon-pencil
+                = fa_icon_tag('pencil')
                 Edit topic
           %li
             = link_to @topic, data: { method: :delete, confirm: 'Are you sure?' } do
-              %span.glyphicon.glyphicon-remove
+              = fa_icon_tag('trash-o')
               Delete topic
     - if can? :comment, @topic
       = link_to new_topic_comment_path(@topic), class: 'btn btn-primary' do
-        %span.glyphicon.glyphicon-plus
+        = fa_icon_tag('reply')
         New reply
   %h2
     = icons_for_topic(@topic)
@@ -72,7 +72,7 @@
                 = time_ago_tag @topic.updated_at
             - if can? :update, @topic
               %li= link_to 'Edit', edit_topic_path(@topic), class: 'text-muted'
-            %li= link_to 'Report', new_topic_report_path(@topic), class: 'text-muted'
+            %li= link_to fa_icon_tag('exclamation-triangle'), new_topic_report_path(@topic), class: 'text-muted', title: 'Report'
         .clearfix
         = @topic.cooked_content.html_safe
 

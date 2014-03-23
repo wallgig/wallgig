@@ -4,11 +4,11 @@
     .col-sm-4
       - if favourite.present?
         = link_to wallpaper_favourite_path(wallpaper), class: 'btn btn-info', data: { method: :delete, remote: true, disable_with: '&hellip;' } do
-          %span.glyphicon.glyphicon-star
+          = fa_icon_tag('star')
           = wallpaper.favourites.count
       - else
         = link_to wallpaper_favourite_path(wallpaper), class: 'btn btn-default', data: { method: :post, remote: true, disable_with: '&hellip;' } do
-          %span.glyphicon.glyphicon-star-empty
+          = fa_icon_tag('star-o')
           = wallpaper.favourites.count
     - if favourite.present?
       .col-sm-8

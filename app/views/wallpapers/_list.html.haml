@@ -9,7 +9,7 @@
       .pull-left= link_to wallpapers.current_page, url_for(current_page_params)
       .pull-right
         %a{:href => '#'}
-          %span.glyphicon.glyphicon-chevron-up
+          = fa_icon_tag('chevron-up')
 
 - if wallpapers.any?
   %ul.list-wallpaper{:class => local_assigns[:extra_css_class]}
@@ -24,7 +24,7 @@
           = wallpaper.favourite_button_for_list
 
           .btn.btn-sm.pull-right
-            %span.glyphicon.glyphicon-eye-open
+            = fa_icon_tag('eye')
             = wallpaper.impressions_count
 
   = wallpapers.link_to_next_page

@@ -10,6 +10,6 @@
 </div>
 
 <a href="/account/collections" class="btn btn-default">
-  <span class="glyphicon glyphicon-pencil"></span>
+  <span class="fa fa-pencil"></span>
   Manage collections
 </a>

@@ -1,13 +1,11 @@
 %li{:data => {:comment_id => comment.id}}
   .panel.panel-default
     .panel-body
-      %small.pull-right
-        %ul.list-inline.text-muted
-          - if can? :destroy, comment
-            %li
-              = link_to comment, class: 'destroy-comment', data: { method: :delete, confirm: 'Are you sure?' } do
-                %span.glyphicon.glyphicon-trash
-          %li= link_to 'Report', new_comment_report_path(comment)
+      %ul.list-inline.pull-right
+        - if can? :destroy, comment
+          %li= link_to fa_icon_tag('trash-o'), comment, class: 'destroy-comment', title: 'Delete', data: { method: :delete, confirm: 'Are you sure?' }
+        %li
+          = link_to fa_icon_tag('exclamation-triangle'), new_comment_report_path(comment), title: 'Report'
       %h4
         = link_to_user comment.user do
           = image_tag user_avatar_url(comment.user, 30), width: 30, height: 30

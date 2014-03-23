@@ -15,25 +15,25 @@
     .panel-body
       %ul.list-inline
         %li
-          %span.glyphicon.glyphicon-calendar
+          = fa_icon_tag('calendar')
           = time_tag @wallpaper.created_at, @wallpaper.created_at.to_date.to_formatted_s(:long), title: @wallpaper.created_at
         %li
-          %span.glyphicon.glyphicon-eye-open
+          = fa_icon_tag('eye')
           = @wallpaper.impressions_count
         %li
-          %span.glyphicon.glyphicon-star
+          = fa_icon_tag('star')
           %span.fav-count= @wallpaper.favourites_count
       %ul.list-inline
         %li
-          %span.glyphicon.glyphicon-picture
+          = fa_icon_tag('picture-o')
           = @wallpaper.resolution
         %li{:class => "purity-#{@wallpaper.purity}"}
-          %span.glyphicon.glyphicon-flag
+          = fa_icon_tag('flag')
           = @wallpaper.purity_text
       - if @wallpaper.source.present?
         %ul.list-inline
           %li
-            %span.glyphicon.glyphicon-question-sign
+            = fa_icon_tag('question-circle')
             = @wallpaper.cooked_source
 
     - unless @wallpaper.approved?
@@ -46,48 +46,48 @@
         .btn-group.btn-group-justified
           - if user_signed_in? && current_user.favourited?(@wallpaper.object)
             %a{:class => 'btn btn-favourite favourited', :data => {:remote => true, :method => :post, :url => toggle_favourite_wallpaper_path(@wallpaper)}}
-              %span.glyphicon.glyphicon-star
+              = fa_icon_tag('star')
               Faved
           - else
             %a{:class => 'btn btn-favourite favourite', :data => {:remote => true, :method => :post, :url => toggle_favourite_wallpaper_path(@wallpaper)}}
-              %span.glyphicon.glyphicon-star-empty
+              = fa_icon_tag('star-o')
               Fav
           %a{:class => 'btn btn-collect', :data => {:remote => true, :url => collections_wallpaper_path(@wallpaper)}} 
-            %span.glyphicon.glyphicon-folder-close
+            %span.fa.fa-folder
             Collect
           .btn-group
             %a{:class => 'btn btn-default dropdown-toggle', :data => {:toggle => 'dropdown'}} 
-              %span.glyphicon.glyphicon-list
+              = fa_icon_tag('bars')
             %ul.dropdown-menu.pull-right{:role => 'menu'}
               - if user_signed_in?
                 - if @wallpaper.sfw?
                   %li
                     = link_to set_profile_cover_wallpaper_path(@wallpaper), data: { method: :post, confirm: 'Are you sure?' } do
-                      %span.glyphicon.glyphicon-picture
+                      = fa_icon_tag('picture-o')
                       Set as profile cover
                 - if can? :update, @wallpaper
                   %li
                     = link_to edit_wallpaper_path(@wallpaper) do
-                      %span.glyphicon.glyphicon-pencil
+                      = fa_icon_tag('pencil')
                       Edit metadata
                 - if can? :update, @wallpaper
                   %li
                     = link_to history_wallpaper_path(@wallpaper) do
-                      %span.glyphicon.glyphicon-list-alt
+                      = fa_icon_tag('list')
                       View edit history
                 - if can? :destroy, @wallpaper
                   %li
                     = link_to @wallpaper, data: { method: :delete, confirm: 'Are you sure?' } do
-                      %span.glyphicon.glyphicon-remove
+                      = fa_icon_tag('times')
                       Delete wallpaper
                 %li
                   = link_to new_wallpaper_report_path(@wallpaper) do
-                    %span.glyphicon.glyphicon-flag
+                    = fa_icon_tag('exclamation-triangle')
                     Report
                 - if current_user.admin?
                   %li
                     = link_to admin_wallpaper_path(@wallpaper) do
-                      %span.glyphicon.glyphicon-fire
+                      = fa_icon_tag('bolt')
                       Administer
 
     - if false
@@ -139,7 +139,7 @@
               %li
                 .btn-group
                   = link_to tag, class: "btn btn-xs btn-default purity-#{tag.purity}" do
-                    %span.glyphicon.glyphicon-tag
+                    = fa_icon_tag('tag')
                   = link_to tag.name, wallpapers_path(tags: [tag.name]), class: "btn btn-xs btn-link purity-#{tag.purity}"
 
 - content_for :wallpaper_stage_content do

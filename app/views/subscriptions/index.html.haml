@@ -4,11 +4,11 @@
   - if @wallpapers.any?
     - if @subscription.present?
       = link_to mark_read_subscription_path(@subscription), method: :post, class: 'btn btn-info' do
-        %span.glyphicon.glyphicon-ok
+        = fa_icon_tag('check')
         Mark all as read
     - else
       = link_to mark_type_read_subscriptions_path(type: @subscribable_type.underscore), method: :post, class: 'btn btn-info' do
-        %span.glyphicon.glyphicon-ok
+        = fa_icon_tag('check')
         Mark all as read
 
 .page-header
@@ -17,13 +17,13 @@
 
   %ul.nav.nav-pills
     = active_link_to subscriptions_path(params: purity_params), wrap_tag: :li, active: @subscribable_type == 'User' do
-      %span.glyphicon.glyphicon-upload
+      = fa_icon_tag('upload')
       Uploads
     = active_link_to collections_subscriptions_path(params: purity_params), wrap_tag: :li, active: @subscribable_type == 'Collection' do
-      %span.glyphicon.glyphicon-folder-close
+      = fa_icon_tag('folder')
       Collections
     = active_link_to tags_subscriptions_path(params: purity_params), wrap_tag: :li, active: @subscribable_type == 'Tag' do
-      %span.glyphicon.glyphicon-tags
+      = fa_icon_tag('tags')
       Tags
 
 .row
@@ -49,7 +49,7 @@
             &mdash;
             = username_tag subscription.subscribable.user
           - when 'Tag'
-            %span.glyphicon.glyphicon-tag
+            = fa_icon_tag('tag')
             = subscription.subscribable.name
 
           - if (count = subscription.subscriptions_wallpapers_count_for(current_purities)) > 0

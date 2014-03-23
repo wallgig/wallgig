@@ -23,10 +23,10 @@
                   %span.label.label-danger Private
               %ul.list-inline.pull-right.text-muted
                 %li
-                  %span.glyphicon.glyphicon-eye-open
+                  %span.fa.fa-eye
                   = collection.impressions_count
                 %li
-                  %span.glyphicon.glyphicon-picture
+                  %span.fa.fa-picture-o
                   = collection.wallpapers_count_for(current_purities)
               = link_to collection.user do
                 = image_tag user_avatar_url(collection.user, 20), alt: collection.user.username

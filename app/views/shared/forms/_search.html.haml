@@ -3,4 +3,4 @@
     = text_field_tag :q, params[:q], class: 'form-control', placeholder: 'Search'
     .input-group-btn
       %button.btn.btn-default{:type => 'submit'}
-        %span.glyphicon.glyphicon-search
+        = fa_icon_tag('search')

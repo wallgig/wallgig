@@ -18,10 +18,10 @@
           .col-md-6.col-lg-3
             .btn-group.btn-group-tag
               = link_to tag_path(label.parameterize), class: 'btn btn-xs btn-default' do
-                %span.glyphicon.glyphicon-tag
+                = fa_icon_tag('tag')
 
               = link_to url_for(search_options.merge(tags: (tags - [label]), exclude_tags: (exclude_tags + [label])).reject(&blank_value)), class: 'btn btn-xs btn-default' do
-                %span.glyphicon.glyphicon-remove
+                = fa_icon_tag('times')
 
               - if tags.include?(label)
                 = link_to url_for(search_options.merge(tags: (tags - [label]), exclude_tags: (exclude_tags - [label])).reject(&blank_value)), class: 'btn btn-xs btn-success' do
@@ -45,10 +45,10 @@
           .col-md-6.col-lg-3
             .btn-group
               = link_to tag_path(label.parameterize), class: 'btn btn-xs btn-default' do
-                %span.glyphicon.glyphicon-tag
+                = fa_icon_tag('tag')
 
               = link_to url_for(search_options.merge(exclude_tags: (exclude_tags - [label])).reject(&blank_value)), class: 'btn btn-xs btn-danger' do
-                %span.glyphicon.glyphicon-remove
+                = fa_icon_tag('times')
 
               = link_to url_for(search_options.merge(exclude_tags: (exclude_tags - [label]), tags: (tags + [label]), ).reject(&blank_value)), class: 'btn btn-xs btn-link' do
                 = label
@@ -66,10 +66,10 @@
           .col-lg-6
             .btn-group
               = link_to category_path(label.parameterize), class: 'btn btn-xs btn-default' do
-                %span.glyphicon.glyphicon-folder-close
+                %span.fa.fa-folder-o
 
               = link_to url_for(search_options.merge(categories: (categories - [label]), exclude_categories: (exclude_categories + [label])).reject(&blank_value)), class: 'btn btn-xs btn-default' do
-                %span.glyphicon.glyphicon-remove
+                = fa_icon_tag('times')
 
               - if categories.include?(label)
                 = link_to url_for(search_options.merge(categories: (categories - [label]), exclude_categories: (exclude_categories - [label])).reject(&blank_value)), class: 'btn btn-xs btn-success' do
@@ -93,10 +93,10 @@
           .col-lg-6
             .btn-group
               = link_to category_path(label.parameterize), class: 'btn btn-xs btn-default' do
-                %span.glyphicon.glyphicon-folder-close
+                %span.fa.fa-folder-o
 
               = link_to url_for(search_options.merge(exclude_categories: (exclude_categories - [label])).reject(&blank_value)), class: 'btn btn-xs btn-danger' do
-                %span.glyphicon.glyphicon-remove
+                = fa_icon_tag('times')
 
               = link_to url_for(search_options.merge(exclude_categories: (exclude_categories - [label]), categories: (categories + [label])).reject(&blank_value)), class: 'btn btn-xs btn-link' do
                 = label
@@ -189,8 +189,8 @@
               %li
                 - if search_options[:aspect_ratios].include?(value)
                   = link_to url_for(search_options.merge(aspect_ratios: search_options[:aspect_ratios] - [value]).reject(&blank_value)) do
-                    %span.glyphicon.glyphicon-ok
                     = label
+                    = fa_icon_tag('check')
                 - else
                   = link_to label, url_for(search_options.merge(aspect_ratios: search_options[:aspect_ratios] + [value]).reject(&blank_value))
 

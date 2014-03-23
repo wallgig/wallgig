@@ -72,4 +72,8 @@ module ApplicationHelper
     time_tag(date_or_time, options)
   end
 
+  def fa_icon_tag(icon)
+    "<span class='fa fa-#{icon}'></span>".html_safe
+  end
+
 end

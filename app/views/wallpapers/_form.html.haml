@@ -23,9 +23,9 @@
         - @wallpaper.wallpapers_tags.each do |wallpapers_tag|
           .list-group-item{:data => {:tag_id => wallpapers_tag.tag_id}}
             %a{:class => 'pull-right', :data => {:action => 'remove'}} 
-              %span.glyphicon.glyphicon-remove
+              = fa_icon_tag('times')
             %span{:class => "purity-#{wallpapers_tag.purity}"}
-              %span.glyphicon.glyphicon-tag
+              = fa_icon_tag('tag')
               = wallpapers_tag.name
             %br/
             .text-muted= wallpapers_tag.tag.category_name

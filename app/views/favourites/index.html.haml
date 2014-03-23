@@ -1,6 +1,6 @@
 .page-header
   %h3
-    %span.glyphicon.glyphicon-star
+    = fa_icon_tag('star')
     = title [@user.username, 'Favourites'], 'Favourites'
     %small= @user.favourite_wallpapers.size
 

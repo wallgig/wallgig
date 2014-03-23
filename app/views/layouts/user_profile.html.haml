@@ -17,32 +17,32 @@
                                    :style => @user.profile.cover_style,
                                    :data => header_cover_data}
       .media-meta
-        .container.container-full
+        .container-fluid
           .pull-right
             - if myself?
               .btn-group
                 %button{:type => 'button', :class => 'btn btn-lg btn-default dropdown-toggle', :data => {:toggle => 'dropdown'}}
-                  %span.glyphicon.glyphicon-cog
+                  = fa_icon_tag('cog')
                   Settings
                 %ul.dropdown-menu.pull-right{:role => 'menu'}
                   - if @user.profile.cover_wallpaper.present?
                     %li
                       = link_to remove_profile_cover_account_profile_path, data: { method: :delete, confirm: 'Are you sure?' } do
-                        %span.glyphicon.glyphicon-remove
+                        = fa_icon_tag('times')
                         Remove cover
                   - else
                     %li
                       %a{:href => '#', :data => {:action => 'explain-add-profile-cover'}}
-                        %span.glyphicon.glyphicon-picture
+                        = fa_icon_tag('picture-o')
                         Add profile cover
                   %li.divider
                   %li
                     = link_to account_collections_path do
-                      %span.glyphicon.glyphicon-pencil
+                      = fa_icon_tag('pencil')
                       Manage collections
                   %li
                     = link_to edit_account_profile_path do
-                      %span.glyphicon.glyphicon-pencil
+                      = fa_icon_tag('pencil')
                       Edit profile
             - else
               - if can?(:subscribe, @user)
@@ -60,7 +60,7 @@
                 = user_online_status_tag @user
                 %small= role_name_for @user
       %nav.navbar.navbar-default{:role => 'navigation'}
-        .container.container-full
+        .container-fluid
           %ul.nav.navbar-nav
             = active_link_to 'Profile', @user, active: [['users'], ['show']], wrap_tag: :li
 

@@ -13,8 +13,7 @@
  *= require_self
  */
 
-@import url(http://fonts.googleapis.com/css?family=Lato:400,700|Roboto:400,700|Roboto+Condensed:400,700);
-@import url(http://fonts.googleapis.com/css?family=Droid+Sans:400,700);
+@import url(http://fonts.googleapis.com/css?family=Open+Sans:300,400,700);
 
 @import "bourbon";
 @import "ladda";
@@ -25,23 +24,13 @@
 
 $wallpaper-thumbnail-width: 250px;
 
-html, body {
-  min-height: 100%;
-  margin: 0;
-  padding: 0;
-}
-
-body {
-  padding-top: 50px;
-}
-
 a {
   cursor: pointer;
 }
 
-.container-full {
-  width: 98% !important;
-  margin: 0 auto;
+// Set font-awesome's icons to fixed-width
+span.fa {
+  @extend .fa-fw;
 }
 
 // @mixin responsive-container-width($columns) {
@@ -112,7 +101,7 @@ a {
 }
 
 #main {
-  padding: 40px 0;
+  padding: 20px 0;
 }
 
 

@@ -8,14 +8,11 @@
         = time_ago_tag comment.created_at, class: 'pull-right'
         .comment-heading
           = link_to_user comment.user
-          = flag_tag_for comment.user
           = user_online_status_tag comment.user
           - if user_signed_in?
-            %small.show-when-hover
+            %span.show-when-hover
               - if can? :destroy, comment
-                = link_to comment, class: 'destroy-comment', data: { method: :delete, confirm: 'Are you sure?' } do
-                  %span.glyphicon.glyphicon-trash
+                = link_to fa_icon_tag('trash-o'), comment, class: 'destroy-comment', title: 'Delete', data: { method: :delete, confirm: 'Are you sure?' }
               - if current_user != comment.user
-                = link_to reply_comment_path(comment), class: 'reply-comment' do
-                  %span.glyphicon.glyphicon-share-alt
+                = link_to fa_icon_tag('reply'), reply_comment_path(comment), class: 'reply-comment', title: 'Reply'
       %div{:data => {:provide => 'wgtext'}}= comment.cooked_comment.html_safe

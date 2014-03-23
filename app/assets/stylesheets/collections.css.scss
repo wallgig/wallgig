@@ -44,36 +44,6 @@
     a {
       text-decoration: none;
     }
-    .overlay-bottom {
-      $overlay-height: 30px;
-      left: 0;
-      width: 100%;
-      bottom: -$overlay-height;
-      height: $overlay-height;
-      background-color: rgba(0, 0, 0, 0.5);
-      color: white;
-      text-align: center;
-      line-height: $overlay-height;
-      .btn {
-        color: white;
-        .glyphicon {
-          margin-right: 4px;
-        }
-      }
-    }
-    .overlay-left {
-      top: 5px;
-      left: 5px;
-      opacity: 0;
-    }
-    .overlay-right {
-      top: 0;
-      right: 0;
-      opacity: 0;
-      .btn-report {
-        text-shadow: black 1px 1px 1px;
-      }
-    }
   }
   & > li:hover {
     @include box-shadow(#666 0px 0px 5px);

@@ -20,8 +20,8 @@ class Wallgig.Managers.SubscribeButton
 
   applySubscribeState: ($el) ->
     $el.removeClass('subscribed')
-       .html('<span class="glyphicon glyphicon-plus"></span> Subscribe')
+       .html('<span class="fa fa-plus"></span> Subscribe')
 
   applyUnsubscribeState: ($el) ->
     $el.addClass('subscribed')
-       .html('<span class="glyphicon glyphicon-minus"></span> Unsubscribe')
+       .html('<span class="fa fa-minus"></span> Unsubscribe')
