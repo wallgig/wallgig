@@ -1,5 +1,5 @@
 .row
-  .col-lg-offset-4.col-lg-4
+  .col-lg-offset-3.col-lg-6
     .page-header
       = link_to 'New', new_account_collection_path, class: 'btn btn-default btn-lg pull-right'
       %h1= title 'My collections'
@@ -15,19 +15,23 @@
         - @collections.each do |collection|
           %tr{:class => (unless collection.public? then 'danger' end)}
             %td
-              - unless collection.first?
-                = link_to move_up_account_collection_path(collection), method: :patch, class: 'btn btn-link btn-xs' do
-                  %span.fa.fa-arrow-up
-              - unless collection.last?
-                = link_to move_down_account_collection_path(collection), method: :patch, class: 'btn btn-link btn-xs' do
-                  %span.fa.fa-arrow-down
+              .btn-group
+                - if collection.first?
+                  .btn.btn-default.btn-xs.disabled= fa_icon_tag('arrow-up')
+                - else
+                  = link_to fa_icon_tag('arrow-up'), move_up_account_collection_path(collection), method: :patch, class: 'btn btn-primary btn-xs'
+
+                - if collection.last?
+                  .btn.btn-default.btn-xs.disabled= fa_icon_tag('arrow-down')
+                - else
+                  = link_to fa_icon_tag('arrow-down'), move_down_account_collection_path(collection), method: :patch, class: 'btn btn-primary btn-xs'
             %td= collection.name
             %td.text-center
               - unless collection.public?
-                %span.fa.fa-eye-slash
+                = fa_icon_tag('eye-slash')
             %td.text-right
               = link_to 'Show', collection_path(collection), class: 'btn btn-link btn-xs'
               = link_to edit_account_collection_path(collection), class: 'btn btn-info btn-xs' do
-                %span.fa.fa-pencil
+                = fa_icon_tag('pencil')
               = link_to account_collection_path(collection), method: :delete, data: { confirm: 'Are you sure?' }, class: 'btn btn-danger btn-xs' do
-                %span.fa.fa-times
+                = fa_icon_tag('times')

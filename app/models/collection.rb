@@ -32,7 +32,7 @@ class Collection < ActiveRecord::Base
 
   include Subscribable
 
-  acts_as_list scope: :user
+  acts_as_list scope: :user, top_of_list: 0, add_new_at: :top
 
   is_impressionable counter_cache: true
 
@@ -71,6 +71,20 @@ class Collection < ActiveRecord::Base
             AND w.purity = \'nsfw\'
         )
     ')
+  end
+
+  def self.ensure_in_list!
+    all.each do |collection|
+      collection.insert_to_list if collection.not_in_list?
+    end
+  end
+
+  def self.reset_list_position!
+    all.update_all(position: nil)
+  end
+
+  def insert_to_list
+    insert_at(0)
   end
 
   def private?
