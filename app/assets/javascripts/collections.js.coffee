@@ -7,7 +7,7 @@ $ ->
       $this.unbind 'inview'
       $this.replaceWith('<hr /><div class="loading" />')
       $.get url, (html) ->
-        $mainContainer = $('#main > .container')
+        $mainContainer = $('.list-collection:first').parent()
         $mainContainer.find('.loading').remove()
         $mainContainer.append(html)
         $('[rel=next]').bind('inview', loadNextPage)

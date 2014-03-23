@@ -58,7 +58,7 @@ class WallpaperDecorator < Draper::Decorator
     options[:class] << ' btn-favourite favourited' if context[:favourited]
 
     h.content_tag :a, options do
-      "<span class='glyphicon glyphicon-star'></span>" \
+      "<span class='fa fa-star'></span>" \
       "<span class='count'>#{favourites_count}</span>".html_safe
     end
   end
