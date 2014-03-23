@@ -104,6 +104,9 @@ class User < ActiveRecord::Base
   # Voter
   acts_as_voter
 
+  # Donations
+  has_many :donations, dependent: :nullify
+
   # Devise authentication
   devise :database_authenticatable, :registerable,
          :recoverable, :rememberable, :trackable, :validatable,
