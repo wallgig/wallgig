@@ -8,7 +8,7 @@
       = t 'notifications.actions.mark_all_as_read'
 
     = link_to purge_notifications_path, method: :delete, confirm: 'Are you sure?', class: 'btn btn-danger' do
-      = fa_icon_tag('trash')
+      = fa_icon_tag('trash-o')
       = t 'notifications.actions.purge'
 
   %ul.list-group.list-group-notifications{:data => {:provide => 'notifications'}}= render @notifications
