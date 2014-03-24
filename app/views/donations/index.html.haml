@@ -77,5 +77,8 @@
                 = anonymize_email donation.email
               - else
                 Anonymous
+
+              - if myself?(donation.user)
+                = link_to (donation.anonymous? ? 'Publicized' : 'Anonymized'), toggle_anonymous_donation_path(donation), method: :patch, class: 'btn btn-xs btn-default pull-right'
             %td.text-right= donation.currency
             %td.text-right= number_to_currency(donation.amount, format: '%n')

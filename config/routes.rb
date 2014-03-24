@@ -77,12 +77,16 @@ Wallgig::Application.routes.draw do
   resources :comments, only: [:index, :edit, :update, :destroy] do
     concerns :reportable
     member do
-      get 'reply'
+      get :reply
     end
   end
 
   # Donations
-  resources :donations, only: [:index]
+  resources :donations, only: [:index] do
+    member do
+      patch :toggle_anonymous
+    end
+  end
 
   # Forums
   resources :forums, only: [:index, :show]
