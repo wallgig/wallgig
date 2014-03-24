@@ -1,28 +1,35 @@
 class CollectionsController < ApplicationController
+  before_action :set_user
   before_action :set_collection, only: [:show]
-  before_action :set_parent
+
   layout :resolve_layout
+
   impressionist actions: [:show]
 
   # GET /collections
+  # GET /users/1/collections
   def index
     @should_apply_purity_settings = true
+    minimum_wallpapers            = 4
 
     if @user.present?
       # Viewing user's collections. They are ordered.
       @collections = @user.collections.ordered
+
       @should_apply_purity_settings = false if myself?
+      minimum_wallpapers = 0
     else
       @collections = Collection.latest
     end
 
+    if @should_apply_purity_settings
+      @collections = @collections.not_empty_for_purities(current_purities, minimum_wallpapers)
+    end
+
+    # Common
     @collections = @collections.includes(user: :profile)
                                .accessible_by(current_ability, :read)
                                .page(params[:page]).per(20)
-
-    if @should_apply_purity_settings
-      @collections = @collections.not_empty_for_purities(current_purities, 4)
-    end
 
     if request.xhr?
       render partial: 'list', layout: false, locals: { collections: @collections, should_apply_purity_settings: @should_apply_purity_settings }
@@ -46,13 +53,11 @@ class CollectionsController < ApplicationController
 
   private
 
-  def set_parent
+  def set_user
     if params[:user_id].present?
-      @parent = @user = User.find_by_username!(params[:user_id])
-    elsif params[:group_id].present?
-      @parent = @group = Group.friendly.find(params[:group_id])
+      @user = User.find_by_username!(params[:user_id])
     end
-    authorize! :read, @parent if @parent.present?
+    authorize! :read, @user
   end
 
   def set_collection
@@ -60,16 +65,9 @@ class CollectionsController < ApplicationController
     authorize! :read, @collection
   end
 
-  # Never trust parameters from the scary internet, only allow the white list through.
-  def collection_params
-    params.require(:collection).permit(:name, :public)
-  end
-
   def resolve_layout
-    if @parent.is_a?(User) || @user.present? # TODO deprecate
+    if @user.present?
       'user_profile'
-    elsif @parent.is_a?(Group)
-      'group'
     else
       'application'
     end
