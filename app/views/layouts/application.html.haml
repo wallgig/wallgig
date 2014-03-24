@@ -26,7 +26,9 @@
                 = link_to donations_path do
                   Donate!
                   - cache('donation_goal', expires_in: 30.minutes) do
-                    %small (#{DonationGoal.current.percentage_complete}% goal)
+                    - donation_goal = DonationGoal.current
+                    - if donation_goal.present?
+                      %small (#{donation_goal.percentage_complete}% goal)
             %ul.nav.navbar-nav.navbar-right
               %li
                 = link_to wallpapers_path do
