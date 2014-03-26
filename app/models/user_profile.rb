@@ -64,4 +64,8 @@ class UserProfile < ActiveRecord::Base
   def needs_country_code?
     country_code.nil?
   end
+
+  def country_name
+    ISO3166::Country.find_country_by_alpha2(country_code).names.first if country_code.present?
+  end
 end

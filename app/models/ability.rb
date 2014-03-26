@@ -7,7 +7,7 @@ class Ability
 
     alias_action :create, :read, :update, :destroy, :to => :crud
 
-    if user.admin? || user.moderator?
+    if user.admin?
       can :manage, :all
     end
 
@@ -88,6 +88,16 @@ class Ability
       can :subscribe, :all
       cannot :subscribe, Collection, user_id: user.id
       cannot :subscribe, User, id: user.id
+
+      # Moderators
+      if user.moderator?
+        can :manage, Category
+        can :manage, Comment
+        can :manage, Report
+        can :manage, Tag
+        can :manage, Wallpaper
+        can :manage, ActiveAdmin::Comment
+      end
     else
       # Wallpaper
       can :read, Wallpaper, processing: false, purity: 'sfw'

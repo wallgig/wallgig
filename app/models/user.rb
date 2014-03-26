@@ -263,6 +263,10 @@ class User < ActiveRecord::Base
   end
 
   module CollectionMethods
+    def collections_count
+      collections.count
+    end
+
     def public_collections_count
       collections.public.count
     end

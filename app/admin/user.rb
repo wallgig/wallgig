@@ -3,7 +3,9 @@ ActiveAdmin.register User do
 
   actions :all, except: [:destroy]
 
-  permit_params :email, :username, :trusted, :moderator, :admin, :developer, :locked_at, :password
+  permit_params :email, :username, :trusted,
+                :moderator, :admin, :developer,
+                :locked_at, :password
 
   scope :all, default: true
   scope :trusted
@@ -45,6 +47,58 @@ ActiveAdmin.register User do
       link_to 'Pretend', pretend_admin_user_path(user), data: { method: :post, confirm: 'Are you sure?' }
       link_to 'View settings', admin_user_settings_path(q: { user_id_eq: user.id })
     end
+  end
+
+  show do
+    panel 'User Details' do
+      attributes_table_for user do
+        row('Username') { username_tag(user) }
+        row('Title') { user.profile.title }
+        row('Country') { user.profile.country_name }
+        row 'Avatar' do
+          image_tag(user_avatar_url(user, 50), width: 50, height: 50)
+        end
+        row :email
+      end
+    end
+    panel 'Security' do
+      attributes_table_for user do
+        row :sign_in_count
+        row :current_sign_in_at
+        row :last_sign_in_at
+        row :confirmed_at
+        row :confirmation_sent_at
+        row :unconfirmed_email
+        row :failed_attempts
+        row :locked_at
+        row :created_at
+        row :updated_at
+      end
+    end
+    active_admin_comments
+  end
+
+  sidebar 'Roles', only: :show do
+    attributes_table_for user do
+      row :moderator
+      row :admin
+      row :developer
+    end
+  end
+
+  action_item only: :show do
+    if authorized? :read, user.settings
+      link_to 'View Settings', admin_user_setting_path(user.settings)
+    end
+  end
+  action_item only: :show do
+    link_to "Collections (#{user.collections_count})", admin_collections_path(q: { user_username_eq: user.username })
+  end
+  action_item only: :show do
+    link_to "Favourites (#{user.favourites_count})", admin_favourites_path(q: { user_username_eq: user.username })
+  end
+  action_item only: :show do
+    link_to "Wallpapers (#{user.wallpapers_count})", admin_wallpapers_path(q: { user_username_eq: user.username }, scope: 'all')
   end
 
   form do |f|
