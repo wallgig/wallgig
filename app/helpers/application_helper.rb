@@ -1,6 +1,19 @@
 module ApplicationHelper
   ALERT_TYPES = [:danger, :info, :success, :warning]
 
+  def link_to(name = nil, options = nil, html_options = nil, &block)
+    html_options, options, name = options, name, block if block_given?
+    options ||= {}
+
+    html_options = convert_options_to_data_attributes(options, html_options)
+
+    url = url_for(options)
+    html_options['href'] ||= url
+    html_options['target'] ||= '_self'
+
+    content_tag(:a, name || url, html_options, &block)
+  end
+
   def bootstrap_flash
     flash_messages = []
     flash.each do |type, message|
