@@ -1,7 +1,7 @@
 ActiveAdmin.register Category do
   config.filters = false
 
-  menu parent: 'Tags'
+  menu label: 'Tag Categories', parent: 'Tags'
 
   permit_params :name, :slug, :parent_id
 

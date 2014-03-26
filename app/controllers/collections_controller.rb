@@ -56,8 +56,8 @@ class CollectionsController < ApplicationController
   def set_user
     if params[:user_id].present?
       @user = User.find_by_username!(params[:user_id])
+      authorize! :read, @user
     end
-    authorize! :read, @user
   end
 
   def set_collection
