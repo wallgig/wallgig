@@ -3,12 +3,13 @@
   %head
     = display_meta_tags site: 'wallgig'
     %meta{name: 'viewport', content: 'width=device-width, initial-scale=1.0'}/
+    = javascript_include_tag "angularjs/app"
     = stylesheet_link_tag "application", media: "all", "data-turbolinks-track" => true
     /[if lt IE 9]
       %script{src: 'https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js'}
       %script{src: 'https://oss.maxcdn.com/libs/respond.js/1.3.0/respond.min.js'}
     = csrf_meta_tags
-  %body{:class => "#{controller_name.parameterize} #{action_name.parameterize}"}
+  %body{:class => "#{controller_name.parameterize} #{action_name.parameterize}", :ng => {:app => 'wallgig', :controller => 'MainCtrl'}}
     - unless content_for?(:hide_navbar) && yield(:hide_navbar)
       %nav.navbar.navbar-inverse.navbar-static-top{:role => "navigation"}
         .container-fluid
@@ -154,12 +155,13 @@
                 %li
                   = link_to 'Sign in', new_user_session_path
                 %li= link_to 'Sign up', new_user_registration_path
+
     = yield(:pre_container)
     - if content_for?(:main_container)
       = yield :main_container
     - else
       #main
-        %div{:class => ((content_for?(:use_full_container) && yield(:use_full_container)) ? 'container-fluid' : 'container')}
+        %div{:class => ((content_for?(:use_full_container) && yield(:use_full_container)) ? 'container-fluid' : 'container'), :ng => {:view => true}}
           = content_for?(:content) ? yield(:content) : yield
     = javascript_include_tag "application", "data-turbolinks-track" => true, "data-turbolinks-eval" => false
     = yield :javascript_for_page

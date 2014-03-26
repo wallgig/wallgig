@@ -1,0 +1,10 @@
+<ul class="list-wallpaper">
+  <li ng-repeat="wallpaper in wallpapers" ng-class="'purity-' + wallpaper.purity">
+    <a ng-href="{{wallpaper.path}}">
+      <img ng-src="{{wallpaper.thumbnail_image.url}}" width="{{wallpaper.thumbnail_image.width}}" height="{{wallpaper.thumbnail_image.height}}" class="img-wallpaper">
+      <div class="overlay overlay-bottom">
+        <strong>{{wallpaper.image.width}}&times;{{wallpaper.image.height}}</strong>
+      </div>
+    </a>
+  </li>
+</ul>

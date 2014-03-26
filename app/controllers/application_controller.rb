@@ -103,7 +103,7 @@ class ApplicationController < ActionController::Base
     end
 
     def authorize_rack_mini_profiler_request
-      if user_signed_in? && current_user.developer?
+      if user_signed_in? && current_user.developer? && params[:debug] == '1'
         Rack::MiniProfiler.authorize_request
       end
     end

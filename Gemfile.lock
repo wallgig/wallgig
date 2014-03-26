@@ -106,6 +106,7 @@ GEM
     acts_as_votable (0.8.0)
     ancestry (2.0.0)
       activerecord (>= 3.0.0)
+    angularjs-rails (1.2.14)
     annotate (2.6.1)
       activerecord (>= 2.3.0)
       rake (>= 0.8.7)
@@ -500,6 +501,7 @@ DEPENDENCIES
   acts_as_list
   acts_as_votable (~> 0.8.0)
   ancestry
+  angularjs-rails
   annotate
   better_errors
   binding_of_caller
