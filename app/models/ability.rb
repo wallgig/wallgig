@@ -95,8 +95,10 @@ class Ability
         can :manage, Comment
         can :manage, Report
         can :manage, Tag
+        can :manage, Topic
         can :manage, Wallpaper
         can :manage, ActiveAdmin::Comment
+        can :read, ActiveAdmin::Page, name: 'Dashboard'
       end
     else
       # Wallpaper

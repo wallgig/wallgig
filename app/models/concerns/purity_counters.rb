@@ -26,7 +26,7 @@ module PurityCounters
 
       define_singleton_method :counter_name_for do |purity|
         purity = purity.purity if purity.respond_to? :purity
-        "#{purity}_#{collection_name}_count"
+        "#{purity}_#{collection_name}_count" if purity.present?
       end
 
       define_method :"#{collection_name}_count_for" do |purities|

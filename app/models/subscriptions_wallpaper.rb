@@ -20,7 +20,7 @@ class SubscriptionsWallpaper < ActiveRecord::Base
   belongs_to :wallpaper
 
   validates :subscription_id, presence: true
-  validates :wallpaper_id, presence: true
+  validates :wallpaper_id, presence: true, uniqueness: { scope: :subscription_id }
 
   # TODO refactor into concerns
   after_create :increment_subscriptions_wallpapers_count

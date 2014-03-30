@@ -61,7 +61,7 @@ class TopicsController < ApplicationController
 
   Topic::MODERATION_ACTIONS.each do |action|
     define_method action do
-      authorize! :moderate, @topic
+      authorize! :manage, @topic
       @topic.send("#{action.to_s}!")
 
       respond_to do |format|
