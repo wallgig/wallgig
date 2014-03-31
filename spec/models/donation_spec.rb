@@ -5,10 +5,10 @@
 #  id               :integer          not null, primary key
 #  user_id          :integer
 #  email            :string(255)
-#  currency         :string(3)        not null
+#  currency         :string(3)        default("USD"), not null
 #  cents            :integer          not null
 #  base_cents       :integer          not null
-#  anonymous        :boolean          default(TRUE), not null
+#  anonymous        :boolean          default(FALSE), not null
 #  donated_at       :datetime
 #  donation_goal_id :integer
 #
