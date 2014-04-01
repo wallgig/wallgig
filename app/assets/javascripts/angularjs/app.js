@@ -20,6 +20,13 @@ angular.module('wallgig', [
 angular.module('wallgig')
   .config(function($locationProvider) {
     $locationProvider.html5Mode(true);
+  })
+  .config(function($httpProvider) {
+    var tokenEl = document.querySelector('meta[name="csrf-token"]');
+    if (tokenEl) {
+      $httpProvider.defaults.headers.common['X-CSRF-Token'] = tokenEl.getAttribute('content');
+      $httpProvider.defaults.headers.common['X-Requested-With'] = 'XMLHttpRequest';
+    }
   });
 
 //= require routes

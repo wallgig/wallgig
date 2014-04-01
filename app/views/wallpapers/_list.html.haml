@@ -23,7 +23,7 @@
       .overlay.overlay-bottom
         %strong {{wallpaper.image_width}}&times;{{wallpaper.image_height}}
 
-        %a.btn.btn-sm.btn-favourite.pull-left{:href => '', :ng => {:click => 'toggleFavourite(wallpaper.id)', :class => '{favourited: wallpaper.favourited}'}}
+        %a.btn.btn-sm.btn-favourite.pull-left{:href => true, :ng => {:click => 'toggleFavourite(wallpaper.id)', :class => '{favourited: wallpaper.favourited}'}}
           %span.fa.fa-star
           %span.count {{wallpaper.favourites_count}}
 
