@@ -11,25 +11,48 @@
         %a{:href => '#'}
           = fa_icon_tag('chevron-up')
 
-- if wallpapers.any?
-  %ul.list-wallpaper{:class => local_assigns[:extra_css_class]}
-    - wallpapers.each do |wallpaper|
-      %li{:class => "purity-#{wallpaper.purity}", :data => {:wallpaper_id => wallpaper.id}}
-        = link_to wallpaper.path_with_resolution, title: wallpaper.tag_list_text, target: '_blank' do
-          = image_tag nil, width: 250, height: 188, class: 'img-wallpaper lazy', data: { src: wallpaper.thumbnail_image_url }
+%div{:ng => {:controller => 'WallpaperListController', :init => "wallpapers = #{ActiveModel::ArraySerializer.new(wallpapers, each_serializer: WallpaperListSerializer).to_json}"}}
 
-        .overlay.overlay-bottom
-          %strong= wallpaper.resolution
+  %ul.list-wallpaper{:ng => {:show => 'wallpapers.length > 0'}}
 
-          = wallpaper.favourite_button_for_list
+    %li{:ng => {:repeat => 'wallpaper in wallpapers'}, :class => 'purity-{{wallpaper.purity}}'}
 
-          .btn.btn-sm.pull-right
-            = fa_icon_tag('eye')
-            = wallpaper.impressions_count
+      %a{:ng => {:href => '/wallpapers/{{wallpaper.id}}'}} 
+        %div{:wg => {:wallpaper_thumbnail => true}}
 
-  = wallpapers.link_to_next_page
+      .overlay.overlay-bottom
+        %strong {{wallpaper.image_width}}&times;{{wallpaper.image_height}}
 
-- else
-  %br/
-  %br/
-  %h2.text-center No search results found :(
+        %a.btn.btn-sm.btn-favourite.pull-left{:href => '', :ng => {:click => 'toggleFavourite(wallpaper.id)', :class => '{favourited: wallpaper.favourited}'}}
+          %span.fa.fa-star
+          %span.count {{wallpaper.favourites_count}}
+
+        .btn.btn-sm.pull-right
+          %span.fa.fa-eye
+          {{wallpaper.impressions_count}}
+
+  %h2.text-center{:ng => {:show => 'wallpapers.length == 0'}}
+    No search results found :(
+
+/ - if wallpapers.any?
+/   %ul.list-wallpaper{:class => local_assigns[:extra_css_class]}
+/     - wallpapers.each do |wallpaper|
+/       %li{:class => "purity-#{wallpaper.purity}", :data => {:wallpaper_id => wallpaper.id}}
+/         = link_to wallpaper.path_with_resolution, title: wallpaper.tag_list_text, target: '_blank' do
+/           = image_tag nil, width: 250, height: 188, class: 'img-wallpaper lazy', data: { src: wallpaper.thumbnail_image_url }
+
+/         .overlay.overlay-bottom
+/           %strong= wallpaper.resolution
+
+/           = wallpaper.favourite_button_for_list
+
+/           .btn.btn-sm.pull-right
+/             = fa_icon_tag('eye')
+/             = wallpaper.impressions_count
+
+/   = wallpapers.link_to_next_page
+
+/ - else
+/   %br/
+/   %br/
+/   %h2.text-center No search results found :(

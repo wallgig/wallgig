@@ -28,6 +28,14 @@ class WallpaperDecorator < Draper::Decorator
     end
   end
 
+  def thumbnail_image_width
+    250
+  end
+
+  def thumbnail_image_height
+    188
+  end
+
   def thumbnail_image_url
     return if thumbnail_image.blank?
     if Rails.env.production?
@@ -38,12 +46,18 @@ class WallpaperDecorator < Draper::Decorator
   end
 
   def thumbnail_image_tag
-    h.image_tag(thumbnail_image_url, width: 250, height: 188, alt: to_s)
+    h.image_tag(thumbnail_image_url, width: thumbnail_image_width, height: thumbnail_image_height, alt: to_s)
   end
 
   def resolution
     "#{image_width}&times;#{image_height}".html_safe
   end
+
+  def favourited
+    context[:favourited]
+  end
+
+  alias favourited? favourited
 
   def favourite_button_for_list
     options = {
@@ -55,7 +69,7 @@ class WallpaperDecorator < Draper::Decorator
         action: 'favourite'
       }
     }
-    options[:class] << ' btn-favourite favourited' if context[:favourited]
+    options[:class] << ' btn-favourite favourited' if favourited?
 
     h.content_tag :a, options do
       "<span class='fa fa-star'></span>" \

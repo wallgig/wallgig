@@ -278,7 +278,6 @@ a.purity-sfw, a.purity-sketchy, a.purity-nsfw {
 }
 
 .btn-favourite {
-  @extend .btn-default;
   &.favourited {
     @extend .btn-primary;
   }
