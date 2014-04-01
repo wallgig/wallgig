@@ -29,7 +29,7 @@ class Donation < ActiveRecord::Base
   scope :latest, -> { order(donated_at: :desc) }
 
   after_initialize do
-    self.donated_at = Time.now
+    self.donated_at ||= Time.now
   end
 
   before_save do
