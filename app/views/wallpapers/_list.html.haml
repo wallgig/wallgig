@@ -4,20 +4,27 @@
   - else
     - current_page_params = { page: wallpapers.current_page }
 
-  .horizontal-page-bar
+%noscript
+  - if wallpapers.any?
+    %ul
+      - wallpapers.each do |wallpaper|
+        %li= link_to "Wallpaper ##{wallpaper.id} #{wallpaper.tag_list_text}", wallpaper
+    = wallpapers.link_to_next_page
+
+%div{:ng => {:controller => 'WallpaperListController', :init => "wallpapers = #{ActiveModel::ArraySerializer.new(wallpapers, each_serializer: WallpaperListSerializer).to_json}; page = #{wallpapers.current_page}"}}
+
+  .horizontal-page-har{:ng => {:hide => 'page === 1'}}
     %h3
       .pull-left= link_to wallpapers.current_page, url_for(current_page_params)
       .pull-right
         %a{:href => '#'}
-          = fa_icon_tag('chevron-up')
-
-%div{:ng => {:controller => 'WallpaperListController', :init => "wallpapers = #{ActiveModel::ArraySerializer.new(wallpapers, each_serializer: WallpaperListSerializer).to_json}"}}
+          %span.fa.fa-chevron-up
 
   %ul.list-wallpaper{:ng => {:show => 'wallpapers.length > 0'}}
 
     %li{:ng => {:repeat => 'wallpaper in wallpapers'}, :class => 'purity-{{wallpaper.purity}}'}
 
-      %a{:ng => {:href => '/wallpapers/{{wallpaper.id}}'}} 
+      %a{:ng => {:href => '/wallpapers/{{wallpaper.id}}'}, :title => '{{wallpaper.tag_list.join(",")}}'}
         %div{:wg => {:wallpaper_thumbnail => true}}
 
       .overlay.overlay-bottom
@@ -31,7 +38,7 @@
           %span.fa.fa-eye
           {{wallpaper.impressions_count}}
 
-  %h2.text-center{:ng => {:show => 'wallpapers.length == 0'}}
+  %h2.text-center{:ng => {:show => 'wallpapers.length === 0'}}
     No search results found :(
 
 / - if wallpapers.any?
