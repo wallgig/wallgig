@@ -150,47 +150,51 @@ class Wallpaper < ActiveRecord::Base
 
   after_commit :queue_notify_subscribers
 
+  #
   # Search
+  #
   # formula to calculate wallpaper's popularity
   POPULARITY_SCRIPT = "doc['views'].value * 0.1 + doc['favourites'].value * 1.0"
 
-  include Tire::Model::Search
-  tire.settings :analysis => {
-                  :analyzer => {
-                    :'string_lowercase' => {
-                      :tokenizer => 'keyword',
-                      :filter => 'lowercase'
-                    }
-                  }
-                } do
-    tire.mapping do
-      indexes :user_id,              type: 'integer'
-      indexes :user,                 type: 'string',  analyzer: 'keyword', index: 'not_analyzed'
-      indexes :purity,               type: 'string',  analyzer: 'keyword', index: 'not_analyzed'
-      indexes :tags,                 type: 'string',  analyzer: 'keyword'
-      indexes :categories,           type: 'string',  analyzer: 'keyword'
-      indexes :width,                type: 'integer'
-      indexes :height,               type: 'integer'
-      indexes :source,               type: 'string'
-      indexes :colors do
-        indexes :hex,                type: 'string',  analyzer: 'keyword', index: 'not_analyzed'
-        indexes :percentage,         type: 'integer'
-      end
-      indexes :views,                type: 'integer'
-      # indexes :views_today,          type: 'integer'
-      # indexes :views_this_week,      type: 'integer'
-      indexes :favourites,           type: 'integer'
-      # indexes :favourites_today,     type: 'integer' # TODO
-      # indexes :favourites_this_week, type: 'integer' # TODO
-      indexes :approved,             type: 'boolean'
-      indexes :approved_at,          type: 'date'
-      indexes :created_at,           type: 'date'
-      indexes :updated_at,           type: 'date'
-      indexes :aspect_ratio,         type: 'float'
-    end
-  end
+  searchkick
 
-  def to_indexed_json
+  # include Tire::Model::Search
+  # tire.settings :analysis => {
+  #                 :analyzer => {
+  #                   :'string_lowercase' => {
+  #                     :tokenizer => 'keyword',
+  #                     :filter => 'lowercase'
+  #                   }
+  #                 }
+  #               } do
+  #   tire.mapping do
+  #     indexes :user_id,              type: 'integer'
+  #     indexes :user,                 type: 'string',  analyzer: 'keyword', index: 'not_analyzed'
+  #     indexes :purity,               type: 'string',  analyzer: 'keyword', index: 'not_analyzed'
+  #     indexes :tags,                 type: 'string',  analyzer: 'keyword'
+  #     indexes :categories,           type: 'string',  analyzer: 'keyword'
+  #     indexes :width,                type: 'integer'
+  #     indexes :height,               type: 'integer'
+  #     indexes :source,               type: 'string'
+  #     indexes :colors do
+  #       indexes :hex,                type: 'string',  analyzer: 'keyword', index: 'not_analyzed'
+  #       indexes :percentage,         type: 'integer'
+  #     end
+  #     indexes :views,                type: 'integer'
+  #     # indexes :views_today,          type: 'integer'
+  #     # indexes :views_this_week,      type: 'integer'
+  #     indexes :favourites,           type: 'integer'
+  #     # indexes :favourites_today,     type: 'integer' # TODO
+  #     # indexes :favourites_this_week, type: 'integer' # TODO
+  #     indexes :approved,             type: 'boolean'
+  #     indexes :approved_at,          type: 'date'
+  #     indexes :created_at,           type: 'date'
+  #     indexes :updated_at,           type: 'date'
+  #     indexes :aspect_ratio,         type: 'float'
+  #   end
+  # end
+
+  def search_data
     {
       user_id:              user_id,
       user:                 user.try(:username),
@@ -212,7 +216,7 @@ class Wallpaper < ActiveRecord::Base
       created_at:           created_at,
       updated_at:           updated_at,
       aspect_ratio:         aspect_ratio
-    }.to_json
+    }
   end
 
   def self.ensure_consistency!

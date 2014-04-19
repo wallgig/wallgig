@@ -1,9 +1,12 @@
 class WallpapersDecorator < Draper::CollectionDecorator
-  # pagination
+  # Pagination
   delegate :total_count, :limit_value, :current_page, :total_pages, :next_page, :prev_page, :first_page?, :last_page?
 
+  # Elasticsearch (searchkick)
+
   def facets
-    object.kind_of?(Tire::Results::Collection) ? object.facets : []
+    return object.facets if object.respond_to?(:facets)
+    {}
   end
 
   def link_to_next_page

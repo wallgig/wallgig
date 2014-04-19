@@ -203,6 +203,14 @@ GEM
       eco-source
       execjs
     eco-source (1.1.0.rc.1)
+    elasticsearch (0.4.11)
+      elasticsearch-api (= 0.4.11)
+      elasticsearch-transport (= 0.4.11)
+    elasticsearch-api (0.4.11)
+      multi_json
+    elasticsearch-transport (0.4.11)
+      faraday
+      multi_json
     enumerize (0.8.0)
       activesupport (>= 3.2)
     erubis (2.7.0)
@@ -443,6 +451,10 @@ GEM
     sdoc (0.4.0)
       json (~> 1.8)
       rdoc (~> 4.0, < 5.0)
+    searchkick (0.7.1)
+      activemodel
+      elasticsearch (~> 0.4.11)
+      hashie
     simple_form (3.0.2)
       actionpack (~> 4.0)
       activemodel (~> 4.0)
@@ -579,6 +591,7 @@ DEPENDENCIES
   rspec-rails
   sass-rails (~> 4.0.0)
   sdoc
+  searchkick
   shoulda-matchers!
   sidekiq!
   sidetiq!

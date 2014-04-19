@@ -4,18 +4,50 @@ class WallpaperSearchService
   end
 
   def execute
-    Wallpaper.tire.search nil,
-                          load: true,
-                          payload: build_payload,
-                          page: @options[:page],
-                          per_page: (@options[:per_page] || Wallpaper.default_per_page)
-  rescue Tire::Search::SearchRequestFailed => e
+    payload = build_payload
+
+    Wallpaper.search nil,
+      query: payload[:query],
+      facets: build_facets,
+      order: payload[:sort],
+      page: @options[:page],
+      per_page: @options[:per_page] || Wallpaper.default_per_page
+  rescue Elasticsearch::Transport::Transport::Errors::BadRequest => e
+    # Reraise error unless in production
+    raise e unless Rails.env.production?
+
+    # Log error if something went wrong
     Rails.logger.error e.message
     e.backtrace.each { |line| Rails.logger.error line }
+
     Wallpaper.none
   end
 
   private
+
+    def build_facets
+      {
+        :tags => {
+          :terms => {
+            :field => 'tags',
+            :size => 20
+          }
+        },
+        :categories => {
+          :terms => {
+            :field => 'categories',
+            :size => 10
+          }
+        },
+        :colors => {
+          :terms => {
+            :field => 'colors.hex',
+            :size => 20
+          }
+        }
+      }
+    end
+
     def build_payload
       payload = {
         :query => {
@@ -24,8 +56,7 @@ class WallpaperSearchService
             :must_not => []
           }
         },
-        :sort => [],
-        :facets => {}
+        :sort => []
       }
 
       payload[:query][:bool][:must] << {
@@ -230,27 +261,6 @@ class WallpaperSearchService
           :'approved_at' => 'desc'
         }
       end
-
-      payload[:facets] = {
-        :tags => {
-          :terms => {
-            :field => 'tags',
-            :size => 20
-          }
-        },
-        :categories => {
-          :terms => {
-            :field => 'categories',
-            :size => 10
-          }
-        },
-        :colors => {
-          :terms => {
-            :field => 'colors.hex',
-            :size => 20
-          }
-        }
-      }
 
       payload
     end

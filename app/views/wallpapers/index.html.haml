@@ -104,7 +104,7 @@
 - content_for :faceted_colors do
   %h5 Colors
 
-  - if @wallpapers.facets['colors']['terms'].any?
+  - if @wallpapers.facets['colors'] && @wallpapers.facets['colors']['terms'].any?
     - colors = search_options[:colors]
 
     - @wallpapers.facets['colors']['terms'].in_groups_of(4, false).each do |terms|
