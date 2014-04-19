@@ -134,6 +134,7 @@ gem 'meta-tags', :require => 'meta_tags'
 # gem 'phashion'
 gem 'draper', github: 'jianyuan/draper'
 gem 'redcarpet'
+gem 'spring', group: :development
 
 # rack
 gem 'rack-cache', require: 'rack/cache', group: :production
