@@ -143,6 +143,9 @@ GEM
     capistrano-rvm (0.1.1)
       capistrano (~> 3.0)
       sshkit (~> 1.2)
+    capistrano-sidekiq (0.2.6)
+      capistrano
+      sidekiq
     celluloid (0.15.2)
       timers (~> 1.1.0)
     celluloid-io (0.15.0)
@@ -525,6 +528,7 @@ DEPENDENCIES
   capistrano-rails
   capistrano-rbenv
   capistrano-rvm
+  capistrano-sidekiq
   coffee-rails (~> 4.0.0)
   color
   colorscore

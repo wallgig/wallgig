@@ -43,6 +43,7 @@ group :development do
   gem 'capistrano-rvm'
   gem 'capistrano-rbenv'
   gem 'capistrano-puma', github: 'seuros/capistrano-puma'
+  gem 'capistrano-sidekiq'
 end
 
 # Use Foreman to manage the app
