@@ -538,7 +538,7 @@ DEPENDENCIES
   devise
   doorkeeper (~> 0.7.0)
   dotenv-rails
-  dragonfly (~> 1.0.0)
+  dragonfly (~> 1.0.4)
   draper!
   eco
   enumerize

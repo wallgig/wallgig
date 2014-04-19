@@ -86,7 +86,7 @@ gem 'activeadmin', github: 'gregbell/active_admin'
 # models
 gem 'friendly_id', '~> 5.0.0'
 gem 'workflow', github: 'geekq/workflow'
-gem 'dragonfly', '~> 1.0.0'
+gem 'dragonfly', '~> 1.0.4'
 gem 'enumerize'
 gem 'kaminari'
 gem 'kaminari-bootstrap', '~> 3.0.1'
