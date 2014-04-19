@@ -6,12 +6,11 @@ class WallpaperSearchService
   def execute
     payload = build_payload
 
-    Wallpaper.search nil,
-      query: payload[:query],
-      facets: build_facets,
-      order: payload[:sort],
-      page: @options[:page],
-      per_page: @options[:per_page] || Wallpaper.default_per_page
+    Wallpaper.search query: payload[:query],
+                     facets: build_facets,
+                     order: payload[:sort],
+                     page: @options[:page],
+                     per_page: @options[:per_page] || Wallpaper.default_per_page
   rescue Elasticsearch::Transport::Transport::Errors::BadRequest => e
     # Reraise error unless in production
     raise e unless Rails.env.production?
@@ -56,7 +55,7 @@ class WallpaperSearchService
             :must_not => []
           }
         },
-        :sort => []
+        :sort => {}
       }
 
       payload[:query][:bool][:must] << {
@@ -190,13 +189,11 @@ class WallpaperSearchService
             }
           }
 
-          payload[:sort] << {
-            :'colors.percentage' => {
-              :order => 'desc',
-              :nested_filter => {
-                :term => {
-                  :'colors.hex' => color
-                }
+          payload[:sort]['colors.percentage'] = {
+            :order => 'desc',
+            :nested_filter => {
+              :term => {
+                :'colors.hex' => color
               }
             }
           }
@@ -242,7 +239,7 @@ class WallpaperSearchService
             ]
           }
         }
-        payload[:sort] << '_score'
+        payload[:sort]['_score'] = 'desc'
       when 'popular'
         payload[:query][:bool][:must] << {
           :function_score => {
@@ -255,11 +252,9 @@ class WallpaperSearchService
             ]
           }
         }
-        payload[:sort] << '_score'
+        payload[:sort]['_score'] = 'desc'
       else
-        payload[:sort] << {
-          :'approved_at' => 'desc'
-        }
+        payload[:sort]['approved_at'] = 'desc'
       end
 
       payload
