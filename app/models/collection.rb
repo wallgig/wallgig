@@ -41,8 +41,6 @@ class Collection < ActiveRecord::Base
 
   validates :name, presence: true
 
-  scope :public,  -> { where(public: true) }
-  scope :private, -> { where(public: false) }
   scope :ordered, -> { order(position: :asc) }
   scope :latest,  -> { order(last_added_at: :desc) }
 
