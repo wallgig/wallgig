@@ -45,6 +45,9 @@ class UsersController < ApplicationController
     else
       @collections = @collections.not_empty_for_purities(current_purities)
     end
+
+    # Comments
+    @comments = @user.comments.includes(:user).latest
   end
 
   # GET /users/1/following

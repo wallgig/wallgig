@@ -88,4 +88,9 @@ class Comment < ActiveRecord::Base
       # TODO detect mentions and notify them
     end
   end
+
+  # FIXME Strange bug that loads incorrect user when accessing via user's comments: `User.first.comments.first.user`
+  def user
+    User.find(user_id)
+  end
 end
