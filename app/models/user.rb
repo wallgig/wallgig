@@ -268,7 +268,7 @@ class User < ActiveRecord::Base
     end
 
     def public_collections_count
-      collections.public.count
+      collections.where(public: true).count
     end
   end
 
