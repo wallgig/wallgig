@@ -58,6 +58,11 @@ module WallpaperSearchParams
         session[:random_seed] = search_options[:random_seed]
       end
 
+      # Remove empty array items
+      [:categories, :exclude_categories, :tags, :exclude_tags, :colors, :aspect_ratios].each do |array_key|
+        search_options[array_key].reject!(&:blank?)
+      end
+
       search_options
     end
   end
