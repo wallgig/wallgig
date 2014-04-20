@@ -32,10 +32,6 @@ describe Ability do
         it { should be_able_to :update, not_my_wallpaper }
         it { should_not be_able_to :destroy, not_my_wallpaper }
       end
-
-      context 'purity locked' do
-        it { should_not be_able_to :update_purity, build(:wallpaper, user: user, purity_locked: true) }
-      end
     end
 
     context 'favourites' do

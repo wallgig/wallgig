@@ -100,49 +100,4 @@ describe WallpapersController do
       end
     end
   end
-
-  describe 'PATCH #update_purity' do
-    let(:user) { FactoryGirl.create :user }
-    let!(:wallpaper) { FactoryGirl.create :wallpaper, user: user, purity: 'sfw' }
-
-    context 'when signed out' do
-      it 'redirects to sign in page' do
-        delete :destroy, id: wallpaper.id
-        expect(response).to redirect_to new_user_session_path
-      end
-    end
-
-    context 'when signed in' do
-      before { sign_in user }
-
-      context 'wallpaper with purity locked' do
-        before do
-          wallpaper.purity_locked = true
-          wallpaper.save
-
-          patch :update_purity, id: wallpaper.id, purity: 'nsfw'
-        end
-
-        it { should respond_with 401 }
-      end
-
-      context 'wallpaper with purity not locked' do
-        before do
-          wallpaper.purity_locked = false
-          wallpaper.save
-        end
-
-        it 'changes the wallpaper purity' do
-          patch :update_purity, id: wallpaper.id, purity: 'nsfw'
-          wallpaper.reload
-          expect(wallpaper.purity).to eq 'nsfw'
-        end
-
-        it 'redirects to the wallpaper' do
-          patch :update_purity, id: wallpaper.id, purity: 'nsfw'
-          expect(response).to redirect_to wallpaper
-        end
-      end
-    end
-  end
 end

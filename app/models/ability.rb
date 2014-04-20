@@ -41,7 +41,6 @@ class Ability
       cannot :read, Wallpaper, approved_at: nil unless user.moderator?
       can :create, Wallpaper, user_id: user.id
       # can :crud, Wallpaper, user_id: user.id
-      # cannot :update_purity, Wallpaper, purity_locked: true unless user.moderator?
 
       # Favourite
       can :crud, Favourite, user_id: user.id

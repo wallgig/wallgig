@@ -18,7 +18,6 @@
 #  cached_tag_list       :text
 #  image_gravity         :string(255)      default("c")
 #  favourites_count      :integer          default(0)
-#  purity_locked         :boolean          default(FALSE)
 #  source                :text
 #  scrape_source         :string(255)
 #  scrape_id             :string(255)

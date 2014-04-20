@@ -18,7 +18,6 @@
 #  cached_tag_list       :text
 #  image_gravity         :string(255)      default("c")
 #  favourites_count      :integer          default(0)
-#  purity_locked         :boolean          default(FALSE)
 #  source                :text
 #  scrape_source         :string(255)
 #  scrape_id             :string(255)
@@ -55,7 +54,6 @@ class Wallpaper < ActiveRecord::Base
 
   enumerize :image_gravity, in: Dragonfly::ImageMagick::Processors::Thumb::GRAVITIES.keys
 
-
   #
   # Relations
   #
@@ -88,7 +86,6 @@ class Wallpaper < ActiveRecord::Base
   has_many :subscriptions_wallpapers, dependent: :destroy
   has_many :subscriptions, through: :subscriptions_wallpapers
 
-
   #
   # Image
   #
@@ -102,11 +99,9 @@ class Wallpaper < ActiveRecord::Base
     end
   end
 
-
   #
   # Validations
   #
-
   validates_presence_of :image
   validates_size_of :image,      maximum: 20.megabytes,                       on: :create
   validates_property :mime_type, of: :image, in: ['image/jpeg', 'image/png'], on: :create
@@ -115,7 +110,6 @@ class Wallpaper < ActiveRecord::Base
 
   validate :check_duplicate_image_hash, on: :create unless Rails.env.development?
 
-
   #
   # Scopes
   #
@@ -123,7 +117,6 @@ class Wallpaper < ActiveRecord::Base
   scope :processed,     -> { where(processing: false) }
   scope :visible,       -> { processed }
   scope :latest,        -> { order(created_at: :desc) }
-
 
   #
   # Callbacks
@@ -135,7 +128,6 @@ class Wallpaper < ActiveRecord::Base
   around_save :check_image_gravity_changed
   after_save :update_processing_status, if: :processing?
   after_commit :queue_notify_subscribers
-
 
   #
   # Search
@@ -286,14 +278,6 @@ class Wallpaper < ActiveRecord::Base
     "Wallpaper \##{id}"
   end
 
-  def lock_purity!
-    update_attribute :purity_locked, true
-  end
-
-  def unlock_purity!
-    update_attribute :purity_locked, false
-  end
-
   def queue_create_thumbnails
     WallpaperResizerWorker.perform_async(id)
   end
@@ -377,14 +361,13 @@ class Wallpaper < ActiveRecord::Base
   end
 
   private
-
-  def check_duplicate_image_hash
-    if image_hash.present? && (duplicate = self.class.where.not(id: self.id).where(image_hash: image_hash).first)
-      errors.add :image, "has already been uploaded (#{duplicate})"
+    def check_duplicate_image_hash
+      if image_hash.present? && (duplicate = self.class.where.not(id: self.id).where(image_hash: image_hash).first)
+        errors.add :image, "has already been uploaded (#{duplicate})"
+      end
     end
-  end
 
-  def auto_approve_if_trusted_user
-    self.approved_at = Time.now if user.staff? || user.trusted?
-  end
+    def auto_approve_if_trusted_user
+      self.approved_at = Time.now if user.staff? || user.trusted?
+    end
 end

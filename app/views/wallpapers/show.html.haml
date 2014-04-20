@@ -102,20 +102,6 @@
       .panel-body
         = @wallpaper.resolution_select_tag
 
-    - if false
-      .panel-body
-        .btn-group.btn-group-justified.btn-group-purity
-          - Wallpaper.purity.options.each_entry do |label, value|
-            = link_to label, update_purity_wallpaper_path(@wallpaper, value),
-                      class: "btn btn-sm ladda-button btn-#{value} #{'btn-active' if @wallpaper.purity == value} #{'disabled' if @wallpaper.purity_locked?}",
-                      data: { :method => :patch,
-                              :remote => true,
-                              :type => 'json',
-                              :style => 'zoom-in',
-                              :'action' => 'change-purity',
-                              :'wallpaper-id' => @wallpaper.id,
-                              :purity => value }
-
     - if user_signed_in?
       .panel-body
         = simple_form_for :comment, url: wallpaper_comments_path(@wallpaper), remote: true, data: { provide: 'comments' } do |f|

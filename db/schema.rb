@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20140420071949) do
+ActiveRecord::Schema.define(version: 20140420235245) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -495,7 +495,6 @@ ActiveRecord::Schema.define(version: 20140420071949) do
     t.text     "cached_tag_list"
     t.string   "image_gravity",       default: "c"
     t.integer  "favourites_count",    default: 0
-    t.boolean  "purity_locked",       default: false
     t.text     "source"
     t.string   "scrape_source"
     t.string   "scrape_id"
