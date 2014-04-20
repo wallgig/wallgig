@@ -1,13 +1,14 @@
 class Api::V1::WallpapersController < Api::V1::BaseController
-  before_action :ensure_from_mashape!
   before_action :authenticate_user_from_token!, only: [:create]
   before_action :set_wallpaper, only: [:show]
 
   include WallpaperSearchParams
 
   def index
-    @wallpapers = WallpaperSearchService.new(search_options).wallpapers
+    @wallpapers = WallpaperSearchService.new(search_options).execute
+
     @wallpapers = WallpapersDecorator.new(@wallpapers, context: { search_options: search_options, current_user: current_user })
+
     respond_with @wallpapers
   end
 
