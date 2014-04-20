@@ -115,7 +115,6 @@ gem 'countries', require: 'iso3166'
 gem 'geocoder'
 
 gem 'searchkick'
-gem 'tire'
 
 gem 'sidekiq', github: 'mperham/sidekiq'
 gem 'sidetiq', github: 'tobiassvn/sidetiq'

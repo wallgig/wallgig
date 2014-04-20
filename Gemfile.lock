@@ -111,7 +111,6 @@ GEM
     annotate (2.6.3)
       activerecord (>= 2.3.0)
       rake (>= 0.8.7)
-    ansi (1.4.3)
     arbre (1.0.1)
       activesupport (>= 3.0.0)
     arel (5.0.1.20140414130214)
@@ -262,7 +261,6 @@ GEM
       actionpack (>= 3.2, < 5)
       activesupport (>= 3.2, < 5)
     hashie (2.1.1)
-    hashr (0.0.22)
     hike (1.2.3)
     httparty (0.13.1)
       json (~> 1.8)
@@ -500,14 +498,6 @@ GEM
     tilt (1.4.1)
     timers (1.1.0)
     tins (1.1.0)
-    tire (0.6.2)
-      activemodel (>= 3.0)
-      activesupport
-      ansi
-      hashr (~> 0.0.19)
-      multi_json (~> 1.3)
-      rake
-      rest-client (~> 1.6)
     treetop (1.4.15)
       polyglot
       polyglot (>= 0.3.1)
@@ -601,6 +591,5 @@ DEPENDENCIES
   spork-rails
   spring
   therubyracer
-  tire
   uglifier (>= 1.3.0)
   workflow!

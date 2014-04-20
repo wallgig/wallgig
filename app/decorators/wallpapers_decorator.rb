@@ -15,7 +15,7 @@ class WallpapersDecorator < Draper::CollectionDecorator
   end
 
   def has_pagination?
-    object.kind_of?(Kaminari::PageScopeMethods) || object.kind_of?(Tire::Results::Pagination)
+    object.is_a?(Kaminari::PageScopeMethods) || object.is_a?(Searchkick::Results)
   end
 
   def ids

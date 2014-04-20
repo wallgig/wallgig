@@ -4,7 +4,7 @@ class WallpaperSearchService
 
     # Remove blank array values
     @options.each do |_,option|
-      option.reject!(&:blank?) if options.is_a? Array
+      option.reject!(&:blank?) if option.is_a? Array
     end
   end
 
@@ -191,7 +191,7 @@ class WallpaperSearchService
           :constant_score => {
             :filter => {
               :terms => {
-                :'aspect_ratio' => Array.wrap(@options[:aspect_ratios]).map { |aspect_ratio| aspect_ratio.tr('_', '.').to_f }
+                :aspect_ratio => Array.wrap(@options[:aspect_ratios]).map { |aspect_ratio| aspect_ratio.tr('_', '.').to_f }
               }
             }
           }
