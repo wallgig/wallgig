@@ -50,6 +50,25 @@
 #
 
 class Wallpaper < ActiveRecord::Base
+  serialize :cached_tag_list, Array
+
+  include Approvable
+  include Commentable
+  include HasPurity
+  include Reportable
+
+  acts_as_votable # TODO deprecate
+
+  is_impressionable counter_cache: true
+
+  paginates_per 20
+
+  enumerize :image_gravity, in: Dragonfly::ImageMagick::Processors::Thumb::GRAVITIES.keys
+
+
+  #
+  # Relations
+  #
   belongs_to :user, counter_cache: true
 
   has_many :wallpaper_colors, -> { order('wallpaper_colors.percentage DESC') }, dependent: :destroy
@@ -79,15 +98,10 @@ class Wallpaper < ActiveRecord::Base
   has_many :subscriptions_wallpapers, dependent: :destroy
   has_many :subscriptions, through: :subscriptions_wallpapers
 
-  include Approvable
-  include HasPurity
-  include Reportable
 
-  acts_as_votable
-
-  enumerize :image_gravity, in: Dragonfly::ImageMagick::Processors::Thumb::GRAVITIES.keys
-
+  #
   # Image
+  #
   attr_readonly :image
 
   dragonfly_accessor :image
@@ -98,52 +112,41 @@ class Wallpaper < ActiveRecord::Base
     end
   end
 
-  # Comments
-  include Commentable
 
-  # Tags
-  serialize :cached_tag_list, Array
+  #
+  # Validations
+  #
 
-  # Pagination
-  paginates_per 20
-
-  # Views
-  is_impressionable counter_cache: true
-
-  # Paper trail
-  # has_paper_trail only: [:purity, :cached_tag_list, :source]
-
-  # Validation
   validates_presence_of :image
   validates_size_of :image,      maximum: 20.megabytes,                       on: :create
   validates_property :mime_type, of: :image, in: ['image/jpeg', 'image/png'], on: :create
   validates_property :width,     of: :image, in: (600..10240),                on: :create
   validates_property :height,    of: :image, in: (600..10240),                on: :create
 
-  unless Rails.env.development?
-    validate :check_duplicate_image_hash, on: :create
-  end
+  validate :check_duplicate_image_hash, on: :create unless Rails.env.development?
 
+
+  #
   # Scopes
+  #
   scope :processing,    -> { where(processing: true ) }
   scope :processed,     -> { where(processing: false) }
   scope :visible,       -> { processed }
   scope :latest,        -> { order(created_at: :desc) }
   scope :similar_to,    -> (w) { where.not(id: w.id).where(["( SELECT SUM(((phash::bigint # ?) >> bit) & 1 ) FROM generate_series(0, 63) bit) <= 15", w.phash]) }
 
+
+  #
   # Callbacks
+  #
   before_validation :set_image_hash, on: :create
-
   before_create :auto_approve_if_trusted_user
-
   after_create :queue_create_thumbnails
   after_create :queue_process_image
-
   around_save :check_image_gravity_changed
-
   after_save :update_processing_status, if: :processing?
-
   after_commit :queue_notify_subscribers
+
 
   #
   # Search
