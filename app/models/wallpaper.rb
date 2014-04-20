@@ -146,21 +146,25 @@ class Wallpaper < ActiveRecord::Base
 
   searchkick mappings: {
     wallpaper: {
-      user_id: { type: 'integer' },
-      user: { type: 'string', analyzer: 'keyword', index: 'not_analyzed' },
-      purity: { type: 'string', analyzer: 'keyword', index: 'not_analyzed' },
-      tag: { type: 'string', analyzer: 'keyword' },
-      category: { type: 'string', analyzer: 'keyword' },
-      width: { type: 'integer' },
-      height: { type: 'integer' },
-      color: {
-        hex: { type: 'string', analyzer: 'keyword', index: 'not_analyzed' },
-        percentage: { type: 'integer' }
-      },
-      aspect_ratio: { type: 'float' },
-      updated_at: { type: 'date' },
-      views: { type: 'integer' },
-      favourites: { type: 'integer' }
+      properties: {
+        user_id: { type: 'integer' },
+        user: { type: 'string', analyzer: 'keyword', index: 'not_analyzed' },
+        purity: { type: 'string', analyzer: 'keyword', index: 'not_analyzed' },
+        tag: { type: 'string', analyzer: 'keyword' },
+        category: { type: 'string', analyzer: 'keyword' },
+        width: { type: 'integer' },
+        height: { type: 'integer' },
+        color: {
+          properties: {
+            hex: { type: 'string', analyzer: 'keyword', index: 'not_analyzed' },
+            percentage: { type: 'integer' }
+          }
+        },
+        aspect_ratio: { type: 'float' },
+        updated_at: { type: 'date' },
+        views: { type: 'integer' },
+        favourites: { type: 'integer' }
+      }
     }
   }
 
@@ -182,7 +186,7 @@ class Wallpaper < ActiveRecord::Base
   end
 
   def should_index?
-    processing? && approved?
+    !processing? && approved?
   end
 
   def self.ensure_consistency!
