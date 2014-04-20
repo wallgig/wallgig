@@ -25,6 +25,9 @@
 #
 
 class Topic < ActiveRecord::Base
+  include Cookable
+  cookable :content
+
   MODERATION_ACTIONS = [:pin, :unpin, :lock, :unlock, :hide, :unhide]
 
   belongs_to :forum
@@ -52,10 +55,6 @@ class Topic < ActiveRecord::Base
 
   after_initialize do
     self.forum ||= Forum.uncategorized
-  end
-
-  before_save do
-    self.cooked_content = ApplicationController.helpers.markdown(content) if content_changed?
   end
 
   def to_s

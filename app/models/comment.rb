@@ -21,6 +21,9 @@
 #
 
 class Comment < ActiveRecord::Base
+  include Cookable
+  cookable :comment
+
   belongs_to :user
   belongs_to :commentable, polymorphic: true, counter_cache: true
 
@@ -36,10 +39,6 @@ class Comment < ActiveRecord::Base
 
   scope :latest, -> { order(created_at: :desc) }
   scope :oldest, -> { order(created_at: :asc) }
-
-  before_save do
-    self.cooked_comment = ApplicationController.helpers.markdown(comment) if comment_changed?
-  end
 
   after_create :update_last_comment_on_create
   after_create :notify
