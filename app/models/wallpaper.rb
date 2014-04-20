@@ -178,7 +178,7 @@ class Wallpaper < ActiveRecord::Base
   end
 
   def should_index?
-    approved?
+    processed? && approved?
   end
 
   def self.ensure_consistency!
