@@ -1,4 +1,6 @@
-json.extract! wallpaper, :id, :purity, :source, :created_at, :updated_at, :comments_count, :favourites_count
+json.extract! wallpaper, :id, :purity, :created_at, :updated_at, :comments_count, :favourites_count
+
+json.source wallpaper.cooked_source.presence
 
 json.views_count wallpaper.impressions_count
 

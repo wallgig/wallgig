@@ -26,6 +26,7 @@
 #  comments_count        :integer          default(0)
 #  approved_by_id        :integer
 #  approved_at           :datetime
+#  cooked_source         :string(255)
 #
 # Indexes
 #
@@ -44,6 +45,9 @@ class Wallpaper < ActiveRecord::Base
   include Commentable
   include HasPurity
   include Reportable
+  include Cookable
+
+  cookable :source
 
   is_impressionable counter_cache: true
 
@@ -178,7 +182,7 @@ class Wallpaper < ActiveRecord::Base
   end
 
   def should_index?
-    processed? && approved?
+    processing? && approved?
   end
 
   def self.ensure_consistency!
@@ -327,11 +331,6 @@ class Wallpaper < ActiveRecord::Base
         .uniq
 
     Category.where(id: category_ids).pluck(:name)
-  end
-
-  def cooked_source
-    # OPTIMIZE save to model?
-    ApplicationController.helpers.markdown_line(source) if source.present?
   end
 
   # TODO deprecate

@@ -26,6 +26,7 @@
 #  comments_count        :integer          default(0)
 #  approved_by_id        :integer
 #  approved_at           :datetime
+#  cooked_source         :string(255)
 #
 # Indexes
 #
