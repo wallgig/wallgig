@@ -1,14 +1,17 @@
 class WallpaperSearchService
   def initialize(options)
     @options = options
+
+    # Remove blank array values
+    @options.each do |_,option|
+      option.reject!(&:blank?) if options.is_a? Array
+    end
   end
 
   def execute
-    payload = build_payload
-
-    Wallpaper.search query: payload[:query],
+    Wallpaper.search query: build_query,
                      facets: build_facets,
-                     order: payload[:sort],
+                     order: build_sort,
                      page: @options[:page],
                      per_page: @options[:per_page] || Wallpaper.default_per_page
   rescue Elasticsearch::Transport::Transport::Errors::BadRequest => e
@@ -47,26 +50,13 @@ class WallpaperSearchService
       }
     end
 
-    def build_payload
-      payload = {
-        :query => {
-          :bool => {
-            :must => [],
-            :must_not => []
-          }
-        },
-        :sort => {}
-      }
-
-      payload[:query][:bool][:must] << {
-        :term => {
-          :'approved' => true
-        }
-      }
+    def build_query
+      musts = []
+      must_nots = []
 
       # Handle query string
       if @options[:q].present?
-        payload[:query][:bool][:must] << {
+        musts << {
           :query_string => {
             :query => @options[:q],
             :default_operator => 'AND',
@@ -78,11 +68,11 @@ class WallpaperSearchService
       # Handle tags
       if @options[:tags].present?
         @options[:tags].each do |tag|
-          payload[:query][:bool][:must] << {
+          musts << {
             :constant_score => {
               :filter => {
                 :term => {
-                  :'tags' => tag
+                  :tag => tag
                 }
               }
             }
@@ -93,11 +83,11 @@ class WallpaperSearchService
       # Handle tag exclusions
       if @options[:exclude_tags].present?
         @options[:exclude_tags].each do |tag|
-          payload[:query][:bool][:must_not] << {
+          must_nots << {
             :constant_score => {
               :filter => {
                 :term => {
-                  :'tags' => tag
+                  :tag => tag
                 }
               }
             }
@@ -108,11 +98,11 @@ class WallpaperSearchService
       # Handle categories
       if @options[:categories].present?
         @options[:categories].each do |category|
-          payload[:query][:bool][:must] << {
+          musts << {
             :constant_score => {
               :filter => {
                 :term => {
-                  :'categories' => category
+                  :category => category
                 }
               }
             }
@@ -123,11 +113,11 @@ class WallpaperSearchService
       # Handle categories exclusions
       if @options[:exclude_categories].present?
         @options[:exclude_categories].each do |category|
-          payload[:query][:bool][:must_not] << {
+          must_nots << {
             :constant_score => {
               :filter => {
                 :term => {
-                  :'categories' => category
+                  :category => category
                 }
               }
             }
@@ -136,11 +126,11 @@ class WallpaperSearchService
       end
 
       # Handle purity
-      payload[:query][:bool][:must] << {
+      musts << {
         :constant_score => {
           :filter => {
             :terms => {
-              :'purity' => @options[:purity]
+              :purity => @options[:purity]
             }
           }
         }
@@ -150,7 +140,7 @@ class WallpaperSearchService
       if @options[:resolution_exactness] == 'at_least'
         [:width, :height].each do |a|
           if @options[a].present?
-            payload[:query][:bool][:must] << {
+            musts << {
               :range => {
                 a => {
                   :gte => @options[a],
@@ -163,7 +153,7 @@ class WallpaperSearchService
       else
         [:width, :height].each do |a|
           if @options[a].present?
-            payload[:query][:bool][:must] << {
+            musts << {
               :constant_score => {
                 :filter => {
                   :term => {
@@ -179,7 +169,7 @@ class WallpaperSearchService
       # Handle colors
       if @options[:colors].present?
         @options[:colors].each do |color|
-          payload[:query][:bool][:must] << {
+          musts << {
             :constant_score => {
               :filter => {
                 :term => {
@@ -188,25 +178,16 @@ class WallpaperSearchService
               }
             }
           }
-
-          payload[:sort]['colors.percentage'] = {
-            :order => 'desc',
-            :nested_filter => {
-              :term => {
-                :'colors.hex' => color
-              }
-            }
-          }
         end
       end
 
       # Handle user
       if @options[:user].present?
-        payload[:query][:bool][:must] << {
+        musts << {
           :constant_score => {
             :filter => {
               :term => {
-                :'user' => @options[:user]
+                :user => @options[:user]
               }
             }
           }
@@ -215,7 +196,7 @@ class WallpaperSearchService
 
       # Handle aspect ratios
       if @options[:aspect_ratios].present?
-        payload[:query][:bool][:must] << {
+        musts << {
           :constant_score => {
             :filter => {
               :terms => {
@@ -226,9 +207,10 @@ class WallpaperSearchService
         }
       end
 
+      # Handle ordering
       case @options[:order]
       when 'random'
-        payload[:query][:bool][:must] << {
+        musts << {
           :function_score => {
             :functions => [
               {
@@ -239,9 +221,8 @@ class WallpaperSearchService
             ]
           }
         }
-        payload[:sort]['_score'] = 'desc'
       when 'popular'
-        payload[:query][:bool][:must] << {
+        musts << {
           :function_score => {
             :functions => [
               {
@@ -252,11 +233,29 @@ class WallpaperSearchService
             ]
           }
         }
-        payload[:sort]['_score'] = 'desc'
-      else
-        payload[:sort]['approved_at'] = 'desc'
       end
 
-      payload
+      {
+        :bool => {
+          :must => musts,
+          :must_not => must_nots
+        }
+      }
+    end
+
+    def build_sort
+      sorts = {}
+
+      # Handle ordering
+      case @options[:order]
+      when 'random'
+      when 'popular'
+        sorts['_score'] = 'desc'
+      else
+        # Sort using updated_at by default
+        sorts['updated_at'] = 'desc'
+      end
+
+      sorts
     end
 end

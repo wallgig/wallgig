@@ -143,80 +143,54 @@ class Wallpaper < ActiveRecord::Base
 
   after_save :update_processing_status, if: :processing?
 
-  unless Rails.env.test?
-    after_save :update_index, unless: :processing?
-    after_destroy :update_index
-  end
-
   after_commit :queue_notify_subscribers
 
   #
   # Search
   #
-  # formula to calculate wallpaper's popularity
+
+  # Formula to calculate wallpaper's popularity
   POPULARITY_SCRIPT = "doc['views'].value * 0.1 + doc['favourites'].value * 1.0"
 
-  searchkick
-
-  # include Tire::Model::Search
-  # tire.settings :analysis => {
-  #                 :analyzer => {
-  #                   :'string_lowercase' => {
-  #                     :tokenizer => 'keyword',
-  #                     :filter => 'lowercase'
-  #                   }
-  #                 }
-  #               } do
-  #   tire.mapping do
-  #     indexes :user_id,              type: 'integer'
-  #     indexes :user,                 type: 'string',  analyzer: 'keyword', index: 'not_analyzed'
-  #     indexes :purity,               type: 'string',  analyzer: 'keyword', index: 'not_analyzed'
-  #     indexes :tags,                 type: 'string',  analyzer: 'keyword'
-  #     indexes :categories,           type: 'string',  analyzer: 'keyword'
-  #     indexes :width,                type: 'integer'
-  #     indexes :height,               type: 'integer'
-  #     indexes :source,               type: 'string'
-  #     indexes :colors do
-  #       indexes :hex,                type: 'string',  analyzer: 'keyword', index: 'not_analyzed'
-  #       indexes :percentage,         type: 'integer'
-  #     end
-  #     indexes :views,                type: 'integer'
-  #     # indexes :views_today,          type: 'integer'
-  #     # indexes :views_this_week,      type: 'integer'
-  #     indexes :favourites,           type: 'integer'
-  #     # indexes :favourites_today,     type: 'integer' # TODO
-  #     # indexes :favourites_this_week, type: 'integer' # TODO
-  #     indexes :approved,             type: 'boolean'
-  #     indexes :approved_at,          type: 'date'
-  #     indexes :created_at,           type: 'date'
-  #     indexes :updated_at,           type: 'date'
-  #     indexes :aspect_ratio,         type: 'float'
-  #   end
-  # end
+  searchkick mappings: {
+    wallpaper: {
+      user_id: { type: 'integer' },
+      user: { type: 'string', analyzer: 'keyword', index: 'not_analyzed' },
+      purity: { type: 'string', analyzer: 'keyword', index: 'not_analyzed' },
+      tag: { type: 'string', analyzer: 'keyword' },
+      category: { type: 'string', analyzer: 'keyword' },
+      width: { type: 'integer' },
+      height: { type: 'integer' },
+      color: {
+        hex: { type: 'string', analyzer: 'keyword', index: 'not_analyzed' },
+        percentage: { type: 'integer' }
+      },
+      aspect_ratio: { type: 'float' },
+      updated_at: { type: 'date' },
+      views: { type: 'integer' },
+      favourites: { type: 'integer' }
+    }
+  }
 
   def search_data
     {
-      user_id:              user_id,
-      user:                 user.try(:username),
-      purity:               purity,
-      tags:                 tag_list,
-      categories:           category_list,
-      width:                image_width,
-      height:               image_height,
-      source:               source,
-      colors:               wallpaper_colors.includes(:color).map { |color| { hex: color.hex, percentage: (color.percentage * 10).ceil } },
-      views:                impressions_count,
-      # views_today:          impressionist_count(start_date: Time.now.beginning_of_day),
-      # views_this_week:      impressionist_count(start_date: Time.now.beginning_of_week),
-      favourites:           favourites_count,
-      # favourites_today:     favourites.where('created_at >= ?', Time.now.beginning_of_day).size, # FIXME
-      # favourites_this_week: favourites.where('created_at >= ?', Time.now.beginning_of_week).size, # FIXME
-      approved:             approved?,
-      approved_at:          approved_at,
-      created_at:           created_at,
-      updated_at:           updated_at,
-      aspect_ratio:         aspect_ratio
+      user_id: user_id,
+      user: user.try(:username),
+      purity: purity,
+      tag: tag_list,
+      category: category_list,
+      width: image_width,
+      height: image_height,
+      color: wallpaper_colors.includes(:color).map { |color| { hex: color.hex, percentage: (color.percentage * 10).ceil } },
+      aspect_ratio: aspect_ratio,
+      updated_at: updated_at,
+      views: impressions_count,
+      favourites: favourites_count
     }
+  end
+
+  def should_index?
+    approved?
   end
 
   def self.ensure_consistency!
