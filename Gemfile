@@ -94,7 +94,6 @@ gem 'impressionist'
 gem 'paper_trail', '~> 3.0.0'
 gem 'ancestry'
 gem 'acts_as_list'
-gem 'acts_as_votable', '~> 0.8.0'
 
 # views
 gem 'slim'

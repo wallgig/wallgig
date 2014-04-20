@@ -23,11 +23,6 @@
 #  scrape_source         :string(255)
 #  scrape_id             :string(255)
 #  image_hash            :string(255)
-#  cached_votes_total    :integer          default(0)
-#  cached_votes_score    :integer          default(0)
-#  cached_votes_up       :integer          default(0)
-#  cached_votes_down     :integer          default(0)
-#  cached_weighted_score :integer          default(0)
 #  comments_count        :integer          default(0)
 #  approved_by_id        :integer
 #  approved_at           :datetime
@@ -36,11 +31,6 @@
 #
 #  index_wallpapers_on_approved_at            (approved_at)
 #  index_wallpapers_on_approved_by_id         (approved_by_id)
-#  index_wallpapers_on_cached_votes_down      (cached_votes_down)
-#  index_wallpapers_on_cached_votes_score     (cached_votes_score)
-#  index_wallpapers_on_cached_votes_total     (cached_votes_total)
-#  index_wallpapers_on_cached_votes_up        (cached_votes_up)
-#  index_wallpapers_on_cached_weighted_score  (cached_weighted_score)
 #  index_wallpapers_on_image_hash             (image_hash)
 #  index_wallpapers_on_primary_color_id       (primary_color_id)
 #  index_wallpapers_on_purity                 (purity)
@@ -54,8 +44,6 @@ class Wallpaper < ActiveRecord::Base
   include Commentable
   include HasPurity
   include Reportable
-
-  acts_as_votable # TODO deprecate
 
   is_impressionable counter_cache: true
 

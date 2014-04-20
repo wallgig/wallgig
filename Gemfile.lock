@@ -105,7 +105,6 @@ GEM
       tzinfo (~> 1.1)
     acts_as_list (0.4.0)
       activerecord (>= 3.0)
-    acts_as_votable (0.8.0)
     ancestry (2.1.0)
       activerecord (>= 3.0.0)
     annotate (2.6.3)
@@ -516,7 +515,6 @@ DEPENDENCIES
   active_link_to
   activeadmin!
   acts_as_list
-  acts_as_votable (~> 0.8.0)
   ancestry
   annotate
   better_errors

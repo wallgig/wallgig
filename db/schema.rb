@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20140420062222) do
+ActiveRecord::Schema.define(version: 20140420064115) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -470,21 +470,6 @@ ActiveRecord::Schema.define(version: 20140420062222) do
 
   add_index "versions", ["item_type", "item_id"], name: "index_versions_on_item_type_and_item_id", using: :btree
 
-  create_table "votes", force: true do |t|
-    t.integer  "votable_id"
-    t.string   "votable_type"
-    t.integer  "voter_id"
-    t.string   "voter_type"
-    t.boolean  "vote_flag"
-    t.string   "vote_scope"
-    t.integer  "vote_weight"
-    t.datetime "created_at"
-    t.datetime "updated_at"
-  end
-
-  add_index "votes", ["votable_id", "votable_type", "vote_scope"], name: "index_votes_on_votable_id_and_votable_type_and_vote_scope", using: :btree
-  add_index "votes", ["voter_id", "voter_type", "vote_scope"], name: "index_votes_on_voter_id_and_voter_type_and_vote_scope", using: :btree
-
   create_table "wallpaper_colors", force: true do |t|
     t.integer "wallpaper_id"
     t.integer "color_id"
@@ -497,7 +482,7 @@ ActiveRecord::Schema.define(version: 20140420062222) do
   create_table "wallpapers", force: true do |t|
     t.integer  "user_id"
     t.string   "purity"
-    t.boolean  "processing",            default: true
+    t.boolean  "processing",          default: true
     t.string   "image_uid"
     t.string   "image_name"
     t.integer  "image_width"
@@ -506,32 +491,22 @@ ActiveRecord::Schema.define(version: 20140420062222) do
     t.datetime "updated_at"
     t.string   "thumbnail_image_uid"
     t.integer  "primary_color_id"
-    t.integer  "impressions_count",     default: 0
+    t.integer  "impressions_count",   default: 0
     t.text     "cached_tag_list"
-    t.string   "image_gravity",         default: "c"
-    t.integer  "favourites_count",      default: 0
-    t.boolean  "purity_locked",         default: false
+    t.string   "image_gravity",       default: "c"
+    t.integer  "favourites_count",    default: 0
+    t.boolean  "purity_locked",       default: false
     t.string   "source"
     t.string   "scrape_source"
     t.string   "scrape_id"
     t.string   "image_hash"
-    t.integer  "cached_votes_total",    default: 0
-    t.integer  "cached_votes_score",    default: 0
-    t.integer  "cached_votes_up",       default: 0
-    t.integer  "cached_votes_down",     default: 0
-    t.integer  "cached_weighted_score", default: 0
-    t.integer  "comments_count",        default: 0
+    t.integer  "comments_count",      default: 0
     t.integer  "approved_by_id"
     t.datetime "approved_at"
   end
 
   add_index "wallpapers", ["approved_at"], name: "index_wallpapers_on_approved_at", using: :btree
   add_index "wallpapers", ["approved_by_id"], name: "index_wallpapers_on_approved_by_id", using: :btree
-  add_index "wallpapers", ["cached_votes_down"], name: "index_wallpapers_on_cached_votes_down", using: :btree
-  add_index "wallpapers", ["cached_votes_score"], name: "index_wallpapers_on_cached_votes_score", using: :btree
-  add_index "wallpapers", ["cached_votes_total"], name: "index_wallpapers_on_cached_votes_total", using: :btree
-  add_index "wallpapers", ["cached_votes_up"], name: "index_wallpapers_on_cached_votes_up", using: :btree
-  add_index "wallpapers", ["cached_weighted_score"], name: "index_wallpapers_on_cached_weighted_score", using: :btree
   add_index "wallpapers", ["image_hash"], name: "index_wallpapers_on_image_hash", using: :btree
   add_index "wallpapers", ["primary_color_id"], name: "index_wallpapers_on_primary_color_id", using: :btree
   add_index "wallpapers", ["purity"], name: "index_wallpapers_on_purity", using: :btree

@@ -101,9 +101,6 @@ class User < ActiveRecord::Base
   # Comments
   include Commentable
 
-  # Voter
-  acts_as_voter
-
   # Donations
   has_many :donations, dependent: :nullify
 
