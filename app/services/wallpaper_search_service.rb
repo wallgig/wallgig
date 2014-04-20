@@ -29,23 +29,14 @@ class WallpaperSearchService
 
     def build_facets
       {
-        :tags => {
-          :terms => {
-            :field => 'tags',
-            :size => 20
-          }
+        :tag => {
+          :limit => 20
         },
-        :categories => {
-          :terms => {
-            :field => 'categories',
-            :size => 10
-          }
+        :category => {
+          :limit => 10
         },
-        :colors => {
-          :terms => {
-            :field => 'colors.hex',
-            :size => 20
-          }
+        :'color.hex' => {
+          :limit => 20
         }
       }
     end
@@ -173,7 +164,7 @@ class WallpaperSearchService
             :constant_score => {
               :filter => {
                 :term => {
-                  :'colors.hex' => color
+                  :'color.hex' => color
                 }
               }
             }
