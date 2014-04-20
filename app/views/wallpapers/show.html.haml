@@ -34,7 +34,7 @@
         %ul.list-inline
           %li
             = fa_icon_tag('question-circle')
-            = @wallpaper.cooked_source
+            = @wallpaper.cooked_source.html_safe
 
     - unless @wallpaper.approved?
       .panel-body
