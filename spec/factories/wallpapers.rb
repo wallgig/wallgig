@@ -19,14 +19,14 @@
 #  image_gravity         :string(255)      default("c")
 #  favourites_count      :integer          default(0)
 #  purity_locked         :boolean          default(FALSE)
-#  source                :string(255)
+#  source                :text
 #  scrape_source         :string(255)
 #  scrape_id             :string(255)
 #  image_hash            :string(255)
 #  comments_count        :integer          default(0)
 #  approved_by_id        :integer
 #  approved_at           :datetime
-#  cooked_source         :string(255)
+#  cooked_source         :text
 #
 # Indexes
 #
