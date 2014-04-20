@@ -110,10 +110,11 @@ gem 'font-awesome-rails'
 # services
 gem 'sinatra', '>= 1.3.0', require: false
 gem 'doorkeeper', '~> 0.7.0'
-gem 'tire'
 gem 'pg_search'
 gem 'countries', require: 'iso3166'
 gem 'geocoder'
+
+gem 'searchkick'
 
 gem 'sidekiq', github: 'mperham/sidekiq'
 gem 'sidetiq', github: 'tobiassvn/sidetiq'

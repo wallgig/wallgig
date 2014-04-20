@@ -10,8 +10,8 @@
 
   %h5 Tags
 
-  - if @wallpapers.facets.include?('tags') && @wallpapers.facets['tags']['terms'].any?
-    - @wallpapers.facets['tags']['terms'].in_groups_of(4, false).each do |terms|
+  - if @wallpapers.facets.include?('tag') && @wallpapers.facets['tag']['terms'].any?
+    - @wallpapers.facets['tag']['terms'].in_groups_of(4, false).each do |terms|
       .row
         - terms.each do |term|
           - label, count = term['term'], (term['count'] || 0)
@@ -58,8 +58,8 @@
 
   %h5 Categories
 
-  - if @wallpapers.facets.include?('categories') && @wallpapers.facets['categories']['terms'].any?
-    - @wallpapers.facets['categories']['terms'].in_groups_of(2, false).each do |terms|
+  - if @wallpapers.facets.include?('category') && @wallpapers.facets['category']['terms'].any?
+    - @wallpapers.facets['category']['terms'].in_groups_of(2, false).each do |terms|
       .row
         - terms.each do |term|
           - label, count = term['term'], (term['count'] || 0)
@@ -104,10 +104,10 @@
 - content_for :faceted_colors do
   %h5 Colors
 
-  - if @wallpapers.facets['colors']['terms'].any?
+  - if @wallpapers.facets['color.hex'] && @wallpapers.facets['color.hex']['terms'].any?
     - colors = search_options[:colors]
 
-    - @wallpapers.facets['colors']['terms'].in_groups_of(4, false).each do |terms|
+    - @wallpapers.facets['color.hex']['terms'].in_groups_of(4, false).each do |terms|
       .row
         - terms.each do |term|
           - hex, count = term['term'], (term['count'] || 0)

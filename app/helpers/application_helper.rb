@@ -76,4 +76,16 @@ module ApplicationHelper
     "<span class='fa fa-#{icon}'></span>".html_safe
   end
 
+  #
+  # Kaminari overrides
+  #
+
+  # Searchkick doesn't have the `last_page?` method
+  def link_to_next_page(scope, name, options = {}, &block)
+    params = options.delete(:params) || {}
+    param_name = options.delete(:param_name) || Kaminari.config.param_name
+    link_to_unless scope.current_page >= scope.total_pages, name, params.merge(param_name => scope.next_page), options.reverse_merge(:rel => 'next') do
+      block.call if block
+    end
+  end
 end
