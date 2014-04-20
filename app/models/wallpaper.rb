@@ -20,7 +20,6 @@
 #  favourites_count      :integer          default(0)
 #  purity_locked         :boolean          default(FALSE)
 #  source                :string(255)
-#  phash                 :integer
 #  scrape_source         :string(255)
 #  scrape_id             :string(255)
 #  image_hash            :string(255)
@@ -43,7 +42,6 @@
 #  index_wallpapers_on_cached_votes_up        (cached_votes_up)
 #  index_wallpapers_on_cached_weighted_score  (cached_weighted_score)
 #  index_wallpapers_on_image_hash             (image_hash)
-#  index_wallpapers_on_phash                  (phash)
 #  index_wallpapers_on_primary_color_id       (primary_color_id)
 #  index_wallpapers_on_purity                 (purity)
 #  index_wallpapers_on_user_id                (user_id)
@@ -133,7 +131,6 @@ class Wallpaper < ActiveRecord::Base
   scope :processed,     -> { where(processing: false) }
   scope :visible,       -> { processed }
   scope :latest,        -> { order(created_at: :desc) }
-  scope :similar_to,    -> (w) { where.not(id: w.id).where(["( SELECT SUM(((phash::bigint # ?) >> bit) & 1 ) FROM generate_series(0, 63) bit) <= 15", w.phash]) }
 
 
   #
@@ -301,19 +298,6 @@ class Wallpaper < ActiveRecord::Base
     update_attribute :purity_locked, false
   end
 
-  def update_phash
-    # TODO disable this for now
-    # return unless image.present?
-
-    # fingerprint = Phashion::Image.new(image.path).fingerprint
-    # self.phash = (fingerprint & ~(1 << 63)) - (fingerprint & (1 << 63)) # convert 64 bit unsigned to signed
-    # self.save
-  end
-
-  def similar_wallpapers
-    Wallpaper.similar_to(self)
-  end
-
   def queue_create_thumbnails
     WallpaperResizerWorker.perform_async(id)
   end
@@ -324,7 +308,6 @@ class Wallpaper < ActiveRecord::Base
 
   def process_image
     extract_colors
-    update_phash
   end
 
   def resolutions

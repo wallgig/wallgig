@@ -133,7 +133,6 @@ gem 'colorscore'
 gem 'httparty'
 gem 'active_link_to'
 gem 'meta-tags', :require => 'meta_tags'
-# gem 'phashion'
 gem 'draper', github: 'jianyuan/draper'
 gem 'redcarpet'
 gem 'spring', group: :development

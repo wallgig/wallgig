@@ -20,7 +20,6 @@
 #  favourites_count      :integer          default(0)
 #  purity_locked         :boolean          default(FALSE)
 #  source                :string(255)
-#  phash                 :integer
 #  scrape_source         :string(255)
 #  scrape_id             :string(255)
 #  image_hash            :string(255)
@@ -43,7 +42,6 @@
 #  index_wallpapers_on_cached_votes_up        (cached_votes_up)
 #  index_wallpapers_on_cached_weighted_score  (cached_weighted_score)
 #  index_wallpapers_on_image_hash             (image_hash)
-#  index_wallpapers_on_phash                  (phash)
 #  index_wallpapers_on_primary_color_id       (primary_color_id)
 #  index_wallpapers_on_purity                 (purity)
 #  index_wallpapers_on_user_id                (user_id)

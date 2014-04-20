@@ -123,9 +123,6 @@ ActiveAdmin.register Wallpaper do
         row :image_height
         row :thumbnail_image_uid
         row :image_gravity, &:image_gravity_text
-        row :phash do |wallpaper|
-          content_tag :code, wallpaper.phash
-        end
         row :scrape_source
         row :scrape_id
       end
@@ -135,21 +132,6 @@ ActiveAdmin.register Wallpaper do
         row :impressions_count
         row :favourites_count
         row :comments_count
-      end
-    end
-    if wallpaper.similar_wallpapers.any?
-      panel 'Similar Images' do
-        table_for wallpaper.similar_wallpapers do
-          column :thumbnail do |similar_wallpaper|
-            link_to admin_wallpaper_path(similar_wallpaper) do
-              if similar_wallpaper.thumbnail_image.present?
-                image_tag similar_wallpaper.thumbnail_image.url
-              else
-                "Wallpaper \##{similar_wallpaper.id}"
-              end
-            end
-          end
-        end        
       end
     end
     active_admin_comments
