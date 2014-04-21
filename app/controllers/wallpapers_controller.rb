@@ -15,8 +15,12 @@ class WallpapersController < ApplicationController
 
     @wallpapers = WallpapersDecorator.new(@wallpapers, context: { search_options: search_options, current_user: current_user })
 
-    if request.xhr?
-      render partial: 'list', layout: false, locals: { wallpapers: @wallpapers }
+    respond_to do |format|
+      format.html
+      format.json do
+        html = render_to_string partial: 'list', layout: false, locals: { wallpapers: @wallpapers }, formats: [:html]
+        render json: { html: html }
+      end
     end
   end
 

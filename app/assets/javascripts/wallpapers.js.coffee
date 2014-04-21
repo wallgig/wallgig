@@ -40,10 +40,10 @@ $ ->
       url = $this.attr 'href'
       $this.unbind 'inview'
       $this.replaceWith('<div class="loading-spinner" />')
-      $.get url, (html) ->
+      $.getJSON url, (data) ->
         $mainContainer = $('.list-wallpaper:first').parent()
         $mainContainer.find('.loading-spinner').remove()
-        $mainContainer.append(html)
+        $mainContainer.append(data.html)
         applyLazyLoad()
         $('[rel=next]').bind('inview', loadNextPage)
       window.analytics.page(null, null, { path: url })
