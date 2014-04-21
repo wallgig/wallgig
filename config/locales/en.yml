@@ -25,6 +25,9 @@ en:
       user_profile:
         country_code: "Country"
         title: "Custom title"
+      user_setting:
+        sfw: "SFW"
+        nsfw: "NSFW"
 
   enumerize:
     purity:
