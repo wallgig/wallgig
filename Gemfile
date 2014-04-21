@@ -62,7 +62,7 @@ group :development, :test do
   gem 'coveralls', require: false
 
   # utilities
-  gem 'annotate'
+  gem 'annotate', github: 'razum2um/annotate_models', branch: 'develop' # using alternative repo since original repo doesn't work with 4.1
   gem 'better_errors'
   gem 'binding_of_caller'
   gem 'database_cleaner'
@@ -131,7 +131,7 @@ gem 'color'
 gem 'colorscore'
 gem 'httparty'
 gem 'active_link_to'
-gem 'meta-tags', :require => 'meta_tags'
+gem 'meta-tags', require: 'meta_tags'
 gem 'draper', github: 'jianyuan/draper'
 gem 'redcarpet'
 gem 'spring', group: :development
