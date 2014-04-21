@@ -22,12 +22,17 @@
 en:
   simple_form:
     labels:
+      defaults:
+        sfw: "SFW"
+        nsfw: "NSFW"
+      user:
+        login: "Username or Email"
       user_profile:
         country_code: "Country"
         title: "Custom title"
       user_setting:
-        sfw: "SFW"
-        nsfw: "NSFW"
+        per_page: "Thumbnails per page"
+        infinite_scroll: "Use infinite scroll"
 
   enumerize:
     purity:
