@@ -102,7 +102,7 @@ gem 'simple_form', '~> 3.1.0.rc1', github: 'plataformatec/simple_form'
 gem 'eco'
 
 # assets
-gem 'bootstrap-sass', '~> 3.1.0'
+gem 'bootstrap-sass', '~> 3.1.1'
 gem 'bourbon'
 gem 'font-awesome-rails'
 
