@@ -98,7 +98,7 @@ gem 'acts_as_list'
 # views
 gem 'slim'
 gem 'haml-rails'
-gem 'simple_form'
+gem 'simple_form', '~> 3.1.0.rc1', github: 'plataformatec/simple_form'
 gem 'eco'
 
 # assets

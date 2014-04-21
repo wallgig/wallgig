@@ -10,7 +10,7 @@ en:
       # html: '<abbr title="required">*</abbr>'
     error_notification:
       default_message: "Please review the problems below:"
-    # Labels and hints examples
+    # Examples
     # labels:
     #   defaults:
     #     password: 'Password'
@@ -23,12 +23,9 @@ en:
     #   defaults:
     #     username: 'User name to sign in.'
     #     password: 'No special characters, please.'
-    labels:
-      defaults:
-        sfw: "SFW"
-        nsfw: "NSFW"
-      user:
-        login: "Username or Email"
-      user_setting:
-        per_page: "Thumbnails per page"
-        infinite_scroll: "Use infinite scroll"
+    # include_blanks:
+    #   defaults:
+    #     age: 'Rather not say'
+    # prompts:
+    #   defaults:
+    #     age: 'Select your age'
