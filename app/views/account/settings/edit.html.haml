@@ -1,41 +1,45 @@
 .page-header
   %h1 Edit settings
-  %span.help-block Settings that reflect throughout the entire site.
+  %span.help-block Settings that reflect throughout the site
 
-  = simple_form_for @settings, url: account_settings_path, method: :patch do |f|
-    .row
-      .col-md-6
-        %fieldset
-          %legend Browsing settings
+= simple_form_for @settings, url: account_settings_path, method: :patch,
+                  wrapper_mappings: { check_boxes: :vertical_radio_and_checkboxes,
+                                      radio_buttons: :vertical_radio_and_checkboxes,
+                                      file: :vertical_file_input,
+                                      boolean: :vertical_boolean } do |f|
+  .row
+    .col-md-6
+      %fieldset
+        %legend Browsing settings
 
-          .form-group
-            %label Purity
-            .row
-              .col-xs-4.purity-sfw
-                = f.input :sfw
-              .col-xs-4.purity-sketchy
-                = f.input :sketchy
-              .col-xs-4.purity-nsfw
-                = f.input :nsfw
+        .form-group
+          %label Purity
+          .row
+            .col-xs-4.purity-sfw
+              = f.input :sfw
+            .col-xs-4.purity-sketchy
+              = f.input :sketchy
+            .col-xs-4.purity-nsfw
+              = f.input :nsfw
 
-          = f.input :per_page
+        = f.input :per_page, include_blank: false
 
-          = f.input :infinite_scroll
+        = f.input :infinite_scroll
 
-        %fieldset
-          %legend Privacy settings
+      %fieldset
+        %legend Privacy settings
 
-          = f.input :invisible, hint: 'Hide my online status.'
+        = f.input :invisible, hint: 'Hide my online status'
 
-      .col-md-6
-        %fieldset
-          %legend Search settings
+    .col-md-6
+      %fieldset
+        %legend Search settings
 
-          = f.input :resolution_exactness, include_blank: false
+        = f.input :resolution_exactness, include_blank: false
 
-          = f.association :screen_resolution, include_blank: 'All'
+        = f.association :screen_resolution, include_blank: 'All'
 
-          = f.input :aspect_ratios, as: :check_boxes, hint: 'Select none for all'
+        = f.input :aspect_ratios, as: :check_boxes, hint: 'Select none for all'
 
-    .form-actions
-      = f.button :submit, 'Update settings', class: 'btn btn-primary btn-lg'
+  .form-actions
+    = f.button :submit, 'Update settings', class: 'btn btn-primary btn-lg'

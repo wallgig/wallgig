@@ -17,7 +17,8 @@
 
     .form-group
       = label_tag 'Tags'
-      = text_field_tag :tag, nil, data: { provide: 'tag-search' }, class: 'typeahead form-control', autocomplete: 'off'
+      = text_field_tag :tag, nil, data: { provide: 'tag-search' }, class: 'typeahead form-control', autocomplete: 'off', placeholder: 'Search for Tags'
+      %p.help-block Press <strong>Enter</strong> to add a tag
     .form-group
       %ul.list-tag.list-group{:data => {:provide => 'tag-list'}}
         - @wallpaper.wallpapers_tags.each do |wallpapers_tag|
