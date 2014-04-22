@@ -66,13 +66,17 @@ span.fa {
 }
 
 /* Dropdown menu */
-// .open .dropdown-menu > li > a {
-//   padding: 10px 20px;
-// }
+.open .dropdown-menu > li > a {
+  padding: 10px 20px;
+}
 
-/* Navbar */
-.navbar .navbar-nav div .btn {
-  margin-top: 8px;
+// Navbar
+// ------
+
+// Accommodate 25x25 avatar
+.navbar .dropdown-toggle.has-user-avatar {
+  padding-top: 13px;
+  padding-bottom: 13px;
 }
 
 /* Panel */

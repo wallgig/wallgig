@@ -103,7 +103,7 @@
                     %li.divider
                     %li= link_to 'View all notifications', notifications_url
                 %li.dropdown
-                  = link_to username_tag(current_user), current_user, class: 'dropdown-toggle', data: { toggle: 'dropdown' }
+                  = link_to user_avatar_tag(current_user, size: 25), current_user, class: 'dropdown-toggle has-user-avatar', data: { toggle: 'dropdown' }
                   %ul.dropdown-menu
                     - if current_user.admin? || current_user.moderator?
                       %li
