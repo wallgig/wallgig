@@ -14,6 +14,7 @@
 # Indexes
 #
 #  index_notifications_on_notifiable_id_and_notifiable_type  (notifiable_id,notifiable_type)
+#  index_notifications_on_read                               (read)
 #  index_notifications_on_user_id                            (user_id)
 #
 
