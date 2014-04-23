@@ -15,7 +15,7 @@ class Api::V1::NotificationsController < Api::V1::BaseController
     render action: 'index'
   end
 
-  # PATCH /api/v1/notifications/1/mark_read.json
+  # POST /api/v1/notifications/1/mark_read.json
   def mark_read
     @notification.mark_as_read
     head :no_content
