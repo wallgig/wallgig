@@ -15,8 +15,8 @@
   %ul.list-wallpaper{:class => local_assigns[:extra_css_class]}
     - wallpapers.each do |wallpaper|
       %li{:class => "purity-#{wallpaper.purity}", :data => {:wallpaper_id => wallpaper.id}}
-        = link_to wallpaper.path_with_resolution, title: wallpaper.tag_list_text, target: '_blank' do
-          = image_tag nil, width: 250, height: 188, class: 'img-wallpaper lazy', data: { src: wallpaper.thumbnail_image_url }
+
+        = thumbnail_link_to_wallpaper(wallpaper, lazy: true)
 
         .overlay.overlay-bottom
           %strong= wallpaper.resolution
