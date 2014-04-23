@@ -33,6 +33,7 @@ en:
       user_setting:
         per_page: "Thumbnails per page"
         infinite_scroll: "Use infinite scroll"
+        new_window: "Open wallpapers in new window"
 
   enumerize:
     purity:
