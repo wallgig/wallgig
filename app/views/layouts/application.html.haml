@@ -100,16 +100,22 @@
                 %li.dropdown
                   = link_to user_avatar_tag(current_user, size: 25), current_user, class: 'dropdown-toggle has-user-avatar', data: { toggle: 'dropdown' }
                   %ul.dropdown-menu
+                    %li
+                      = link_to_user current_user
+                    %li.divider
                     - if current_user.admin? || current_user.moderator?
                       %li
                         = link_to admin_root_path do
                           = fa_icon_tag('dashboard')
-                          Admin
-                      %li.divider
+                          Admin panel
                     %li
-                      = link_to current_user do
+                      = link_to edit_account_profile_path do
                         = fa_icon_tag('user')
-                        Profile
+                        Edit profile
+                    %li
+                      = link_to account_collections_path do
+                        = fa_icon_tag('pencil')
+                        Manage collections
                     %li.divider
                     %li
                       = link_to user_wallpapers_path(current_user) do
@@ -125,22 +131,14 @@
                         Favourites
                     %li.divider
                     %li
-                      = link_to account_collections_path do
-                        = fa_icon_tag('pencil')
-                        Manage collections
-                    %li
-                      = link_to edit_account_profile_path do
-                        = fa_icon_tag('pencil')
-                        Edit profile
-                    %li.divider
-                    %li
                       = link_to edit_account_settings_path do
                         = fa_icon_tag('wrench')
-                        Edit settings
+                        Edit site settings
                     %li
                       = link_to edit_user_registration_path do
                         = fa_icon_tag('pencil')
                         Edit account
+                    %li.divider
                     %li
                       = link_to destroy_user_session_path, method: :delete do
                         = fa_icon_tag('power-off')
