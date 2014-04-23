@@ -1,15 +1,4 @@
-# This is a manifest file that'll be compiled into application.js, which will include all the files
-# listed below.
-#
-# Any JavaScript/Coffee file within this directory, lib/assets/javascripts, vendor/assets/javascripts,
-# or vendor/assets/javascripts of plugins, if any, can be referenced here using a relative path.
-#
-# It's not advisable to add code directly here, but if you do, it'll appear at the bottom of the
-# compiled file.
-#
-# Read Sprockets README (https:#github.com/sstephenson/sprockets#sprockets-directives) for details
-# about supported directives.
-#
+#= require lodash
 #= require jquery
 #= require jquery_ujs
 
@@ -42,8 +31,10 @@
 #= require_self
 
 $ ->
+  $document = $(document)
+
   # Handle ajax errors
-  $(document).ajaxError (e, xhr, status, error) ->
+  $document.ajaxError (e, xhr, status, error) ->
     return unless xhr.status == 422
     bootbox.alert
       message: xhr.responseJSON.join('<br>'),
@@ -55,7 +46,7 @@ $ ->
   # Handle tooltips
   bindTooltips = -> $('[data-toggle=tooltip]').tooltip()
   bindTooltips()
-  $(document).ajaxSuccess bindTooltips
+  $document.ajaxSuccess bindTooltips
 
   # Handle WGText
   bindWGText = -> (new Wallgig.Managers.WGText($('[data-provide=wgtext]'))).execute()
@@ -65,15 +56,6 @@ $ ->
   # Handle subscribe button
   bindSubscribeButtons = -> (new Wallgig.Managers.SubscribeButton($('[data-provide=subscribe-button]'))).execute()
   bindSubscribeButtons()
-
-  # Handle time ago
-  bindTimeAgo = -> $('[data-provide=time-ago]').timeago()
-  bindTimeAgo()
-  $(document).ajaxSuccess bindTimeAgo
-
-  # Handle notifications
-  bindNotifications = -> (new Wallgig.Managers.Notifications($('[data-provide=notifications]'))).execute()
-  bindNotifications()
 
   # Handle user online status tooltip
   bindUserOnlineTooltip = ->
