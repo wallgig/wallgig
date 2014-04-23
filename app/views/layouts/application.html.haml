@@ -86,7 +86,7 @@
                     = fa_icon_tag('plus')
                     Subscriptions
                 %li.dropdown.user-notifications
-                  %a.dropdown-toggle{:data => {:toggle => 'dropdown'}}
+                  = link_to notifications_url, class: 'dropdown-toggle', data: { toggle: 'dropdown' } do
                     - if current_user.notifications.unread.any?
                       = fa_icon_tag('bell')
                       %span.badge.counter= current_user.notifications.unread.count
@@ -97,8 +97,8 @@
                     %li.dropdown-header.status
                     %li.divider
                     %li.view-all= link_to 'View all notifications', notifications_url
-                %li.dropdown
-                  = link_to user_avatar_tag(current_user, size: 25), current_user, class: 'dropdown-toggle has-user-avatar', data: { toggle: 'dropdown' }
+                %li.dropdown.current-user
+                  = link_to user_avatar_tag(current_user, size: 25), current_user, class: 'dropdown-toggle', data: { toggle: 'dropdown' }
                   %ul.dropdown-menu
                     %li
                       = link_to_user current_user

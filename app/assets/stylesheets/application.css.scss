@@ -59,10 +59,17 @@ span.fa {
 // Navbar
 // ------
 
-// Accommodate 25x25 avatar
-.navbar .dropdown-toggle.has-user-avatar {
-  padding-top: 13px;
-  padding-bottom: 13px;
+// Current user
+.dropdown.current-user {
+  // Accommodate 25x25 avatar
+  .dropdown-toggle {
+    padding-top: 13px;
+    padding-bottom: 13px;
+  }
+
+  .link-user {
+    font-size: larger;
+  }
 }
 
 // User notifications
