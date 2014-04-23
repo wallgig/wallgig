@@ -1,36 +1,51 @@
 class NotificationsController < ApplicationController
   before_action :authenticate_user!
+  before_action :set_notification, only: :show
 
+  # GET /notifications
   def index
-    @notifications = current_user.notifications.latest.page(params[:page])
+    @notifications = scoped_collection.latest.page(params[:page])
   end
 
-  def mark_as_read
-    if params[:id].present?
-      # Mark single notification as read
-      current_user.notifications.find(params[:id]).mark_as_read
+  # GET /notifications/1
+  def show
+    @notification.mark_as_read
 
-      respond_to do |format|
-        format.html { redirect_to notifications_url, notice: I18n.t('notifications.flashes.marked_as_read') }
-        format.json { head :no_content }
-      end
+    if actual_model = @notification.to_actual_model
+      redirect_to actual_model
     else
-      # Mark all notifications as read
-      current_user.notifications.mark_as_read
-
-      respond_to do |format|
-        format.html { redirect_to notifications_url, notice: I18n.t('notifications.flashes.marked_all_as_read') }
-        format.json { head :no_content }
-      end
+      redirect_to notifications_url, notice: I18n.t('notifications.flashes.marked_as_read')
     end
   end
 
+  # POST /notifications/mark_all_read
+  # POST /notifications/mark_all_read.json
+  def mark_all_read
+    scoped_collection.mark_as_read
+
+    respond_to do |format|
+      format.html { redirect_to notifications_url, notice: I18n.t('notifications.flashes.marked_all_as_read') }
+      format.json { head :no_content }
+    end
+  end
+
+  # DELETE /notifications/purge
+  # DELETE /notifications/purge.json
   def purge
-    current_user.notifications.delete_all
+    scoped_collection.delete_all
 
     respond_to do |format|
       format.html { redirect_to notifications_url, notice: I18n.t('notifications.flashes.purged') }
       format.json { head :no_content }
     end
   end
+
+  private
+    def scoped_collection
+      current_user.notifications
+    end
+
+    def set_notification
+      @notification = scoped_collection.find(params[:id])
+    end
 end

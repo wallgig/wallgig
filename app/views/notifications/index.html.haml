@@ -3,7 +3,7 @@
 
 - if @notifications.any?
   .page-subheader
-    = link_to mark_as_read_notifications_path, method: :post, class: 'btn btn-info' do
+    = link_to mark_all_read_notifications_path, method: :post, class: 'btn btn-info' do
       = fa_icon_tag('check')
       = t 'notifications.actions.mark_all_as_read'
 
@@ -11,7 +11,7 @@
       = fa_icon_tag('trash-o')
       = t 'notifications.actions.purge'
 
-  %ul.list-group.list-group-notifications{:data => {:provide => 'notifications'}}= render @notifications
+  %ul.list-group= render @notifications
 
   = paginate @notifications
 

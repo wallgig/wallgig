@@ -92,14 +92,10 @@ Wallgig::Application.routes.draw do
   resources :forums, only: [:index, :show]
 
   # Notifications
-  resources :notifications, only: [:index] do
+  resources :notifications, only: [:index, :show] do
     collection do
-      post :mark_as_read
+      post :mark_all_read
       delete :purge
-    end
-
-    member do
-      post :mark_as_read
     end
   end
 
