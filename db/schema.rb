@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20140422210151) do
+ActiveRecord::Schema.define(version: 20140423215233) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -396,6 +396,7 @@ ActiveRecord::Schema.define(version: 20140422210151) do
     t.boolean  "invisible",            default: false
     t.text     "aspect_ratios"
     t.string   "resolution_exactness", default: "at_least"
+    t.boolean  "new_window",           default: true,       null: false
   end
 
   add_index "user_settings", ["screen_resolution_id"], name: "index_user_settings_on_screen_resolution_id", using: :btree

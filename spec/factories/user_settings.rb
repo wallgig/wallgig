@@ -17,6 +17,7 @@
 #  invisible            :boolean          default(FALSE)
 #  aspect_ratios        :text
 #  resolution_exactness :string(255)      default("at_least")
+#  new_window           :boolean          default(TRUE), not null
 #
 # Indexes
 #
