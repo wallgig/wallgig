@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20140423215233) do
+ActiveRecord::Schema.define(version: 20140423221236) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -383,17 +383,17 @@ ActiveRecord::Schema.define(version: 20140423215233) do
 
   create_table "user_settings", force: true do |t|
     t.integer  "user_id"
-    t.boolean  "sfw",                  default: true
-    t.boolean  "sketchy",              default: false
-    t.boolean  "nsfw",                 default: false
+    t.boolean  "sfw",                  default: true,       null: false
+    t.boolean  "sketchy",              default: false,      null: false
+    t.boolean  "nsfw",                 default: false,      null: false
     t.integer  "per_page",             default: 20
-    t.boolean  "infinite_scroll",      default: true
+    t.boolean  "infinite_scroll",      default: true,       null: false
     t.integer  "screen_width"
     t.integer  "screen_height"
     t.datetime "created_at"
     t.datetime "updated_at"
     t.integer  "screen_resolution_id"
-    t.boolean  "invisible",            default: false
+    t.boolean  "invisible",            default: false,      null: false
     t.text     "aspect_ratios"
     t.string   "resolution_exactness", default: "at_least"
     t.boolean  "new_window",           default: true,       null: false

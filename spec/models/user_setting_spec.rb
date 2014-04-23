@@ -4,17 +4,17 @@
 #
 #  id                   :integer          not null, primary key
 #  user_id              :integer
-#  sfw                  :boolean          default(TRUE)
-#  sketchy              :boolean          default(FALSE)
-#  nsfw                 :boolean          default(FALSE)
+#  sfw                  :boolean          default(TRUE), not null
+#  sketchy              :boolean          default(FALSE), not null
+#  nsfw                 :boolean          default(FALSE), not null
 #  per_page             :integer          default(20)
-#  infinite_scroll      :boolean          default(TRUE)
+#  infinite_scroll      :boolean          default(TRUE), not null
 #  screen_width         :integer
 #  screen_height        :integer
 #  created_at           :datetime
 #  updated_at           :datetime
 #  screen_resolution_id :integer
-#  invisible            :boolean          default(FALSE)
+#  invisible            :boolean          default(FALSE), not null
 #  aspect_ratios        :text
 #  resolution_exactness :string(255)      default("at_least")
 #  new_window           :boolean          default(TRUE), not null
