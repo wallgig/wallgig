@@ -11,7 +11,7 @@
       = fa_icon_tag('trash-o')
       = t 'notifications.actions.purge'
 
-  %ul.list-group= render @notifications
+  %ul.list-group.notifications= render @notifications
 
   = paginate @notifications
 

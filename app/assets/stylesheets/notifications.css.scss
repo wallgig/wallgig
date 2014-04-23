@@ -1,3 +1,5 @@
-.list-group-notifications .unread {
-  @extend .list-group-item-info;
+.list-group.notifications {
+  .unread {
+    @extend .list-group-item-info;
+  }
 }
