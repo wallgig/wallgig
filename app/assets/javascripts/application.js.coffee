@@ -51,6 +51,7 @@ $ ->
   # Handle WGText
   bindWGText = -> (new Wallgig.Managers.WGText($('[data-provide=wgtext]'))).execute()
   bindWGText()
+  $(document).on 'wg:bind-wgtext', bindWGText
   # $(document).ajaxSuccess bindWGText
 
   # Handle subscribe button
