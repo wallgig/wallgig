@@ -16,6 +16,7 @@
 #  comments_count       :integer          default(0)
 #  last_commented_at    :datetime
 #  last_commented_by_id :integer
+#  bumped_at            :datetime
 #
 # Indexes
 #

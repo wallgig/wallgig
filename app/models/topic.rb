@@ -16,6 +16,7 @@
 #  comments_count       :integer          default(0)
 #  last_commented_at    :datetime
 #  last_commented_by_id :integer
+#  bumped_at            :datetime
 #
 # Indexes
 #
@@ -28,7 +29,7 @@ class Topic < ActiveRecord::Base
   include Cookable
   cookable :content
 
-  MODERATION_ACTIONS = [:pin, :unpin, :lock, :unlock, :hide, :unhide]
+  MODERATION_ACTIONS = [:pin, :unpin, :lock, :unlock, :hide, :unhide, :bump]
 
   belongs_to :forum
   belongs_to :user
@@ -51,7 +52,15 @@ class Topic < ActiveRecord::Base
   validates :content,  presence: true, length: { minimum: 20 }
 
   scope :pinned_first, -> { order(pinned: :desc) }
-  scope :latest,       -> { order('COALESCE(topics.last_commented_at, topics.created_at) DESC') }
+  scope :latest, -> {
+    order("
+      COALESCE(
+        #{quoted_table_name}.bumped_at,
+        #{quoted_table_name}.last_commented_at,
+        #{quoted_table_name}.created_at
+      ) DESC
+    ")
+  }
 
   after_initialize do
     self.forum ||= Forum.uncategorized
