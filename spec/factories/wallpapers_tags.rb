@@ -21,8 +21,8 @@
 
 FactoryGirl.define do
   factory :wallpapers_tag do
-    wallpaper nil
-    tag nil
-    added_by nil
+    wallpaper
+    tag
+    association :added_by, factory: :user
   end
 end

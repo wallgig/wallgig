@@ -40,13 +40,10 @@
 require 'spec_helper'
 
 describe Wallpaper do
-  describe 'associations' do
+  describe 'relations' do
     it { should belong_to(:user).counter_cache(true) }
     it { should have_many(:wallpaper_colors).dependent(:destroy) }
-    it { should have_many(:colors).through(:wallpaper_colors).class_name('Kolor') }
-    it { should belong_to(:primary_color).class_name('Kolor') }
     it { should have_many(:favourites).dependent(:destroy) }
-    it { should have_many(:favourited_users).through(:favourites).source(:wallpaper) }
     it { should have_many(:reports).dependent(:destroy) }
   end
 
@@ -55,15 +52,23 @@ describe Wallpaper do
     it { should validate_presence_of(:image) }
   end
 
-  context 'tags' do
-    context 'when empty' do
-      subject { create(:wallpaper, tag_list: nil) }
-      it { expect(subject.tag_list).to include('tagme') }
+  describe '#merge_to' do
+    let(:to_wallpaper) { create(:wallpaper) }
+    let(:from_wallpaper) { create(:wallpaper) } # Wallpaper to be replaced (will be destroyed)
+    let!(:favourite) { create(:favourite, wallpaper: from_wallpaper) }
+    let!(:wallpapers_tag) { create(:wallpapers_tag, wallpaper: from_wallpaper) }
+
+    # Perform the merging
+    before { from_wallpaper.merge_to(to_wallpaper) }
+
+    it 'changes favourite ownership' do
+      favourite.reload
+      expect(favourite.wallpaper).to eq(to_wallpaper)
     end
 
-    context 'when present' do
-      subject { create(:wallpaper, tag_list: ['tagme', 'tag']) }
-      it { expect(subject.tag_list).not_to include('tagme') }
+    it 'changes wallpapers_tag ownership' do
+      wallpapers_tag.reload
+      expect(wallpapers_tag.wallpaper).to eq(to_wallpaper)
     end
   end
 end

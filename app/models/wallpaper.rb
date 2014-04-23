@@ -108,7 +108,7 @@ class Wallpaper < ActiveRecord::Base
   validates_property :width,     of: :image, in: (600..10240),                on: :create
   validates_property :height,    of: :image, in: (600..10240),                on: :create
 
-  validate :check_duplicate_image_hash, on: :create unless Rails.env.development?
+  validate :check_duplicate_image_hash, on: :create if Rails.env.production?
 
   #
   # Scopes
