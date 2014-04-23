@@ -58,6 +58,7 @@ module UsersHelper
   # user - User model object
   # options - HTML attribute options hash
   #   :size - Integer size of avatar (optional)
+  #   :alt - (default: user's username)
   #   :class - CSS class (default: 'user-avatar')
   #
   # Examples
@@ -68,6 +69,7 @@ module UsersHelper
   #
   def user_avatar_tag(user, options={})
     options = options.symbolize_keys
+    options[:alt] ||= user.username
     options[:class] = Array.wrap(options[:class]) # ensure array
     options[:class] << 'user-avatar' # append 'user-avatar' CSS class
 
