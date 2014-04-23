@@ -89,9 +89,10 @@
                   %a.dropdown-toggle{:data => {:toggle => 'dropdown'}}
                     - if current_user.notifications.unread.any?
                       = fa_icon_tag('bell')
-                      %span.badge= current_user.notifications.unread.count
+                      %span.badge.counter= current_user.notifications.unread.count
                     - else
                       = fa_icon_tag('bell-o')
+                      %span.badge.counter{style: 'display: none;'}
                   %ul.dropdown-menu
                     %li.dropdown-header.status
                     %li.divider

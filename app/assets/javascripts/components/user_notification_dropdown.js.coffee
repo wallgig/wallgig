@@ -16,6 +16,7 @@ $ ->
   $dropdownMenu = $dropdown.find('.dropdown-menu')
   $status = $dropdownMenu.find('.status')
   $icon = $dropdown.find('.fa')
+  $counter = $dropdown.find('.counter')
 
   status =
     loading: ->
@@ -26,9 +27,7 @@ $ ->
       $status
         .text('No new notifications')
         .show()
-    hide: ->
-      $status
-        .hide()
+    hide: -> $status.hide()
 
   bell =
     present: ->
@@ -39,6 +38,13 @@ $ ->
       $icon
         .removeClass('bell')
         .addClass('bell-o')
+
+  setCount = (total_count) ->
+    $counter.text(total_count)
+    if total_count > 0
+      $counter.show()
+    else
+      $counter.hide()
 
   buildMarkReadOnClick = (markReadPath) ->
     (e) ->
@@ -82,6 +88,8 @@ $ ->
           status.hide()
           bell.present()
           canReload = false
+
+        setCount(data._page.total_count)
 
   # Bind events
   $dropdown.on 'show.bs.dropdown', onShowDropdown
