@@ -39,10 +39,12 @@ class SubscriptionsController < ApplicationController
     @subscriptions = current_user.subscriptions.by_type_with_includes(@subscribable_type)
                                                .most_subscriptions_wallpapers_first(current_purities)
 
-    if request.xhr?
-      render partial: 'wallpapers/list', layout: false, locals: { wallpapers: @wallpapers }
-    else
-      render action: 'index'
+    respond_to do |format|
+      format.html { render action: 'index' }
+      format.json do
+        html = render_to_string partial: 'wallpapers/list', layout: false, locals: { wallpapers: @wallpapers }, formats: [:html]
+        render json: { html: html }
+      end
     end
   end
 

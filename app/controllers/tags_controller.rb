@@ -10,10 +10,6 @@ class TagsController < ApplicationController
                                  .limit(current_settings.per_page)
 
     @wallpapers = WallpapersDecorator.new(@wallpapers, context: { current_user: current_user })
-
-    if request.xhr?
-      render partial: 'wallpapers/list', layout: false, locals: { wallpapers: @wallpapers }
-    end
   end
 
   def new
