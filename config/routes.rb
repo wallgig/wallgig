@@ -192,6 +192,10 @@ Wallgig::Application.routes.draw do
         collection do
           get :unread
         end
+
+        member do
+          post :mark_read
+        end
       end
 
       resources :sessions, only: :create

@@ -1,5 +1,7 @@
 class Api::V1::NotificationsController < Api::V1::BaseController
   before_action :authenticate_user!
+  before_action :set_notification, only: [:mark_read]
+
   helper_method :notification_params
 
   # GET /api/v1/notifications.json
@@ -13,6 +15,12 @@ class Api::V1::NotificationsController < Api::V1::BaseController
     render action: 'index'
   end
 
+  # PATCH /api/v1/notifications/1/mark_read.json
+  def mark_read
+    @notification.mark_as_read
+    head :no_content
+  end
+
   private
     def current_user_notifications
       current_user.notifications
@@ -22,5 +30,9 @@ class Api::V1::NotificationsController < Api::V1::BaseController
 
     def notification_params
       params.permit(:page, :limit)
+    end
+
+    def set_notification
+      @notification = current_user.notifications.find(params[:id])
     end
 end
