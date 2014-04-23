@@ -188,6 +188,16 @@ Wallgig::Application.routes.draw do
     namespace :v1 do
       resources :categories, only: :index
 
+      resources :notifications, only: :index do
+        collection do
+          get :unread
+        end
+
+        member do
+          post :mark_read
+        end
+      end
+
       resources :sessions, only: :create
 
       resources :tags, only: [:index, :create] do

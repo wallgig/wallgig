@@ -85,25 +85,20 @@
                   = link_to subscriptions_path do
                     = fa_icon_tag('plus')
                     Subscriptions
-                %li
+                %li.dropdown.user-notifications
                   %a.dropdown-toggle{:data => {:toggle => 'dropdown'}}
-                    = fa_icon_tag('bell')
                     - if current_user.notifications.unread.any?
-                      %span.badge= current_user.notifications.unread.count
-                  %ul.dropdown-menu{:data => {:provide => 'notifications'}}
-                    - if current_user.notifications.unread.any?
-                      %li.dropdown-header Notifications
-                      - current_user.notifications.unread.limit(5).each do |notification|
-                        %li
-                          = link_to notification.to_actual_model, data: { notification_id: notification.id } do
-                            %span{:data => {:provide => 'wgtext'}}= notification.message
-                            = time_ago_tag notification.created_at
+                      = fa_icon_tag('bell')
+                      %span.badge.counter= current_user.notifications.unread.count
                     - else
-                      %li.dropdown-header No new notifications
+                      = fa_icon_tag('bell-o')
+                      %span.badge.counter{style: 'display: none;'}
+                  %ul.dropdown-menu
+                    %li.dropdown-header.status
                     %li.divider
-                    %li= link_to 'View all notifications', notifications_url
+                    %li.view-all= link_to 'View all notifications', notifications_url
                 %li.dropdown
-                  = link_to username_tag(current_user), current_user, class: 'dropdown-toggle', data: { toggle: 'dropdown' }
+                  = link_to user_avatar_tag(current_user, size: 25), current_user, class: 'dropdown-toggle has-user-avatar', data: { toggle: 'dropdown' }
                   %ul.dropdown-menu
                     - if current_user.admin? || current_user.moderator?
                       %li

@@ -52,4 +52,25 @@ module UsersHelper
     return if user.profile.country_code.blank?
     content_tag :span, nil, class: "flag flag-#{user.profile.country_code.downcase}", data: { country: user.profile.country_name }
   end
+
+  # Public: Renders user avatar image tag.
+  #
+  # user - User model object
+  # options - HTML attribute options hash
+  #   :size - Integer size of avatar (optional)
+  #   :class - CSS class (default: 'user-avatar')
+  #
+  # Examples
+  # 
+  #   user_avatar_tag(@user)
+  #   
+  #   user_avatar_tag(@user, size: 40)
+  #
+  def user_avatar_tag(user, options={})
+    options = options.symbolize_keys
+    options[:class] = Array.wrap(options[:class]) # ensure array
+    options[:class] << 'user-avatar' # append 'user-avatar' CSS class
+
+    image_tag(user_avatar_url(user, options[:size]), options)
+  end
 end

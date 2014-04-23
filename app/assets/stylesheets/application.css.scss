@@ -33,49 +33,49 @@ span.fa {
   @extend .fa-fw;
 }
 
-// @mixin responsive-container-width($columns) {
-//   $container-width: ($wallpaper-thumbnail-width + $grid-gutter-width) * $columns;
-//   $container-padding: 40px;
-//   @media (min-width: $container-width + $container-padding) {
-//     .container {
-//       width: $container-width;
-//     }
-//   }  
-// }
+// Utilities
+// ---------
 
-// @include responsive-container-width(1);
-// @include responsive-container-width(2);
-// @include responsive-container-width(3);
-// @include responsive-container-width(4);
-// @include responsive-container-width(5);
-// @include responsive-container-width(6);
-// @include responsive-container-width(7);
-// @include responsive-container-width(8);
-// @include responsive-container-width(9);
-// @include responsive-container-width(10);
-// @include responsive-container-width(11);
-// @include responsive-container-width(12);
-// @include responsive-container-width(13);
-// @include responsive-container-width(14);
-// @include responsive-container-width(15);
-// @include responsive-container-width(16);
+.no-padding {
+  padding: 0;
+}
+.no-margin {
+  margin: 0;
+}
+.no-top-margin {
+  margin-top: 0;
+}
+.no-bottom-margin {
+  margin-bottom: 0;
+}
 
-/* Heading */
+// Heading
+// -------
+
 .page-subheader {
   margin-bottom: 20px;
 }
 
-/* Dropdown menu */
-// .open .dropdown-menu > li > a {
-//   padding: 10px 20px;
-// }
+// Navbar
+// ------
 
-/* Navbar */
-.navbar .navbar-nav div .btn {
-  margin-top: 8px;
+// Accommodate 25x25 avatar
+.navbar .dropdown-toggle.has-user-avatar {
+  padding-top: 13px;
+  padding-bottom: 13px;
 }
 
-/* Panel */
+// User notifications
+// ------------------
+.dropdown.user-notifications {
+  .view-all {
+    text-align: center;
+  }
+}
+
+// Panel
+// -----
+
 .panel-transparent {
   &, .panel-body {
     border: none;
@@ -90,7 +90,8 @@ span.fa {
   border-bottom: none;
 }
 
-
+// Content
+// -------
 .header-content {
   background-color: lighten($body-bg, 10%);
   padding: 40px 0;
@@ -98,20 +99,6 @@ span.fa {
 
 #main {
   padding: 20px 0;
-}
-
-
-.no-padding {
-  padding: 0;
-}
-.no-margin {
-  margin: 0;
-}
-.no-top-margin {
-  margin-top: 0;
-}
-.no-bottom-margin {
-  margin-bottom: 0;
 }
 
 @import "header_cover";

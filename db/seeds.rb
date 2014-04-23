@@ -53,3 +53,11 @@ forums = [
 forums.each do |forum|
   Forum.find_or_create_by!(forum)
 end
+
+unless Rails.env.production?
+  first_user = User.first
+
+  10.times do |number|
+    Notification.create!(user_id: first_user.id, message: "Notification \##{number}")
+  end
+end
