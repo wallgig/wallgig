@@ -46,6 +46,7 @@ module Account
           :sfw, :sketchy, :nsfw,
           :per_page,
           :infinite_scroll,
+          :new_window,
           :resolution_exactness,
           :screen_resolution_id,
           :invisible,
