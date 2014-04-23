@@ -121,12 +121,9 @@ Wallgig::Application.routes.draw do
     concerns :reportable
 
     member do
-      patch :pin
-      patch :unpin
-      patch :lock
-      patch :unlock
-      patch :hide
-      patch :unhide
+      Topic::MODERATION_ACTIONS.each do |action_name|
+        patch action_name
+      end
     end
   end
 

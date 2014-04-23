@@ -54,10 +54,10 @@ class Topic < ActiveRecord::Base
   scope :pinned_first, -> { order(pinned: :desc) }
   scope :latest, -> {
     order("
-      COALESCE(
+      GREATEST(
         #{quoted_table_name}.bumped_at,
-        #{quoted_table_name}.last_commented_at,
-        #{quoted_table_name}.created_at
+        #{quoted_table_name}.created_at,
+        #{quoted_table_name}.last_commented_at
       ) DESC
     ")
   }
@@ -101,5 +101,9 @@ class Topic < ActiveRecord::Base
 
   def unhide!
     update_attribute(:hidden, false)
+  end
+
+  def bump!
+    touch(:bumped_at)
   end
 end
