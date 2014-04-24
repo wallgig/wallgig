@@ -360,6 +360,43 @@ class Wallpaper < ActiveRecord::Base
     NotifySubscribers.perform_async('User', user_id, id, persisted? && approved?)
   end
 
+  # Public: Merges this wallpaper to another wallpaper.
+  #
+  # other_wallpaper - Wallpaper to copy associations to
+  def merge_to(other_wallpaper)
+    raise 'Cannot merge two same wallpapers' if self == other_wallpaper
+
+    # Find dependent destroy associations
+    dependent_destroy_associations = self.class.reflect_on_all_associations.select do |association|
+      association.options[:dependent] == :destroy
+    end
+
+    foreign_key_updater = lambda do |association, record|
+      record[association.foreign_key.to_sym] = other_wallpaper.id
+      record.save
+    end
+
+    self.class.transaction do
+      # Change foreign key of associations from this wallpaper to other wallpaper
+      dependent_destroy_associations.each do |association|
+        if association.collection?
+          send(association.name).find_each do |record|
+            foreign_key_updater.call(association, record)
+          end
+        else
+          record = send(association.name)
+          foreign_key_updater.call(association, record) unless record.nil?
+        end
+      end
+
+      # Touch other wallpaer (to invalidate cache)
+      other_wallpaper.touch
+
+      # Destroy this wallpaper
+      destroy
+    end
+  end
+
   private
     def check_duplicate_image_hash
       if image_hash.present? && (duplicate = self.class.where.not(id: self.id).where(image_hash: image_hash).first)

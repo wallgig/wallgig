@@ -70,5 +70,7 @@ describe Wallpaper do
       wallpapers_tag.reload
       expect(wallpapers_tag.wallpaper).to eq(to_wallpaper)
     end
+
+    it { expect(from_wallpaper).to be_destroyed }
   end
 end
