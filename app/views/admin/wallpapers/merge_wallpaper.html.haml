@@ -2,8 +2,14 @@
   %fieldset.inputs
     %ol
       %li.string.input
-        = label_tag 'target_id', 'Merge to Wallpaper ID'
+        = label_tag 'target_id', 'Merge to Wallpaper ID (THAT)'
         = text_field_tag 'target_id'
+        %p.inline-hints
+          Moves associations (i.e. comments, tags, etc.)
+          from <strong>THIS</strong> (#{@wallpaper})
+          to <strong>THAT</strong>.
+          %br/
+          <strong>Destroys THIS</strong>.
   %fieldset.actions
     %ol
       %li.action= submit_tag 'Merge'

@@ -18,4 +18,7 @@ class WallpaperColor < ActiveRecord::Base
   belongs_to :color, class_name: 'Kolor'
 
   delegate :red, :green, :blue, :hex, :to_html_hex, to: :color
+
+  validates :wallpaper_id, presence: true
+  validates :color_id, presence: true, uniqueness: { scope: :wallpaper_id }
 end

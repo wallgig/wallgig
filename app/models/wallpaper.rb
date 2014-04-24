@@ -366,9 +366,12 @@ class Wallpaper < ActiveRecord::Base
   def merge_to(other_wallpaper)
     raise 'Cannot merge two same wallpapers' if self == other_wallpaper
 
+    # Don't move these associations
+    excluded_associations = [:wallpaper_colors]
+
     # Find dependent destroy associations
     dependent_destroy_associations = self.class.reflect_on_all_associations.select do |association|
-      association.options[:dependent] == :destroy
+      association.options[:dependent] == :destroy && !excluded_associations.include?(association.name)
     end
 
     foreign_key_updater = lambda do |association, record|

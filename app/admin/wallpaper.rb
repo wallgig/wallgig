@@ -154,9 +154,8 @@ ActiveAdmin.register Wallpaper do
   member_action :perform_wallpaper_merge, method: :post do
     @from_wallpaper = Wallpaper.find(params[:id])
     @to_wallpaper = Wallpaper.find(params[:target_id])
-    WallpaperMergerService.new(@from_wallpaper, @to_wallpaper).execute
-
-    redirect_to admin_wallpaper_path(@to_wallpaper), notice: 'Wallpapers merged!'
+    @from_wallpaper.merge_to(@to_wallpaper)
+    redirect_to admin_wallpaper_path(@to_wallpaper), notice: 'Wallpapers were successfully merged.'
   end
 
   member_action :approve_wallpaper, method: :post do
