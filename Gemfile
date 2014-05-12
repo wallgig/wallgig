@@ -70,8 +70,14 @@ group :development, :test do
   gem 'guard-rspec'
   gem 'guard-sidekiq'
   gem 'guard-spork'
-  gem 'rb-inotify'
   gem 'spork-rails'
+
+  # notifications
+  gem 'rb-inotify', require: false
+  gem 'rb-fsevent', require: false
+  gem 'rb-fchange', require: false
+  gem 'libnotify' if /linux/ =~ RUBY_PLATFORM
+  gem 'growl' if /darwin/ =~ RUBY_PLATFORM
 end
 
 # auth
