@@ -1,7 +1,7 @@
 source 'https://rubygems.org'
 
 # Bundle edge Rails instead: gem 'rails', github: 'rails/rails'
-gem 'rails', '4.1.0'
+gem 'rails', '4.1.1'
 
 # Use pg as the database for Active Record
 gem 'pg'
@@ -22,7 +22,7 @@ gem 'therubyracer', platforms: :ruby
 gem 'jquery-rails'
 
 # Build JSON APIs with ease. Read more: https://github.com/rails/jbuilder
-gem 'jbuilder', '~> 1.2'
+gem 'jbuilder'
 
 group :doc do
   # bundle exec rake doc:rails generates the API under doc/api.
@@ -37,12 +37,12 @@ gem 'puma'
 
 # Use Capistrano for deployment
 group :development do
-  gem 'capistrano', '~> 3.0.0'
+  gem 'capistrano'
   gem 'capistrano-rails'
   gem 'capistrano-bundler'
   gem 'capistrano-rvm'
   gem 'capistrano-rbenv'
-  gem 'capistrano-puma', github: 'seuros/capistrano-puma'
+  gem 'capistrano-puma'
   gem 'capistrano-sidekiq'
 end
 
