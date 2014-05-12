@@ -1,10 +1,25 @@
-# This file should contain all the record creation needed to seed the database with its default values.
-# The data can then be loaded with the rake db:seed (or created alongside the db with db:setup).
-#
-# Examples:
-#
-#   cities = City.create([{ name: 'Chicago' }, { name: 'Copenhagen' }])
-#   Mayor.create(name: 'Emanuel', city: cities.first)
+# In development
+if Rails.env.development?
+  if User.all.empty?
+    # Create admin user
+    user = User.create!(
+      email: 'admin@example.com',
+      username: 'admin',
+      password: 'password',
+      developer: true,
+      admin: true,
+      moderator: true
+    )
+
+    # Confirm user
+    user.confirm!
+
+    # Create test notifications
+    10.times do |number|
+      Notification.create!(user_id: user.id, message: "Notification \##{number}")
+    end
+  end
+end
 
 screen_resolutions = [
   { category: :standard, width: 1600, height: 1200 },
@@ -52,12 +67,4 @@ forums = [
 
 forums.each do |forum|
   Forum.find_or_create_by!(forum)
-end
-
-unless Rails.env.production?
-  first_user = User.first
-
-  10.times do |number|
-    Notification.create!(user_id: first_user.id, message: "Notification \##{number}")
-  end
 end
