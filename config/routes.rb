@@ -1,4 +1,4 @@
-Wallgig::Application.routes.draw do
+Rails.application.routes.draw do
   concern :commentable do
     resources :comments, only: [:index, :new, :create]
   end

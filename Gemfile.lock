@@ -138,20 +138,9 @@ GEM
     capistrano-bundler (1.1.2)
       capistrano (~> 3.0)
       sshkit (~> 1.2)
-    capistrano-puma (0.2.3)
-      capistrano (>= 3.0)
     capistrano-rails (1.1.1)
       capistrano (~> 3.1)
       capistrano-bundler (~> 1.1)
-    capistrano-rbenv (2.0.2)
-      capistrano (~> 3.1)
-      sshkit (~> 1.3)
-    capistrano-rvm (0.1.1)
-      capistrano (~> 3.0)
-      sshkit (~> 1.2)
-    capistrano-sidekiq (0.2.9)
-      capistrano
-      sidekiq
     celluloid (0.15.2)
       timers (~> 1.1.0)
     celluloid-io (0.15.0)
@@ -243,7 +232,6 @@ GEM
     friendly_id (5.0.3)
       activerecord (>= 4.0.0)
     geocoder (1.2.1)
-    growl (1.0.3)
     guard (2.6.1)
       formatador (>= 0.2.4)
       listen (~> 2.7)
@@ -301,8 +289,6 @@ GEM
     kaminari-bootstrap (3.0.1)
       kaminari (>= 0.13.0)
       rails
-    libnotify (0.8.3)
-      ffi (>= 1.0.11)
     libv8 (3.16.14.3)
     listen (2.7.4)
       celluloid (>= 0.15.2)
@@ -403,8 +389,6 @@ GEM
       activesupport (>= 3.0)
       i18n
       polyamorous (~> 1.0.0)
-    rb-fchange (0.0.6)
-      ffi
     rb-fsevent (0.9.4)
     rb-inotify (0.9.4)
       ffi (>= 0.5.0)
@@ -486,7 +470,7 @@ GEM
     spork-rails (4.0.0)
       rails (>= 3.0.0, < 5)
       spork (>= 1.0rc0)
-    spring (1.1.2)
+    spring (1.1.3)
     sprockets (2.11.0)
       hike (~> 1.2)
       multi_json (~> 1.0)
@@ -538,11 +522,7 @@ DEPENDENCIES
   cancan!
   capistrano
   capistrano-bundler
-  capistrano-puma
   capistrano-rails
-  capistrano-rbenv
-  capistrano-rvm
-  capistrano-sidekiq
   coffee-rails (~> 4.0.0)
   color
   colorscore
@@ -562,7 +542,6 @@ DEPENDENCIES
   foreman
   friendly_id (~> 5.0.0)
   geocoder
-  growl
   guard
   guard-rspec
   guard-sidekiq
@@ -570,11 +549,10 @@ DEPENDENCIES
   haml-rails
   httparty
   impressionist
-  jbuilder
+  jbuilder (~> 2.0)
   jquery-rails
   kaminari
   kaminari-bootstrap (~> 3.0.1)
-  libnotify
   lodash-rails
   meta-tags
   miro
@@ -588,16 +566,13 @@ DEPENDENCIES
   rack-cache
   rack-mini-profiler
   rails (= 4.1.1)
-  rb-fchange
-  rb-fsevent
-  rb-inotify
   redcarpet
   redis-objects
   redis-rails
   rollbar
   rspec-rails
-  sass-rails (~> 4.0.0)
-  sdoc
+  sass-rails (~> 4.0.3)
+  sdoc (~> 0.4.0)
   searchkick
   shoulda-matchers!
   sidekiq!
