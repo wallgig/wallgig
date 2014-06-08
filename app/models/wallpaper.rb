@@ -153,6 +153,7 @@ class Wallpaper < ActiveRecord::Base
           }
         },
         aspect_ratio: { type: 'float' },
+        created_at: { type: 'date' },
         updated_at: { type: 'date' },
         views: { type: 'integer' },
         favourites: { type: 'integer' }
@@ -171,6 +172,7 @@ class Wallpaper < ActiveRecord::Base
       height: image_height,
       color: wallpaper_colors.includes(:color).map { |color| { hex: color.hex, percentage: (color.percentage * 10).ceil } },
       aspect_ratio: aspect_ratio,
+      created_at: created_at,
       updated_at: updated_at,
       views: impressions_count,
       favourites: favourites_count
