@@ -57,6 +57,7 @@ namespace :puma do
   end
 end
 
+
 namespace :sidekiq do
   desc 'Start sidekiq'
   task :start do
@@ -80,8 +81,22 @@ namespace :sidekiq do
   end
 end
 
-namespace :deploy do
 
+namespace :wallpaper do
+  desc 'Reindex wallpaper'
+  task :reindex do
+    on roles(:app), in: :sequence do
+      within release_path do
+        with rails_env: :production do
+          execute :rake, 'searchkick:reindex', 'CLASS=Wallpaper'
+        end
+      end
+    end
+  end
+end
+
+
+namespace :deploy do
   desc 'Restart application'
   task :restart do
     on roles(:app), in: :sequence, wait: 5 do
@@ -100,5 +115,4 @@ namespace :deploy do
       end
     end
   end
-
 end
