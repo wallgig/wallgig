@@ -138,20 +138,9 @@ GEM
     capistrano-bundler (1.1.2)
       capistrano (~> 3.0)
       sshkit (~> 1.2)
-    capistrano-puma (0.2.3)
-      capistrano (>= 3.0)
     capistrano-rails (1.1.1)
       capistrano (~> 3.1)
       capistrano-bundler (~> 1.1)
-    capistrano-rbenv (2.0.2)
-      capistrano (~> 3.1)
-      sshkit (~> 1.3)
-    capistrano-rvm (0.1.1)
-      capistrano (~> 3.0)
-      sshkit (~> 1.2)
-    capistrano-sidekiq (0.2.9)
-      capistrano
-      sidekiq
     celluloid (0.15.2)
       timers (~> 1.1.0)
     celluloid-io (0.15.0)
@@ -486,7 +475,7 @@ GEM
     spork-rails (4.0.0)
       rails (>= 3.0.0, < 5)
       spork (>= 1.0rc0)
-    spring (1.1.2)
+    spring (1.1.3)
     sprockets (2.11.0)
       hike (~> 1.2)
       multi_json (~> 1.0)
@@ -538,11 +527,7 @@ DEPENDENCIES
   cancan!
   capistrano
   capistrano-bundler
-  capistrano-puma
   capistrano-rails
-  capistrano-rbenv
-  capistrano-rvm
-  capistrano-sidekiq
   coffee-rails (~> 4.0.0)
   color
   colorscore
@@ -570,7 +555,7 @@ DEPENDENCIES
   haml-rails
   httparty
   impressionist
-  jbuilder
+  jbuilder (~> 2.0)
   jquery-rails
   kaminari
   kaminari-bootstrap (~> 3.0.1)
@@ -596,8 +581,8 @@ DEPENDENCIES
   redis-rails
   rollbar
   rspec-rails
-  sass-rails (~> 4.0.0)
-  sdoc
+  sass-rails (~> 4.0.3)
+  sdoc (~> 0.4.0)
   searchkick
   shoulda-matchers!
   sidekiq!
