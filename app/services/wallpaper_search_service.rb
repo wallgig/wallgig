@@ -243,8 +243,8 @@ class WallpaperSearchService
       when 'popular'
         sorts['_score'] = 'desc'
       else
-        # Sort using updated_at by default
-        sorts['updated_at'] = 'desc'
+        # Sort using created_at by default
+        sorts['created_at'] = 'desc'
       end
 
       sorts
