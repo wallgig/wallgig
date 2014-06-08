@@ -20,11 +20,15 @@
 # available at http://guides.rubyonrails.org/i18n.html.
 
 en:
+  purity: &purity
+    sfw: "SFW"
+    skechy: "Sketchy"
+    nsfw: "NSFW"
+
   simple_form:
     labels:
       defaults:
-        sfw: "SFW"
-        nsfw: "NSFW"
+        *purity
       user:
         login: "Username or Email"
       user_profile:
@@ -35,11 +39,13 @@ en:
         infinite_scroll: "Use infinite scroll"
         new_window: "Open wallpapers in new window"
 
+  formtastic:
+    labels:
+      *purity
+
   enumerize:
     purity:
-      sfw: "SFW"
-      sketchy: "Sketchy"
-      nsfw: "NSFW"
+      *purity
 
     image_gravity:
       nw: "North West"
