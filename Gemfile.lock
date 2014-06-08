@@ -232,7 +232,6 @@ GEM
     friendly_id (5.0.3)
       activerecord (>= 4.0.0)
     geocoder (1.2.1)
-    growl (1.0.3)
     guard (2.6.1)
       formatador (>= 0.2.4)
       listen (~> 2.7)
@@ -290,8 +289,6 @@ GEM
     kaminari-bootstrap (3.0.1)
       kaminari (>= 0.13.0)
       rails
-    libnotify (0.8.3)
-      ffi (>= 1.0.11)
     libv8 (3.16.14.3)
     listen (2.7.4)
       celluloid (>= 0.15.2)
@@ -392,8 +389,6 @@ GEM
       activesupport (>= 3.0)
       i18n
       polyamorous (~> 1.0.0)
-    rb-fchange (0.0.6)
-      ffi
     rb-fsevent (0.9.4)
     rb-inotify (0.9.4)
       ffi (>= 0.5.0)
@@ -547,7 +542,6 @@ DEPENDENCIES
   foreman
   friendly_id (~> 5.0.0)
   geocoder
-  growl
   guard
   guard-rspec
   guard-sidekiq
@@ -559,7 +553,6 @@ DEPENDENCIES
   jquery-rails
   kaminari
   kaminari-bootstrap (~> 3.0.1)
-  libnotify
   lodash-rails
   meta-tags
   miro
@@ -573,9 +566,6 @@ DEPENDENCIES
   rack-cache
   rack-mini-profiler
   rails (= 4.1.1)
-  rb-fchange
-  rb-fsevent
-  rb-inotify
   redcarpet
   redis-objects
   redis-rails

@@ -58,13 +58,6 @@ group :development, :test do
   gem 'guard-sidekiq'
   gem 'guard-spork'
   gem 'spork-rails'
-
-  # notifications
-  gem 'rb-inotify', require: false
-  gem 'rb-fsevent', require: false
-  gem 'rb-fchange', require: false
-  gem 'libnotify', require: /linux/ =~ RUBY_PLATFORM
-  gem 'growl', require: /darwin/ =~ RUBY_PLATFORM
 end
 
 # auth
