@@ -20,6 +20,9 @@
 /cookbooks
 Berksfile.lock
 
+# RubyMine
+/.idea/
+
 /public/system/*
 /public/uploads/*
 dump.rdb
@@ -27,8 +30,5 @@ dump.rdb
 /.env
 /.env.production
 /config/database.yml
-/config/deploy.rb
-/config/deploy/*
-/config/newrelic.yml
 
 /coverage
