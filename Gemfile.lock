@@ -301,6 +301,8 @@ GEM
     kaminari-bootstrap (3.0.1)
       kaminari (>= 0.13.0)
       rails
+    libnotify (0.8.3)
+      ffi (>= 1.0.11)
     libv8 (3.16.14.3)
     listen (2.7.4)
       celluloid (>= 0.15.2)
@@ -572,6 +574,7 @@ DEPENDENCIES
   jquery-rails
   kaminari
   kaminari-bootstrap (~> 3.0.1)
+  libnotify
   lodash-rails
   meta-tags
   miro

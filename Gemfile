@@ -76,8 +76,8 @@ group :development, :test do
   gem 'rb-inotify', require: false
   gem 'rb-fsevent', require: false
   gem 'rb-fchange', require: false
-  gem 'libnotify' if /linux/ =~ RUBY_PLATFORM
-  gem 'growl' if /darwin/ =~ RUBY_PLATFORM
+  gem 'libnotify', require: /linux/ =~ RUBY_PLATFORM
+  gem 'growl', require: /darwin/ =~ RUBY_PLATFORM
 end
 
 # auth
