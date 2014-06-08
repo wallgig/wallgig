@@ -44,8 +44,10 @@ ActiveAdmin.register User do
     column :created_at
     column :updated_at
     actions do |user|
-      link_to 'Pretend', pretend_admin_user_path(user), data: { method: :post, confirm: 'Are you sure?' }
-      link_to 'View settings', admin_user_settings_path(q: { user_id_eq: user.id })
+      links = ''.html_safe
+      links << link_to('Pretend', pretend_admin_user_path(user), data: { method: :post, confirm: 'Are you sure?' }, class: 'member_link')
+      links << link_to('User settings', admin_user_settings_path(q: { user_id_eq: user.id }), class: 'member_link')
+      links
     end
   end
 
@@ -87,8 +89,11 @@ ActiveAdmin.register User do
   end
 
   action_item only: :show do
+    link_to 'Pretend', pretend_admin_user_path(user), data: { method: :post, confirm: 'Are you sure?' }
+  end
+  action_item only: :show do
     if authorized? :read, user.settings
-      link_to 'View Settings', admin_user_setting_path(user.settings)
+      link_to 'User Settings', admin_user_setting_path(user.settings)
     end
   end
   action_item only: :show do
