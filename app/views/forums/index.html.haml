@@ -14,7 +14,7 @@
     - cache(['forums', 'index', @forum, 'markdown_description']) do
       %p.text-muted= markdown_line @forum.description
 
-- if @topics.any?
+- if @topics.count(:all) > 0 # @topics.count/.any? is broken in Rails 4.1
   %ul.list-group= render @topics
   .text-right= paginate @topics
 - else
