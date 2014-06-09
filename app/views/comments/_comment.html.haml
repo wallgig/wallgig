@@ -8,7 +8,7 @@
           = link_to fa_icon_tag('exclamation-triangle'), new_comment_report_path(comment), title: 'Report'
       %h4
         = link_to_user comment.user do
-          = image_tag user_avatar_url(comment.user, 30), width: 30, height: 30
+          = image_tag user_avatar_url(comment.user, 30), alt: comment.user.username, width: 30, height: 30
           = comment.user.username
         = flag_tag_for comment.user
         = user_online_status_tag comment.user
