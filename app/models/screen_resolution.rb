@@ -22,6 +22,10 @@ class ScreenResolution < ActiveRecord::Base
     end
   end
 
+  def self.find_by_dimensions(width, height)
+    find_by width: width, height: height
+  end
+
   def to_s
     "#{width}&times;#{height}".html_safe
   end

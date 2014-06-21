@@ -27,9 +27,13 @@ class WallpapersController < ApplicationController
   # GET /wallpapers/1
   # GET /wallpapers/1.json
   def show
+    # Checks if requested screen resolution is present and valid
+    # before telling @wallpaper to resize.
     if resize_params.present?
-      requested_resolution = ScreenResolution.find_by(width: resize_params[:width], height: resize_params[:height])
-      redirect_to short_wallpaper_path(@wallpaper) unless @wallpaper.resize_image_to(requested_resolution)
+      screen_resolution = ScreenResolution.find_by_dimensions(resize_params[:width], resize_params[:height])
+      unless @wallpaper.resize_image_to(screen_resolution)
+        redirect_to @wallpaper, status: :moved_permanently, alert: 'Requested screen resolution is invalid.'
+      end
     end
 
     @wallpaper = @wallpaper.decorate
