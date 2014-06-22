@@ -398,17 +398,22 @@ class Wallpaper < ActiveRecord::Base
       @resizable_resolutions ||= WallpaperResolutions.new(self)
     end
 
-    def resize_image_to(resolution)
-      return false unless resizable_resolutions.include?(resolution)
-      @resized_image = image.thumb("#{resolution.to_geometry_s}\##{image_gravity}")
-      @resized_image_resolution = resolution
+    # Resizes the image given a ScreenResolution instance
+    def resize_image_to(screen_resolution)
+      raise ArgumentError, 'Argument is not an instance of ScreenResolution' unless screen_resolution.is_a?(ScreenResolution)
+      return false unless resizable_resolutions.include?(screen_resolution)
+      @resized_image = image.thumb("#{screen_resolution.to_geometry_s}\##{image_gravity}")
+      @resized_image_resolution = screen_resolution
       true
     end
 
+    # Creates a ScreenResolution instance with the original image dimensions.
     def original_image_resolution
       ScreenResolution.new(width: image_width, height: image_height)
     end
 
+    # Returns a ScreenResolution instance with the requested image dimensions.
+    # Falls back to original image dimensions if not present.
     def requested_image_resolution
       return resized_image_resolution unless resized_image_resolution.nil?
       original_image_resolution
