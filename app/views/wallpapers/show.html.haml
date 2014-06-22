@@ -131,7 +131,8 @@
   = image_tag @wallpaper.requested_image_url,
     width: @wallpaper.requested_image_resolution.width,
     height: @wallpaper.requested_image_resolution.height,
-    class: "img-wallpaper img-#{@wallpaper.format} state-1"
+    class: "img-wallpaper img-#{@wallpaper.format} state-1",
+    style: "background: url(#{@wallpaper.thumbnail_image_url}) no-repeat center center fixed; background-size: cover;"
 
 - # OPTIMIZE
 - content_for :javascript_for_page do
