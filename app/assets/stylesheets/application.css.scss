@@ -13,16 +13,48 @@
  *= require_self
  */
 
+/* Web Fonts */
 @import url(http://fonts.googleapis.com/css?family=Open+Sans:300,400,700);
 
+/* Wallgig Variables */
+@import "variables";
+
+/* CSS Frameworks */
+@import "bootstrap";
 @import "bourbon";
+
+/* Components */
 @import "ladda";
 @import "flags";
-// @import "bootstrap_and_overrides";
-@import "bootstrap_and_overrides_old";
 @import "font-awesome";
 
-$wallpaper-thumbnail-width: 250px;
+/* Selection */
+::selection {
+  background-color: $selection-bg;
+  color: $selection-text-color;
+}
+
+/* Scrollbar (for Webkit browsers) */
+::-webkit-scrollbar {
+  width: $scrollbar-width;
+  height: 10px;
+}
+
+::-webkit-scrollbar-button:start:decrement,
+::-webkit-scrollbar-button:end:increment {
+  height: 0px;
+  display: block;
+  background-color: transparent;
+}
+
+::-webkit-scrollbar-track-piece {
+  background-color: $body-bg;
+}
+
+::-webkit-scrollbar-thumb:vertical {
+  height: 50px;
+  background-color: #3f3f3f;
+}
 
 a {
   cursor: pointer;
