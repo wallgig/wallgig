@@ -12,14 +12,6 @@ class WallpaperDecorator < Draper::Decorator
     end
   end
 
-  def requested_image_width
-    resized_image_resolution.present? ? resized_image_resolution.width : image_width
-  end
-
-  def requested_image_height
-    resized_image_resolution.present? ? resized_image_resolution.height : image_height
-  end
-
   def path_with_resolution
     if context[:search_options].present? && context[:search_options][:width].present? && context[:search_options][:height].present?
       h.resized_wallpaper_path(self, width: context[:search_options][:width], height: context[:search_options][:height])
@@ -41,10 +33,6 @@ class WallpaperDecorator < Draper::Decorator
     h.image_tag(thumbnail_image_url, width: 250, height: 188, alt: to_s)
   end
 
-  def resolution
-    "#{image_width}&times;#{image_height}".html_safe
-  end
-
   def favourite_button_for_list
     options = {
       class: 'btn btn-sm pull-left',
@@ -64,8 +52,14 @@ class WallpaperDecorator < Draper::Decorator
   end
 
   def resolution_select_tag
+    option_tags = h.grouped_options_for_select(
+      resizable_resolutions.array_for_options,
+      requested_image_resolution.to_param,
+      prompt: "#{original_image_resolution} (Original)".html_safe
+    )
+
     h.select_tag 'resolution',
-                 h.grouped_options_for_select(resolutions.array_for_options, "#{requested_image_width}x#{requested_image_height}", prompt: "#{resolution} (Original)".html_safe),
+                 option_tags,
                  class: 'form-control',
                  data: { action: 'resize', url: h.wallpaper_path(self) }
   end

@@ -404,6 +404,15 @@ class Wallpaper < ActiveRecord::Base
       @resized_image_resolution = resolution
       true
     end
+
+    def original_image_resolution
+      ScreenResolution.new(width: image_width, height: image_height)
+    end
+
+    def requested_image_resolution
+      return resized_image_resolution unless resized_image_resolution.nil?
+      original_image_resolution
+    end
   end
 
   private
