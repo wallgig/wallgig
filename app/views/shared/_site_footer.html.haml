@@ -1,0 +1,21 @@
+%footer#site-footer
+  .container-fluid
+    .row
+      .col-lg-6
+        %ul.list-social
+          %li= link_to fa_icon_tag('facebook'), 'https://www.facebook.com/wallgig', target: '_blank'
+          %li= link_to fa_icon_tag('twitter'), 'https://twitter.com/WallgigNET', target: '_blank'
+          %li
+            = link_to 'https://qchat.rizon.net/?channels=wallgig&prompt=1&nick=admin', target: '_blank' do
+              = fa_icon_tag('comments')
+              != '#wallgig'
+              %small irc.rizon.net
+      .col-lg-6.text-right
+        %ul.list-sitemap
+          - if user_signed_in?
+            %li= link_to 'Upload', new_wallpaper_path
+          %li= link_to 'Tags', categories_path
+          %li= link_to 'Collections', collections_path
+          %li= link_to 'Forums', forums_path
+          %li= link_to 'Comments', comments_path
+          -# TODO Add links to FAQ, Rules, About
