@@ -1,4 +1,6 @@
 class WallpaperSearchService
+  attr_reader :options
+
   def initialize(options)
     @options = options
 
@@ -8,12 +10,31 @@ class WallpaperSearchService
     end
   end
 
+  def resolution_exactness_is_at_least?
+    options[:resolution_exactness].to_s.downcase == 'at_least'
+  end
+
   def execute
-    Wallpaper.search query: build_query,
-                     facets: build_facets,
-                     order: build_sort,
-                     page: @options[:page],
-                     per_page: @options[:per_page] || Wallpaper.default_per_page
+    wallpapers = Wallpaper.search(
+      query: build_query,
+      facets: build_facets,
+      order: build_sort,
+      page: options[:page],
+      per_page: options[:per_page] || Wallpaper.default_per_page
+    )
+
+    # Updates requested resolution of each wallpaper.
+    if !resolution_exactness_is_at_least? && options[:width].present? && options[:height].present?
+      screen_resolution = ScreenResolution.find_by_dimensions(options[:width], options[:height])
+      unless screen_resolution.nil?
+        wallpapers.each do |wallpaper|
+          # check_inclusion is disabled because search results are trusted.
+          wallpaper.resize_image_to(screen_resolution, check_inclusion: false)
+        end
+      end
+    end
+
+    wallpapers
   rescue Elasticsearch::Transport::Transport::Errors::BadRequest => e
     # Reraise error unless in production
     raise e unless Rails.env.production?
@@ -46,10 +67,10 @@ class WallpaperSearchService
       must_nots = []
 
       # Handle query string
-      if @options[:q].present?
+      if options[:q].present?
         musts << {
           :query_string => {
-            :query => @options[:q],
+            :query => options[:q],
             :default_operator => 'AND',
             :lenient => true
           }
@@ -57,8 +78,8 @@ class WallpaperSearchService
       end
 
       # Handle tags
-      if @options[:tags].present?
-        @options[:tags].each do |tag|
+      if options[:tags].present?
+        options[:tags].each do |tag|
           musts << {
             :constant_score => {
               :filter => {
@@ -72,8 +93,8 @@ class WallpaperSearchService
       end
 
       # Handle tag exclusions
-      if @options[:exclude_tags].present?
-        @options[:exclude_tags].each do |tag|
+      if options[:exclude_tags].present?
+        options[:exclude_tags].each do |tag|
           must_nots << {
             :constant_score => {
               :filter => {
@@ -87,8 +108,8 @@ class WallpaperSearchService
       end
 
       # Handle categories
-      if @options[:categories].present?
-        @options[:categories].each do |category|
+      if options[:categories].present?
+        options[:categories].each do |category|
           musts << {
             :constant_score => {
               :filter => {
@@ -102,8 +123,8 @@ class WallpaperSearchService
       end
 
       # Handle categories exclusions
-      if @options[:exclude_categories].present?
-        @options[:exclude_categories].each do |category|
+      if options[:exclude_categories].present?
+        options[:exclude_categories].each do |category|
           must_nots << {
             :constant_score => {
               :filter => {
@@ -121,20 +142,20 @@ class WallpaperSearchService
         :constant_score => {
           :filter => {
             :terms => {
-              :purity => @options[:purity]
+              :purity => options[:purity]
             }
           }
         }
       }
 
       # Handle width and height
-      if @options[:resolution_exactness] == 'at_least'
+      if resolution_exactness_is_at_least?
         [:width, :height].each do |a|
-          if @options[a].present?
+          if options[a].present?
             musts << {
               :range => {
                 a => {
-                  :gte => @options[a],
+                  :gte => options[a],
                   :boost => 2.0
                 }
               }
@@ -143,12 +164,12 @@ class WallpaperSearchService
         end
       else
         [:width, :height].each do |a|
-          if @options[a].present?
+          if options[a].present?
             musts << {
               :constant_score => {
                 :filter => {
                   :term => {
-                    a => @options[a]
+                    a => options[a]
                   }
                 }
               }
@@ -158,8 +179,8 @@ class WallpaperSearchService
       end
 
       # Handle colors
-      if @options[:colors].present?
-        @options[:colors].each do |color|
+      if options[:colors].present?
+        options[:colors].each do |color|
           musts << {
             :constant_score => {
               :filter => {
@@ -173,12 +194,12 @@ class WallpaperSearchService
       end
 
       # Handle user
-      if @options[:user].present?
+      if options[:user].present?
         musts << {
           :constant_score => {
             :filter => {
               :term => {
-                :user => @options[:user]
+                :user => options[:user]
               }
             }
           }
@@ -186,12 +207,12 @@ class WallpaperSearchService
       end
 
       # Handle aspect ratios
-      if @options[:aspect_ratios].present?
+      if options[:aspect_ratios].present?
         musts << {
           :constant_score => {
             :filter => {
               :terms => {
-                :aspect_ratio => Array.wrap(@options[:aspect_ratios]).map { |aspect_ratio| aspect_ratio.tr('_', '.').to_f }
+                :aspect_ratio => Array.wrap(options[:aspect_ratios]).map { |aspect_ratio| aspect_ratio.tr('_', '.').to_f }
               }
             }
           }
@@ -199,14 +220,14 @@ class WallpaperSearchService
       end
 
       # Handle ordering
-      case @options[:order]
+      case options[:order]
       when 'random'
         musts << {
           :function_score => {
             :functions => [
               {
                 :random_score => {
-                  :seed => @options[:random_seed] || Time.now.to_i
+                  :seed => options[:random_seed] || Time.now.to_i
                 }
               }
             ]
@@ -238,7 +259,7 @@ class WallpaperSearchService
       sorts = {}
 
       # Handle ordering
-      case @options[:order]
+      case options[:order]
       when 'random'
       when 'popular'
         sorts['_score'] = 'desc'

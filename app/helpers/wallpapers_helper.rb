@@ -18,7 +18,7 @@ module WallpapersHelper
     link_html_options[:title] = wallpaper.tag_list_text.presence || wallpaper.to_s
     link_html_options[:target] = '_blank' if current_settings.new_window?
 
-    link_to wallpaper.path_with_resolution, link_html_options do
+    link_to wallpaper.path_with_requested_image_resolution, link_html_options do
       if options[:lazy]
         image_tag nil, width: 250, height: 188, class: 'img-wallpaper lazy', data: { src: wallpaper.thumbnail_image_url }
       else

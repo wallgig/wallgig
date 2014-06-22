@@ -36,6 +36,7 @@ class WallpapersController < ApplicationController
       end
     end
 
+    @latest_comments = @wallpaper.comments.includes(:user).latest
     @wallpaper = @wallpaper.decorate
   end
 
