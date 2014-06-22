@@ -26,7 +26,7 @@
       %ul.list-inline
         %li
           = fa_icon_tag('picture-o')
-          = @wallpaper.resolution
+          = @wallpaper.requested_image_resolution
         %li{:class => "purity-#{@wallpaper.purity}"}
           = fa_icon_tag('flag')
           = @wallpaper.purity_text
@@ -90,6 +90,9 @@
                       = fa_icon_tag('bolt')
                       Administer
 
+    .panel-body
+      = @wallpaper.resolution_select_tag
+
     - if false
       - cache ['show', @wallpaper, 'color_list'] do
         - if @wallpaper.wallpaper_colors.any?
@@ -97,10 +100,6 @@
             %ul.list-color
               - @wallpaper.wallpaper_colors.includes(:color).each do |color|
                 %li= link_to '', wallpapers_path(search_params.merge(colors: [color.hex])), style: "background-color: \##{color.hex}"
-
-    - if false
-      .panel-body
-        = @wallpaper.resolution_select_tag
 
     - if user_signed_in?
       .panel-body
@@ -110,11 +109,11 @@
               = image_tag user_avatar_url(current_user, 30), alt: current_user.username, class: 'media-object'
             .col-sm-10
               = f.input :comment, as: :text, label: false, placeholder: 'Your comment', input_html: { data: { focus_placeholder: 'Shift+Enter for newline. Enter to post.' } }
-      - comments = @wallpaper.comments.includes(:user).latest
-      .panel-body.container-comments{:class => ('hide' if comments.empty?)}
-        %ul.list-unstyled.list-comment= render partial: 'comments/wallpaper_comment', collection: comments.limit(4), as: :comment
-        - if comments.size > 4
-          = link_to 'Load all comments', wallpaper_comments_path(@wallpaper), class: 'btn btn-block', remote: true, data: { action: 'load-comments' }
+
+    .panel-body.container-comments{:class => ('hide' if @latest_comments.empty?)}
+      %ul.list-unstyled.list-comment= render partial: 'comments/wallpaper_comment', collection: @latest_comments.limit(4), as: :comment
+      - if @latest_comments.size > 4
+        = link_to 'Load all comments', wallpaper_comments_path(@wallpaper), class: 'btn btn-block', remote: true, data: { action: 'load-comments' }
 
 
     - cache ['wallpapers', 'show', @wallpaper, 'tag_list'] do
@@ -129,7 +128,7 @@
                   = link_to tag.name, wallpapers_path(tags: [tag.name]), class: "btn btn-xs btn-link purity-#{tag.purity}"
 
 - content_for :wallpaper_stage_content do
-  = image_tag @wallpaper.requested_image_url, width: @wallpaper.requested_image_width, height: @wallpaper.requested_image_height, class: "img-wallpaper img-#{@wallpaper.format} state-1"
+  = image_tag @wallpaper.requested_image_url, width: @wallpaper.requested_image_resolution.width, height: @wallpaper.requested_image_resolution.height, class: "img-wallpaper img-#{@wallpaper.format} state-1"
 
 - # OPTIMIZE
 - content_for :javascript_for_page do
