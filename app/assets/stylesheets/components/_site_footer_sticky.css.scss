@@ -18,6 +18,10 @@ body {
   ul {
     @extend .list-inline;
     margin: 0;
+
+    li {
+      height: $site-footer-height;
+    }
   }
 
   ul.list-social {
