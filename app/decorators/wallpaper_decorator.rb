@@ -12,11 +12,11 @@ class WallpaperDecorator < Draper::Decorator
     end
   end
 
-  def path_with_resolution
-    if context[:search_options].present? && context[:search_options][:width].present? && context[:search_options][:height].present?
-      h.resized_wallpaper_path(self, width: context[:search_options][:width], height: context[:search_options][:height])
-    else
+  def path_with_requested_image_resolution
+    if requested_image_resolution == original_image_resolution
       h.wallpaper_path(self)
+    else
+      h.resized_wallpaper_path(self, width: requested_image_resolution.width, height: requested_image_resolution.height)
     end
   end
 
