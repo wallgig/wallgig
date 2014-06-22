@@ -19,7 +19,7 @@
         = thumbnail_link_to_wallpaper(wallpaper, lazy: true)
 
         .overlay.overlay-bottom
-          %strong= wallpaper.resolution
+          %strong= wallpaper.requested_image_resolution
 
           = wallpaper.favourite_button_for_list
 

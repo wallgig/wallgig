@@ -1,4 +1,6 @@
 class WallpaperSearchService
+  attr_reader :options
+
   def initialize(options)
     @options = options
 
@@ -9,11 +11,24 @@ class WallpaperSearchService
   end
 
   def execute
-    Wallpaper.search query: build_query,
-                     facets: build_facets,
-                     order: build_sort,
-                     page: @options[:page],
-                     per_page: @options[:per_page] || Wallpaper.default_per_page
+    wallpapers = Wallpaper.search(
+      query: build_query,
+      facets: build_facets,
+      order: build_sort,
+      page: @options[:page],
+      per_page: @options[:per_page] || Wallpaper.default_per_page
+    )
+
+    # Updates requested resolution of each wallpaper.
+    if options[:width].present? && options[:height].present?
+      screen_resolution = ScreenResolution.find_by_dimensions(options[:width], options[:height])
+      wallpapers.each do |wallpaper|
+        # check_inclusion is disabled because search results are trusted.
+        wallpaper.resize_image_to(screen_resolution, check_inclusion: false)
+      end
+    end
+
+    wallpapers
   rescue Elasticsearch::Transport::Transport::Errors::BadRequest => e
     # Reraise error unless in production
     raise e unless Rails.env.production?
