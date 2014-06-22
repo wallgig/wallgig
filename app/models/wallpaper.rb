@@ -292,20 +292,6 @@ class Wallpaper < ActiveRecord::Base
     extract_colors
   end
 
-  def resolutions
-    @resolutions ||= WallpaperResolutions.new(self)
-  end
-
-  attr_reader :resized_image
-  attr_reader :resized_image_resolution
-
-  def resize_image_to(resolution)
-    return false unless resolutions.include?(resolution)
-    @resized_image = image.thumb("#{resolution.to_geometry_s}\##{image_gravity}")
-    @resized_image_resolution = resolution
-    true
-  end
-
   def set_image_hash
     self.image_hash = Digest::MD5.file(image.file).hexdigest if image.present?
   end
@@ -399,6 +385,24 @@ class Wallpaper < ActiveRecord::Base
 
       # Destroy this wallpaper
       destroy
+    end
+  end
+
+  concerning :Resizing do
+    included do
+      attr_reader :resized_image
+      attr_reader :resized_image_resolution
+    end
+
+    def resizable_resolutions
+      @resizable_resolutions ||= WallpaperResolutions.new(self)
+    end
+
+    def resize_image_to(resolution)
+      return false unless resizable_resolutions.include?(resolution)
+      @resized_image = image.thumb("#{resolution.to_geometry_s}\##{image_gravity}")
+      @resized_image_resolution = resolution
+      true
     end
   end
 
