@@ -38,6 +38,9 @@
 #
 
 class Wallpaper < ActiveRecord::Base
+  THUMBNAIL_WIDTH = 250
+  THUMBNAIL_HEIGHT = 188
+
   serialize :cached_tag_list, Array
 
   include Approvable
