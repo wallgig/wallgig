@@ -292,20 +292,6 @@ class Wallpaper < ActiveRecord::Base
     extract_colors
   end
 
-  def resolutions
-    @resolutions ||= WallpaperResolutions.new(self)
-  end
-
-  attr_reader :resized_image
-  attr_reader :resized_image_resolution
-
-  def resize_image_to(resolution)
-    return false unless resolutions.include?(resolution)
-    @resized_image = image.thumb("#{resolution.to_geometry_s}\##{image_gravity}")
-    @resized_image_resolution = resolution
-    true
-  end
-
   def set_image_hash
     self.image_hash = Digest::MD5.file(image.file).hexdigest if image.present?
   end
@@ -399,6 +385,41 @@ class Wallpaper < ActiveRecord::Base
 
       # Destroy this wallpaper
       destroy
+    end
+  end
+
+  concerning :Resizing do
+    included do
+      attr_reader :resized_image
+      attr_reader :resized_image_resolution
+    end
+
+    def resizable_resolutions
+      @resizable_resolutions ||= WallpaperResolutions.new(self)
+    end
+
+    # Resizes the image given a ScreenResolution instance
+    # @param [Object] check_inclusion Checks if ScreenResolution is in the list of resizable resolutions.
+    def resize_image_to(screen_resolution, check_inclusion: true)
+      raise ArgumentError, 'Argument is not an instance of ScreenResolution' unless screen_resolution.is_a?(ScreenResolution)
+      if check_inclusion && !resizable_resolutions.include?(screen_resolution)
+        return false
+      end
+      @resized_image = image.thumb("#{screen_resolution.to_geometry_s}\##{image_gravity}")
+      @resized_image_resolution = screen_resolution
+      true
+    end
+
+    # Creates a ScreenResolution instance with the original image dimensions.
+    def original_image_resolution
+      @original_image_resolution ||= ScreenResolution.new(width: image_width, height: image_height)
+    end
+
+    # Returns a ScreenResolution instance with the requested image dimensions.
+    # Falls back to original image dimensions if not present.
+    def requested_image_resolution
+      return resized_image_resolution unless resized_image_resolution.nil?
+      original_image_resolution
     end
   end
 

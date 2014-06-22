@@ -17,7 +17,7 @@ class WallpaperResolutions
 
     each do |r|
       unflattened_options[r.category_text] ||= []
-      unflattened_options[r.category_text] << [r.to_s, r.to_geometry_s, { data: { width: r.width, height: r.height } }]
+      unflattened_options[r.category_text] << [r.to_s, r.to_param, { data: { width: r.width, height: r.height } }]
     end
 
     options = []
