@@ -33,6 +33,47 @@ class WallpaperDecorator < Draper::Decorator
     h.image_tag(thumbnail_image_url, width: 250, height: 188, alt: to_s)
   end
 
+  # Public: Renders wallpaper thumbnail link tag.
+  # Link opens in a new window if 'current_settings.new_window' is set to true.
+  #
+  # wallpaper - Wallpaper model object
+  # options - HTML attribute options hash
+  #   :lazy - Use lazy loading (default: true)
+  #   :new_window - Open links in new window
+  #
+  # Examples
+  #
+  #   thumbnail_link_to_wallpaper(@wallpaper)
+  #
+  #   thumbnail_link_to_wallpaper(@wallpaper, lazy: true)
+  #
+  def thumbnail_link(options={})
+    link_html_options = {}
+    link_html_options[:title] = tag_list_text.presence || to_s
+    link_html_options[:target] = '_blank' if options[:new_window]
+
+    h.link_to path_with_requested_image_resolution, link_html_options do
+      if options[:lazy]
+        h.image_tag(
+          nil,
+          width: Wallpaper::THUMBNAIL_WIDTH,
+          height: Wallpaper::THUMBNAIL_HEIGHT,
+          class: 'img-wallpaper lazy',
+          data: {
+            src: thumbnail_image_url
+          }
+        )
+      else
+        h.image_tag(
+          thumbnail_image_url,
+          width: Wallpaper::THUMBNAIL_WIDTH,
+          height: Wallpaper::THUMBNAIL_HEIGHT,
+          class: 'img-wallpaper'
+        )
+      end
+    end
+  end
+
   def favourite_button_for_list
     options = {
       class: 'btn btn-sm pull-left',

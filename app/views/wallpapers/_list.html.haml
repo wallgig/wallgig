@@ -16,7 +16,7 @@
     - wallpapers.each do |wallpaper|
       %li{:class => "purity-#{wallpaper.purity}", :data => {:wallpaper_id => wallpaper.id}}
 
-        = thumbnail_link_to_wallpaper(wallpaper, lazy: true)
+        = wallpaper.thumbnail_link lazy: true, new_window: current_settings.new_window?
 
         .overlay.overlay-bottom
           %strong= wallpaper.requested_image_resolution
