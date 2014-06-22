@@ -13,17 +13,17 @@
  *= require_self
  */
 
-/* Web Fonts */
+/* Web fonts */
 @import url(http://fonts.googleapis.com/css?family=Open+Sans:300,400,700);
 
-/* Wallgig Variables */
+/* Wallgig variables */
 @import "variables";
 
-/* CSS Frameworks */
+/* CSS frameworks */
 @import "bootstrap";
-@import "bourbon";
+//@import "bourbon";
 
-/* Components */
+/* CSS plugins */
 @import "ladda";
 @import "flags";
 @import "font-awesome";
@@ -55,6 +55,9 @@
   height: 50px;
   background-color: #3f3f3f;
 }
+
+/* Wallgig components */
+@import "components/wallpaper_list";
 
 a {
   cursor: pointer;
