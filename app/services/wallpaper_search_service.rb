@@ -19,8 +19,8 @@ class WallpaperSearchService
       query: build_query,
       facets: build_facets,
       order: build_sort,
-      page: @options[:page],
-      per_page: @options[:per_page] || Wallpaper.default_per_page
+      page: options[:page],
+      per_page: options[:per_page] || Wallpaper.default_per_page
     )
 
     # Updates requested resolution of each wallpaper.
@@ -70,7 +70,7 @@ class WallpaperSearchService
       if options[:q].present?
         musts << {
           :query_string => {
-            :query => @options[:q],
+            :query => options[:q],
             :default_operator => 'AND',
             :lenient => true
           }
