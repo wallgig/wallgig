@@ -1,0 +1,38 @@
+html {
+  position: relative;
+  min-height: 100%;
+}
+
+body {
+  margin-bottom: $site-footer-height;
+}
+
+#site-footer {
+  position: absolute;
+  bottom: 0;
+  width: 100%;
+  height: $site-footer-height;
+  line-height: $site-footer-height;
+  background-color: $site-footer-bg-color;
+
+  ul {
+    @extend .list-inline;
+    margin: 0;
+  }
+
+  ul.list-social {
+    font-size: $font-size-h4;
+    a:hover {
+      text-decoration: none;
+    }
+  }
+
+  ul.list-sitemap {
+    margin-left: -10px;
+
+    > li {
+      padding-left: 10px;
+      padding-right: 10px;
+    }
+  }
+}
