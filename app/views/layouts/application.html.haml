@@ -3,7 +3,7 @@
   %head
     = display_meta_tags site: 'wallgig'
     %meta{name: 'viewport', content: 'width=device-width, initial-scale=1.0'}/
-    = stylesheet_link_tag "application", media: "all", "data-turbolinks-track" => true
+    = stylesheet_link_tag 'application', media: 'all'
     /[if lt IE 9]
       %script{src: 'https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js'}
       %script{src: 'https://oss.maxcdn.com/libs/respond.js/1.3.0/respond.min.js'}
@@ -154,7 +154,7 @@
       #main
         %div{:class => ((content_for?(:use_full_container) && yield(:use_full_container)) ? 'container-fluid' : 'container')}
           = content_for?(:content) ? yield(:content) : yield
-    = javascript_include_tag "application", "data-turbolinks-track" => true, "data-turbolinks-eval" => false
+    = javascript_include_tag 'application'
     = yield :javascript_for_page
     :javascript
       var Wallgig = Wallgig || {};
