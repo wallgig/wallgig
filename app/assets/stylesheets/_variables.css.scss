@@ -31,13 +31,16 @@ $scrollbar-width: 13px;
 /* Wallpaper thumbnail */
 $wallpaper-thumbnail-width: 250px;
 $wallpaper-thumbnail-height: 188px;
+
 $wallpaper-thumbnail-box-shadow: #000 0px 0px 5px;
-$wallpaper-thumbnail-box-shadow-hover: #000 0px 0px 15px;
+$wallpaper-thumbnail-hover-box-shadow: #000 0px 0px 15px;
+
+$wallpaper-thumbnail-purity-border-width: 2px;
 
 $wallpaper-thumbnail-overlay-height: 30px;
 $wallpaper-thumbnail-overlay-bg: rgba(0, 0, 0, 0.75);
 
-$wallpaper-thumbnail-purity-border-width: 2px;
+$wallpaper-thumbnail-btn-fav-active-bg-color: rgba($brand-primary, 0.5);
 
 /* Purity colors */
 $purity-sfw: $brand-success;

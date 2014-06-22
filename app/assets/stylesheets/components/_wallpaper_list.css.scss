@@ -1,4 +1,4 @@
-.list-wallpaper {
+ul.list-wallpaper {
   @extend .list-unstyled;
   @extend .clearfix;
   margin-left: -($grid-gutter-width / 2);
@@ -26,7 +26,7 @@
   }
 
   > li:hover {
-    box-shadow: $wallpaper-thumbnail-box-shadow-hover;
+    box-shadow: $wallpaper-thumbnail-hover-box-shadow;
   }
 
   /* Purity */
@@ -45,6 +45,7 @@
       position: absolute;
       transition: all 0.1s ease-in;
     }
+
     .overlay-bottom {
       left: 0;
       right: 0;
@@ -56,15 +57,27 @@
       background-color: $wallpaper-thumbnail-overlay-bg;
       color: $text-color;
       text-align: center;
+
       .btn {
+        @extend .btn-sm;
         color: $text-color;
       }
+
+      .btn-fav {
+        float: left;
+
+        &.active {
+          background-color: $wallpaper-thumbnail-btn-fav-active-bg-color;
+        }
+      }
     }
+
     .overlay-left {
       top: 5px;
       left: 5px;
       opacity: 0;
     }
+
     .overlay-right {
       top: 0;
       right: 0;
@@ -76,7 +89,9 @@
     .overlay-bottom {
       bottom: 0;
     }
-    .overlay-left, .overlay-right {
+
+    .overlay-left,
+    .overlay-right {
       opacity: 1;
     }
   }

@@ -14,12 +14,12 @@ $ ->
         $this.unbind 'contextmenu', prevent_default_handler
 
     # Handle favourite
-    $('.btn-favourite').on 'ajax:success', (e, data) ->
+    $('.btn-fav').on 'ajax:success', (e, data) ->
       $this = $(this)
       if data.fav_status
-        $this.addClass('favourited').html('<span class="fa fa-star"></span> Faved')
+        $this.addClass('active').html('<span class="fa fa-star"></span> Faved')
       else
-        $this.removeClass('favourited').html('<span class="fa fa-star-o"></span> Fav')
+        $this.removeClass('active').html('<span class="fa fa-star-o"></span> Fav')
 
       $('.fav-count').text(data.fav_count)
 
@@ -71,10 +71,10 @@ $ ->
       $this.on 'ajax:success', (event, data, status, xhr) ->
         $this.find('span.count').text data.fav_count
         if data.fav_status
-          $this.addClass 'btn-favourite favourited'
+          $this.addClass 'active'
           window.analytics.track('Favourited a wallpaper')
         else
-          $this.removeClass 'btn-favourite favourited'
+          $this.removeClass 'active'
           window.analytics.track('Unfavourited a wallpaper')
       $this.on 'ajax:error', (event, xhr, status, error) ->
         # alert error
