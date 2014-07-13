@@ -426,6 +426,24 @@ class Wallpaper < ActiveRecord::Base
     end
   end
 
+  concerning :Tagging do
+    included do
+      attr_accessor :tag_ids
+      attr_accessor :editing_user
+
+      validate :check_minimum_two_tags
+    end
+
+    def tags
+      Tag.where(id: tag_ids)
+    end
+
+    private
+      def check_minimum_two_tags
+        errors.add :tags, 'minimum of two tags are required' if tags.count < 2
+      end
+  end
+
   private
     def check_duplicate_image_hash
       if image_hash.present? && (duplicate = self.class.where.not(id: self.id).where(image_hash: image_hash).first)
