@@ -2,7 +2,7 @@ module WallpapersHelper
   def image_tag_for_wallpaper_stage(wallpaper)
     style = [
       "background: url(#{wallpaper.image.thumb('320x320').url}) no-repeat center center fixed",
-      'background-size: cover'
+      'background-size: contain'
     ].join(';')
 
     image_tag(
