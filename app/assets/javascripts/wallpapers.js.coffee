@@ -1,5 +1,19 @@
 $ ->
   if $('body.wallpapers.show').length == 1
+    # Handle high resolution image load
+    $('img[data-highres-src]').each ->
+      $this = $(this)
+      highres_src = $this.data('highres-src')
+      prevent_default_handler = (e) ->
+        e.preventDefault()
+        alert 'Please wait, the full size image is still loading.'
+
+      $this.bind 'contextmenu', prevent_default_handler
+
+      $.get highres_src, ->
+        $this.attr 'src', highres_src
+        $this.unbind 'contextmenu', prevent_default_handler
+
     # Handle favourite
     $('.btn-favourite').on 'ajax:success', (e, data) ->
       $this = $(this)

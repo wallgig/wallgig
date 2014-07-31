@@ -1,16 +1,16 @@
 module WallpapersHelper
   def image_tag_for_wallpaper_stage(wallpaper)
-    style = [
-      "background: url(#{wallpaper.image.thumb('320x320').url}) no-repeat center center fixed",
-      'background-size: contain'
-    ].join(';')
+    lowres_src = wallpaper.image.thumb('320x320').url
+    highres_src = wallpaper.requested_image_url
 
     image_tag(
-      wallpaper.requested_image_url,
+      lowres_src,
       :width => wallpaper.requested_image_resolution.width,
       :height => wallpaper.requested_image_resolution.height,
       :class => "img-wallpaper img-#{wallpaper.format} state-1",
-      :style => style
+      :data => {
+        :highres_src => highres_src
+      }
     )
   end
 end
