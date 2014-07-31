@@ -55,12 +55,11 @@ class WallpapersController < ApplicationController
   # POST /wallpapers
   # POST /wallpapers.json
   def create
-    @wallpaper = current_user.wallpapers.new(create_wallpaper_params.except(:tag_ids))
+    @wallpaper = current_user.wallpapers.new_with_editing_user(create_wallpaper_params, current_user)
     authorize! :create, @wallpaper
 
     respond_to do |format|
       if @wallpaper.save
-        @wallpaper.update_tag_ids_by_user(create_wallpaper_params[:tag_ids], current_user)
         format.html do
           if @wallpaper.approved?
             redirect_to @wallpaper, notice: 'Wallpaper was successfully created.'
@@ -79,16 +78,18 @@ class WallpapersController < ApplicationController
   # PATCH/PUT /wallpapers/1
   # PATCH/PUT /wallpapers/1.json
   def update
+    @wallpaper.editing_user = current_user
     authorize! :update, @wallpaper
-    @wallpaper = @wallpaper.decorate
 
     respond_to do |format|
-      if @wallpaper.update(update_wallpaper_params.except(:tag_ids))
-        @wallpaper.update_tag_ids_by_user(update_wallpaper_params[:tag_ids], current_user)
+      if @wallpaper.update(update_wallpaper_params)
         format.html { redirect_to @wallpaper, notice: 'Wallpaper was successfully updated.' }
         format.json { head :no_content }
       else
-        format.html { render action: 'edit' }
+        format.html do
+          @wallpaper = @wallpaper.decorate
+          render action: 'edit'
+        end
         format.json { render json: @wallpaper.errors, status: :unprocessable_entity }
       end
     end

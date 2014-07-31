@@ -73,7 +73,9 @@ class Wallpaper < ActiveRecord::Base
   has_many :collections_wallpapers, dependent: :destroy
   has_many :collections, through: :collections_wallpapers
 
-  has_many :wallpapers_tags, dependent: :destroy
+  has_many :wallpapers_tags, dependent: :destroy,
+           before_add: :set_wallpaper_tag_added_by_user
+
   has_many :tags, through: :wallpapers_tags
   has_many :ordered_tags, -> {
     reorder('
@@ -331,22 +333,6 @@ class Wallpaper < ActiveRecord::Base
     save
   end
 
-  def update_tag_ids_by_user(new_tag_ids, user)
-    new_tag_ids ||= []
-    new_tag_ids.map!(&:to_i)
-
-    tag_ids_to_add    = new_tag_ids - tag_ids
-    tag_ids_to_remove = tag_ids - new_tag_ids
-
-    wallpapers_tags.where(tag_id: tag_ids_to_remove).delete_all if tag_ids_to_remove.any?
-
-    Tag.where(id: tag_ids_to_add).pluck(:id).each do |tag_id|
-      wallpapers_tags.create!(tag_id: tag_id, added_by_id: user.id)
-    end
-
-    cache_tag_list
-  end
-
   def queue_notify_subscribers
     NotifySubscribers.perform_async('User', user_id, id, persisted? && approved?)
   end
@@ -428,19 +414,29 @@ class Wallpaper < ActiveRecord::Base
 
   concerning :Tagging do
     included do
-      attr_accessor :tag_ids
       attr_accessor :editing_user
 
       validate :check_minimum_two_tags
+
+      extend ClassMethods
     end
 
-    def tags
-      Tag.where(id: tag_ids)
+    module ClassMethods
+      def new_with_editing_user(attributes, editing_user)
+        new.tap do |obj|
+          obj.editing_user = editing_user
+          obj.attributes = attributes
+        end
+      end
     end
 
     private
+      def set_wallpaper_tag_added_by_user(wallpaper_tag)
+        wallpaper_tag.added_by = editing_user unless editing_user.nil?
+      end
+
       def check_minimum_two_tags
-        errors.add :tags, 'minimum of two tags are required' if tags.count < 2
+        errors.add :tags, 'minimum of two tags are required' if tag_ids.count < 2
       end
   end
 
