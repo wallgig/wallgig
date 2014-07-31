@@ -128,11 +128,7 @@
                   = link_to tag.name, wallpapers_path(tags: [tag.name]), class: "btn btn-xs btn-link purity-#{tag.purity}"
 
 - content_for :wallpaper_stage_content do
-  = image_tag @wallpaper.requested_image_url,
-    width: @wallpaper.requested_image_resolution.width,
-    height: @wallpaper.requested_image_resolution.height,
-    class: "img-wallpaper img-#{@wallpaper.format} state-1",
-    style: "background: url(#{@wallpaper.thumbnail_image_url}) no-repeat center center fixed; background-size: cover;"
+  = image_tag_for_wallpaper_stage @wallpaper
 
 - # OPTIMIZE
 - content_for :javascript_for_page do
