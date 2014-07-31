@@ -114,6 +114,7 @@ GEM
       tzinfo (~> 1.1)
     acts_as_list (0.4.0)
       activerecord (>= 3.0)
+    addressable (2.3.6)
     ancestry (2.1.0)
       activerecord (>= 3.0.0)
     arbre (1.0.1)
@@ -289,6 +290,10 @@ GEM
     kaminari-bootstrap (3.0.1)
       kaminari (>= 0.13.0)
       rails
+    launchy (2.4.2)
+      addressable (~> 2.3)
+    letter_opener (1.2.0)
+      launchy (~> 2.2)
     libv8 (3.16.14.3)
     listen (2.7.4)
       celluloid (>= 0.15.2)
@@ -553,6 +558,7 @@ DEPENDENCIES
   jquery-rails
   kaminari
   kaminari-bootstrap (~> 3.0.1)
+  letter_opener
   lodash-rails
   meta-tags
   miro

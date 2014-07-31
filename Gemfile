@@ -29,8 +29,11 @@ gem 'puma'
 # Use Foreman to manage the app
 gem 'foreman'
 
-# Use Capistrano for deployment
 group :development do
+  # utilities
+  gem 'letter_opener'
+
+  # Use Capistrano for deployment
   gem 'capistrano'
   gem 'capistrano-rails'
   gem 'capistrano-bundler'

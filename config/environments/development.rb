@@ -13,6 +13,9 @@ Rails.application.configure do
   config.consider_all_requests_local       = true
   config.action_controller.perform_caching = false
 
+  # Set delivery method to letter_opener gem
+  config.action_mailer.delivery_method = :letter_opener
+
   # Don't care if the mailer can't send.
   config.action_mailer.raise_delivery_errors = false
 
