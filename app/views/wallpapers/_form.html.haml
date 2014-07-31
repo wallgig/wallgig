@@ -15,22 +15,23 @@
 
     = f.input :image, as: :file unless @wallpaper.persisted?
 
-    .form-group
-      = label_tag 'Tags'
+    .form-group.required{:class => ('has-error' if @wallpaper.errors.include?(:tags))}
+      = f.label :tags, required: true, class: 'control-label'
       = text_field_tag :tag, nil, data: { provide: 'tag-search' }, class: 'typeahead form-control', autocomplete: 'off', placeholder: 'Search for Tags'
+      = f.error :tags
       %p.help-block Press <strong>Enter</strong> to add a tag
     .form-group
       %ul.list-tag.list-group{:data => {:provide => 'tag-list'}}
-        - @wallpaper.wallpapers_tags.each do |wallpapers_tag|
-          .list-group-item{:data => {:tag_id => wallpapers_tag.tag_id}}
-            %a{:class => 'pull-right', :data => {:action => 'remove'}} 
+        - @wallpaper.tags.each do |tag|
+          .list-group-item{:data => {:tag_id => tag.id}}
+            %a{:class => 'pull-right', :data => {:action => 'remove'}}
               = fa_icon_tag('times')
-            %span{:class => "purity-#{wallpapers_tag.purity}"}
+            %span{:class => "purity-#{tag.purity}"}
               = fa_icon_tag('tag')
-              = wallpapers_tag.name
+              = tag.name
             %br/
-            .text-muted= wallpapers_tag.tag.category_name
-            = hidden_field_tag 'wallpaper[tag_ids][]', wallpapers_tag.tag_id, id: nil
+            .text-muted= tag.category_name
+            = hidden_field_tag 'wallpaper[tag_ids][]', tag.id, id: nil
   
     = f.input :source, hint: 'Enter URL or Artist'
 
