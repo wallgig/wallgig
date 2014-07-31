@@ -173,8 +173,8 @@
         });
 
     - flash.each do |type, message|
-      - type = :success if type == :notice
-      - type = :danger  if type == :alert
+      - type = 'success' if type == 'notice'
+      - type = 'danger'  if type == 'alert'
       :javascript
         $.bootstrapGrowl('#{j message}', {
           type: '#{type}',
