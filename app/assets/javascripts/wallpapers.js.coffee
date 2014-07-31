@@ -4,15 +4,14 @@ $ ->
     $('img[data-highres-src]').each ->
       $this = $(this)
       highres_src = $this.data('highres-src')
-#      prevent_default_handler = (e) ->
-#        e.preventDefault()
-#        alert 'Please wait, the full size image is still loading.'
+      prevent_default_handler = (e) ->
+        e.preventDefault()
 
-#      $this.bind 'contextmenu', prevent_default_handler
+      $this.bind 'contextmenu', prevent_default_handler
 
-#      $.get highres_src, ->
-      $this.attr 'src', highres_src
-#        $this.unbind 'contextmenu', prevent_default_handler
+      $.get highres_src, ->
+        $this.attr 'src', highres_src
+        $this.unbind 'contextmenu', prevent_default_handler
 
     # Handle favourite
     $('.btn-favourite').on 'ajax:success', (e, data) ->

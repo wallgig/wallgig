@@ -1,6 +1,12 @@
 class WallpaperDecorator < Draper::Decorator
   delegate_all
 
+  def requested_image
+    return if image.blank?
+    return resized_image if resized_image.present?
+    image
+  end
+
   def requested_image_url
     return if image.blank?
     return resized_image.url if resized_image.present?
