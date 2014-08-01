@@ -11,18 +11,18 @@ $ ->
         width = $stage.width()
         if (width / ratio) > height
           $img
-          .addClass 'auto-width'
-          .removeClass 'auto-height'
+            .addClass 'auto-width'
+            .removeClass 'auto-height'
         else
           $img
-          .addClass 'auto-height'
-          .removeClass 'auto-width'
+            .addClass 'auto-height'
+            .removeClass 'auto-width'
 
       # Initial
       onResizeHandler()
       $img.removeClass 'hide'
 
-      $(window).on 'resize', onResizeHandler
+      $(window).on 'resize', _.debounce(onResizeHandler, 100)
     )()
 
     # Handle high resolution image load
