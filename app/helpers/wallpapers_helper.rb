@@ -7,7 +7,7 @@ module WallpapersHelper
       lowres_src,
       :width => wallpaper.requested_image_resolution.width,
       :height => wallpaper.requested_image_resolution.height,
-      :class => "img-wallpaper img-#{wallpaper.format} state-1",
+      :class => "img-wallpaper img-#{wallpaper.format} state-1 hide",
       :data => {
         :highres_src => highres_src
       }

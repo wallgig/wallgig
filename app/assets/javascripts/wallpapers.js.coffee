@@ -1,5 +1,30 @@
 $ ->
   if $('body.wallpapers.show').length == 1
+    # Handle aspect ratio
+    (->
+      $stage = $('.wallpaper-stage')
+      $img = $('.img-wallpaper')
+      ratio = $img.attr('width') / $img.attr('height')
+
+      onResizeHandler = ->
+        height = $stage.height()
+        width = $stage.width()
+        if (width / ratio) > height
+          $img
+          .addClass 'auto-width'
+          .removeClass 'auto-height'
+        else
+          $img
+          .addClass 'auto-height'
+          .removeClass 'auto-width'
+
+      # Initial
+      onResizeHandler()
+      $img.removeClass 'hide'
+
+      $(window).on 'resize', onResizeHandler
+    )()
+
     # Handle high resolution image load
     $('img[data-highres-src]').each ->
       $this = $(this)

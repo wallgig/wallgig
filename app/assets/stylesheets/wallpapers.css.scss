@@ -93,11 +93,15 @@ $wallpaper-sidebar-width: 320px;
     right: 0;
     bottom: 0;
     left: 0;
-    max-height: 95%;
-    max-width: 95%;
+    max-height: 100%;
+    max-width: 100%;
     margin: auto;
-//    height: auto;
-    width: auto;
+    &.auto-height {
+      height: auto;
+    }
+    &.auto-width {
+      width: auto;
+    }
   }
 }
 
