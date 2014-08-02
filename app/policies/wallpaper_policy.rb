@@ -27,6 +27,10 @@ class WallpaperPolicy < ApplicationPolicy
     user.try(:moderator?)
   end
 
+  def set_profile_cover?
+    record.sfw?
+  end
+
   def permitted_attributes
     attrs = [:purity, :image_gravity, :source, { tag_ids: [] }]
     attrs << :image unless record.persisted?

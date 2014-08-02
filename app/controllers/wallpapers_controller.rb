@@ -1,4 +1,5 @@
 class WallpapersController < ApplicationController
+  skip_after_action :verify_policy_scoped, only: :index
   before_action :authenticate_user!, except: [:index, :show, :set_profile_cover, :toggle_favourite, :collections, :toggle_collect]
   before_action :set_user, only: [:index]
   before_action :set_wallpaper, only: [:show, :edit, :update, :destroy, :update_purity, :history, :set_profile_cover, :toggle_favourite, :collections, :toggle_collect]
@@ -12,7 +13,6 @@ class WallpapersController < ApplicationController
   # GET /wallpapers.json
   def index
     @wallpapers = WallpaperSearchService.new(search_options).execute
-
     @wallpapers = WallpapersDecorator.new(@wallpapers, context: { search_options: search_options, current_user: current_user })
 
     respond_to do |format|
@@ -27,11 +27,12 @@ class WallpapersController < ApplicationController
   # GET /wallpapers/1
   # GET /wallpapers/1.json
   def show
+    authorize @wallpaper
+
     # Checks if requested screen resolution is present and valid
     # before telling @wallpaper to resize.
     if resize_params.present?
       screen_resolution = ScreenResolution.find_by_dimensions(resize_params[:width], resize_params[:height])
-      unless @wallpaper.resize_image_to(screen_resolution)
       unless @wallpaper.resize_image_to!(screen_resolution)
         redirect_to @wallpaper, status: :moved_permanently, alert: 'Requested screen resolution is invalid.'
       end
@@ -44,20 +45,20 @@ class WallpapersController < ApplicationController
   # GET /wallpapers/new
   def new
     @wallpaper = current_user.wallpapers.new
-    authorize! :create, @wallpaper
+    authorize @wallpaper
   end
 
   # GET /wallpapers/1/edit
   def edit
-    authorize! :update, @wallpaper
+    authorize @wallpaper
     @wallpaper = @wallpaper.decorate
   end
 
   # POST /wallpapers
   # POST /wallpapers.json
   def create
-    @wallpaper = current_user.wallpapers.new_with_editing_user(create_wallpaper_params, current_user)
-    authorize! :create, @wallpaper
+    @wallpaper = current_user.wallpapers.new_with_editing_user(wallpaper_params, current_user)
+    authorize @wallpaper
 
     respond_to do |format|
       if @wallpaper.save
@@ -80,10 +81,10 @@ class WallpapersController < ApplicationController
   # PATCH/PUT /wallpapers/1.json
   def update
     @wallpaper.editing_user = current_user
-    authorize! :update, @wallpaper
+    authorize @wallpaper
 
     respond_to do |format|
-      if @wallpaper.update(update_wallpaper_params)
+      if @wallpaper.update(wallpaper_params)
         format.html { redirect_to @wallpaper, notice: 'Wallpaper was successfully updated.' }
         format.json { head :no_content }
       else
@@ -99,7 +100,7 @@ class WallpapersController < ApplicationController
   # DELETE /wallpapers/1
   # DELETE /wallpapers/1.json
   def destroy
-    authorize! :destroy, @wallpaper
+    authorize @wallpaper
     @wallpaper.destroy
 
     respond_to do |format|
@@ -111,7 +112,7 @@ class WallpapersController < ApplicationController
   # PATCH /wallpapers/1/update_purity
   # PATCH /wallpapers/1/update_purity.js
   def update_purity
-    authorize! :update_purity, @wallpaper
+    authorize @wallpaper
     @wallpaper.purity = params[:purity]
     @wallpaper.save!
 
@@ -124,6 +125,7 @@ class WallpapersController < ApplicationController
   # POST /wallpapers/save_search_params
   # POST /wallpapers/save_search_params.json
   def save_search_params
+    # TODO move this to Account module
     session[:search_params] = search_params(false).except(:page).to_hash
 
     respond_to do |format|
@@ -133,12 +135,13 @@ class WallpapersController < ApplicationController
   end
 
   def set_profile_cover
-    if @wallpaper.sfw?
-      current_profile.cover_wallpaper = @wallpaper
-      current_profile.save!
-      redirect_to current_user, notice: 'Profile cover was successfully changed.'
-    else
-      redirect_to current_user, alert: 'Only SFW wallpapers can be set as profile cover.'
+    authorize @wallpaper
+
+    current_profile.update!(cover_wallpaper: @wallpaper)
+
+    respond_to do |format|
+      format.html { redirect_to current_user, notice: 'Profile cover was successfully changed.' }
+      format.json { head :no_content }
     end
   end
 
@@ -186,21 +189,17 @@ class WallpapersController < ApplicationController
   def set_user
     if params[:user_id].present?
       @user = User.find_by_username!(params[:user_id])
-      authorize! :read, @user
+      authorize @user, :show?
     end
   end
 
   def set_wallpaper
     @wallpaper = Wallpaper.find(params[:id])
-    authorize! :read, @wallpaper
+    authorize @wallpaper, :show?
   end
 
-  def create_wallpaper_params
-    params.require(:wallpaper).permit(:purity, :image, :image_gravity, :source, tag_ids: [])
-  end
-
-  def update_wallpaper_params
-    create_wallpaper_params.except(:image)
+  def wallpaper_params
+    params.require(:wallpaper).permit(*policy(@wallpaper || Wallpaper).permitted_attributes)
   end
 
   def resize_params

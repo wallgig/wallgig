@@ -60,17 +60,17 @@
               = fa_icon_tag('bars')
             %ul.dropdown-menu.pull-right{:role => 'menu'}
               - if user_signed_in?
-                - if @wallpaper.sfw?
+                - if policy(@wallpaper).set_profile_cover?
                   %li
-                    = link_to set_profile_cover_wallpaper_path(@wallpaper), data: { method: :post, confirm: 'Are you sure?' } do
+                    = link_to set_profile_cover_wallpaper_path(@wallpaper), data: { method: :post, confirm: 'Are you sure you want to set this wallpaper as your profile cover?' } do
                       = fa_icon_tag('picture-o')
                       Set as profile cover
-                - if can? :update, @wallpaper
+                - if policy(@wallpaper).edit?
                   %li
                     = link_to edit_wallpaper_path(@wallpaper) do
                       = fa_icon_tag('pencil')
                       Edit metadata
-                - if can? :destroy, @wallpaper
+                - if policy(@wallpaper).destroy?
                   %li
                     = link_to @wallpaper, data: { method: :delete, confirm: 'Are you sure?' } do
                       = fa_icon_tag('times')
