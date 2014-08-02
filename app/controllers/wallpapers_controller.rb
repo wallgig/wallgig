@@ -32,6 +32,7 @@ class WallpapersController < ApplicationController
     if resize_params.present?
       screen_resolution = ScreenResolution.find_by_dimensions(resize_params[:width], resize_params[:height])
       unless @wallpaper.resize_image_to(screen_resolution)
+      unless @wallpaper.resize_image_to!(screen_resolution)
         redirect_to @wallpaper, status: :moved_permanently, alert: 'Requested screen resolution is invalid.'
       end
     end

@@ -389,7 +389,7 @@ class Wallpaper < ActiveRecord::Base
 
     # Resizes the image given a ScreenResolution instance
     # @param [Object] check_inclusion Checks if ScreenResolution is in the list of resizable resolutions.
-    def resize_image_to(screen_resolution, check_inclusion: true)
+    def resize_image_to!(screen_resolution, check_inclusion: true)
       raise ArgumentError, 'Argument is not an instance of ScreenResolution' unless screen_resolution.is_a?(ScreenResolution)
       if check_inclusion && !resizable_resolutions.include?(screen_resolution)
         return false
