@@ -14,7 +14,7 @@ class Wallgig.Managers.Tag
       datumTokenizer: (d) -> Bloodhound.tokenizers.whitespace(d.name)
       queryTokenizer: Bloodhound.tokenizers.whitespace
       remote:
-        url: '/api/v1/tags?q=%QUERY'
+        url: '/tags.json?name_cont=%QUERY'
         ajax:
           beforeSend: (xhr, settings) =>
             settings.url = settings.url + '&' + $.param(exclude_ids: @tagIds)
@@ -52,10 +52,10 @@ class Wallgig.Managers.Tag
 
   addOrCreateTag: (name) ->
     params =
-      q: name
-    $.get '/api/v1/tags/find', params, (data) =>
-      if data.tag
-        @addTag(data.tag)
+      name_matches: name
+    $.get '/tags.json', params, (data) =>
+      if data.tags.length > 0
+        @addTag(data.tags[0])
       else
         modal = new Wallgig.Modals.NewTag(name, $.proxy(@addTag, @))
         modal.show()

@@ -37,7 +37,7 @@ Rails.application.routes.draw do
   resources :categories, only: [:index, :show]
 
   # Tags
-  resources :tags, only: [:show] do
+  resources :tags, only: [:index, :show] do
     concerns :subscribable
   end
 
@@ -182,11 +182,7 @@ Rails.application.routes.draw do
 
       resources :sessions, only: :create
 
-      resources :tags, only: [:index, :create] do
-        collection do
-          get :find
-        end
-      end
+      resources :tags, only: [:create]
 
       resources :users, only: [:index] do
         collection do

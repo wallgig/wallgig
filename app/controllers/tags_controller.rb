@@ -1,6 +1,17 @@
 class TagsController < ApplicationController
   before_action :set_tag, only: [:show]
 
+  def index
+    q = Tag.ransack(search_params)
+    @tags = policy_scope(q.result).
+      includes(:category).
+      page(params[:page])
+
+    respond_to do |format|
+      format.json
+    end
+  end
+
   def show
     authorize @tag
 
@@ -9,6 +20,10 @@ class TagsController < ApplicationController
       latest.
       limit(current_settings.per_page)
     @wallpapers = WallpapersDecorator.new(@wallpapers, context: { current_user: current_user })
+
+    respond_to do |format|
+      format.html
+    end
   end
 
   # def new
@@ -50,6 +65,10 @@ class TagsController < ApplicationController
   # end
 
   private
+
+  def search_params
+    params.permit(:name_cont, :name_matches, id_not_in: [])
+  end
 
   def set_tag
     @tag = Tag.friendly.find(params[:id])
