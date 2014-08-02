@@ -4,23 +4,24 @@ class CategoriesController < ApplicationController
   helper_method :search_params
 
   def index
-    @categories = Category.roots.alphabetically
+    @categories = policy_scope(Category).
+      roots.
+      alphabetically
 
-    if params[:q].present?
-      @tags = tag_collection_scope.search_names(params[:q])
-    else
-      @tags = tag_collection_scope
-    end
+    @tags = tag_collection_scope
+    @tags = @tags.search_names(params[:q]) if params[:q].present?
   end
 
   def show
+    authorize @category
+
     @ancestors = @category.ancestors
-
     @categories = @category.children.alphabetically
-
     @tags = tag_collection_scope.in_category_and_subtree(@category)
 
-    render action: 'index'
+    respond_to do |format|
+      format.html { render action: :index }
+    end
   end
 
   private
@@ -37,9 +38,10 @@ class CategoriesController < ApplicationController
   end
 
   def tag_collection_scope
-    Tag.includes(:category)
-       .with_purities(current_purities)
-       .most_wallpapers_first(current_purities)
-       .page(params[:page])
+    policy_scope(Tag).
+      includes(:category).
+      with_purities(current_purities).
+      most_wallpapers_first(current_purities).
+      page(params[:page])
   end
 end
