@@ -160,7 +160,6 @@ Rails.application.routes.draw do
       post :toggle_collect
       post :toggle_favourite
       post :set_profile_cover
-      get :history
       patch 'update_purity/:purity', action: :update_purity, as: :update_purity
       get ':width/:height' => 'wallpapers#show', width: /\d+/, height: /\d+/, as: :resized
     end

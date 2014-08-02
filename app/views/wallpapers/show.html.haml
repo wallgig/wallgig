@@ -70,11 +70,6 @@
                     = link_to edit_wallpaper_path(@wallpaper) do
                       = fa_icon_tag('pencil')
                       Edit metadata
-                - if can? :update, @wallpaper
-                  %li
-                    = link_to history_wallpaper_path(@wallpaper) do
-                      = fa_icon_tag('list')
-                      View edit history
                 - if can? :destroy, @wallpaper
                   %li
                     = link_to @wallpaper, data: { method: :delete, confirm: 'Are you sure?' } do

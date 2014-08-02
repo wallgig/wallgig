@@ -121,10 +121,6 @@ class WallpapersController < ApplicationController
     end
   end
 
-  # GET /wallpapers/1/history
-  def history
-  end
-
   # POST /wallpapers/save_search_params
   # POST /wallpapers/save_search_params.json
   def save_search_params
