@@ -17,7 +17,7 @@ class Wallgig.Managers.Tag
         url: '/tags.json?name_cont=%QUERY'
         ajax:
           beforeSend: (xhr, settings) =>
-            settings.url = settings.url + '&' + $.param(exclude_ids: @tagIds)
+            settings.url = settings.url + '&' + $.param(id_not_in: @tagIds)
             true
         filter: (parsedResponse) =>
           parsedResponse['tags'].filter (tag) =>
