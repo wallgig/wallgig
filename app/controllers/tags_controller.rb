@@ -23,32 +23,24 @@ class TagsController < ApplicationController
 
     respond_to do |format|
       format.html
+      format.json
     end
   end
 
-  # def new
-  #   @tag = current_user.coined_tags.new
-  #   authorize! :create, @tag
-  # end
+  def create
+    @tag = current_user.coined_tags.new(tag_params)
+    authorize @tag
 
-  # def edit
-  #   authorize! :update, @tag
-  # end
-
-  # def create
-  #   @tag = current_user.coined_tags.new(tag_params)
-  #   authorize! :create, @tag
-  #
-  #   respond_to do |format|
-  #     if @tag.save
-  #       format.html { redirect_to @tag, notice: 'Tag was successfully created.' }
-  #       format.json { render action: 'show', status: :created, location: @tag }
-  #     else
-  #       format.html { render action: 'new' }
-  #       format.json { render json: @tag.errors, status: :unprocessable_entity }
-  #     end
-  #   end
-  # end
+    respond_to do |format|
+      if @tag.save
+        format.html { redirect_to @tag, notice: 'Tag was successfully created.' }
+        format.json { render action: 'show', status: :created, location: @tag }
+      else
+        format.html { render action: 'new' }
+        format.json { render json: @tag.errors, status: :unprocessable_entity }
+      end
+    end
+  end
 
   # def update
   #   authorize! :update, @tag

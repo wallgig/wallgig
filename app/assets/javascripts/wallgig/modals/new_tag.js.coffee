@@ -72,4 +72,5 @@ class Wallgig.Modals.NewTag
     null
 
   onClickCreateTag: (e) ->
-    $.post '/api/v1/tags', @form.serialize(), @successCallback
+    $.post '/tags.json', @form.serialize(), (response) =>
+      @successCallback(response.tag)

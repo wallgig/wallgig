@@ -4,4 +4,8 @@ class TagPolicy < ApplicationPolicy
       scope
     end
   end
+
+  def create?
+    user.present? && record.coined_by == user
+  end
 end
