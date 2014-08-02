@@ -363,6 +363,8 @@ GEM
       pry (>= 0.9.10)
     puma (2.8.2)
       rack (>= 1.1, < 2.0)
+    pundit (0.2.3)
+      activesupport (>= 3.0.0)
     rack (1.5.2)
     rack-cache (1.2)
       rack (>= 0.4)
@@ -569,6 +571,7 @@ DEPENDENCIES
   pg_search
   pry-rails
   puma
+  pundit
   rack-cache
   rack-mini-profiler
   rails (= 4.1.4)
