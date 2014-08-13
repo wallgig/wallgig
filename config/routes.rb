@@ -204,13 +204,18 @@ Rails.application.routes.draw do
   # Oauth
   # use_doorkeeper
 
-  # Admin routes
-  authenticate :user, -> (user) { user.developer? } do
+  # Developer routes
+  authenticate :user, -> (u) { u.developer? } do
     require 'sidekiq/web'
     mount Sidekiq::Web => '/sidekiq'
   end
 
-  ActiveAdmin.routes(self)
+  # Admin routes
+  authenticate :user, -> (u) { u.admin? } do
+    mount RailsAdmin::Engine => '/admin/rails_admin', as: 'rails_admin'
+
+    ActiveAdmin.routes(self)
+  end
 
   # The priority is based upon order of creation: first created -> highest priority.
   # See how all your routes lay out with "rake routes".
