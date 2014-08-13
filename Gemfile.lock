@@ -32,12 +32,6 @@ GIT
       request_store (~> 1.0.3)
 
 GIT
-  remote: git://github.com/mindvision/cancan.git
-  revision: 7a2a130d2f0e287bdc69967cabe66cdc48b92a4f
-  specs:
-    cancan (1.6.10)
-
-GIT
   remote: git://github.com/mperham/sidekiq.git
   revision: 7ffc9947d19b6bfd75fe84796c71b85963d32ae7
   specs:
@@ -132,6 +126,7 @@ GEM
       sass (~> 3.2)
       thor
     builder (3.2.2)
+    cancancan (1.9.2)
     capistrano (3.2.1)
       i18n
       rake (>= 10.0.0)
@@ -544,7 +539,7 @@ DEPENDENCIES
   binding_of_caller
   bootstrap-sass (~> 3.1.1)
   bourbon
-  cancan!
+  cancancan
   capistrano
   capistrano-bundler
   capistrano-rails
