@@ -39,9 +39,17 @@
 
 FactoryGirl.define do
   factory :wallpaper do
+    ignore do
+      tags_count 2
+    end
+
     user
     image File.new(Rails.root.join('spec', 'wallpapers', 'test.jpg'))
     processing false
+
+    before(:create) do |wallpaper, evaluator|
+      wallpaper.tags = create_list(:tag, evaluator.tags_count)
+    end
 
     factory(:sfw_wallpaper) { purity :sfw }
     factory(:sketchy_wallpaper) { purity :sketchy }
