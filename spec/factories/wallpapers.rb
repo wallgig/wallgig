@@ -47,7 +47,7 @@ FactoryGirl.define do
     image File.new(Rails.root.join('spec', 'wallpapers', 'test.jpg'))
     processing false
 
-    before(:create) do |wallpaper, evaluator|
+    after(:build) do |wallpaper, evaluator|
       wallpaper.tags = create_list(:tag, evaluator.tags_count)
     end
 

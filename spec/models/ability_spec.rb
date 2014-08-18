@@ -29,7 +29,7 @@ describe Ability do
       end
 
       context 'not mine' do
-        it { should be_able_to :update, not_my_wallpaper }
+        it { should_not be_able_to :update, not_my_wallpaper }
         it { should_not be_able_to :destroy, not_my_wallpaper }
       end
     end

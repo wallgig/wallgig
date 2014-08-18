@@ -40,6 +40,18 @@
 require 'spec_helper'
 
 describe Wallpaper do
+  describe 'factory' do
+    describe 'build' do
+      subject { build(:wallpaper) }
+      it { should be_valid }
+    end
+
+    describe 'create' do
+      subject { create(:wallpaper) }
+      it { should be_valid }
+    end
+  end
+
   describe 'relations' do
     it { should belong_to(:user).counter_cache(true) }
     it { should have_many(:wallpaper_colors).dependent(:destroy) }
