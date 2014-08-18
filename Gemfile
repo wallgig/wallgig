@@ -65,8 +65,7 @@ end
 
 # auth
 gem 'devise'
-gem 'cancan', github: 'mindvision/cancan'
-gem 'pundit'
+gem 'cancancan'
 gem 'omniauth'
 gem 'omniauth-facebook'
 

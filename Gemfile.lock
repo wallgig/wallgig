@@ -32,12 +32,6 @@ GIT
       request_store (~> 1.0.3)
 
 GIT
-  remote: git://github.com/mindvision/cancan.git
-  revision: 7a2a130d2f0e287bdc69967cabe66cdc48b92a4f
-  specs:
-    cancan (1.6.10)
-
-GIT
   remote: git://github.com/mperham/sidekiq.git
   revision: 7ffc9947d19b6bfd75fe84796c71b85963d32ae7
   specs:
@@ -132,6 +126,7 @@ GEM
       sass (~> 3.2)
       thor
     builder (3.2.2)
+    cancancan (1.9.2)
     capistrano (3.2.1)
       i18n
       rake (>= 10.0.0)
@@ -364,8 +359,6 @@ GEM
       pry (>= 0.9.10)
     puma (2.8.2)
       rack (>= 1.1, < 2.0)
-    pundit (0.2.3)
-      activesupport (>= 3.0.0)
     rack (1.5.2)
     rack-cache (1.2)
       rack (>= 0.4)
@@ -546,7 +539,7 @@ DEPENDENCIES
   binding_of_caller
   bootstrap-sass (~> 3.1.1)
   bourbon
-  cancan!
+  cancancan
   capistrano
   capistrano-bundler
   capistrano-rails
@@ -591,7 +584,6 @@ DEPENDENCIES
   pg_search
   pry-rails
   puma
-  pundit
   rack-cache
   rack-mini-profiler
   rails (= 4.1.4)
