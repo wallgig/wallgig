@@ -40,6 +40,7 @@ class Ability
       can    :read, Wallpaper, processing: false
       cannot :read, Wallpaper, approved_at: nil unless user.moderator?
       can :create, Wallpaper, user_id: user.id
+      can :set_profile_cover, Wallpaper, purity: 'sfw'
       # can :crud, Wallpaper, user_id: user.id
 
       # Favourite

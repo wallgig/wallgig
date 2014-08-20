@@ -27,8 +27,6 @@ class WallpapersController < ApplicationController
   # GET /wallpapers/1
   # GET /wallpapers/1.json
   def show
-    authorize @wallpaper
-
     # Checks if requested screen resolution is present and valid
     # before telling @wallpaper to resize.
     if resize_params.present?
@@ -45,20 +43,20 @@ class WallpapersController < ApplicationController
   # GET /wallpapers/new
   def new
     @wallpaper = current_user.wallpapers.new
-    authorize @wallpaper
+    authorize! :create, @wallpaper
   end
 
   # GET /wallpapers/1/edit
   def edit
-    authorize @wallpaper
+    authorize! :update, @wallpaper
     @wallpaper = @wallpaper.decorate
   end
 
   # POST /wallpapers
   # POST /wallpapers.json
   def create
-    @wallpaper = current_user.wallpapers.new_with_editing_user(wallpaper_params, current_user)
-    authorize @wallpaper
+    @wallpaper = current_user.wallpapers.new_with_editing_user(create_wallpaper_params, current_user)
+    authorize! :create, @wallpaper
 
     respond_to do |format|
       if @wallpaper.save
@@ -81,10 +79,10 @@ class WallpapersController < ApplicationController
   # PATCH/PUT /wallpapers/1.json
   def update
     @wallpaper.editing_user = current_user
-    authorize @wallpaper
+    authorize! :update, @wallpaper
 
     respond_to do |format|
-      if @wallpaper.update(wallpaper_params)
+      if @wallpaper.update(update_wallpaper_params)
         format.html { redirect_to @wallpaper, notice: 'Wallpaper was successfully updated.' }
         format.json { head :no_content }
       else
@@ -100,11 +98,11 @@ class WallpapersController < ApplicationController
   # DELETE /wallpapers/1
   # DELETE /wallpapers/1.json
   def destroy
-    authorize @wallpaper
+    authorize! :destroy, @wallpaper
     @wallpaper.destroy
 
     respond_to do |format|
-      format.html { redirect_to wallpapers_url }
+      format.html { redirect_to wallpapers_url, notice: 'Wallpaper was successfully destroyed.' }
       format.json { head :no_content }
     end
   end
@@ -112,7 +110,7 @@ class WallpapersController < ApplicationController
   # PATCH /wallpapers/1/update_purity
   # PATCH /wallpapers/1/update_purity.js
   def update_purity
-    authorize @wallpaper
+    authorize! :update_purity, @wallpaper
     @wallpaper.purity = params[:purity]
     @wallpaper.save!
 
@@ -135,7 +133,7 @@ class WallpapersController < ApplicationController
   end
 
   def set_profile_cover
-    authorize @wallpaper
+    authorize! :set_profile_cover, @wallpaper
 
     current_profile.update!(cover_wallpaper: @wallpaper)
 
@@ -155,6 +153,7 @@ class WallpapersController < ApplicationController
     end
 
     respond_to do |format|
+      format.html { redirect_to @wallpaper, notice: 'Favourite successfully toggled.' }
       format.json
     end
   end
@@ -189,17 +188,21 @@ class WallpapersController < ApplicationController
   def set_user
     if params[:user_id].present?
       @user = User.find_by_username!(params[:user_id])
-      authorize @user, :show?
+      authorize! :read, @user
     end
   end
 
   def set_wallpaper
     @wallpaper = Wallpaper.find(params[:id])
-    authorize @wallpaper, :show?
+    authorize! :read, @wallpaper
   end
 
-  def wallpaper_params
-    params.require(:wallpaper).permit(*policy(@wallpaper || Wallpaper).permitted_attributes)
+  def create_wallpaper_params
+    params.require(:wallpaper).permit(:purity, :image, :image_gravity, :source, tag_ids: [])
+  end
+
+  def update_wallpaper_params
+    create_wallpaper_params.except(:image)
   end
 
   def resize_params
