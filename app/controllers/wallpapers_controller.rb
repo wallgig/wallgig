@@ -25,11 +25,6 @@ class WallpapersController < ApplicationController
         current_user: current_user
       }
     )
-
-    respond_to do |format|
-      format.html
-      format.json
-    end
   end
 
   # GET /wallpapers/1
