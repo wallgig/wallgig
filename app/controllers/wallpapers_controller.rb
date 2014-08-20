@@ -1,9 +1,10 @@
 class WallpapersController < ApplicationController
   WALLPAPER_SEARCH_CACHE_TTL = 10.minutes
 
-  before_action :authenticate_user!, except: [:index, :show, :set_profile_cover, :toggle_favourite, :collections, :toggle_collect]
+  before_action :authenticate_user!, except: [:index, :show]
   before_action :set_user, only: [:index]
-  before_action :set_wallpaper, only: [:show, :edit, :update, :destroy, :update_purity, :history, :set_profile_cover, :toggle_favourite, :collections, :toggle_collect]
+  before_action :set_wallpaper,
+                except: [:index, :new, :create, :save_search_params]
   before_action :record_wallpaper_impression, only: :show
 
   include WallpaperSearchParams
