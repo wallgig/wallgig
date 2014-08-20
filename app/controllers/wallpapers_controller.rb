@@ -28,10 +28,7 @@ class WallpapersController < ApplicationController
 
     respond_to do |format|
       format.html
-      format.json do
-        html = render_to_string partial: 'list', layout: false, locals: { wallpapers: @wallpapers }, formats: [:html]
-        render json: { html: html }
-      end
+      format.json
     end
   end
 
