@@ -65,12 +65,13 @@ end
 
 # auth
 gem 'devise'
-gem 'cancan', github: 'mindvision/cancan'
+gem 'cancancan'
 gem 'omniauth'
 gem 'omniauth-facebook'
 
 # admin
 gem 'activeadmin', github: 'gregbell/active_admin'
+gem 'rails_admin'
 
 # models
 gem 'friendly_id', '~> 5.0.0'
