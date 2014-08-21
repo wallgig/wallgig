@@ -26,8 +26,11 @@
 # Typeahead
 #= require typeahead.bundle
 
-#= require_tree .
+# Flight
+#= require flight
+
 #= require_tree ../templates/.
+#= require_tree .
 #= require_self
 
 $ ->
