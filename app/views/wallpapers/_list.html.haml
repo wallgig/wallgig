@@ -1,35 +1,38 @@
-- if wallpapers.has_pagination? && request.xhr?
-  - if respond_to?(:search_options)
-    - current_page_params = search_options.merge(page: wallpapers.current_page).reject { |_,v| v.blank? }
-  - else
-    - current_page_params = { page: wallpapers.current_page }
+.list-wallpaper{:data => {:component => 'wallpaper-list',
+                          :page => wallpapers.try(:current_page) || 1}}
 
-  .horizontal-page-bar
-    %h3
-      .pull-left= link_to wallpapers.current_page, url_for(current_page_params)
-      .pull-right
-        %a{:href => '#'}
-          = fa_icon_tag('chevron-up')
-
-- if wallpapers.any?
-  %ul.list-wallpaper{:class => local_assigns[:extra_css_class]}
-    - wallpapers.each do |wallpaper|
-      %li{:class => "purity-#{wallpaper.purity}", :data => {:wallpaper_id => wallpaper.id}}
-
-        = wallpaper.thumbnail_link lazy: true, new_window: current_settings.new_window?
-
-        .overlay.overlay-bottom
-          %strong= wallpaper.requested_image_resolution
-
-          = wallpaper.favourite_button_for_list
-
-          .btn.btn-sm.pull-right
-            = fa_icon_tag('eye')
-            = wallpaper.impressions_count
-
-  = wallpapers.link_to_next_page
-
-- else
-  %br/
-  %br/
-  %h2.text-center No search results found :(
+-# - if wallpapers.has_pagination? && request.xhr?
+-#   - if respond_to?(:search_options)
+-#     - current_page_params = search_options.merge(page: wallpapers.current_page).reject { |_,v| v.blank? }
+-#   - else
+-#     - current_page_params = { page: wallpapers.current_page }
+-#
+-#   .horizontal-page-bar
+-#     %h3
+-#       .pull-left= link_to wallpapers.current_page, url_for(current_page_params)
+-#       .pull-right
+-#         %a{:href => '#'}
+-#           = fa_icon_tag('chevron-up')
+-#
+-# - if wallpapers.any?
+-#   %ul.list-wallpaper{:class => local_assigns[:extra_css_class]}
+-#     - wallpapers.each do |wallpaper|
+-#       %li{:class => "purity-#{wallpaper.purity}", :data => {:wallpaper_id => wallpaper.id}}
+-#
+-#         = wallpaper.thumbnail_link lazy: true, new_window: current_settings.new_window?
+-#
+-#         .overlay.overlay-bottom
+-#           %strong= wallpaper.requested_image_resolution
+-#
+-#           = wallpaper.favourite_button_for_list
+-#
+-#           .btn.btn-sm.pull-right
+-#             = fa_icon_tag('eye')
+-#             = wallpaper.impressions_count
+-#
+-#   = wallpapers.link_to_next_page
+-#
+-# - else
+-#   %br/
+-#   %br/
+-#   %h2.text-center No search results found :(

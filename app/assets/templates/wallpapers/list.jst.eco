@@ -1,0 +1,55 @@
+<% if @showHorizontalBar: %>
+  <div class="horizontal-page-bar">
+    <span class="pull-left">
+      <a href="<%= @paging.self %>"><%= @paging.current_page %></a>
+    </span>
+    <span class="pull-right">
+      <a href="#">
+        <span class="fa fa-chevron-up"></span>
+      </a>
+    </span>
+  </div>
+<% end %>
+
+<% if @data.length: %>
+  <ul class="list-wallpaper">
+    <% for wallpaper in @data: %>
+      <li class="purity-<%= wallpaper.purity %>" data-wallpaper-id="<%= wallpaper.id %>">
+        <a href="<%= wallpaper.url %>">
+          <img
+            src="<%= wallpaper.image.thumbnail.url %>"
+            alt="Wallpaper #<%= wallpaper.id %>"
+            width="<%= wallpaper.image.thumbnail.width %>"
+            height="<%= wallpaper.image.thumbnail.height %>"
+            class="img-wallpaper"
+          >
+        </a>
+
+        <div class="overlay overlay-bottom">
+
+          <strong>
+            <%= wallpaper.image.original.width %>&times;<%= wallpaper.image.original.height %>
+          </strong>
+
+          <a
+            href="#"
+            class="btn btn-sm btn-favourite pull-left"
+            data-action="toggle-favourites"
+          >
+            <span class="fa fa-star"></span>
+            <span class="count"><%= wallpaper.favourites_count %></span>
+          </a>
+
+          <div class="btn btn-sm pull-right">
+            <span class="fa fa-eye"></span>
+            <%= wallpaper.views_count %>
+          </div>
+        </div>
+      </li>
+    <% end %>
+  </ul>
+<% else: %>
+  <br>
+  <br>
+  <h2 class="text-center">No search results found :(</h2>
+<% end %>
