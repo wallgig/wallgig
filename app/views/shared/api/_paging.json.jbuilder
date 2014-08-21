@@ -1,6 +1,8 @@
 json.paging do
   json.extract! collection, :current_page, :total_pages, :total_count
 
+  json.self url_for(only_path: false)
+
   unless collection.last_page?
     json.next url_for(
       page: collection.next_page,
