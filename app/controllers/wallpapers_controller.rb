@@ -1,4 +1,6 @@
 class WallpapersController < ApplicationController
+  WALLPAPER_SEARCH_CACHE_TTL = 10.minutes
+
   before_action :authenticate_user!, except: [:index, :show, :set_profile_cover, :toggle_favourite, :collections, :toggle_collect]
   before_action :set_user, only: [:index]
   before_action :set_wallpaper, only: [:show, :edit, :update, :destroy, :update_purity, :history, :set_profile_cover, :toggle_favourite, :collections, :toggle_collect]
@@ -11,9 +13,17 @@ class WallpapersController < ApplicationController
   # GET /wallpapers
   # GET /wallpapers.json
   def index
-    @wallpapers = WallpaperSearchService.new(search_options).execute
+    wallpapers = Rails.cache.fetch([:wallpaper_search, search_options], expires_in: WALLPAPER_SEARCH_CACHE_TTL) do
+      WallpaperSearchService.new(search_options).execute
+    end
 
-    @wallpapers = WallpapersDecorator.new(@wallpapers, context: { search_options: search_options, current_user: current_user })
+    @wallpapers = WallpapersDecorator.new(
+      wallpapers,
+      context: {
+        search_options: search_options,
+        current_user: current_user
+      }
+    )
 
     respond_to do |format|
       format.html
