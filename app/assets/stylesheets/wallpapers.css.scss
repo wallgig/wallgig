@@ -145,6 +145,17 @@ $wallpaper-sidebar-width: 320px;
     display: inline-block;
     position: relative;
     @include transition(all 0.1s ease-in);
+
+    // Border colors
+    &.purity-sfw {
+    }
+    &.purity-sketchy {
+      border: 3px solid #fda500;
+    }
+    &.purity-nsfw {
+      border: 3px solid #bf0600;
+    }
+
     .overlay {
       position: absolute;
       @include transition(all 0.1s ease-in);
@@ -191,13 +202,11 @@ $wallpaper-sidebar-width: 320px;
       opacity: 1;
     }
   }
-  .purity-sfw {
-  }
-  .purity-sketchy {
-    border: 3px solid #fda500;
-  }
-  .purity-nsfw {
-    border: 3px solid #bf0600;
+
+  .btn-favourite {
+    &.favourited {
+      @extend .btn-primary;
+    }
   }
 }
 
@@ -278,13 +287,6 @@ $wallpaper-sidebar-width: 320px;
 a.purity-sfw, a.purity-sketchy, a.purity-nsfw {
   &, &:hover {
     text-decoration: none;
-  }
-}
-
-.btn-favourite {
-  @extend .btn-default;
-  &.favourited {
-    @extend .btn-primary;
   }
 }
 
