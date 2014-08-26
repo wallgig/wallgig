@@ -111,6 +111,7 @@ gem 'sidetiq', github: 'tobiassvn/sidetiq'
 
 gem 'redis-rails'
 gem 'redis-objects'
+gem 'redmon', require: false
 
 gem 'rollbar' # rollbar error notification
 
