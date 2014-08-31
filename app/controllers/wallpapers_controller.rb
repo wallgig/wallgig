@@ -13,12 +13,8 @@ class WallpapersController < ApplicationController
   # GET /wallpapers
   # GET /wallpapers.json
   def index
-    wallpapers = Rails.cache.fetch([:wallpaper_search, search_options], expires_in: WALLPAPER_SEARCH_CACHE_TTL) do
-      WallpaperSearchService.new(search_options).execute
-    end
-
     @wallpapers = WallpapersDecorator.new(
-      wallpapers,
+      wallpaper_search_results(search_options),
       context: {
         search_options: search_options,
         current_user: current_user
@@ -234,6 +230,18 @@ class WallpapersController < ApplicationController
       'user_profile' if @user.present?
     when 'show'
       'fullscreen_wallpaper'
+    end
+  end
+
+  def wallpaper_search_results(params)
+    wallpapers = Wallpaper.none
+    begin
+      Rails.cache.fetch([:wallpaper_search, params], expires_in: WALLPAPER_SEARCH_CACHE_TTL) do
+        wallpapers = WallpaperSearchService.new(params).execute
+      end
+    rescue TypeError
+      logger.warn "Cannot cache wallpaper search results with params #{params}"
+      wallpapers
     end
   end
 end
