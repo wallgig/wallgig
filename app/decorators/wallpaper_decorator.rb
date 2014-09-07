@@ -80,6 +80,10 @@ class WallpaperDecorator < Draper::Decorator
     end
   end
 
+  def favourited?
+    context[:favourited]
+  end
+
   def favourite_button_for_list
     options = {
       class: 'btn btn-sm pull-left',
@@ -90,7 +94,7 @@ class WallpaperDecorator < Draper::Decorator
         action: 'favourite'
       }
     }
-    options[:class] << ' btn-favourite favourited' if context[:favourited]
+    options[:class] << ' btn-favourite favourited' if favourited?
 
     h.content_tag :a, options do
       "<span class='fa fa-star'></span>" \

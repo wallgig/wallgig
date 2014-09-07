@@ -151,6 +151,7 @@ class WallpapersController < ApplicationController
     end
   end
 
+  # TODO deprecate
   def toggle_favourite
     if current_user.favourited?(@wallpaper)
       current_user.unfavourite(@wallpaper)

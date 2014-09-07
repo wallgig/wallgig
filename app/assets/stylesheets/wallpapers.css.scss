@@ -191,13 +191,22 @@ $wallpaper-sidebar-width: 320px;
       opacity: 1;
     }
   }
-  .purity-sfw {
+
+  // Purity borders
+  li.purity-sfw {
   }
-  .purity-sketchy {
+  li.purity-sketchy {
     border: 3px solid #fda500;
   }
-  .purity-nsfw {
+  li.purity-nsfw {
     border: 3px solid #bf0600;
+  }
+
+  // Favourite button states
+  .btn-fav {
+  }
+  .btn-fav.faved {
+    @extend .btn-primary;
   }
 }
 
@@ -278,13 +287,6 @@ $wallpaper-sidebar-width: 320px;
 a.purity-sfw, a.purity-sketchy, a.purity-nsfw {
   &, &:hover {
     text-decoration: none;
-  }
-}
-
-.btn-favourite {
-  @extend .btn-default;
-  &.favourited {
-    @extend .btn-primary;
   }
 }
 

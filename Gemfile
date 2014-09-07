@@ -92,10 +92,12 @@ gem 'simple_form', '~> 3.1.0.rc1', github: 'plataformatec/simple_form'
 gem 'eco'
 
 # assets
-gem 'bootstrap-sass', '~> 3.1.1'
+gem 'bootstrap-sass', '~> 3.2.0'
 gem 'bourbon'
-gem 'font-awesome-rails'
-gem 'lodash-rails'
+gem 'rails-assets-fontawesome'
+gem 'rails-assets-lodash'
+gem 'rails-assets-vue'
+gem 'rails-assets-superagent'
 
 # services
 gem 'sinatra', '>= 1.3.0', require: false

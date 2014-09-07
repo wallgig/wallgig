@@ -8,7 +8,9 @@
       %script{src: 'https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js'}
       %script{src: 'https://oss.maxcdn.com/libs/respond.js/1.3.0/respond.min.js'}
     = csrf_meta_tags
-  %body{:class => "#{controller_name.parameterize} #{action_name.parameterize}"}
+    :css
+      [v-cloak] { display: none }
+  %body#wallgig-app{:class => "#{controller_name.parameterize} #{action_name.parameterize}"}
     - unless content_for?(:hide_navbar) && yield(:hide_navbar)
       %nav.navbar.navbar-inverse.navbar-static-top{:role => "navigation"}
         .container-fluid
@@ -181,3 +183,7 @@
           offset: {from: 'top', amount: 80},
           width: 300
         });
+
+    - if Rails.env.development?
+      :javascript
+        Vue.config('debug', true)

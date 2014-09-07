@@ -197,7 +197,13 @@ Rails.application.routes.draw do
         resources :favourites, only: [:index]
       end
 
-      resources :wallpapers, only: [:index, :show, :create]
+      resources :wallpapers, only: [:index, :show, :create] do
+        resource :favourite do
+          member do
+            patch :toggle
+          end
+        end
+      end
     end
   end
 
