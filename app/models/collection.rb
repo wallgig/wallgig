@@ -19,6 +19,7 @@
 # Indexes
 #
 #  index_collections_on_ancestry  (ancestry)
+#  index_collections_on_position  (position)
 #  index_collections_on_user_id   (user_id)
 #
 

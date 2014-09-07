@@ -12,6 +12,7 @@
 # Indexes
 #
 #  index_collections_wallpapers_on_collection_id  (collection_id)
+#  index_collections_wallpapers_on_position       (position)
 #  index_collections_wallpapers_on_wallpaper_id   (wallpaper_id)
 #
 
