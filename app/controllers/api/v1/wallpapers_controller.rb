@@ -1,15 +1,19 @@
 class Api::V1::WallpapersController < Api::V1::BaseController
+  WALLPAPER_SEARCH_CACHE_TTL = 10.minutes
+
   before_action :authenticate_user_from_token!, only: [:create]
   before_action :set_wallpaper, only: [:show]
 
   include WallpaperSearchParams
 
   def index
-    @wallpapers = WallpaperSearchService.new(search_options).execute
-
-    @wallpapers = WallpapersDecorator.new(@wallpapers, context: { search_options: search_options, current_user: current_user })
-
-    respond_with @wallpapers
+    @wallpapers = WallpapersDecorator.new(
+      wallpaper_search_results(search_options),
+      context: {
+        search_options: search_options,
+        current_user: current_user
+      }
+    )
   end
 
   def show
@@ -46,5 +50,14 @@ class Api::V1::WallpapersController < Api::V1::BaseController
 
   def create_wallpaper_params
     params.permit(:purity, :image, :image_url, :tag_list, :image_gravity, :source)
+  end
+
+  def wallpaper_search_results(params)
+    Rails.cache.fetch([:wallpaper_search, params], expires_in: WALLPAPER_SEARCH_CACHE_TTL) do
+      wallpapers = WallpaperSearchService.new(params).execute
+    end
+  rescue TypeError
+    logger.warn "Cannot cache wallpaper search results with params #{params}"
+    Wallpaper.none
   end
 end
