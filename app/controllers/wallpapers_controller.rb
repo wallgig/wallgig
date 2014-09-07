@@ -11,23 +11,14 @@ class WallpapersController < ApplicationController
   layout :resolve_layout
 
   # GET /wallpapers
-  # GET /wallpapers.json
   def index
     @wallpapers = WallpapersDecorator.new(
-      wallpaper_search_results(search_options),
+      wallpaper_search_results(search_options, compact_search_options),
       context: {
         search_options: search_options,
         current_user: current_user
       }
     )
-
-    respond_to do |format|
-      format.html
-      format.json do
-        html = render_to_string partial: 'list', layout: false, locals: { wallpapers: @wallpapers }, formats: [:html]
-        render json: { html: html }
-      end
-    end
   end
 
   # GET /wallpapers/1
@@ -234,10 +225,10 @@ class WallpapersController < ApplicationController
     end
   end
 
-  def wallpaper_search_results(params)
+  def wallpaper_search_results(params, cache_params)
     wallpapers = Wallpaper.none
     begin
-      Rails.cache.fetch([:wallpaper_search, params], expires_in: WALLPAPER_SEARCH_CACHE_TTL) do
+      Rails.cache.fetch([:wallpaper_search, cache_params], expires_in: WALLPAPER_SEARCH_CACHE_TTL) do
         wallpapers = WallpaperSearchService.new(params).execute
       end
     rescue TypeError
