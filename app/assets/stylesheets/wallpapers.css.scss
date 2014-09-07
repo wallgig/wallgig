@@ -124,6 +124,22 @@ $wallpaper-sidebar-width: 320px;
 // }
 
 
+.wallpaper-list-container {
+  // Page separator
+  .page-separator {
+    font-size: $font-size-h3;
+
+    a {
+      color: $gray;
+      text-decoration: none;
+    }
+
+    a:hover {
+      color: $gray-darker;
+    }
+  }
+}
+
 .list-wallpaper {
   @extend .list-unstyled;
   @extend .clearfix;
@@ -317,13 +333,6 @@ a.purity-sfw, a.purity-sketchy, a.purity-nsfw {
   @include transition(opacity 0.2s ease-in);
   &.lazy-show {
     opacity: 1;
-  }
-}
-
-.horizontal-page-bar {
-  @include clearfix;
-  a {
-    text-decoration: none;
   }
 }
 

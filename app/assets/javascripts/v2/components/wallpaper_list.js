@@ -3,7 +3,11 @@
 Vue.component('wallpaper-list', {
   data: {
     isLoading: true,
+    isFirst: false,
+
+    paging: {},
     wallpapers: [],
+
     options: {}
   },
 
@@ -26,6 +30,7 @@ Vue.component('wallpaper-list', {
       .query(queryString.parse(location.search))
       .end(_.bind(function (res) {
         if (res.ok) {
+          this.paging = res.body.paging;
           this.wallpapers = res.body.data;
         }
         this.isLoading = false;

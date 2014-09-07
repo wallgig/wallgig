@@ -1,21 +1,13 @@
-- if wallpapers.has_pagination? && request.xhr?
-  - if respond_to?(:compact_search_options)
-    - current_page_params = compact_search_options.merge(page: wallpapers.current_page).reject { |_,v| v.blank? }
-  - else
-    - current_page_params = { page: wallpapers.current_page }
-
-  .horizontal-page-bar
-    %h3
-      .pull-left= link_to wallpapers.current_page, url_for(current_page_params)
-      .pull-right
-        %a{:href => '#'}
-          = fa_icon_tag('chevron-up')
-
-%div{:v => {:component => 'wallpaper-list', :cloak => true}, :options => search_options.to_json}
+%div.wallpaper-list-container{:v => {:component => 'wallpaper-list', :cloak => true}, :options => search_options.to_json}
   %div{:v => {:show => 'isLoading'}}
     .loading-spinner
 
   %div{:v => {:show => '!isLoading'}}
+    .page-separator{:v => {:show => '!isFirst'}}
+      %a.pull-left{:v => {:attr => 'href: paging.self', :text => 'paging.current_page'}}
+      %a.pull-right{:href => '#'}
+        %span.fa.fa-chevron-up
+
     %ul.list-wallpaper{:v => {:show => 'wallpapers.length'}}
       %li{:v => {:repeat => 'wallpapers'}, :class => 'purity-{{purity}}'}
         %a{:href => '{{url}}'}
@@ -32,6 +24,4 @@
             {{views_count}}
 
     %div{:v => {:show => 'wallpapers.length === 0'}}
-      %br/
-      %br/
       %h2.text-center No search results found :(
