@@ -1,4 +1,4 @@
-/*global _, Vue, superagent */
+/* global _, Vue, superagent, queryString */
 
 Vue.component('wallpaper-list', {
   data: {
@@ -23,7 +23,7 @@ Vue.component('wallpaper-list', {
 
       superagent
       .get('/api/v1/wallpapers')
-      .query(this.options)
+      .query(queryString.parse(location.search))
       .end(_.bind(function (res) {
         if (res.ok) {
           this.wallpapers = res.body.data;

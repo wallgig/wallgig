@@ -1,4 +1,5 @@
 source 'https://rubygems.org'
+source 'https://rails-assets.org'
 
 # Bundle edge Rails instead: gem 'rails', github: 'rails/rails'
 gem 'rails', '4.1.5'
@@ -96,8 +97,9 @@ gem 'bootstrap-sass', '~> 3.2.0'
 gem 'bourbon'
 gem 'rails-assets-fontawesome'
 gem 'rails-assets-lodash'
-gem 'rails-assets-vue'
+gem 'rails-assets-query-string'
 gem 'rails-assets-superagent'
+gem 'rails-assets-vue'
 
 # services
 gem 'sinatra', '>= 1.3.0', require: false

@@ -77,6 +77,7 @@ GIT
 
 GEM
   remote: https://rubygems.org/
+  remote: https://rails-assets.org/
   specs:
     actionmailer (4.1.5)
       actionpack (= 4.1.5)
@@ -385,6 +386,7 @@ GEM
       sprockets-rails (~> 2.0)
     rails-assets-fontawesome (4.2.0)
     rails-assets-lodash (2.4.1)
+    rails-assets-query-string (1.0.0)
     rails-assets-superagent (0.18.2)
     rails-assets-vue (0.10.6)
     rails_admin (0.6.2)
@@ -607,6 +609,7 @@ DEPENDENCIES
   rails (= 4.1.5)
   rails-assets-fontawesome
   rails-assets-lodash
+  rails-assets-query-string
   rails-assets-superagent
   rails-assets-vue
   rails_admin

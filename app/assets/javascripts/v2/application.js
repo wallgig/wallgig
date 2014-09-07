@@ -1,4 +1,5 @@
 //= require lodash
+//= require query-string
 //= require vue
 //= require superagent
 //= require ./components/wallpaper_list
