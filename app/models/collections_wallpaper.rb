@@ -22,7 +22,7 @@ class CollectionsWallpaper < ActiveRecord::Base
   validates :collection_id, presence: true
   validates :wallpaper_id,  presence: true, uniqueness: { scope: :collection_id }
 
-  acts_as_list
+  acts_as_list scope: :collection
 
   after_commit :queue_notify_subscribers
 
