@@ -1,20 +1,23 @@
 module WallpaperSearchParams
   extend ActiveSupport::Concern
 
+  GLUE = ','
+  ARRAY_PARAMS = %i(categories exclude_categories tags exclude_tags colors aspect_ratios)
+
   included do
     helper_method :search_options
+    helper_method :compact_search_options
   end
 
   def search_params(load_session = true)
-    params.permit(
-      :q,:page, :per_page, :width, :height, :order, :user, :resolution_exactness,
-      categories: [],
-      exclude_categories: [],
-      tags: [],
-      exclude_tags: [],
-      colors: [],
-      aspect_ratios: []
-    )
+    permitted_scalars = %i(q page per_page width height order user resolution_exactness) + ARRAY_PARAMS
+
+    permitted_arrays = {}
+    ARRAY_PARAMS.each do |key|
+      permitted_arrays[key] = []
+    end
+
+    params.permit(permitted_scalars, *permitted_arrays)
   end
 
   def search_options
@@ -22,8 +25,12 @@ module WallpaperSearchParams
       search_options = search_params
 
       # Ensure array
-      %i(categories exclude_categories tags exclude_tags colors).each do |key|
-        search_options[key] ||= []
+      ARRAY_PARAMS.each do |key|
+        if search_options[key].is_a? String
+          search_options[key] = search_options[key].split(GLUE)
+        else
+          search_options[key] ||= []
+        end
       end
 
       # Validate order
@@ -59,6 +66,14 @@ module WallpaperSearchParams
       end
 
       search_options
+    end
+  end
+
+  def compact_search_options
+    compact_search_options = search_options.reject { |k, v| v.blank? }
+
+    compact_search_options.each do |k, v|
+      compact_search_options[k] = v.join(GLUE) if v.is_a? Array
     end
   end
 end

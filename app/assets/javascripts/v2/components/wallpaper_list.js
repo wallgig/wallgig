@@ -3,10 +3,17 @@
 Vue.component('wallpaper-list', {
   data: {
     isLoading: true,
-    wallpapers: []
+    wallpapers: [],
+    options: {}
   },
 
+  paramAttributes: ['options'],
+
   created: function () {
+    if (this.options) {
+      this.options = JSON.parse(this.options);
+    }
+
     this.fetchData();
   },
 
@@ -16,6 +23,7 @@ Vue.component('wallpaper-list', {
 
       superagent
       .get('/api/v1/wallpapers')
+      .query(this.options)
       .end(_.bind(function (res) {
         if (res.ok) {
           this.wallpapers = res.body.data;

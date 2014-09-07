@@ -1,6 +1,6 @@
 - if wallpapers.has_pagination? && request.xhr?
-  - if respond_to?(:search_options)
-    - current_page_params = search_options.merge(page: wallpapers.current_page).reject { |_,v| v.blank? }
+  - if respond_to?(:compact_search_options)
+    - current_page_params = compact_search_options.merge(page: wallpapers.current_page).reject { |_,v| v.blank? }
   - else
     - current_page_params = { page: wallpapers.current_page }
 
@@ -11,7 +11,7 @@
         %a{:href => '#'}
           = fa_icon_tag('chevron-up')
 
-%div{:v => {:component => 'wallpaper-list', :cloak => true}}
+%div{:v => {:component => 'wallpaper-list', :cloak => true}, :options => search_options.to_json}
   %div{:v => {:show => 'isLoading'}}
     .loading-spinner
 
