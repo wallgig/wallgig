@@ -1,4 +1,6 @@
-%div.wallpaper-list-container{:v => {:component => 'wallpaper-list', :cloak => true}, :options => search_options.to_json}
+%div.wallpaper-list-container{:v => {:component => 'wallpaper-list', :cloak => true},
+                              :options => search_options.to_json,
+                              :data => local_assigns[:data]}
   %div{:v => {:show => 'isLoading'}}
     .loading-spinner
 

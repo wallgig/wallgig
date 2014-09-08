@@ -19,6 +19,12 @@ class WallpapersController < ApplicationController
         current_user: current_user
       }
     )
+
+    @wallpaper_data = render_to_string(template: 'api/v1/wallpapers/index', formats: [:json], locals: { wallpapers: @wallpapers })
+
+    respond_to do |format|
+      format.html
+    end
   end
 
   # GET /wallpapers/1

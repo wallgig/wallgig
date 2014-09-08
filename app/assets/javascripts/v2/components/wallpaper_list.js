@@ -11,14 +11,25 @@ Vue.component('wallpaper-list', {
     options: {}
   },
 
-  paramAttributes: ['options'],
+  paramAttributes: [
+    'data',
+    'options'
+  ],
 
   created: function () {
     if (this.options) {
       this.options = JSON.parse(this.options);
     }
 
-    this.fetchData();
+    if (this.data) {
+      this.data = JSON.parse(this.data);
+      this.wallpapers = this.data.wallpapers;
+      this.paging = this.data.paging;
+      this.isLoading = false;
+      this.isFirst = true;
+    } else {
+      this.fetchData();
+    }
   },
 
   methods: {
@@ -31,7 +42,7 @@ Vue.component('wallpaper-list', {
       .end(_.bind(function (res) {
         if (res.ok) {
           this.paging = res.body.paging;
-          this.wallpapers = res.body.data;
+          this.wallpapers = res.body.wallpapers;
         }
         this.isLoading = false;
       }, this));
