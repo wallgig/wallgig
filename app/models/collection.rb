@@ -28,8 +28,25 @@ class Collection < ActiveRecord::Base
 
   has_many :collections_wallpapers, dependent: :destroy
   has_many :wallpapers, through: :collections_wallpapers
-  has_many :ordered_wallpapers,        -> { order('collections_wallpapers.position ASC') },    through: :collections_wallpapers, class_name: 'Wallpaper', source: :wallpaper
-  has_many :recently_added_wallpapers, -> { order('collections_wallpapers.created_at DESC') }, through: :collections_wallpapers, class_name: 'Wallpaper', source: :wallpaper
+  has_many :ordered_wallpapers,
+    -> { order(CollectionsWallpaper.arel_table[:position].asc) },
+    through: :collections_wallpapers,
+    class_name: 'Wallpaper',
+    source: :wallpaper
+  has_many :recently_added_wallpapers,
+    -> { order(CollectionsWallpaper.arel_table[:created_at].desc) },
+    through: :collections_wallpapers,
+    class_name: 'Wallpaper',
+    source: :wallpaper
+
+  has_one :last_collections_wallpaper,
+    dependent: :destroy,
+    class_name: 'CollectionsWallpaper'
+  has_one :last_added_wallpaper,
+    -> { order(CollectionsWallpaper.arel_table[:created_at].desc) },
+    through: :last_collections_wallpaper,
+    class_name: 'Wallpaper',
+    source: :wallpaper
 
   include Subscribable
 
