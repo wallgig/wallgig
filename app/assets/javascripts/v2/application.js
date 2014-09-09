@@ -13,16 +13,17 @@
     el: '#wallgig-app',
 
     created: function () {
-      this.$on('unauthorized', this.showUnauthorizedMessage);
+      this.$on('apiError', this.handleApiError);
     },
 
     methods: {
-      showUnauthorizedMessage: function (message) {
-        // TODO use modal box
-        if (message) {
-          alert(message);
-        } else {
-          alert('You are not authorized to perform this action!');
+      handleApiError: function (res) {
+        if (res.unauthorized) {
+          if (res.body.message) {
+            alert(res.body.message);
+          } else {
+            alert('You are not authorized to perform this action!');
+          }
         }
       }
     }

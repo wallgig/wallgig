@@ -57,8 +57,8 @@ Vue.component('wallpaper-list', {
       .end(_.bind(function (res) {
         if (res.ok) {
           _.assign(wallpaper, res.body); // Update favourites_count and favourited
-        } else if (res.unauthorized) {
-          this.$dispatch('unauthorized', res.body.error);
+        } else {
+          this.$dispatch('apiError', res);
         }
         wallpaper.isToggling = false;
       }, this));
