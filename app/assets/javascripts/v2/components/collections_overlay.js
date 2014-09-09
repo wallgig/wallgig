@@ -74,6 +74,9 @@ Vue.component('collections-overlay', {
         if (res.ok) {
           _.forEach(this.collections, function (collection) {
             collection.isInCollection = _.some(res.body.collections, { id: collection.id });
+            if (collection.isInCollection) {
+              collection.isHovering = false;
+            }
           });
         }
       }, this));
