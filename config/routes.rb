@@ -194,6 +194,7 @@ Rails.application.routes.draw do
           get :me
         end
 
+        resources :collections, only: [:index]
         resources :favourites, only: [:index]
       end
 
