@@ -2,6 +2,7 @@
 
 Vue.component('collections-overlay', {
   data: {
+    isVisible: false,
     isLoading: false,
     isCollectionsLoaded: false,
     activeWallpaper: null,
@@ -15,11 +16,13 @@ Vue.component('collections-overlay', {
     this.$on('collectionOverlayHide', this.hide);
 
     this.$watch('activeWallpaper', this.fetchActiveWallpaperCollections);
+
+    // this.$emit('collectionOverlayShow');
   },
 
   methods: {
     show: function () {
-      this.visible = true;
+      this.isVisible = true;
 
       if ( ! this.isCollectionsLoaded) {
         this.fetchCollections();
@@ -32,7 +35,7 @@ Vue.component('collections-overlay', {
     },
 
     hide: function () {
-      this.visible = false;
+      this.isVisible = false;
       this.activeWallpaper = null;
 
       // Reset collection hover state

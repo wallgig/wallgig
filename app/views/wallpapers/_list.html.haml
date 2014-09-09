@@ -45,7 +45,7 @@
 -# TODO create a new partial for this component
 %div.collections-overlay{:v => {:component => 'collections-overlay',
     :cloak => true,
-    :show => 'visible'}}
+    :show => 'isVisible'}}
   .overlay-content
     %div{:v => {:if => 'isLoading'}}
       .loading-spinner
@@ -59,6 +59,10 @@
               :on => 'dragenter: onDragEnter, dragleave: onDragLeave, dragover: onDragOver, drop: onDrop',
               :class => 'hovering: isHovering, in-collection: isInCollection'},
             :dropzone => 'link string:text/x-wallpaper-id'}
+          .media
+            %a.media-object{:href => '#'}
+              %img{:v => {:attr => 'src: preview.url, width: preview.width, height: preview.height'},
+                :class => 'purity-{{preview.purity}}'}
           {{name}}
 
   .overlay-backdrop
