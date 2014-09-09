@@ -27,5 +27,12 @@
             %span.fa.fa-eye
             {{views_count}}
 
+    %ul.pager{:v => {:show => 'paging.previous || paging.next'}}
+      %li
+        %a{:v => {:show => 'paging.previous', :attr => 'href: paging.previous'}}
+          &larr; Previous
+        %a{:v => {:show => 'paging.next', :attr => 'href: paging.next'}}
+          Next &rarr;
+
     %div{:v => {:show => 'wallpapers.length === 0'}}
       %h2.text-center No search results found :(
