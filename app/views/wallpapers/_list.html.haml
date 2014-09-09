@@ -12,7 +12,10 @@
         %span.fa.fa-chevron-up
 
     %ul.list-wallpaper{:v => {:show => 'wallpapers.length'}}
-      %li{:v => {:repeat => 'wallpapers'}, :class => 'purity-{{purity}}'}
+      %li{:v => {:repeat => 'wallpapers',
+            :on => 'dragstart: onDragStart(this, $event), dragend: onDragEnd(this, $event)'},
+          :class => 'purity-{{purity}}',
+          :draggable => true}
         %a{:v => {:attr => 'target: linkTarget'},
             :href => '{{url}}'}
           %img.img-wallpaper{:v => {:attr => 'src: image.thumbnail.url, width: image.thumbnail.width, height: image.thumbnail.height'},

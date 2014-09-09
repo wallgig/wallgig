@@ -68,6 +68,16 @@ Vue.component('wallpaper-list', {
         }
         wallpaper.isToggling = false;
       }, this));
+    },
+
+    onDragStart: function (wallpaper, e) {
+      e.dataTransfer.effectAllowed = 'move';
+      e.dataTransfer.setData('wallpaper', wallpaper);
+      this.$dispatch('dragWallpaperStart');
+    },
+
+    onDragEnd: function (wallpaper, e) {
+      this.$dispatch('dragWallpaperEnd');
     }
   },
 
