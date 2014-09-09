@@ -34,6 +34,11 @@ Vue.component('collections-overlay', {
     hide: function () {
       this.visible = false;
       this.activeWallpaper = null;
+
+      // Reset collection hover state
+      _.forEach(this.collections, function (collection) {
+         collection.isHovering = false;
+      });
     },
 
     fetchCollections: function () {
@@ -66,7 +71,6 @@ Vue.component('collections-overlay', {
       .query({ wallpaper_id: this.activeWallpaper.id })
       .accept('json')
       .end(_.bind(function (res) {
-        console.log('got', res.body);
         if (res.ok) {
           _.forEach(this.collections, function (collection) {
             collection.isInCollection = _.some(res.body.collections, { id: collection.id });
@@ -75,8 +79,24 @@ Vue.component('collections-overlay', {
       }, this));
     },
 
+    addWallpaperToCollection: function (wallpaper, collection) {
+      superagent
+      .post('/api/v1/collections/' + collection.id + '/wallpapers')
+      .send({ wallpaper_id: wallpaper.id })
+      .accept('json')
+      .end(_.bind(function (res) {
+        // console.log('got', res);
+        this.$dispatch('didAddWallpaperToCollection', {
+          wallpaper: wallpaper,
+          collection: collection
+        });
+      }, this));
+    },
+
     onDragEnter: function (e) {
-      e.targetVM.isHovering = true;
+      if ( ! e.targetVM.isInCollection) {
+        e.targetVM.isHovering = true;
+      }
     },
 
     onDragLeave: function (e) {
@@ -90,7 +110,15 @@ Vue.component('collections-overlay', {
     onDrop: function (e) {
       e.preventDefault();
 
-      var wallpaperId = e.dataTransfer.getData('text/x-wallpaper-id');
+      var wallpaperId = parseInt(e.dataTransfer.getData('text/x-wallpaper-id'));
+
+      console.log('this.activeWallpaper.id === wallpaperId', this.activeWallpaper.id === wallpaperId);
+      console.log(' ! e.targetVM.isInCollection', ! e.targetVM.isInCollection);
+
+      if (this.activeWallpaper.id === wallpaperId &&
+           ! e.targetVM.isInCollection) {
+        this.addWallpaperToCollection(this.activeWallpaper, e.targetVM);
+      }
 
       e.targetVM.isHovering = false;
     }

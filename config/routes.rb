@@ -171,6 +171,10 @@ Rails.application.routes.draw do
     namespace :v1 do
       resources :categories, only: :index
 
+      resources :collections, only: [] do
+        resources :collections_wallpapers, path: 'wallpapers', only: [:create]
+      end
+
       resources :notifications, only: :index do
         collection do
           get :unread
