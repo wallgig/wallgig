@@ -2,8 +2,7 @@
 //= require query-string
 //= require vue
 //= require superagent
-//= require ./components/wallpaper_list
-
+//= require_tree ./components/.
 //= require_self
 
 /* global _, Vue, superagent */
@@ -15,11 +14,22 @@
     paramAttributes: ['settings'],
 
     created: function () {
+      var that = this;
+
       if (this.settings) {
         this.settings = JSON.parse(this.settings);
       }
 
+      // API
       this.$on('apiError', this.handleApiError);
+
+      // Wallpaper
+      this.$on('wallpaperDragStart', function (wallpaper) {
+        that.$broadcast('collectionOverlayShowWithWallpaper', wallpaper);
+      });
+      this.$on('wallpaperDragEnd', function () {
+        that.$broadcast('collectionOverlayHide');
+      });
     },
 
     methods: {

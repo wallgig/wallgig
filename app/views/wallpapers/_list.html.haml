@@ -40,3 +40,24 @@
 
     %div{:v => {:show => 'wallpapers.length === 0'}}
       %h2.text-center No search results found :(
+
+
+-# TODO create a new partial for this component
+%div.collections-overlay{:v => {:component => 'collections-overlay',
+    :cloak => true,
+    :show => 'visible'}}
+  .overlay-content
+    %div{:v => {:if => 'isLoading'}}
+      .loading-spinner
+
+    %div{:v => {:show => 'isCollectionsLoaded'}}
+      %p{:v => {:if => 'collections.length === 0'}}
+        No collections yet
+
+      %ul.list-collection{:v => {:if => 'collections.length'}}
+        %li{:v => {:repeat => 'collections',
+              :on => 'dragenter: onDragEnter(this, $event), dragleave: onDragLeave(this, $event), dragover: onDragOver(this, $event), drop: onDrop(this, $event)',
+              :class => 'hovering: isHovering'}}
+          {{name}}
+
+  .overlay-backdrop

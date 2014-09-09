@@ -23,7 +23,7 @@ Vue.component('wallpaper-list', {
     }
 
     if ( ! this.endpoint) {
-      this.endpoint = '/api/v1/wallpapers.json';
+      this.endpoint = '/api/v1/wallpapers';
     }
 
     if (this.data) {
@@ -59,7 +59,8 @@ Vue.component('wallpaper-list', {
       wallpaper.isToggling = true;
 
       superagent
-      .patch('/api/v1/wallpapers/' + wallpaper.id + '/favourite/toggle.json')
+      .patch('/api/v1/wallpapers/' + wallpaper.id + '/favourite/toggle')
+      .accept('json')
       .end(_.bind(function (res) {
         if (res.ok) {
           _.assign(wallpaper, res.body); // Update favourites_count and favourited
@@ -72,12 +73,11 @@ Vue.component('wallpaper-list', {
 
     onDragStart: function (wallpaper, e) {
       e.dataTransfer.effectAllowed = 'move';
-      e.dataTransfer.setData('wallpaper', wallpaper);
-      this.$dispatch('dragWallpaperStart');
+      this.$dispatch('wallpaperDragStart', wallpaper);
     },
 
     onDragEnd: function (wallpaper, e) {
-      this.$dispatch('dragWallpaperEnd');
+      this.$dispatch('wallpaperDragEnd');
     }
   },
 
