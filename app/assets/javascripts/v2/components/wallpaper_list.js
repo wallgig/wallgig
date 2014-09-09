@@ -13,12 +13,17 @@ Vue.component('wallpaper-list', {
 
   paramAttributes: [
     'data',
+    'endpoint',
     'options'
   ],
 
   created: function () {
     if (this.options) {
       this.options = JSON.parse(this.options);
+    }
+
+    if ( ! this.endpoint) {
+      this.endpoint = '/api/v1/wallpapers.json';
     }
 
     if (this.data) {
@@ -37,7 +42,8 @@ Vue.component('wallpaper-list', {
       this.isLoading = true;
 
       superagent
-      .get('/api/v1/wallpapers')
+      .get(this.endpoint)
+      .accept('json')
       .query(queryString.parse(location.search))
       .end(_.bind(function (res) {
         if (res.ok) {
@@ -53,7 +59,7 @@ Vue.component('wallpaper-list', {
       wallpaper.isToggling = true;
 
       superagent
-      .patch('/api/v1/wallpapers/' + wallpaper.id + '/favourite/toggle')
+      .patch('/api/v1/wallpapers/' + wallpaper.id + '/favourite/toggle.json')
       .end(_.bind(function (res) {
         if (res.ok) {
           _.assign(wallpaper, res.body); // Update favourites_count and favourited
