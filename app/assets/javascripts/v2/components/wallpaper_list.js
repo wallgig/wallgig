@@ -71,12 +71,13 @@ Vue.component('wallpaper-list', {
       }, this));
     },
 
-    onDragStart: function (wallpaper, e) {
-      e.dataTransfer.effectAllowed = 'move';
-      this.$dispatch('wallpaperDragStart', wallpaper);
+    onDragStart: function (e) {
+      e.dataTransfer.effectAllowed = 'link';
+      e.dataTransfer.setData('text/x-wallpaper-id', e.targetVM.id);
+      this.$dispatch('wallpaperDragStart', e.targetVM);
     },
 
-    onDragEnd: function (wallpaper, e) {
+    onDragEnd: function (e) {
       this.$dispatch('wallpaperDragEnd');
     }
   },

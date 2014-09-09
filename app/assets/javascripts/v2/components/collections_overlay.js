@@ -14,9 +14,7 @@ Vue.component('collections-overlay', {
     this.$on('collectionOverlayShowWithWallpaper', this.showWithWallpaper);
     this.$on('collectionOverlayHide', this.hide);
 
-    this.$watch('activeWallpaper', function () {
-      console.log(arguments);
-    });
+    this.$watch('activeWallpaper', this.fetchActiveWallpaperCollections);
   },
 
   methods: {
@@ -48,31 +46,53 @@ Vue.component('collections-overlay', {
       .end(_.bind(function (res) {
         if (res.ok) {
           this.collections = res.body.collections;
-          console.log(this.collections);
         }
         this.isLoading = false;
         this.isCollectionsLoaded = true;
       }, this));
     },
 
-    onDragEnter: function (collection, e) {
-      collection.isHovering = true;
+    fetchActiveWallpaperCollections: function () {
+      _.forEach(this.collections, function (collection) {
+         collection.isInCollection = false;
+      });
+
+      if ( ! this.activeWallpaper) {
+        return;
+      }
+
+      superagent
+      .get('/api/v1/users/me/collections')
+      .query({ wallpaper_id: this.activeWallpaper.id })
+      .accept('json')
+      .end(_.bind(function (res) {
+        console.log('got', res.body);
+        if (res.ok) {
+          _.forEach(this.collections, function (collection) {
+            collection.isInCollection = _.some(res.body.collections, { id: collection.id });
+          });
+        }
+      }, this));
     },
 
-    onDragLeave: function (collection, e) {
-      collection.isHovering = false;
+    onDragEnter: function (e) {
+      e.targetVM.isHovering = true;
     },
 
-    onDragOver: function (collection, e) {
+    onDragLeave: function (e) {
+      e.targetVM.isHovering = false;
+    },
+
+    onDragOver: function (e) {
       e.preventDefault();
-      e.dataTransfer.dropEffect = 'move';
     },
 
-    onDrop: function (collection, e) {
+    onDrop: function (e) {
       e.preventDefault();
-      collection.isHovering = false;
 
-      console.log(this.activeWallpaper.id, ' dropped into ', collection.name)
+      var wallpaperId = e.dataTransfer.getData('text/x-wallpaper-id');
+
+      e.targetVM.isHovering = false;
     }
   }
 });

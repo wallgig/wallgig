@@ -13,9 +13,9 @@
 
     %ul.list-wallpaper{:v => {:show => 'wallpapers.length'}}
       %li{:v => {:repeat => 'wallpapers',
-            :on => 'dragstart: onDragStart(this, $event), dragend: onDragEnd(this, $event)'},
+            :on => 'dragstart: onDragStart, dragend: onDragEnd'},
           :class => 'purity-{{purity}}',
-          :draggable => true}
+          :draggable => 'true'}
         %a{:v => {:attr => 'target: linkTarget'},
             :href => '{{url}}'}
           %img.img-wallpaper{:v => {:attr => 'src: image.thumbnail.url, width: image.thumbnail.width, height: image.thumbnail.height'},
@@ -56,8 +56,9 @@
 
       %ul.list-collection{:v => {:if => 'collections.length'}}
         %li{:v => {:repeat => 'collections',
-              :on => 'dragenter: onDragEnter(this, $event), dragleave: onDragLeave(this, $event), dragover: onDragOver(this, $event), drop: onDrop(this, $event)',
-              :class => 'hovering: isHovering'}}
+              :on => 'dragenter: onDragEnter, dragleave: onDragLeave, dragover: onDragOver, drop: onDrop',
+              :class => 'hovering: isHovering, in-collection: isInCollection'},
+            :dropzone => 'link string:text/x-wallpaper-id'}
           {{name}}
 
   .overlay-backdrop
