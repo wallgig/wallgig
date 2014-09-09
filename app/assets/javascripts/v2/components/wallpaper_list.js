@@ -63,5 +63,13 @@ Vue.component('wallpaper-list', {
         wallpaper.isToggling = false;
       }, this));
     }
+  },
+
+  computed: {
+    linkTarget: function () {
+      if (this.$root.settings.new_window) {
+        return '_blank';
+      }
+    }
   }
 });

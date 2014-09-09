@@ -1,6 +1,6 @@
 %div.wallpaper-list-container{:v => {:component => 'wallpaper-list', :cloak => true},
-                              :options => search_options.to_json,
-                              :data => local_assigns[:data]}
+    :options => search_options.to_json,
+    :data => local_assigns[:data]}
   %div{:v => {:show => 'isLoading'}}
     .loading-spinner
 
@@ -12,13 +12,15 @@
 
     %ul.list-wallpaper{:v => {:show => 'wallpapers.length'}}
       %li{:v => {:repeat => 'wallpapers'}, :class => 'purity-{{purity}}'}
-        %a{:href => '{{url}}'}
+        %a{:v => {:attr => 'target: linkTarget'},
+            :href => '{{url}}'}
           %img.img-wallpaper{:v => {:attr => 'src: image.thumbnail.url, width: image.thumbnail.width, height: image.thumbnail.height'},
             :alt => 'Wallpaper #{{id}}'}
         .overlay.overlay-bottom
           %strong {{image.original.width}}&times;{{image.original.height}}
-          %a.btn.btn-sm.btn-fav.pull-left{:href => '#', :v => {:class => 'faved: favourited, disabled: isToggling',
-                                                               :on => 'click: toggleFavourite(this, $event)'}}
+          %a.btn.btn-sm.btn-fav.pull-left{:href => '#',
+              :v => {:class => 'faved: favourited, disabled: isToggling',
+                :on => 'click: toggleFavourite(this, $event)'}}
             %span.fa.fa-star
             %span.count {{favourites_count}}
           .btn.btn-sm.pull-right

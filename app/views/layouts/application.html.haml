@@ -10,7 +10,8 @@
     = csrf_meta_tags
     :css
       [v-cloak] { display: none }
-  %body#wallgig-app{:class => "#{controller_name.parameterize} #{action_name.parameterize}"}
+  %body#wallgig-app{:class => "#{controller_name.parameterize} #{action_name.parameterize}",
+                    :settings => current_settings.to_json}
     - unless content_for?(:hide_navbar) && yield(:hide_navbar)
       %nav.navbar.navbar-inverse.navbar-static-top{:role => "navigation"}
         .container-fluid

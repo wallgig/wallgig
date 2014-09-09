@@ -12,7 +12,13 @@
   exports.app = new Vue({
     el: '#wallgig-app',
 
+    paramAttributes: ['settings'],
+
     created: function () {
+      if (this.settings) {
+        this.settings = JSON.parse(this.settings);
+      }
+
       this.$on('apiError', this.handleApiError);
     },
 
