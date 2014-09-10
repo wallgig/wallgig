@@ -1,4 +1,4 @@
-/* global _, Vue, superagent, queryString */
+/* global _, Vue, superagent */
 
 Vue.component('wallpaper-list', {
   data: {
@@ -44,7 +44,7 @@ Vue.component('wallpaper-list', {
       superagent
       .get(this.endpoint)
       .accept('json')
-      .query(queryString.parse(location.search))
+      .query(location.search.slice(1))
       .end(_.bind(function (res) {
         if (res.ok) {
           this.paging = res.body.paging;
