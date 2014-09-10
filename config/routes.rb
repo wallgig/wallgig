@@ -151,9 +151,8 @@ Rails.application.routes.draw do
     concerns :reportable
     concerns :subscribable
 
-    get :index_v2
-
     collection do
+      get :index_v2
       post :save_search_params
     end
 
