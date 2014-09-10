@@ -1,5 +1,4 @@
 class Api::V1::FavouritesController < Api::V1::BaseController
-  before_action :ensure_from_mashape!
   before_action :authenticate_user!, only: [:toggle]
   before_action :set_user, only: [:index]
 

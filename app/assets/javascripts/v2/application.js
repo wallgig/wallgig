@@ -35,11 +35,13 @@
     methods: {
       handleApiError: function (res) {
         if (res.unauthorized) {
-          if (res.body.message) {
+          if (res.body && res.body.message) {
             alert(res.body.message);
           } else {
             alert('You are not authorized to perform this action!');
           }
+        } else {
+          alert(res.toError());
         }
       }
     }
