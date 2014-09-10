@@ -10,14 +10,13 @@ module WallpaperSearchParams
   end
 
   def search_params(load_session = true)
-    permitted_scalars = %i(q page per_page width height order user resolution_exactness) + ARRAY_PARAMS
-
-    permitted_arrays = {}
-    ARRAY_PARAMS.each do |key|
-      permitted_arrays[key] = []
-    end
-
-    params.permit(permitted_scalars, *permitted_arrays)
+    params.permit(
+      :q, :page, :per_page, :width, :height, :order, :user, :resolution_exactness,
+      :categories, :exclude_categories, :tags, :exclude_tags, :colors, :aspect_ratios,
+      categories: [], exclude_categories: [],
+      tags: [], exclude_tags: [],
+      colors: [], aspect_ratios: []
+    )
   end
 
   def search_options
