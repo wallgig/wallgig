@@ -120,9 +120,12 @@ Vue.component('collections-overlay', {
     didAddWallpaperToCollection: function (wallpaper, collection) {
       var self = this;
 
-      setTimeout(function () {
-        self.isHidingDeferred = false; // Hide overlay if already requested
-      }, 300);
+      // Handle deferred hiding
+      if (self.isHidingDeferred) {
+        setTimeout(function () {
+          self.isHidingDeferred = false;
+        }, 300);
+      }
 
       self.$dispatch('didAddWallpaperToCollection', {
         wallpaper: wallpaper,
