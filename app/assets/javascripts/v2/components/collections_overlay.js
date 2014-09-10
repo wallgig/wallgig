@@ -165,6 +165,12 @@ Vue.component('collections-overlay', {
       }
 
       e.targetVM.isHovering = false;
+    },
+
+    onDropNewCollection: function (e) {
+      e.preventDefault();
+
+      console.log('onDropNewCollection');
     }
   }
 });

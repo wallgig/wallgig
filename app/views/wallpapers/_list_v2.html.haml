@@ -51,10 +51,13 @@
       .loading-spinner
 
     %div{:v => {:show => 'isCollectionsLoaded'}}
-      %p{:v => {:if => 'collections.length === 0'}}
-        No collections yet
-
-      %ul.list-collection{:v => {:if => 'collections.length'}}
+      %ul.list-collection
+        %li{:v => {:on => 'dragenter: onDragEnter, dragleave: onDragLeave, dragover: onDragOver, drop: onDropNewCollection',
+              :class => 'hovering: isHovering'},
+            :dropzone => 'link string:text/x-wallpaper-id'}
+          .media
+            %a.media-object{:href => '#'}
+              New Collection
         %li{:v => {:repeat => 'collections | orderBy position',
               :on => 'dragenter: onDragEnter, dragleave: onDragLeave, dragover: onDragOver, drop: onDrop',
               :class => 'hovering: isHovering, in-collection: isInCollection'},
