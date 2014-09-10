@@ -25,10 +25,10 @@
 
       // Wallpaper
       this.$on('wallpaperDragStart', function (wallpaper) {
-        that.$broadcast('collectionOverlayShowWithWallpaper', wallpaper);
+        that.$broadcast('requestShowCollectionOverlay', { wallpaper: wallpaper });
       });
       this.$on('wallpaperDragEnd', function () {
-        that.$broadcast('collectionOverlayHide');
+        that.$broadcast('requestHideCollectionOverlay');
       });
     },
 

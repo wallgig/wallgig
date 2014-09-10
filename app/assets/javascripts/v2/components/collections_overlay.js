@@ -11,9 +11,8 @@ Vue.component('collections-overlay', {
   },
 
   ready: function () {
-    this.$on('collectionOverlayShow', this.show);
-    this.$on('collectionOverlayShowWithWallpaper', this.showWithWallpaper);
-    this.$on('collectionOverlayHide', this.hide);
+    this.$on('requestShowCollectionOverlay', this.show);
+    this.$on('requestHideCollectionOverlay', this.hide);
 
     this.$watch('activeWallpaper', this.fetchActiveWallpaperCollections);
 
@@ -21,17 +20,16 @@ Vue.component('collections-overlay', {
   },
 
   methods: {
-    show: function () {
+    show: function (payload) {
       this.isVisible = true;
+
+      if (_.isObject(payload) && payload.wallpaper) {
+        this.activeWallpaper = payload.wallpaper;
+      }
 
       if ( ! this.isCollectionsLoaded) {
         this.fetchCollections();
       }
-    },
-
-    showWithWallpaper: function (wallpaper) {
-      this.activeWallpaper = wallpaper;
-      this.show();
     },
 
     hide: function () {
@@ -49,8 +47,7 @@ Vue.component('collections-overlay', {
       this.isCollectionsLoaded = false;
 
       superagent
-      .get('/api/v1/users/me/collections')
-      .accept('json')
+      .get('/api/v1/users/me/collections.json')
       .end(_.bind(function (res) {
         if (res.ok) {
           this.collections = res.body.collections;
@@ -70,9 +67,8 @@ Vue.component('collections-overlay', {
       }
 
       superagent
-      .get('/api/v1/users/me/collections')
+      .get('/api/v1/users/me/collections.json')
       .query({ wallpaper_id: this.activeWallpaper.id })
-      .accept('json')
       .end(_.bind(function (res) {
         if (res.ok) {
           _.forEach(this.collections, function (collection) {
@@ -91,9 +87,8 @@ Vue.component('collections-overlay', {
       }
 
       superagent
-      .post('/api/v1/collections/' + collection.id + '/wallpapers')
+      .post('/api/v1/collections/' + collection.id + '/wallpapers.json')
       .send({ wallpaper_id: wallpaper.id })
-      .accept('json')
       .end(_.bind(function (res) {
         _.assign(collection, res.body.collection); // Refresh collection
 
