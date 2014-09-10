@@ -6,7 +6,10 @@ class Api::V1::CollectionsWallpapersController < Api::V1::BaseController
     wallpaper = Wallpaper.find(params[:wallpaper_id])
     authorize! :read, wallpaper
 
-    @collection.collect!(wallpaper) unless @collection.collected?(wallpaper)
+    unless @collection.collected?(wallpaper)
+      @collection.collect!(wallpaper)
+      @collection.reload # needed to reload wallpapers count
+    end
 
     respond_to do |format|
       format.json { render status: :created }

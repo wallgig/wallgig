@@ -66,10 +66,9 @@
                 :class => 'purity-{{preview.purity}}'}
             .media-body
               %h5.media-heading
-                %span.label.label-danger{:v => {:if => '!this.public'}}
-                  %span.fa.fa-eye-slash
-                  Private
                 {{name}}
+                %span.label.label-danger{:v => {:if => '!this.public'}}
+                  Private
               %ul.list-inline.pull-right.text-muted
                 %li
                   %span.fa.fa-picture-o
