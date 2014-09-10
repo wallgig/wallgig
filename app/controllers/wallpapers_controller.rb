@@ -14,7 +14,7 @@ class WallpapersController < ApplicationController
   # GET /wallpapers.json
   def index
     @wallpapers = WallpapersDecorator.new(
-      wallpaper_search_results(search_options),
+      wallpaper_search_results(search_options, compact_search_options),
       context: {
         search_options: search_options,
         current_user: current_user
@@ -27,6 +27,23 @@ class WallpapersController < ApplicationController
         html = render_to_string partial: 'list', layout: false, locals: { wallpapers: @wallpapers }, formats: [:html]
         render json: { html: html }
       end
+    end
+  end
+
+  # GET /wallpapers/index_v2
+  def index_v2
+    @wallpapers = WallpapersDecorator.new(
+      wallpaper_search_results(search_options, compact_search_options),
+      context: {
+        search_options: search_options,
+        current_user: current_user
+      }
+    )
+
+    @wallpaper_data = render_to_string(template: 'api/v1/wallpapers/index', formats: [:json], locals: { wallpapers: @wallpapers })
+
+    respond_to do |format|
+      format.html
     end
   end
 
@@ -151,6 +168,7 @@ class WallpapersController < ApplicationController
     end
   end
 
+  # TODO deprecate
   def toggle_favourite
     if current_user.favourited?(@wallpaper)
       current_user.unfavourite(@wallpaper)
@@ -233,10 +251,10 @@ class WallpapersController < ApplicationController
     end
   end
 
-  def wallpaper_search_results(params)
+  def wallpaper_search_results(params, cache_params)
     wallpapers = Wallpaper.none
     begin
-      Rails.cache.fetch([:wallpaper_search, params], expires_in: WALLPAPER_SEARCH_CACHE_TTL) do
+      Rails.cache.fetch([:wallpaper_search, cache_params], expires_in: WALLPAPER_SEARCH_CACHE_TTL) do
         wallpapers = WallpaperSearchService.new(params).execute
       end
     rescue TypeError

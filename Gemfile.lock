@@ -77,6 +77,7 @@ GIT
 
 GEM
   remote: https://rubygems.org/
+  remote: https://rails-assets.org/
   specs:
     actionmailer (4.1.5)
       actionpack (= 4.1.5)
@@ -120,7 +121,7 @@ GEM
       erubis (>= 2.6.6)
     binding_of_caller (0.7.2)
       debug_inspector (>= 0.0.1)
-    bootstrap-sass (3.1.1.1)
+    bootstrap-sass (3.2.0.2)
       sass (~> 3.2)
     bourbon (3.2.1)
       sass (~> 3.2)
@@ -298,8 +299,6 @@ GEM
       celluloid-io (>= 0.15.0)
       rb-fsevent (>= 0.9.3)
       rb-inotify (>= 0.9)
-    lodash-rails (2.4.1)
-      railties (>= 3.1)
     lumberjack (1.0.5)
     mail (2.5.4)
       mime-types (~> 1.16)
@@ -385,6 +384,11 @@ GEM
       bundler (>= 1.3.0, < 2.0)
       railties (= 4.1.5)
       sprockets-rails (~> 2.0)
+    rails-assets-fontawesome (4.2.0)
+    rails-assets-lodash (2.4.1)
+    rails-assets-query-string (1.0.0)
+    rails-assets-superagent (0.18.2)
+    rails-assets-vue (0.10.6)
     rails_admin (0.6.2)
       builder (~> 3.1)
       coffee-rails (~> 4.0)
@@ -555,7 +559,7 @@ DEPENDENCIES
   annotate!
   better_errors
   binding_of_caller
-  bootstrap-sass (~> 3.1.1)
+  bootstrap-sass (~> 3.2.0)
   bourbon
   cancancan
   capistrano
@@ -576,7 +580,6 @@ DEPENDENCIES
   enumerize
   factory_girl_rails (~> 4.0)
   ffaker
-  font-awesome-rails
   foreman
   friendly_id (~> 5.0.0)
   geocoder
@@ -592,7 +595,6 @@ DEPENDENCIES
   kaminari
   kaminari-bootstrap (~> 3.0.1)
   letter_opener
-  lodash-rails
   meta-tags
   miro
   omniauth
@@ -605,6 +607,11 @@ DEPENDENCIES
   rack-cache
   rack-mini-profiler
   rails (= 4.1.5)
+  rails-assets-fontawesome
+  rails-assets-lodash
+  rails-assets-query-string
+  rails-assets-superagent
+  rails-assets-vue
   rails_admin
   redcarpet
   redis-objects

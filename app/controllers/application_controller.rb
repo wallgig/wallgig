@@ -71,6 +71,7 @@ class ApplicationController < ActionController::Base
     end
   end
 
+  # TODO refactor
   module PurityMethods
     def self.included(base)
       base.class_eval do
@@ -81,8 +82,10 @@ class ApplicationController < ActionController::Base
 
     def purity_params
       params
-        .permit(purity: [])
+        .permit(:purity, purity: [])
         .tap do |p|
+          p[:purity] = p[:purity].split(',') if p[:purity].is_a? String
+
           Array.wrap(p[:purity])
                .select { |purity| UserSetting::PURITY_STRING_KEYS.include?(purity) }
                .presence

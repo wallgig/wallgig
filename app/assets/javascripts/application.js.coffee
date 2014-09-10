@@ -26,6 +26,9 @@
 # Typeahead
 #= require typeahead.bundle
 
+# v2
+#= require v2/application
+
 #= require_tree .
 #= require_tree ../templates/.
 #= require_self

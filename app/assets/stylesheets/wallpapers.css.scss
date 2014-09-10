@@ -124,6 +124,22 @@ $wallpaper-sidebar-width: 320px;
 // }
 
 
+.wallpaper-list-container {
+  // Page separator
+  .page-separator {
+    font-size: $font-size-h3;
+
+    a {
+      color: $gray;
+      text-decoration: none;
+    }
+
+    a:hover {
+      color: $gray-darker;
+    }
+  }
+}
+
 .list-wallpaper {
   @extend .list-unstyled;
   @extend .clearfix;
@@ -191,13 +207,22 @@ $wallpaper-sidebar-width: 320px;
       opacity: 1;
     }
   }
-  .purity-sfw {
+
+  // Purity borders
+  li.purity-sfw {
   }
-  .purity-sketchy {
+  li.purity-sketchy {
     border: 3px solid #fda500;
   }
-  .purity-nsfw {
+  li.purity-nsfw {
     border: 3px solid #bf0600;
+  }
+
+  // Favourite button states
+  .btn-fav {
+  }
+  .btn-fav.faved {
+    @extend .btn-primary;
   }
 }
 
@@ -281,13 +306,6 @@ a.purity-sfw, a.purity-sketchy, a.purity-nsfw {
   }
 }
 
-.btn-favourite {
-  @extend .btn-default;
-  &.favourited {
-    @extend .btn-primary;
-  }
-}
-
 .btn-collect {
   @extend .btn-default;
 }
@@ -315,13 +333,6 @@ a.purity-sfw, a.purity-sketchy, a.purity-nsfw {
   @include transition(opacity 0.2s ease-in);
   &.lazy-show {
     opacity: 1;
-  }
-}
-
-.horizontal-page-bar {
-  @include clearfix;
-  a {
-    text-decoration: none;
   }
 }
 

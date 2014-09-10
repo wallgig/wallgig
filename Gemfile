@@ -1,4 +1,5 @@
 source 'https://rubygems.org'
+source 'https://rails-assets.org'
 
 # Bundle edge Rails instead: gem 'rails', github: 'rails/rails'
 gem 'rails', '4.1.5'
@@ -92,10 +93,13 @@ gem 'simple_form', '~> 3.1.0.rc1', github: 'plataformatec/simple_form'
 gem 'eco'
 
 # assets
-gem 'bootstrap-sass', '~> 3.1.1'
+gem 'bootstrap-sass', '~> 3.2.0'
 gem 'bourbon'
-gem 'font-awesome-rails'
-gem 'lodash-rails'
+gem 'rails-assets-fontawesome'
+gem 'rails-assets-lodash'
+gem 'rails-assets-query-string'
+gem 'rails-assets-superagent'
+gem 'rails-assets-vue'
 
 # services
 gem 'sinatra', '>= 1.3.0', require: false

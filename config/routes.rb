@@ -151,6 +151,8 @@ Rails.application.routes.draw do
     concerns :reportable
     concerns :subscribable
 
+    get :index_v2
+
     collection do
       post :save_search_params
     end
@@ -170,6 +172,10 @@ Rails.application.routes.draw do
   namespace :api, defaults: {format: 'json'} do
     namespace :v1 do
       resources :categories, only: :index
+
+      resources :collections, only: [] do
+        resources :collections_wallpapers, path: 'wallpapers', only: [:create]
+      end
 
       resources :notifications, only: :index do
         collection do
@@ -194,10 +200,17 @@ Rails.application.routes.draw do
           get :me
         end
 
+        resources :collections, only: [:index]
         resources :favourites, only: [:index]
       end
 
-      resources :wallpapers, only: [:index, :show, :create]
+      resources :wallpapers, only: [:index, :show, :create] do
+        resource :favourite do
+          member do
+            patch :toggle
+          end
+        end
+      end
     end
   end
 

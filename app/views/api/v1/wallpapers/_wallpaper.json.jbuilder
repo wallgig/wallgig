@@ -8,7 +8,9 @@ json.views_count wallpaper.impressions_count
 
 json.url wallpaper_url(wallpaper)
 
-json.user wallpaper.user, :username unless wallpaper.user.nil?
+unless wallpaper.user.nil?
+  json.user wallpaper.user, :username
+end
 
 json.image do
   json.file_name wallpaper.image_name
@@ -30,4 +32,8 @@ end
 json.tags wallpaper.tags do |tag|
   json.id tag.slug
   json.extract! tag, :name, :purity
+end
+
+if user_signed_in?
+  json.favourited wallpaper.favourited?
 end

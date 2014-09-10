@@ -1,3 +1,3 @@
 json.partial! 'api/v1/shared/paging', collection: @wallpapers
 
-json.data @wallpapers, partial: 'wallpaper', as: :wallpaper
+json.wallpapers @wallpapers, partial: 'api/v1/wallpapers/wallpaper', as: :wallpaper
