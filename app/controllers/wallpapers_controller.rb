@@ -11,7 +11,27 @@ class WallpapersController < ApplicationController
   layout :resolve_layout
 
   # GET /wallpapers
+  # GET /wallpapers.json
   def index
+    @wallpapers = WallpapersDecorator.new(
+      wallpaper_search_results(search_options, compact_search_options),
+      context: {
+        search_options: search_options,
+        current_user: current_user
+      }
+    )
+
+    respond_to do |format|
+      format.html
+      format.json do
+        html = render_to_string partial: 'list', layout: false, locals: { wallpapers: @wallpapers }, formats: [:html]
+        render json: { html: html }
+      end
+    end
+  end
+
+  # GET /wallpapers/index_v2
+  def index_v2
     @wallpapers = WallpapersDecorator.new(
       wallpaper_search_results(search_options, compact_search_options),
       context: {

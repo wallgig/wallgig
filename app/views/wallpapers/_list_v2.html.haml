@@ -1,0 +1,77 @@
+%div.wallpaper-list-container{:v => {:component => 'wallpaper-list', :cloak => true},
+    :endpoint => local_assigns[:endpoint],
+    :options => local_assigns[:search_options].try(:to_json),
+    :data => local_assigns[:data]}
+  %div{:v => {:show => 'isLoading'}}
+    .loading-spinner
+
+  %div{:v => {:show => '!isLoading'}}
+    .page-separator{:v => {:show => '!isFirst'}}
+      %a.pull-left{:v => {:attr => 'href: paging.self', :text => 'paging.current_page'}}
+      %a.pull-right{:href => '#'}
+        %span.fa.fa-chevron-up
+
+    %ul.list-wallpaper{:v => {:show => 'wallpapers.length'}}
+      %li{:v => {:repeat => 'wallpapers',
+            :on => 'dragstart: onDragStart, dragend: onDragEnd'},
+          :class => 'purity-{{purity}}',
+          :draggable => 'true'}
+        %a{:v => {:attr => 'target: linkTarget'},
+            :href => '{{url}}'}
+          %img.img-wallpaper{:v => {:attr => 'src: image.thumbnail.url, width: image.thumbnail.width, height: image.thumbnail.height'},
+            :alt => 'Wallpaper #{{id}}'}
+        .overlay.overlay-bottom
+          %strong {{image.original.width}}&times;{{image.original.height}}
+          %a.btn.btn-sm.btn-fav.pull-left{:href => '#',
+              :v => {:class => 'faved: favourited, disabled: isToggling',
+                :on => 'click: toggleFavourite(this, $event)'}}
+            %span.fa.fa-star
+            %span.count {{favourites_count}}
+          .btn.btn-sm.pull-right
+            %span.fa.fa-eye
+            {{views_count}}
+
+    %ul.pager{:v => {:show => 'paging.previous || paging.next'}}
+      %li
+        %a{:v => {:show => 'paging.previous', :attr => 'href: paging.previous'}}
+          &larr; Previous
+        %a{:v => {:show => 'paging.next', :attr => 'href: paging.next'}}
+          Next &rarr;
+
+    %div{:v => {:show => 'wallpapers.length === 0'}}
+      %h2.text-center No search results found :(
+
+
+-# TODO create a new partial for this component
+%div.collections-overlay{:v => {:component => 'collections-overlay',
+    :cloak => true,
+    :show => 'isVisible'}}
+  .overlay-content
+    %div{:v => {:if => 'isLoading'}}
+      .loading-spinner
+
+    %div{:v => {:show => 'isCollectionsLoaded'}}
+      %p{:v => {:if => 'collections.length === 0'}}
+        No collections yet
+
+      %ul.list-collection{:v => {:if => 'collections.length'}}
+        %li{:v => {:repeat => 'collections | orderBy position',
+              :on => 'dragenter: onDragEnter, dragleave: onDragLeave, dragover: onDragOver, drop: onDrop',
+              :class => 'hovering: isHovering, in-collection: isInCollection'},
+            :dropzone => 'link string:text/x-wallpaper-id'}
+          .media
+            %a.media-object{:href => '#'}
+              %img{:v => {:attr => 'src: preview.url, width: preview.width, height: preview.height',
+                  :if => 'preview'},
+                :class => 'purity-{{preview.purity}}'}
+            .media-body
+              %h5.media-heading
+                {{name}}
+                %span.label.label-danger{:v => {:if => '!this.public'}}
+                  Private
+              %ul.list-inline.pull-right.text-muted
+                %li
+                  %span.fa.fa-picture-o
+                  {{wallpapers_count}}
+
+  .overlay-backdrop
