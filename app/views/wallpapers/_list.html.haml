@@ -66,7 +66,13 @@
                 :class => 'purity-{{preview.purity}}'}
             .media-body
               %h5.media-heading
-                %span.fa.fa-eye-slash{:v => {:if => '!this.public'}}
+                %span.label.label-danger{:v => {:if => '!this.public'}}
+                  %span.fa.fa-eye-slash
+                  Private
                 {{name}}
+              %ul.list-inline.pull-right.text-muted
+                %li
+                  %span.fa.fa-picture-o
+                  {{wallpapers_count}}
 
   .overlay-backdrop
