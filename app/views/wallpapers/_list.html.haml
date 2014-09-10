@@ -61,8 +61,12 @@
             :dropzone => 'link string:text/x-wallpaper-id'}
           .media
             %a.media-object{:href => '#'}
-              %img{:v => {:attr => 'src: preview.url, width: preview.width, height: preview.height'},
+              %img{:v => {:attr => 'src: preview.url, width: preview.width, height: preview.height',
+                  :if => 'preview'},
                 :class => 'purity-{{preview.purity}}'}
-          {{name}}
+            .media-body
+              %h5.media-heading
+                %span.fa.fa-eye-slash{:v => {:if => '!this.public'}}
+                {{name}}
 
   .overlay-backdrop

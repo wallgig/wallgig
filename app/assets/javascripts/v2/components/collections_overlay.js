@@ -86,12 +86,17 @@ Vue.component('collections-overlay', {
     },
 
     addWallpaperToCollection: function (wallpaper, collection) {
+      if ( ! wallpaper || ! collection) {
+        return;
+      }
+
       superagent
       .post('/api/v1/collections/' + collection.id + '/wallpapers')
       .send({ wallpaper_id: wallpaper.id })
       .accept('json')
       .end(_.bind(function (res) {
-        // console.log('got', res);
+        _.assign(collection, res.body.collection); // Refresh collection
+
         this.$dispatch('didAddWallpaperToCollection', {
           wallpaper: wallpaper,
           collection: collection
@@ -111,6 +116,10 @@ Vue.component('collections-overlay', {
 
     onDragOver: function (e) {
       e.preventDefault();
+
+      if ( ! e.targetVM.isInCollection) {
+        e.targetVM.isHovering = true;
+      }
     },
 
     onDrop: function (e) {

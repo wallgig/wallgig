@@ -9,7 +9,7 @@ class Api::V1::CollectionsWallpapersController < Api::V1::BaseController
     @collection.collect!(wallpaper) unless @collection.collected?(wallpaper)
 
     respond_to do |format|
-      format.json { render json: true, status: :created }
+      format.json { render status: :created }
     end
   end
 
