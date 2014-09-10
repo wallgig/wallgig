@@ -170,7 +170,20 @@ Vue.component('collections-overlay', {
     onDropNewCollection: function (e) {
       e.preventDefault();
 
-      console.log('onDropNewCollection');
+      this.isHidingDeferred = true;
+
+      superagent
+      .post('/api/v1/users/me/collections.json')
+      .send({ name: 'Untitled', public: true })
+      .end(_.bind(function (res) {
+        if (res.ok) {
+          this.collections.push(res.body.collection);
+          this.addWallpaperToCollection(this.activeWallpaper, res.body.collection);
+        } else {
+          this.isHidingDeferred = false;
+          this.$dispatch('apiError', res);
+        }
+      }, this));
     }
   }
 });
