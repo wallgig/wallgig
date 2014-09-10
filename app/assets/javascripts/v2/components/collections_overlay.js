@@ -5,6 +5,7 @@ Vue.component('collections-overlay', {
     isVisible: false,
     isLoading: false,
     isCollectionsLoaded: false,
+    isHidingDeferred: false,
     activeWallpaper: null,
 
     collections: []
@@ -33,13 +34,28 @@ Vue.component('collections-overlay', {
     },
 
     hide: function () {
-      this.isVisible = false;
-      this.activeWallpaper = null;
+      var self = this;
+      var actuallyHide = function () {
+        self.isVisible = false;
+        self.activeWallpaper = null;
 
-      // Reset collection hover state
-      _.forEach(this.collections, function (collection) {
-         collection.isHovering = false;
-      });
+        // Reset collection hover state
+        _.forEach(self.collections, function (collection) {
+           collection.isHovering = false;
+        });
+      }
+
+      if (self.isHidingDeferred) {
+        self.$watch('isHidingDeferred', function (value) {
+          if (value) {
+            return;
+          }
+          self.$unwatch('isHidingDeferred');
+          actuallyHide();
+        });
+      } else {
+        actuallyHide();
+      }
     },
 
     fetchCollections: function () {
@@ -82,21 +98,36 @@ Vue.component('collections-overlay', {
     },
 
     addWallpaperToCollection: function (wallpaper, collection) {
+      var self = this;
+
       if ( ! wallpaper || ! collection) {
         return;
       }
 
+      self.isHidingDeferred = true; // Defer hiding
+
       superagent
       .post('/api/v1/collections/' + collection.id + '/wallpapers.json')
       .send({ wallpaper_id: wallpaper.id })
-      .end(_.bind(function (res) {
-        _.assign(collection, res.body.collection); // Refresh collection
+      .end(function (res) {
+        if (res.ok) {
+          _.assign(collection, res.body.collection); // Refresh collection
+          self.didAddWallpaperToCollection(wallpaper, collection);
+        }
+      });
+    },
 
-        this.$dispatch('didAddWallpaperToCollection', {
-          wallpaper: wallpaper,
-          collection: collection
-        });
-      }, this));
+    didAddWallpaperToCollection: function (wallpaper, collection) {
+      var self = this;
+
+      setTimeout(function () {
+        self.isHidingDeferred = false; // Hide overlay if already requested
+      }, 300);
+
+      self.$dispatch('didAddWallpaperToCollection', {
+        wallpaper: wallpaper,
+        collection: collection
+      });
     },
 
     onDragEnter: function (e) {

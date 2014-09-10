@@ -55,7 +55,7 @@
         No collections yet
 
       %ul.list-collection{:v => {:if => 'collections.length'}}
-        %li{:v => {:repeat => 'collections',
+        %li{:v => {:repeat => 'collections | orderBy position',
               :on => 'dragenter: onDragEnter, dragleave: onDragLeave, dragover: onDragOver, drop: onDrop',
               :class => 'hovering: isHovering, in-collection: isInCollection'},
             :dropzone => 'link string:text/x-wallpaper-id'}
