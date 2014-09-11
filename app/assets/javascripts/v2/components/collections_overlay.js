@@ -144,9 +144,8 @@ Vue.component('collections-overlay', {
     },
 
     onDragOver: function (e) {
-      e.preventDefault();
-
       if ( ! e.targetVM.isInCollection) {
+        e.preventDefault(); // prevent default to allow dropping
         e.targetVM.isHovering = true;
       }
     },
