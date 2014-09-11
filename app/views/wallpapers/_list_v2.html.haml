@@ -51,7 +51,7 @@
       .loading-spinner
 
     %div{:v => {:show => 'isCollectionsLoaded'}}
-      %ul.list-collection
+      %ul.collection-list.collection-list--compact
         %li{:v => {:on => 'dragenter: onDragEnter, dragleave: onDragLeave, dragover: onDragOver, drop: onDropNewCollection',
               :class => 'hovering: isHovering'},
             :dropzone => 'link string:text/x-wallpaper-id'}

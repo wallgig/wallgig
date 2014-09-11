@@ -1,0 +1,73 @@
+ul.collection-list {
+  @extend .list-unstyled;
+  @extend .clearfix;
+  margin-left: -10px;
+  margin-right: -10px;
+  overflow: hidden;
+  text-align: center;
+  &.row-1 {
+    height: 374px;
+  }
+  & > li {
+    width: 250px;
+    height: 354px;
+    margin: 10px;
+    overflow: hidden;
+    display: inline-block;
+    position: relative;
+    text-align: left;
+    @include transition(all 0.1s ease-in);
+    background-color: white;
+    .row-collection {
+      margin-top: 5px;
+      margin-left: -5px;
+      @extend .clearfix;
+      img, .placeholder {
+        float: left;
+        margin-left: 5px;
+        width: 80px;
+        height: 80px;
+      }
+      .placeholder {
+        background-color: darken($body-bg, 5%);
+      }
+    }
+    .media-object {
+      height: 273px;
+    }
+    .media-body {
+      padding: 10px;
+    }
+    .media-heading {
+      height: 35px;
+    }
+    a {
+      text-decoration: none;
+      white-space: nowrap;
+    }
+    .list-inline {
+      font-size: smaller;
+      li {
+        padding-right: 0;
+      }
+    }
+  }
+  & > li:hover {
+    @include box-shadow(#666 0px 0px 5px);
+  }
+}
+
+ul.collection-list--compact {
+  & > li {
+    width: $wallpaper-thumbnail-compact-width;
+    height: $wallpaper-thumbnail-compact-height;
+  }
+
+  li.hovering {
+    background: black;
+  }
+
+  .in-collection {
+    opacity: 0.3;
+  }
+}
