@@ -151,8 +151,6 @@ Vue.component('collections-overlay', {
     },
 
     onDrop: function (e) {
-      e.preventDefault();
-
       var wallpaperId = parseInt(e.dataTransfer.getData('text/x-wallpaper-id'));
 
       console.log('this.activeWallpaper.id === wallpaperId', this.activeWallpaper.id === wallpaperId);
@@ -167,9 +165,11 @@ Vue.component('collections-overlay', {
     },
 
     onDropNewCollection: function (e) {
-      e.preventDefault();
-
       var name = window.prompt('New collection name?', 'Untitled');
+
+      if ( ! name) {
+        return;
+      }
 
       this.isHidingDeferred = true;
 
