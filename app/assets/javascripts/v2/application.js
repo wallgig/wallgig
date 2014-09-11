@@ -14,21 +14,21 @@
     paramAttributes: ['settings'],
 
     created: function () {
-      var that = this;
+      var self = this;
 
-      if (this.settings) {
-        this.settings = JSON.parse(this.settings);
+      if (self.settings) {
+        self.settings = JSON.parse(self.settings);
       }
 
       // API
-      this.$on('apiError', this.handleApiError);
+      self.$on('apiError', self.handleApiError);
 
       // Wallpaper
-      this.$on('wallpaperDragStart', function (wallpaper) {
-        that.$broadcast('requestShowCollectionOverlay', { wallpaper: wallpaper });
+      self.$on('wallpaperDragStart', function (wallpaper) {
+        self.$broadcast('requestShowCollectionOverlay', { wallpaper: wallpaper });
       });
-      this.$on('wallpaperDragEnd', function () {
-        that.$broadcast('requestHideCollectionOverlay');
+      self.$on('wallpaperDragEnd', function () {
+        self.$broadcast('requestHideCollectionOverlay');
       });
     },
 
