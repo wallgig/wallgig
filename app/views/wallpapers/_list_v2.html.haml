@@ -13,6 +13,7 @@
 
     %ul.list-wallpaper{:v => {:show => 'wallpapers.length'}}
       %li{:v => {:repeat => 'wallpapers',
+            :component => 'wallpaper',
             :on => 'dragstart: onDragStart, dragend: onDragEnd'},
           :class => 'purity-{{purity}}',
           :draggable => 'true'}
@@ -24,7 +25,7 @@
           %strong {{image.original.width}}&times;{{image.original.height}}
           %a.btn.btn-sm.btn-fav.pull-left{:href => '#',
               :v => {:class => 'faved: favourited, disabled: isToggling',
-                :on => 'click: toggleFavourite(this, $event)'}}
+                :on => 'click: toggleFavourite'}}
             %span.fa.fa-star
             %span.count {{favourites_count}}
           .btn.btn-sm.pull-right

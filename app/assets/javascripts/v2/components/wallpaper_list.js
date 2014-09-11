@@ -39,46 +39,21 @@ Vue.component('wallpaper-list', {
 
   methods: {
     fetchData: function () {
-      this.isLoading = true;
+      var self = this;
+
+      self.isLoading = true;
 
       superagent
-      .get(this.endpoint)
-      .accept('json')
-      .query(location.search.slice(1))
-      .end(_.bind(function (res) {
-        if (res.ok) {
-          this.paging = res.body.paging;
-          this.wallpapers = res.body.wallpapers;
-        }
-        this.isLoading = false;
-      }, this));
-    },
-
-    toggleFavourite: function (wallpaper, e) {
-      e.preventDefault();
-      wallpaper.isToggling = true;
-
-      superagent
-      .patch('/api/v1/wallpapers/' + wallpaper.id + '/favourite/toggle')
-      .accept('json')
-      .end(_.bind(function (res) {
-        if (res.ok) {
-          _.assign(wallpaper, res.body); // Update favourites_count and favourited
-        } else {
-          this.$dispatch('apiError', res);
-        }
-        wallpaper.isToggling = false;
-      }, this));
-    },
-
-    onDragStart: function (e) {
-      e.dataTransfer.effectAllowed = 'link';
-      e.dataTransfer.setData('text/x-wallpaper-id', e.targetVM.id);
-      this.$dispatch('wallpaperDragStart', e.targetVM);
-    },
-
-    onDragEnd: function (e) {
-      this.$dispatch('wallpaperDragEnd');
+        .get(this.endpoint)
+        .accept('json')
+        .query(location.search.slice(1))
+        .end(function (res) {
+          if (res.ok) {
+            self.paging = res.body.paging;
+            self.wallpapers = res.body.wallpapers;
+          }
+          self.isLoading = false;
+        });
     }
   },
 
