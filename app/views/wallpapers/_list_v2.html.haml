@@ -64,7 +64,7 @@
             :dropzone => 'link string:text/x-wallpaper-id'}
           .media
             %a.media-object{:href => '#'}
-              %img{:v => {:attr => 'src: preview.url, width: preview.width, height: preview.height',
+              %img.img-wallpaper{:v => {:attr => 'src: preview.url, width: preview.width, height: preview.height',
                   :if => 'preview'},
                 :class => 'purity-{{preview.purity}}'}
             .media-body

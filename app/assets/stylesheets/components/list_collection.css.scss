@@ -57,8 +57,10 @@ ul.collection-list {
   }
 }
 
+// Compact collection list
 ul.collection-list--compact {
-  & > li {
+  & > li,
+  img.img-wallpaper {
     width: $wallpaper-thumbnail-compact-width;
     height: $wallpaper-thumbnail-compact-height;
   }
