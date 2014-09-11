@@ -177,7 +177,7 @@ Vue.component('collections-overlay', {
       .send({ name: 'Untitled', public: true })
       .end(_.bind(function (res) {
         if (res.ok) {
-          this.collections.push(res.body.collection);
+          this.collections.unshift(res.body.collection);
           this.addWallpaperToCollection(this.activeWallpaper, res.body.collection);
         } else {
           this.isHidingDeferred = false;
