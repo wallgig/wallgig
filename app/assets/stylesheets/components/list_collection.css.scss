@@ -1,4 +1,4 @@
-ul.collection-list {
+ul.collectionList {
   @extend .list-unstyled;
   @extend .clearfix;
   margin-left: -10px;
@@ -58,18 +58,43 @@ ul.collection-list {
 }
 
 // Compact collection list
-ul.collection-list--compact {
-  & > li,
-  img.img-wallpaper {
-    width: $wallpaper-thumbnail-compact-width;
-    height: $wallpaper-thumbnail-compact-height;
+ul.collectionList--compact {
+  & > li {
+    width: $width-compact--collectionListItem;
+    height: $height-compact--collectionListItem;
+    top: 0;
   }
 
-  li.hovering {
-    background: black;
+  .img--wallpaper {
+    width: $width-halfWallpaperThumbnail;
+    height: $height-halfWallpaperThumbnail;
   }
 
-  .in-collection {
+  .is-draggedOver {
+    top: 10px;
+  }
+
+  .is-collected {
     opacity: 0.3;
+  }
+
+  .collectionList-wallpapersCount {
+    background-color: rgba(0, 0, 0, 0.5);
+    color: #fff;
+    position: absolute;
+    top: 0;
+    right: 0;
+    padding: 2px 4px;
+  }
+
+  .collectionList-preview--centeredText {
+    text-align: center;
+    line-height: $height-halfWallpaperThumbnail;
+    text-overflow: ellipsis;
+  }
+
+  .collectionList-meta {
+    height: $height-compact--collectionListItemMeta;
+    padding: 4px;
   }
 }

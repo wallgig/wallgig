@@ -51,31 +51,31 @@
     %div{:v => {:if => 'isLoading'}}
       .loading-spinner
 
-    %div{:v => {:show => 'isCollectionsLoaded'}}
-      %ul.collection-list.collection-list--compact
+    %div.container{:v => {:show => 'isCollectionsLoaded'}}
+      %ul.collectionList.collectionList--compact
         %li{:v => {:on => 'dragenter: onDragEnter, dragleave: onDragLeave, dragover: onDragOver, drop: onDropNewCollection',
-              :class => 'hovering: isHovering'},
+              :class => 'is-hovering: isHovering'},
             :dropzone => 'link string:text/x-wallpaper-id'}
-          .media
-            %a.media-object{:href => '#'}
-              New Collection
+          .collectionList-preview.collectionList-preview--centeredText
+            New Collection
         %li{:v => {:repeat => 'collections | orderBy position',
               :on => 'dragenter: onDragEnter, dragleave: onDragLeave, dragover: onDragOver, drop: onDrop',
-              :class => 'hovering: isHovering, in-collection: isInCollection'},
+              :class => 'is-draggedOver: isDraggedOver, is-collected: isInCollection'},
             :dropzone => 'link string:text/x-wallpaper-id'}
-          .media
-            %a.media-object{:href => '#'}
-              %img.img-wallpaper{:v => {:attr => 'src: preview.url, width: preview.width, height: preview.height',
-                  :if => 'preview'},
-                :class => 'purity-{{preview.purity}}'}
-            .media-body
-              %h5.media-heading
-                {{name}}
-                %span.label.label-danger{:v => {:if => '!this.public'}}
-                  Private
-              %ul.list-inline.pull-right.text-muted
-                %li
-                  %span.fa.fa-picture-o
-                  {{wallpapers_count}}
+          .collectionList-wallpapersCount
+            %span.fa.fa-picture-o
+            {{wallpapers_count}}
+
+          %img.collectionList-preview.img--wallpaper{:v => {:if => 'preview',
+              :attr => 'src: preview.url, width: preview.width, height: preview.height'},
+            :class => 'is-{{preview.purity}}'}
+          .collectionList-preview.collectionList-preview--centeredText.text-muted{:v => {:if => '!preview'}}
+            Empty
+
+          .collectionList-meta
+            %h6.collectionList-name
+              {{name}}
+              %span.label.label-danger{:v => {:if => '!this.public'}}
+                Private
 
   .overlay-backdrop

@@ -41,7 +41,7 @@ Vue.component('collections-overlay', {
 
         // Reset collection hover state
         _.forEach(self.collections, function (collection) {
-           collection.isHovering = false;
+           collection.isDraggedOver = false;
         });
       }
 
@@ -90,7 +90,7 @@ Vue.component('collections-overlay', {
           _.forEach(this.collections, function (collection) {
             collection.isInCollection = _.some(res.body.collections, { id: collection.id });
             if (collection.isInCollection) {
-              collection.isHovering = false;
+              collection.isDraggedOver = false;
             }
           });
         }
@@ -124,7 +124,7 @@ Vue.component('collections-overlay', {
       if (self.isHidingDeferred) {
         setTimeout(function () {
           self.isHidingDeferred = false;
-        }, 300);
+        }, 1000);
       }
 
       self.$dispatch('didAddWallpaperToCollection', {
@@ -135,18 +135,18 @@ Vue.component('collections-overlay', {
 
     onDragEnter: function (e) {
       if ( ! e.targetVM.isInCollection) {
-        e.targetVM.isHovering = true;
+        e.targetVM.isDraggedOver = true;
       }
     },
 
     onDragLeave: function (e) {
-      e.targetVM.isHovering = false;
+      e.targetVM.isDraggedOver = false;
     },
 
     onDragOver: function (e) {
       if ( ! e.targetVM.isInCollection) {
         e.preventDefault(); // prevent default to allow dropping
-        e.targetVM.isHovering = true;
+        e.targetVM.isDraggedOver = true;
       }
     },
 
@@ -158,7 +158,7 @@ Vue.component('collections-overlay', {
         this.addWallpaperToCollection(this.activeWallpaper, e.targetVM);
       }
 
-      e.targetVM.isHovering = false;
+      e.targetVM.isDraggedOver = false;
     },
 
     onDropNewCollection: function (e) {

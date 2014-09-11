@@ -21,14 +21,4 @@
     outline: 0;
     z-index: $zindex-modal;
   }
-
-  .list-collection {
-    li.hovering {
-      background: black;
-    }
-
-    .in-collection {
-      opacity: 0.3;
-    }
-  }
 }

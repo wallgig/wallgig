@@ -1,6 +1,13 @@
 // Wallpaper thumbnail sizes
-$wallpaper-thumbnail-width: 250px;
-$wallpaper-thumbnail-height: 188px;
+$width-wallpaperThumbnail: 250px;
+$height-wallpaperThumbnail: 188px;
 
-$wallpaper-thumbnail-compact-width: $wallpaper-thumbnail-width / 2;
-$wallpaper-thumbnail-compact-height: $wallpaper-thumbnail-height / 2;
+$width-halfWallpaperThumbnail: $width-wallpaperThumbnail / 2;
+$height-halfWallpaperThumbnail: $height-wallpaperThumbnail / 2;
+
+
+// Collections
+$width-compact--collectionListItemMeta: $width-halfWallpaperThumbnail;
+$height-compact--collectionListItemMeta: 40px;
+$width-compact--collectionListItem: $width-halfWallpaperThumbnail;
+$height-compact--collectionListItem: $height-halfWallpaperThumbnail + $height-compact--collectionListItemMeta;
