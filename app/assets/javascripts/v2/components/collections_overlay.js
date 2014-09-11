@@ -169,11 +169,13 @@ Vue.component('collections-overlay', {
     onDropNewCollection: function (e) {
       e.preventDefault();
 
+      var name = window.prompt('New collection name?', 'Untitled');
+
       this.isHidingDeferred = true;
 
       superagent
       .post('/api/v1/users/me/collections.json')
-      .send({ name: 'Untitled', public: true })
+      .send({ name: name, public: true })
       .end(_.bind(function (res) {
         if (res.ok) {
           this.collections.unshift(res.body.collection);
