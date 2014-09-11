@@ -153,9 +153,6 @@ Vue.component('collections-overlay', {
     onDrop: function (e) {
       var wallpaperId = parseInt(e.dataTransfer.getData('text/x-wallpaper-id'));
 
-      console.log('this.activeWallpaper.id === wallpaperId', this.activeWallpaper.id === wallpaperId);
-      console.log(' ! e.targetVM.isInCollection', ! e.targetVM.isInCollection);
-
       if (this.activeWallpaper.id === wallpaperId &&
            ! e.targetVM.isInCollection) {
         this.addWallpaperToCollection(this.activeWallpaper, e.targetVM);
