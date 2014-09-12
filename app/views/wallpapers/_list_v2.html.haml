@@ -44,10 +44,10 @@
 
 
 -# TODO create a new partial for this component
-%div.collections-overlay{:v => {:component => 'collections-overlay',
+%div.collectionsOverlay{:v => {:component => 'collections-overlay',
     :cloak => true,
     :show => 'isVisible'}}
-  .overlay-content
+  .collectionsOverlay-content
     %div{:v => {:if => 'isLoading'}}
       .loading-spinner
 
@@ -80,4 +80,4 @@
             %span.label.label-danger{:v => {:if => '!this.public'}}
               Private
 
-  .overlay-backdrop
+  .collectionsOverlay-backdrop
