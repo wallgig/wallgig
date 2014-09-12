@@ -64,18 +64,16 @@ ul.collectionList--compact {
     height: $height-compact--collectionListItem;
     top: 0;
   }
+  .is-draggedOver {
+    top: 10px;
+  }
+  .is-collected {
+    opacity: 0.3;
+  }
 
   .img--wallpaper {
     width: $width-halfWallpaperThumbnail;
     height: $height-halfWallpaperThumbnail;
-  }
-
-  .is-draggedOver {
-    top: 10px;
-  }
-
-  .is-collected {
-    opacity: 0.3;
   }
 
   .collectionList-wallpapersCount {
@@ -87,14 +85,31 @@ ul.collectionList--compact {
     padding: 2px 4px;
   }
 
+  .collectionList-dropArrow {
+    transition: all 0.1s ease-in;
+    font-size: $fontSize--collectionListItem-dropArrow;
+    text-align: center;
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: -40px;
+    opacity: 0;
+  }
+  .is-draggedOver .collectionList-dropArrow {
+    top: 0;
+    opacity: 1;
+  }
+
   .collectionList-preview--centeredText {
     text-align: center;
     line-height: $height-halfWallpaperThumbnail;
-    text-overflow: ellipsis;
   }
 
-  .collectionList-meta {
-    height: $height-compact--collectionListItemMeta;
+  .collectionList-name {
+    height: $height-compact--collectionListItem-meta;
     padding: 4px;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    overflow: hidden;
   }
 }

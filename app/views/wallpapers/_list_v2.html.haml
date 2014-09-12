@@ -66,16 +66,18 @@
             %span.fa.fa-picture-o
             {{wallpapers_count}}
 
+          .collectionList-dropArrow
+            %span.fa.fa-arrow-down
+
           %img.collectionList-preview.img--wallpaper{:v => {:if => 'preview',
               :attr => 'src: preview.url, width: preview.width, height: preview.height'},
             :class => 'is-{{preview.purity}}'}
           .collectionList-preview.collectionList-preview--centeredText.text-muted{:v => {:if => '!preview'}}
             Empty
 
-          .collectionList-meta
-            %h6.collectionList-name
-              {{name}}
-              %span.label.label-danger{:v => {:if => '!this.public'}}
-                Private
+          %h6.collectionList-name
+            {{name}}
+            %span.label.label-danger{:v => {:if => '!this.public'}}
+              Private
 
   .overlay-backdrop
