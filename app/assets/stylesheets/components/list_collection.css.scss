@@ -59,6 +59,7 @@ ul.collectionList {
 
 // Compact collection list
 ul.collectionList--compact {
+  // List item
   & > li {
     width: $width-compact--collectionListItem;
     height: $height-compact--collectionListItem;
@@ -68,14 +69,10 @@ ul.collectionList--compact {
     top: 10px;
   }
   .is-collected {
-    opacity: 0.3;
+    background-color: rgba(255, 255, 255, 0.3);
   }
 
-  .img--wallpaper {
-    width: $width-halfWallpaperThumbnail;
-    height: $height-halfWallpaperThumbnail;
-  }
-
+  // Wallpapers count
   .collectionList-wallpapersCount {
     background-color: rgba(0, 0, 0, 0.5);
     color: #fff;
@@ -85,6 +82,7 @@ ul.collectionList--compact {
     padding: 2px 4px;
   }
 
+  // Drop arrow
   .collectionList-dropArrow {
     transition: all 0.1s ease-in;
     font-size: $fontSize--collectionListItem-dropArrow;
@@ -96,15 +94,25 @@ ul.collectionList--compact {
     opacity: 0;
   }
   .is-draggedOver .collectionList-dropArrow {
-    top: 0;
+    top: 10px;
     opacity: 1;
   }
 
+  // Preview area
   .collectionList-preview--centeredText {
     text-align: center;
     line-height: $height-halfWallpaperThumbnail;
   }
 
+  // Preview thumbnail
+  .is-draggedOver .wallpaperThumbnail {
+    opacity: 0.6;
+  }
+  .is-collected .wallpaperThumbnail {
+    opacity: 0.3;
+  }
+
+  // Collection name
   .collectionList-name {
     height: $height-compact--collectionListItem-meta;
     padding: 4px;

@@ -69,7 +69,7 @@
           .collectionList-dropArrow
             %span.fa.fa-arrow-down
 
-          %img.collectionList-preview.img--wallpaper{:v => {:if => 'preview',
+          %img.collectionList-preview.wallpaperThumbnail.wallpaperThumbnail--halved{:v => {:if => 'preview',
               :attr => 'src: preview.url, width: preview.width, height: preview.height'},
             :class => 'is-{{preview.purity}}'}
           .collectionList-preview.collectionList-preview--centeredText.text-muted{:v => {:if => '!preview'}}
