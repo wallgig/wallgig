@@ -107,14 +107,14 @@ Vue.component('collections-overlay', {
       self.isHidingDeferred = true; // Defer hiding
 
       superagent
-      .post('/api/v1/collections/' + collection.id + '/wallpapers.json')
-      .send({ wallpaper_id: wallpaper.id })
-      .end(function (res) {
-        if (res.ok) {
-          _.assign(collection, res.body.collection); // Refresh collection
-          self.didAddWallpaperToCollection(wallpaper, collection);
-        }
-      });
+        .post('/api/v1/collections/' + collection.id + '/wallpapers.json')
+        .send({ wallpaper_id: wallpaper.id })
+        .end(function (res) {
+          if (res.ok) {
+            _.assign(collection, res.body.collection); // Refresh collection
+            self.didAddWallpaperToCollection(wallpaper, collection);
+          }
+        });
     },
 
     didAddWallpaperToCollection: function (wallpaper, collection) {
@@ -162,26 +162,28 @@ Vue.component('collections-overlay', {
     },
 
     onDropNewCollection: function (e) {
-      var name = window.prompt('New collection name?', 'Untitled');
+      e.preventDefault();
 
+      var name = window.prompt('New collection name?', 'Untitled');
       if ( ! name) {
         return;
       }
 
+      var wallpaper = this.activeWallpaper;
       this.isHidingDeferred = true;
 
       superagent
-      .post('/api/v1/users/me/collections.json')
-      .send({ name: name, public: true })
-      .end(_.bind(function (res) {
-        if (res.ok) {
-          this.collections.unshift(res.body.collection);
-          this.addWallpaperToCollection(this.activeWallpaper, res.body.collection);
-        } else {
-          this.isHidingDeferred = false;
-          this.$dispatch('apiError', res);
-        }
-      }, this));
+        .post('/api/v1/users/me/collections.json')
+        .send({ name: name, public: true })
+        .end(_.bind(function (res) {
+          if (res.ok) {
+            this.collections.unshift(res.body.collection);
+            this.addWallpaperToCollection(wallpaper, res.body.collection);
+          } else {
+            this.isHidingDeferred = false;
+            this.$dispatch('apiError', res);
+          }
+        }, this));
     }
   }
 });
