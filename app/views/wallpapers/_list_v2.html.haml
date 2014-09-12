@@ -13,6 +13,7 @@
 
     %ul.list-wallpaper{:v => {:show => 'wallpapers.length'}}
       %li{:v => {:repeat => 'wallpapers',
+            :component => 'wallpaper',
             :on => 'dragstart: onDragStart, dragend: onDragEnd'},
           :class => 'purity-{{purity}}',
           :draggable => 'true'}
@@ -24,7 +25,7 @@
           %strong {{image.original.width}}&times;{{image.original.height}}
           %a.btn.btn-sm.btn-fav.pull-left{:href => '#',
               :v => {:class => 'faved: favourited, disabled: isToggling',
-                :on => 'click: toggleFavourite(this, $event)'}}
+                :on => 'click: toggleFavourite'}}
             %span.fa.fa-star
             %span.count {{favourites_count}}
           .btn.btn-sm.pull-right
@@ -43,35 +44,40 @@
 
 
 -# TODO create a new partial for this component
-%div.collections-overlay{:v => {:component => 'collections-overlay',
+%div.collectionsOverlay{:v => {:component => 'collections-overlay',
     :cloak => true,
     :show => 'isVisible'}}
-  .overlay-content
+  .collectionsOverlay-content
     %div{:v => {:if => 'isLoading'}}
       .loading-spinner
 
-    %div{:v => {:show => 'isCollectionsLoaded'}}
-      %p{:v => {:if => 'collections.length === 0'}}
-        No collections yet
-
-      %ul.list-collection{:v => {:if => 'collections.length'}}
+    %div.container{:v => {:show => 'isCollectionsLoaded'}}
+      %ul.collectionList.collectionList--compact
+        %li{:v => {:on => 'dragenter: onDragEnter, dragleave: onDragLeave, dragover: onDragOver, drop: onDropNewCollection',
+              :class => 'is-hovering: isHovering'},
+            :dropzone => 'link string:text/x-wallpaper-id'}
+          .collectionList-preview.collectionList-preview--centeredText
+            New Collection
         %li{:v => {:repeat => 'collections | orderBy position',
               :on => 'dragenter: onDragEnter, dragleave: onDragLeave, dragover: onDragOver, drop: onDrop',
-              :class => 'hovering: isHovering, in-collection: isInCollection'},
+              :class => 'is-draggedOver: isDraggedOver, is-collected: isInCollection'},
             :dropzone => 'link string:text/x-wallpaper-id'}
-          .media
-            %a.media-object{:href => '#'}
-              %img{:v => {:attr => 'src: preview.url, width: preview.width, height: preview.height',
-                  :if => 'preview'},
-                :class => 'purity-{{preview.purity}}'}
-            .media-body
-              %h5.media-heading
-                {{name}}
-                %span.label.label-danger{:v => {:if => '!this.public'}}
-                  Private
-              %ul.list-inline.pull-right.text-muted
-                %li
-                  %span.fa.fa-picture-o
-                  {{wallpapers_count}}
+          .collectionList-wallpapersCount
+            %span.fa.fa-picture-o
+            {{wallpapers_count}}
 
-  .overlay-backdrop
+          .collectionList-dropArrow
+            %span.fa.fa-arrow-down
+
+          %img.collectionList-preview.wallpaperThumbnail.wallpaperThumbnail--halved{:v => {:if => 'preview',
+              :attr => 'src: preview.url, width: preview.width, height: preview.height'},
+            :class => 'is-{{preview.purity}}'}
+          .collectionList-preview.collectionList-preview--centeredText.text-muted{:v => {:if => '!preview'}}
+            Empty
+
+          %h6.collectionList-name
+            {{name}}
+            %span.label.label-danger{:v => {:if => '!this.public'}}
+              Private
+
+  .collectionsOverlay-backdrop

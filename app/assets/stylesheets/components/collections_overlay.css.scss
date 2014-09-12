@@ -1,34 +1,23 @@
-.collections-overlay {
-  .overlay-backdrop {
-    position: fixed;
-    top: 0;
-    right: 0;
-    bottom: 0;
-    left: 0;
-    z-index: $zindex-modal-background;
-    background-color: $modal-backdrop-bg;
-    opacity: $modal-backdrop-opacity;
-  }
+// Collections overlay
+.collectionsOverlay-backdrop {
+  position: fixed;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  z-index: $zindex-modal-background;
+  background-color: $modal-backdrop-bg;
+  opacity: $modal-backdrop-opacity;
+}
 
-  .overlay-content {
-    overflow: hidden;
-    position: fixed;
-    top: 0;
-    right: 0;
-    bottom: 0;
-    left: 0;
-    -webkit-overflow-scrolling: touch;
-    outline: 0;
-    z-index: $zindex-modal;
-  }
-
-  .list-collection {
-    li.hovering {
-      background: black;
-    }
-
-    .in-collection {
-      opacity: 0.3;
-    }
-  }
+.collectionsOverlay-content {
+  overflow: hidden;
+  position: fixed;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  -webkit-overflow-scrolling: touch;
+  outline: 0;
+  z-index: $zindex-modal;
 }

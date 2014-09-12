@@ -41,7 +41,7 @@ Vue.component('collections-overlay', {
 
         // Reset collection hover state
         _.forEach(self.collections, function (collection) {
-           collection.isHovering = false;
+           collection.isDraggedOver = false;
         });
       }
 
@@ -90,7 +90,7 @@ Vue.component('collections-overlay', {
           _.forEach(this.collections, function (collection) {
             collection.isInCollection = _.some(res.body.collections, { id: collection.id });
             if (collection.isInCollection) {
-              collection.isHovering = false;
+              collection.isDraggedOver = false;
             }
           });
         }
@@ -120,9 +120,12 @@ Vue.component('collections-overlay', {
     didAddWallpaperToCollection: function (wallpaper, collection) {
       var self = this;
 
-      setTimeout(function () {
-        self.isHidingDeferred = false; // Hide overlay if already requested
-      }, 300);
+      // Handle deferred hiding
+      if (self.isHidingDeferred) {
+        setTimeout(function () {
+          self.isHidingDeferred = false;
+        }, 1000);
+      }
 
       self.$dispatch('didAddWallpaperToCollection', {
         wallpaper: wallpaper,
@@ -132,36 +135,53 @@ Vue.component('collections-overlay', {
 
     onDragEnter: function (e) {
       if ( ! e.targetVM.isInCollection) {
-        e.targetVM.isHovering = true;
+        e.targetVM.isDraggedOver = true;
       }
     },
 
     onDragLeave: function (e) {
-      e.targetVM.isHovering = false;
+      e.targetVM.isDraggedOver = false;
     },
 
     onDragOver: function (e) {
-      e.preventDefault();
-
       if ( ! e.targetVM.isInCollection) {
-        e.targetVM.isHovering = true;
+        e.preventDefault(); // prevent default to allow dropping
+        e.targetVM.isDraggedOver = true;
       }
     },
 
     onDrop: function (e) {
-      e.preventDefault();
-
       var wallpaperId = parseInt(e.dataTransfer.getData('text/x-wallpaper-id'));
-
-      console.log('this.activeWallpaper.id === wallpaperId', this.activeWallpaper.id === wallpaperId);
-      console.log(' ! e.targetVM.isInCollection', ! e.targetVM.isInCollection);
 
       if (this.activeWallpaper.id === wallpaperId &&
            ! e.targetVM.isInCollection) {
         this.addWallpaperToCollection(this.activeWallpaper, e.targetVM);
       }
 
-      e.targetVM.isHovering = false;
+      e.targetVM.isDraggedOver = false;
+    },
+
+    onDropNewCollection: function (e) {
+      var name = window.prompt('New collection name?', 'Untitled');
+
+      if ( ! name) {
+        return;
+      }
+
+      this.isHidingDeferred = true;
+
+      superagent
+      .post('/api/v1/users/me/collections.json')
+      .send({ name: name, public: true })
+      .end(_.bind(function (res) {
+        if (res.ok) {
+          this.collections.unshift(res.body.collection);
+          this.addWallpaperToCollection(this.activeWallpaper, res.body.collection);
+        } else {
+          this.isHidingDeferred = false;
+          this.$dispatch('apiError', res);
+        }
+      }, this));
     }
   }
 });

@@ -1,0 +1,18 @@
+@import "bootstrap/variables";
+
+// Wallpaper thumbnail sizes
+$width-wallpaperThumbnail: 250px;
+$height-wallpaperThumbnail: 188px;
+
+$width-halfWallpaperThumbnail: $width-wallpaperThumbnail / 2;
+$height-halfWallpaperThumbnail: $height-wallpaperThumbnail / 2;
+
+
+// Collections
+$width-compact--collectionListItem-meta: $width-halfWallpaperThumbnail;
+$height-compact--collectionListItem-meta: 35px;
+
+$width-compact--collectionListItem: $width-halfWallpaperThumbnail;
+$height-compact--collectionListItem: $height-halfWallpaperThumbnail + $height-compact--collectionListItem-meta;
+
+$fontSize--collectionListItem-dropArrow: $font-size-h1;
