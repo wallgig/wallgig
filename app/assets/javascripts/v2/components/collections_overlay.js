@@ -55,6 +55,7 @@ Vue.component('collections-overlay', {
 
     hideNow: function () {
       this.isVisible = false;
+      this.isHidingDeferred = false;
       this.setActiveWallpaper(null);
     },
 
@@ -174,28 +175,31 @@ Vue.component('collections-overlay', {
     },
 
     onDropNewCollection: function (e) {
+      var self = this;
+
       e.preventDefault();
+      self.isHidingDeferred = true;
 
       var name = window.prompt('New collection name?', 'Untitled');
       if ( ! name) {
+        self.isHidingDeferred = false;
         return;
       }
 
-      var wallpaper = this.activeWallpaper;
-      this.isHidingDeferred = true;
+      var wallpaper = self.activeWallpaper;
 
       superagent
         .post('/api/v1/users/me/collections.json')
         .send({ name: name, public: true })
-        .end(_.bind(function (res) {
+        .end(function (res) {
           if (res.ok) {
-            this.collections.unshift(res.body.collection);
-            this.addWallpaperToCollection(wallpaper, res.body.collection);
+            self.collections.unshift(res.body.collection);
+            self.addWallpaperToCollection(wallpaper, res.body.collection);
           } else {
-            this.isHidingDeferred = false;
-            this.$dispatch('apiError', res);
+            self.isHidingDeferred = false;
+            self.$dispatch('apiError', res);
           }
-        }, this));
+        });
     }
   }
 });
