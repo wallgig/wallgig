@@ -55,18 +55,23 @@ Vue.component('collections-overlay', {
     },
 
     fetchCollections: function () {
-      this.isLoading = true;
-      this.isCollectionsLoaded = false;
+      var self = this;
+      self.isLoading = true;
+      self.isCollectionsLoaded = false;
 
       superagent
         .get('/api/v1/users/me/collections.json')
-        .end(_.bind(function (res) {
+        .end(function (res) {
           if (res.ok) {
-            this.collections = res.body.collections;
+            self.collections = res.body.collections;
           }
-          this.isLoading = false;
-          this.isCollectionsLoaded = true;
-        }, this));
+          self.isLoading = false;
+          self.isCollectionsLoaded = true;
+
+          Vue.nextTick(function () {
+            self.$broadcast('setActiveWallpaper', self.activeWallpaper);
+          });
+        });
     },
 
     fetchActiveWallpaperCollections: function () {
@@ -77,18 +82,17 @@ Vue.component('collections-overlay', {
         return;
       }
 
+      var wallpaper = self.activeWallpaper;
+
       var actuallyFetch = function () {
         superagent
           .get('/api/v1/users/me/collections.json')
-          .query({ wallpaper_id: self.activeWallpaper.id })
+          .query({ wallpaper_id: wallpaper.id })
           .end(function (res) {
             if (res.ok) {
-              console.log(self.collections);
-              _.forEach(self.collections, function (collection) {
-                collection.isInCollection = _.some(res.body.collections, { id: collection.id });
-                if (collection.isInCollection) {
-                  collection.isDraggedOver = false;
-                }
+              self.$broadcast('wallpaperInCollections', {
+                wallpaperId: wallpaper.id,
+                collectionIds: _.pluck(res.body.collections, 'id')
               });
             }
           });

@@ -30,9 +30,11 @@
 
       // Wallpaper
       self.$on('wallpaperDragStart', function (wallpaper) {
+        self.$broadcast('setActiveWallpaper', wallpaper);
         self.$broadcast('requestShowCollectionOverlay', { wallpaper: wallpaper });
       });
       self.$on('wallpaperDragEnd', function () {
+        self.$broadcast('setActiveWallpaper', null);
         self.$broadcast('requestHideCollectionOverlay');
       });
     },
