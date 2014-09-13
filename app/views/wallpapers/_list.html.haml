@@ -14,22 +14,14 @@
 - if wallpapers.any?
   %ul.list-wallpaper{:class => local_assigns[:extra_css_class]}
     - wallpapers.each do |wallpaper|
-      %li{:class => "purity-#{wallpaper.purity}",
-        :v => {:component => 'wallpaper',
-          :initial => {:id => wallpaper.id,
-            :favourited => wallpaper.favourited?,
-            :favourites_count => wallpaper.favourites_count}.to_json}}
+      %li{:class => "purity-#{wallpaper.purity}", :data => {:wallpaper_id => wallpaper.id}}
 
         = wallpaper.thumbnail_link lazy: true, new_window: current_settings.new_window?
 
         .overlay.overlay-bottom
           %strong= wallpaper.requested_image_resolution
 
-          %a.btn.btn-sm.btn-fav.pull-left{:href => '#',
-              :v => {:class => 'faved: favourited, disabled: isToggling',
-                :on => 'click: toggleFavourite'}}
-            %span.fa.fa-star
-            %span.count {{favourites_count}}
+          = wallpaper.favourite_button_for_list
 
           .btn.btn-sm.pull-right
             = fa_icon_tag('eye')
