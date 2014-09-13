@@ -93,6 +93,10 @@ ul.collectionList--compact {
     transition: all 0.1s ease-in;
   }
 
+  .collectionList-previewOverlay--added {
+    color: $brand-success;
+  }
+
   .collectionList-previewOverlay--plus {
     opacity: 0;
   }
