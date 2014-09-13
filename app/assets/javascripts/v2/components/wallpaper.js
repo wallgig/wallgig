@@ -37,11 +37,11 @@ Vue.component('wallpaper', {
 
       e.dataTransfer.effectAllowed = 'link';
       e.dataTransfer.setData('text/x-wallpaper-id', this.id);
-      this.$dispatch('wallpaperDragStart', this);
+      this.$root.$broadcast('wallpaperDragStart', this);
     },
 
     onDragEnd: function () {
-      this.$dispatch('wallpaperDragEnd', this);
+      this.$root.$broadcast('wallpaperDragEnd', this);
     }
   }
 });

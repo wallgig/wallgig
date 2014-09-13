@@ -21,20 +21,14 @@ Vue.component('collection', {
       }
     });
 
-    this.$on('resetCollectionState', this.resetState);
     this.$on('setActiveWallpaper', function (wallpaper) {
-      console.log('setActiveWallpaper', wallpaper);
       this.activeWallpaper = wallpaper;
     });
     this.$on('wallpaperInCollections', this.wallpaperInCollections);
+    this.$on('didAddWallpaperToCollection', this.didAddWallpaperToCollection);
   },
 
   methods: {
-    resetState: function () {
-      this.activeWallpaper = null;
-      this.isDraggedOver = false;
-    },
-
     refreshCollectionState: function () {
       if (this.activeWallpaper) {
         this.isInCollection = _(this.cachedWallpaperIds).contains(this.activeWallpaper.id);
@@ -43,7 +37,7 @@ Vue.component('collection', {
       }
     },
 
-    wallpaperInCollections: function(data) {
+    wallpaperInCollections: function (data) {
       if (_(data.collectionIds).contains(this.id)) {
         // Wallpaper is in collection
         this.cachedWallpaperIds = _.chain(this.cachedWallpaperIds).
@@ -54,6 +48,18 @@ Vue.component('collection', {
         // Wallpaper not in collection, check if wallpaper id is cached and remove it
         this.cachedWallpaperIds = _.without(this.cachedWallpaperIds, data.wallpaperId);
       }
+    },
+
+    didAddWallpaperToCollection: function (data) {
+      if (data.collection.id !== this.id) {
+        // Not ours
+        return;
+      }
+
+      this.cachedWallpaperIds = _.chain(this.cachedWallpaperIds).
+        push(data.wallpaper.id).
+        uniq().
+        valueOf();
     },
 
     onDragEnter: function () {

@@ -12,21 +12,26 @@ Vue.component('collections-overlay', {
   },
 
   ready: function () {
-    this.$on('requestShowCollectionOverlay', this.show);
-    this.$on('requestHideCollectionOverlay', this.hide);
+    var self = this;
 
-    this.$watch('activeWallpaper', this.fetchActiveWallpaperCollections);
+    self.$on('wallpaperDragStart', function (wallpaper) {
+      self.setActiveWallpaper(wallpaper);
+      self.show();
+    });
+    self.$on('wallpaperDragEnd', self.hide);
 
+    self.$watch('activeWallpaper', this.refreshActiveWallpaperCollectStatus);
     // this.$emit('collectionOverlayShow');
   },
 
   methods: {
-    show: function (payload) {
-      this.isVisible = true;
+    setActiveWallpaper: function (wallpaper) {
+      this.activeWallpaper = wallpaper;
+      this.$broadcast('setActiveWallpaper', wallpaper);
+    },
 
-      if (_.isObject(payload) && payload.wallpaper) {
-        this.activeWallpaper = payload.wallpaper;
-      }
+    show: function () {
+      this.isVisible = true;
 
       if ( ! this.isCollectionsLoaded) {
         this.fetchCollections();
@@ -50,8 +55,7 @@ Vue.component('collections-overlay', {
 
     hideNow: function () {
       this.isVisible = false;
-      this.activeWallpaper = null;
-      this.$broadcast('resetCollectionState');
+      this.setActiveWallpaper(null);
     },
 
     fetchCollections: function () {
@@ -74,11 +78,10 @@ Vue.component('collections-overlay', {
         });
     },
 
-    fetchActiveWallpaperCollections: function () {
+    refreshActiveWallpaperCollectStatus: function () {
       var self = this;
 
       if ( ! self.activeWallpaper) {
-        // This shouldn't have happened
         return;
       }
 
@@ -141,7 +144,7 @@ Vue.component('collections-overlay', {
         }, 1000);
       }
 
-      self.$dispatch('didAddWallpaperToCollection', {
+      self.$root.$broadcast('didAddWallpaperToCollection', {
         wallpaper: wallpaper,
         collection: collection
       });
