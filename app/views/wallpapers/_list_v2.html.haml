@@ -59,6 +59,7 @@
             New Collection
         %li{:v => {:repeat => 'collections | orderBy position',
               :component => 'collection',
+              :ref => 'collections',
               :on => 'dragenter: onDragEnter, dragleave: onDragLeave, dragover: onDragOver, drop: onDrop',
               :class => 'is-draggedOver: isDraggedOver, is-collected: isInCollection'},
             :dropzone => 'link string:text/x-wallpaper-id'}

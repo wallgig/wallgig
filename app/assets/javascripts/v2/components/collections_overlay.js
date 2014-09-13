@@ -35,27 +35,23 @@ Vue.component('collections-overlay', {
 
     hide: function () {
       var self = this;
-      var actuallyHide = function () {
-        self.isVisible = false;
-        self.activeWallpaper = null;
-
-        // Reset collection hover state
-        _.forEach(self.collections, function (collection) {
-           collection.isDraggedOver = false;
-        });
-      }
-
       if (self.isHidingDeferred) {
         self.$watch('isHidingDeferred', function (value) {
           if (value) {
             return;
           }
           self.$unwatch('isHidingDeferred');
-          actuallyHide();
+          self.hideNow();
         });
       } else {
-        actuallyHide();
+        self.hideNow();
       }
+    },
+
+    hideNow: function () {
+      this.isVisible = false;
+      this.activeWallpaper = null;
+      this.$broadcast('resetCollectionState');
     },
 
     fetchCollections: function () {
@@ -63,38 +59,52 @@ Vue.component('collections-overlay', {
       this.isCollectionsLoaded = false;
 
       superagent
-      .get('/api/v1/users/me/collections.json')
-      .end(_.bind(function (res) {
-        if (res.ok) {
-          this.collections = res.body.collections;
-        }
-        this.isLoading = false;
-        this.isCollectionsLoaded = true;
-      }, this));
+        .get('/api/v1/users/me/collections.json')
+        .end(_.bind(function (res) {
+          if (res.ok) {
+            this.collections = res.body.collections;
+          }
+          this.isLoading = false;
+          this.isCollectionsLoaded = true;
+        }, this));
     },
 
     fetchActiveWallpaperCollections: function () {
-      _.forEach(this.collections, function (collection) {
-         collection.isInCollection = false;
-      });
+      var self = this;
 
-      if ( ! this.activeWallpaper) {
+      if ( ! self.activeWallpaper) {
+        // This shouldn't have happened
         return;
       }
 
-      superagent
-      .get('/api/v1/users/me/collections.json')
-      .query({ wallpaper_id: this.activeWallpaper.id })
-      .end(_.bind(function (res) {
-        if (res.ok) {
-          _.forEach(this.collections, function (collection) {
-            collection.isInCollection = _.some(res.body.collections, { id: collection.id });
-            if (collection.isInCollection) {
-              collection.isDraggedOver = false;
+      var actuallyFetch = function () {
+        superagent
+          .get('/api/v1/users/me/collections.json')
+          .query({ wallpaper_id: self.activeWallpaper.id })
+          .end(function (res) {
+            if (res.ok) {
+              console.log(self.collections);
+              _.forEach(self.collections, function (collection) {
+                collection.isInCollection = _.some(res.body.collections, { id: collection.id });
+                if (collection.isInCollection) {
+                  collection.isDraggedOver = false;
+                }
+              });
             }
           });
-        }
-      }, this));
+      };
+
+      if (self.isCollectionsLoaded) {
+        actuallyFetch();
+      } else {
+        self.$watch('isCollectionsLoaded', function (value) {
+          if ( ! value) {
+            return;
+          }
+          self.$unwatch('isCollectionsLoaded');
+          actuallyFetch();
+        });
+      }
     },
 
     addWallpaperToCollection: function (wallpaper, collection) {

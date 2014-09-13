@@ -9,10 +9,6 @@
 /* global _, Vue, superagent */
 
 (function (exports) {
-  <% if Rails.env.development? %>
-  Vue.config('debug', true);
-  <% end %>
-
   exports.app = new Vue({
     el: '#wallgig-app',
 
