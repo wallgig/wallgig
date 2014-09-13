@@ -3,11 +3,16 @@
 //= require vue
 //= require superagent
 //= require_tree ./components/.
+//= require_tree ./directives/.
 //= require_self
 
 /* global _, Vue, superagent */
 
 (function (exports) {
+  <% if Rails.env.development? %>
+  Vue.config('debug', true);
+  <% end %>
+
   exports.app = new Vue({
     el: '#wallgig-app',
 

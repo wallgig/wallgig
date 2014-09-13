@@ -48,8 +48,7 @@
     :cloak => true,
     :show => 'isVisible'}}
   .collectionsOverlay-content
-    %div{:v => {:if => 'isLoading'}}
-      .loading-spinner
+    .loader{:v => {:if => 'isLoading'}}
 
     %div.container{:v => {:show => 'isCollectionsLoaded'}}
       %ul.collectionList.collectionList--compact
@@ -59,6 +58,7 @@
           .collectionList-preview.collectionList-preview--centeredText
             New Collection
         %li{:v => {:repeat => 'collections | orderBy position',
+              :component => 'collection',
               :on => 'dragenter: onDragEnter, dragleave: onDragLeave, dragover: onDragOver, drop: onDrop',
               :class => 'is-draggedOver: isDraggedOver, is-collected: isInCollection'},
             :dropzone => 'link string:text/x-wallpaper-id'}

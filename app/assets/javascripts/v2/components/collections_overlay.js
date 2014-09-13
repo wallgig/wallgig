@@ -133,16 +133,6 @@ Vue.component('collections-overlay', {
       });
     },
 
-    onDragEnter: function (e) {
-      if ( ! e.targetVM.isInCollection) {
-        e.targetVM.isDraggedOver = true;
-      }
-    },
-
-    onDragLeave: function (e) {
-      e.targetVM.isDraggedOver = false;
-    },
-
     onDragOver: function (e) {
       if ( ! e.targetVM.isInCollection) {
         e.preventDefault(); // prevent default to allow dropping
