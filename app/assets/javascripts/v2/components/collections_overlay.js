@@ -12,21 +12,26 @@ Vue.component('collections-overlay', {
   },
 
   ready: function () {
-    this.$on('requestShowCollectionOverlay', this.show);
-    this.$on('requestHideCollectionOverlay', this.hide);
+    var self = this;
 
-    this.$watch('activeWallpaper', this.fetchActiveWallpaperCollections);
+    self.$on('wallpaperDragStart', function (wallpaper) {
+      self.setActiveWallpaper(wallpaper);
+      self.show();
+    });
+    self.$on('wallpaperDragEnd', self.hide);
 
+    self.$watch('activeWallpaper', this.refreshActiveWallpaperCollectStatus);
     // this.$emit('collectionOverlayShow');
   },
 
   methods: {
-    show: function (payload) {
-      this.isVisible = true;
+    setActiveWallpaper: function (wallpaper) {
+      this.activeWallpaper = wallpaper;
+      this.$broadcast('setActiveWallpaper', wallpaper);
+    },
 
-      if (_.isObject(payload) && payload.wallpaper) {
-        this.activeWallpaper = payload.wallpaper;
-      }
+    show: function () {
+      this.isVisible = true;
 
       if ( ! this.isCollectionsLoaded) {
         this.fetchCollections();
@@ -35,66 +40,83 @@ Vue.component('collections-overlay', {
 
     hide: function () {
       var self = this;
-      var actuallyHide = function () {
-        self.isVisible = false;
-        self.activeWallpaper = null;
-
-        // Reset collection hover state
-        _.forEach(self.collections, function (collection) {
-           collection.isDraggedOver = false;
-        });
-      }
-
       if (self.isHidingDeferred) {
         self.$watch('isHidingDeferred', function (value) {
           if (value) {
             return;
           }
           self.$unwatch('isHidingDeferred');
-          actuallyHide();
+          self.hideNow();
         });
       } else {
-        actuallyHide();
+        self.hideNow();
       }
+    },
+
+    hideNow: function () {
+      this.isVisible = false;
+      this.setActiveWallpaper(null);
     },
 
     fetchCollections: function () {
-      this.isLoading = true;
-      this.isCollectionsLoaded = false;
+      var self = this;
+      self.isLoading = true;
+      self.isCollectionsLoaded = false;
 
       superagent
-      .get('/api/v1/users/me/collections.json')
-      .end(_.bind(function (res) {
-        if (res.ok) {
-          this.collections = res.body.collections;
-        }
-        this.isLoading = false;
-        this.isCollectionsLoaded = true;
-      }, this));
+        .get('/api/v1/users/me/collections.json')
+        .end(function (res) {
+          if (res.ok) {
+            self.collections = res.body.collections;
+          }
+          self.isLoading = false;
+          self.isCollectionsLoaded = true;
+
+          Vue.nextTick(function () {
+            self.$broadcast('setActiveWallpaper', self.activeWallpaper);
+          });
+        });
     },
 
-    fetchActiveWallpaperCollections: function () {
-      _.forEach(this.collections, function (collection) {
-         collection.isInCollection = false;
-      });
+    refreshActiveWallpaperCollectStatus: function () {
+      var self = this;
 
-      if ( ! this.activeWallpaper) {
+      if ( ! self.activeWallpaper) {
         return;
       }
 
-      superagent
-      .get('/api/v1/users/me/collections.json')
-      .query({ wallpaper_id: this.activeWallpaper.id })
-      .end(_.bind(function (res) {
-        if (res.ok) {
-          _.forEach(this.collections, function (collection) {
-            collection.isInCollection = _.some(res.body.collections, { id: collection.id });
-            if (collection.isInCollection) {
-              collection.isDraggedOver = false;
+      var wallpaper = self.activeWallpaper;
+
+      var actuallyFetch = function () {
+        superagent
+          .get('/api/v1/users/me/collections.json')
+          .query({ wallpaper_id: wallpaper.id })
+          .end(function (res) {
+            if (res.ok) {
+              _(res.body.collections).forEach(function (latestCollection) {
+                _.chain(self.collections).
+                  find({ id: latestCollection.id }).
+                  assign(latestCollection);
+              });
+              self.$broadcast('wallpaperInCollections', {
+                wallpaperId: wallpaper.id,
+                collectionIds: _.pluck(res.body.collections, 'id')
+              });
             }
           });
-        }
-      }, this));
+      };
+
+      if (self.isCollectionsLoaded) {
+        actuallyFetch();
+      } else {
+        self.$watch('isCollectionsLoaded', function (value) {
+          if ( ! value) {
+            return;
+          }
+          self.$unwatch('isCollectionsLoaded');
+          actuallyFetch();
+        });
+      }
     },
 
     addWallpaperToCollection: function (wallpaper, collection) {
@@ -124,23 +146,13 @@ Vue.component('collections-overlay', {
       if (self.isHidingDeferred) {
         setTimeout(function () {
           self.isHidingDeferred = false;
-        }, 1000);
+        }, 500);
       }
 
-      self.$dispatch('didAddWallpaperToCollection', {
+      self.$root.$broadcast('didAddWallpaperToCollection', {
         wallpaper: wallpaper,
         collection: collection
       });
-    },
-
-    onDragEnter: function (e) {
-      if ( ! e.targetVM.isInCollection) {
-        e.targetVM.isDraggedOver = true;
-      }
-    },
-
-    onDragLeave: function (e) {
-      e.targetVM.isDraggedOver = false;
     },
 
     onDragOver: function (e) {

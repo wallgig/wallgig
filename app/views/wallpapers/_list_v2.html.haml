@@ -6,7 +6,7 @@
     .loading-spinner
 
   %div{:v => {:show => '!isLoading'}}
-    .page-separator{:v => {:show => '!isFirst'}}
+    .page-separator{:v => {:if => '!isFirst'}}
       %a.pull-left{:v => {:attr => 'href: paging.self', :text => 'paging.current_page'}}
       %a.pull-right{:href => '#'}
         %span.fa.fa-chevron-up
@@ -48,32 +48,32 @@
     :cloak => true,
     :show => 'isVisible'}}
   .collectionsOverlay-content
-    %div{:v => {:if => 'isLoading'}}
-      .loading-spinner
+    .loader{:v => {:if => 'isLoading'}}
 
     %div.container{:v => {:show => 'isCollectionsLoaded'}}
       %ul.collectionList.collectionList--compact
-        %li{:v => {:on => 'dragenter: onDragEnter, dragleave: onDragLeave, dragover: onDragOver, drop: onDropNewCollection',
-              :class => 'is-hovering: isHovering'},
-            :dropzone => 'link string:text/x-wallpaper-id'}
-          .collectionList-preview.collectionList-preview--centeredText
-            New Collection
+        %li.collectionList-createNew{:v => {:on => 'dragenter: onDragEnter, dragleave: onDragLeave, dragover: onDragOver, drop: onDropNewCollection',
+              :class => 'is-hovering: isHovering'}}
+          New Collection
         %li{:v => {:repeat => 'collections | orderBy position',
+              :component => 'collection',
+              :ref => 'collections',
               :on => 'dragenter: onDragEnter, dragleave: onDragLeave, dragover: onDragOver, drop: onDrop',
-              :class => 'is-draggedOver: isDraggedOver, is-collected: isInCollection'},
-            :dropzone => 'link string:text/x-wallpaper-id'}
-          .collectionList-wallpapersCount
+              :class => 'is-draggedOver: isDraggedOver, is-collected: isInCollection'}}
+          .collectionList-wallpapersCount{:v => {:if => 'wallpapers_count > 0'}}
             %span.fa.fa-picture-o
             {{wallpapers_count}}
 
-          .collectionList-dropArrow
-            %span.fa.fa-arrow-down
+          .collectionList-previewOverlay.collectionList-previewOverlay--added{:v => {:if => 'isInCollection'}}
+            %span.fa.fa-check
+          .collectionList-previewOverlay.collectionList-previewOverlay--plus{:v => {:if => '!isInCollection'}}
+            %span.fa.fa-plus
 
-          %img.collectionList-preview.wallpaperThumbnail.wallpaperThumbnail--halved{:v => {:if => 'preview',
-              :attr => 'src: preview.url, width: preview.width, height: preview.height'},
-            :class => 'is-{{preview.purity}}'}
+          .collectionList-preview{:v => {:if => 'preview'}}
+            %img.wallpaperThumbnail.wallpaperThumbnail--halved{:class => 'is-{{preview.purity}}',
+              :v => {:attr => 'src: preview.url, width: preview.width, height: preview.height'}}
           .collectionList-preview.collectionList-preview--centeredText.text-muted{:v => {:if => '!preview'}}
-            Empty
+            %em Empty
 
           %h6.collectionList-name
             {{name}}

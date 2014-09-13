@@ -3,6 +3,7 @@
 //= require vue
 //= require superagent
 //= require_tree ./components/.
+//= require_tree ./directives/.
 //= require_self
 
 /* global _, Vue, superagent */
@@ -11,25 +12,21 @@
   exports.app = new Vue({
     el: '#wallgig-app',
 
-    paramAttributes: ['settings'],
+    data: {
+      current_user: null,
+      settings: {
+        per_page: 20,
+        infinite_scroll: false,
+        invisible: false,
+        new_window: false
+      }
+    },
 
     created: function () {
       var self = this;
 
-      if (self.settings) {
-        self.settings = JSON.parse(self.settings);
-      }
-
       // API
       self.$on('apiError', self.handleApiError);
-
-      // Wallpaper
-      self.$on('wallpaperDragStart', function (wallpaper) {
-        self.$broadcast('requestShowCollectionOverlay', { wallpaper: wallpaper });
-      });
-      self.$on('wallpaperDragEnd', function () {
-        self.$broadcast('requestHideCollectionOverlay');
-      });
     },
 
     methods: {

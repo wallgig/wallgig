@@ -11,7 +11,7 @@ Vue.component('wallpaper', {
       e.preventDefault();
 
       var self = this;
-      if ( !self.id) {
+      if ( ! self.id) {
         return;
       }
 
@@ -30,13 +30,18 @@ Vue.component('wallpaper', {
     },
 
     onDragStart: function (e) {
+      if ( ! this.$root.current_user) {
+        // Not logged in, don't show overlay
+        return;
+      }
+
       e.dataTransfer.effectAllowed = 'link';
       e.dataTransfer.setData('text/x-wallpaper-id', this.id);
-      this.$dispatch('wallpaperDragStart', this);
+      this.$root.$broadcast('wallpaperDragStart', this);
     },
 
-    onDragEnd: function (e) {
-      this.$dispatch('wallpaperDragEnd', this);
+    onDragEnd: function () {
+      this.$root.$broadcast('wallpaperDragEnd', this);
     }
   }
 });
