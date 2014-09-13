@@ -8,9 +8,9 @@ $height-halfWallpaperThumbnail: $height-wallpaperThumbnail / 2;
 
 // Collections
 $width-compact--collectionListItem-meta: $width-halfWallpaperThumbnail;
-$height-compact--collectionListItem-meta: 36px;
+$height-compact--collectionListItem-meta: 32px;
 
 $width-compact--collectionListItem: $width-halfWallpaperThumbnail;
 $height-compact--collectionListItem: $height-halfWallpaperThumbnail + $height-compact--collectionListItem-meta;
 
-$fontSize--collectionListItem-dropArrow: 36px;
+$fontSize--collectionListItem-previewOverlayIcon: 40px;

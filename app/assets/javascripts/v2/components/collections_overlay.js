@@ -146,7 +146,7 @@ Vue.component('collections-overlay', {
       if (self.isHidingDeferred) {
         setTimeout(function () {
           self.isHidingDeferred = false;
-        }, 1000);
+        }, 500);
       }
 
       self.$root.$broadcast('didAddWallpaperToCollection', {

@@ -12,8 +12,7 @@ ul.collectionList {
     width: 250px;
     height: 354px;
     margin: 10px;
-    overflow: hidden;
-    display: inline-block;
+    float: left;
     position: relative;
     text-align: left;
     @include transition(all 0.1s ease-in);
@@ -63,13 +62,13 @@ ul.collectionList--compact {
   & > li {
     width: $width-compact--collectionListItem;
     height: $height-compact--collectionListItem;
-    top: 0;
   }
-  .is-draggedOver {
-    top: 10px;
-  }
-  .is-collected {
-    background-color: rgba(255, 255, 255, 0.3);
+
+  // Create new wallpaper
+  .collectionList-createNew {
+    text-align: center;
+    height: $height-compact--collectionListItem;
+    line-height: $height-compact--collectionListItem;
   }
 
   // Wallpapers count
@@ -82,40 +81,38 @@ ul.collectionList--compact {
     padding: 2px 4px;
   }
 
-  // Drop arrow
-  .collectionList-dropArrow {
-    transition: all 0.1s ease-in;
-    font-size: $fontSize--collectionListItem-dropArrow;
-    text-align: center;
+  // Preview overlay
+  .collectionList-previewOverlay {
+    font-size: $fontSize--collectionListItem-previewOverlayIcon;
     position: absolute;
-    left: 0;
+    top: 0;
     right: 0;
-    top: -40px;
+    bottom: 0;
+    left: 0;
+    background: rgba(0, 0, 0, 0.3);
+    transition: all 0.1s ease-in;
+  }
+
+  .collectionList-previewOverlay--plus {
     opacity: 0;
   }
-  .is-draggedOver .collectionList-dropArrow {
-    top: 10px;
+  .is-draggedOver .collectionList-previewOverlay--plus {
     opacity: 1;
   }
 
-  // Preview area
-  .collectionList-preview--centeredText {
+  // Preview area and previewOverlay
+  .collectionList-preview--centeredText,
+  .collectionList-previewOverlay {
     text-align: center;
     line-height: $height-halfWallpaperThumbnail;
   }
 
-  // Preview thumbnail
-  .is-draggedOver .wallpaperThumbnail {
-    opacity: 0.6;
-  }
-  .is-collected .wallpaperThumbnail {
-    opacity: 0.3;
-  }
-
   // Collection name
   .collectionList-name {
+    margin: 0;
+    padding: 4px 6px;
     height: $height-compact--collectionListItem-meta;
-    padding: 4px;
+    line-height: $height-compact--collectionListItem-meta - 8px;
     text-overflow: ellipsis;
     white-space: nowrap;
     overflow: hidden;
