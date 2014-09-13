@@ -16,14 +16,18 @@
   exports.app = new Vue({
     el: '#wallgig-app',
 
-    paramAttributes: ['settings'],
+    data: {
+      current_user: null,
+      settings: {
+        per_page: 20,
+        infinite_scroll: false,
+        invisible: false,
+        new_window: false
+      }
+    },
 
     created: function () {
       var self = this;
-
-      if (self.settings) {
-        self.settings = JSON.parse(self.settings);
-      }
 
       // API
       self.$on('apiError', self.handleApiError);

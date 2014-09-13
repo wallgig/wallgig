@@ -30,12 +30,17 @@ Vue.component('wallpaper', {
     },
 
     onDragStart: function (e) {
+      if ( ! this.$root.current_user) {
+        // Not logged in, don't show overlay
+        return;
+      }
+
       e.dataTransfer.effectAllowed = 'link';
       e.dataTransfer.setData('text/x-wallpaper-id', this.id);
       this.$dispatch('wallpaperDragStart', this);
     },
 
-    onDragEnd: function (e) {
+    onDragEnd: function () {
       this.$dispatch('wallpaperDragEnd', this);
     }
   }
