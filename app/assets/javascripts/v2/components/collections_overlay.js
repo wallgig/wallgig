@@ -93,6 +93,11 @@ Vue.component('collections-overlay', {
           .query({ wallpaper_id: wallpaper.id })
           .end(function (res) {
             if (res.ok) {
+              _(res.body.collections).forEach(function (latestCollection) {
+                _.chain(self.collections).
+                  find({ id: latestCollection.id }).
+                  assign(latestCollection);
+              });
               self.$broadcast('wallpaperInCollections', {
                 wallpaperId: wallpaper.id,
                 collectionIds: _.pluck(res.body.collections, 'id')
