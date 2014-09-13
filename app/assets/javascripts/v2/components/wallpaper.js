@@ -11,7 +11,7 @@ Vue.component('wallpaper', {
       e.preventDefault();
 
       var self = this;
-      if ( !self.id) {
+      if ( ! self.id) {
         return;
       }
 
