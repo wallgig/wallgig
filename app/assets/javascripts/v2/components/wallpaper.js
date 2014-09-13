@@ -2,15 +2,15 @@
 
 Vue.component('wallpaper', {
   data: {
-    isToggling: false
+    isToggling: false,
+    id: null
   },
 
   methods: {
     toggleFavourite: function (e) {
-      var self = this;
-
       e.preventDefault();
 
+      var self = this;
       if ( !self.id) {
         return;
       }

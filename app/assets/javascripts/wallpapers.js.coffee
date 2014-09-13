@@ -96,10 +96,10 @@ $ ->
       $this.on 'ajax:success', (event, data, status, xhr) ->
         $this.find('span.count').text data.fav_count
         if data.fav_status
-          $this.addClass 'btn-favourite favourited'
+          $this.addClass 'faved'
           window.analytics.track('Favourited a wallpaper')
         else
-          $this.removeClass 'btn-favourite favourited'
+          $this.removeClass 'faved'
           window.analytics.track('Unfavourited a wallpaper')
       $this.on 'ajax:error', (event, xhr, status, error) ->
         # alert error
