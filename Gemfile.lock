@@ -147,11 +147,6 @@ GEM
       nio4r (>= 0.5.0)
     childprocess (0.5.3)
       ffi (~> 1.0, >= 1.0.11)
-    chunky_png (1.3.1)
-    climate_control (0.0.3)
-      activesupport (>= 3.0)
-    cocaine (0.5.4)
-      climate_control (>= 0.0.3, < 1.0)
     coderay (1.1.0)
     coffee-rails (4.0.1)
       coffee-script (>= 2.2.0)
@@ -161,8 +156,6 @@ GEM
       execjs
     coffee-script-source (1.7.0)
     color (1.5.1)
-    colorscore (0.0.4)
-      color
     connection_pool (2.0.0)
     countries (0.9.3)
       currencies (~> 0.4.2)
@@ -311,10 +304,6 @@ GEM
     mime-types (1.25.1)
     mini_portile (0.5.3)
     minitest (5.4.1)
-    miro (0.3.0)
-      cocaine
-      color
-      oily_png
     mixlib-cli (1.5.0)
     multi_json (1.10.1)
     multi_xml (0.5.5)
@@ -332,8 +321,6 @@ GEM
       multi_json (~> 1.3)
       multi_xml (~> 0.5)
       rack (~> 1.2)
-    oily_png (1.1.1)
-      chunky_png (~> 1.3.0)
     omniauth (1.2.1)
       hashie (>= 1.2, < 3)
       rack (~> 1.0)
@@ -571,7 +558,6 @@ DEPENDENCIES
   capistrano-rails
   coffee-rails (~> 4.0.0)
   color
-  colorscore
   countries
   coveralls
   database_cleaner
@@ -600,7 +586,6 @@ DEPENDENCIES
   kaminari-bootstrap (~> 3.0.1)
   letter_opener
   meta-tags
-  miro
   omniauth
   omniauth-facebook
   paper_trail (~> 3.0.0)

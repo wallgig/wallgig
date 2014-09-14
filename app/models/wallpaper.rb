@@ -36,6 +36,9 @@
 #  index_wallpapers_on_user_id         (user_id)
 #
 
+require_dependency 'dominant_colors'
+
+
 class Wallpaper < ActiveRecord::Base
   THUMBNAIL_WIDTH = 250
   THUMBNAIL_HEIGHT = 188
@@ -172,7 +175,7 @@ class Wallpaper < ActiveRecord::Base
       category: category_list,
       width: image_width,
       height: image_height,
-      color: image_hsl_color_scores,
+      color: image_hsv_color_scores,
       aspect_ratio: aspect_ratio,
       created_at: created_at,
       updated_at: updated_at,
@@ -333,16 +336,18 @@ class Wallpaper < ActiveRecord::Base
   end
 
   concerning :ColorIndexing do
-    COLOR_SCORE_THRESHOLD = 0.01
-
     included do
       before_create :set_colors
+    end
+
+    def set_colors
+      self.colors = image_hex_color_scores
     end
 
     def image_color_scores
       @image_color_scores ||= begin
         return unless image.present?
-        Colorscore::Histogram.new(image.path).scores.keep_if { |score| score[0] > COLOR_SCORE_THRESHOLD }
+        DominantColors.new(image.path).results
       end
     end
 
@@ -356,7 +361,7 @@ class Wallpaper < ActiveRecord::Base
       end
     end
 
-    def image_hsl_color_scores
+    def image_hsv_color_scores
       return if image_color_scores.blank?
       image_color_scores.map do |score|
         color = score[1].to_rgb
@@ -394,12 +399,6 @@ class Wallpaper < ActiveRecord::Base
           score: (score[0] * 100).to_i
         }
       end
-    end
-
-    private
-
-    def set_colors
-      self.colors = image_hex_color_scores
     end
   end
 
