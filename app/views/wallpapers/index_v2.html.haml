@@ -221,20 +221,17 @@
         = yield :faceted_categories
 
   .panel-body
-    = form_tag url_for, method: :get do
+    = form_tag url_for, method: :get, class: 'form-inline' do
       - search_options.reject(&blank_value).each do |k, v|
+        - next if k == 'color'
         = hidden_field_tag k, v
-      .input-group
+      .form-group
         = text_field_tag :q, search_options[:q], class: 'form-control input-md', placeholder: 'e.g. width:>1920 height:>1080'
-        .input-group-btn
-          = submit_tag 'Search', class: 'btn btn-default btn-md'
-
-  .panel-body
-    %input.form-control.minicolors-input{:type => 'text',
-      :v => {:component => 'color-picker', :with => 'color: search.color'}}
-
-  .panel-body
-    %input.form-control{:type => 'text', :v => {:model => 'search.color'}}
-    {{search.color}}
+      .form-group
+        %input.form-control.minicolors-input{:type => 'text',
+          :name => 'color',
+          :value => search_options[:color],
+          :v => {:component => 'color-picker', :with => 'color: search.color'}}
+      = submit_tag 'Search', class: 'btn btn-default btn-md'
 
 = render partial: 'list_v2', locals: { data: @wallpaper_data }

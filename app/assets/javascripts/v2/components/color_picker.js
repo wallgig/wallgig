@@ -12,7 +12,9 @@ Vue.component('color-picker', {
     var self = this;
     var $jQueryEl = jQuery(self.$el);
 
-    $jQueryEl.val(self.color);
+    if (self.color) {
+      $jQueryEl.val(self.color);
+    }
     $jQueryEl.minicolors({
       change: function (hex) {
         self.color = hex.slice(1);
