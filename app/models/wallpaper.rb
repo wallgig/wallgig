@@ -226,14 +226,38 @@ class Wallpaper < ActiveRecord::Base
 
     scores = Colorscore::Histogram.new(image.path).scores.keep_if { |score| score[0] > COLOR_SCORE_THRESHOLD }
     scores.map do |score|
-      color = score[1].to_hsl
-      h, s, l = color.h, color.s, color.l
-      s *= l < 0.5 ? l : 1 - l
+      color = score[1].to_rgb
+      r, g, b = color.r, color.g, color.b
+      max_rgb = [r, g, b].max
+      min_rgb = [r, g, b].min
+      delta = max_rgb - min_rgb
+      v = max_rgb * 100
+
+      if max_rgb == 0.0
+        s = 0.0
+      else
+        s = delta / max_rgb * 100
+      end
+
+      if s == 0.0
+        h = 0.0
+      else
+        if r == max_rgb
+          h = (g - b) / delta
+        elsif g == max_rgb
+          h = 2 + (b - r) / delta
+        elsif b == max_rgb
+          h = 4 + (r - g) / delta
+        end
+
+        h *= 60.0
+        h += 360.0 if h < 0
+      end
 
       {
-        h: h,
-        s: 2 * s / (l + s),
-        v: l + s,
+        h: h.to_i,
+        s: s.to_i,
+        v: v.to_i,
         score: (score[0] * 100).to_i # Convert float to percentage
       }
     end

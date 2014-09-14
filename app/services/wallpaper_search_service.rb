@@ -180,17 +180,91 @@ class WallpaperSearchService
 
       # Handle colors
       if options[:colors].present?
-        options[:colors].each do |color|
+        h_range = 10
+        s_range = 5
+        v_range = 5
+
+        options[:colors].map { |html| Color::RGB.from_html(html) }.each do |color|
+          r, g, b = color.r, color.g, color.b
+          max_rgb = [r, g, b].max
+          min_rgb = [r, g, b].min
+          delta = max_rgb - min_rgb
+          v = max_rgb * 100
+
+          if max_rgb == 0.0
+            s = 0.0
+          else
+            s = delta / max_rgb * 100
+          end
+
+          if s == 0.0
+            h = 0.0
+          else
+            if r == max_rgb
+              h = (g - b) / delta
+            elsif g == max_rgb
+              h = 2 + (b - r) / delta
+            elsif b == max_rgb
+              h = 4 + (r - g) / delta
+            end
+
+            h *= 60.0
+            h += 360.0 if h < 0
+          end
+
           musts << {
-            :constant_score => {
+            :nested => {
+              :path => 'color',
               :filter => {
-                :term => {
-                  :'color.hex' => color
-                }
+                :and => [
+                  # {
+                  #   :range => {
+                  #     :'score' => {
+                  #       :gte => 80,
+                  #       :lte => 100
+                  #     }
+                  #   }
+                  # },
+                  {
+                    :range => {
+                      :'h' => {
+                        :gte => h - h_range,
+                        :lte => h + h_range
+                      }
+                    }
+                  },
+                  {
+                    :range => {
+                      :'s' => {
+                        :gte => s - s_range,
+                        :lte => s + s_range
+                      }
+                    }
+                  },
+                  {
+                    :range => {
+                      :'v' => {
+                        :gte => v - v_range,
+                        :lte => v + v_range
+                      }
+                    }
+                  }
+                ]
               }
             }
           }
         end
+        # options[:colors].each do |color|
+        #   musts << {
+        #     :constant_score => {
+        #       :filter => {
+        #         :term => {
+        #           :'color.hex' => color
+        #         }
+        #       }
+        #     }
+        #   }
+        # end
       end
 
       # Handle user
