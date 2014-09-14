@@ -112,12 +112,12 @@ gem 'geocoder'
 
 gem 'searchkick'
 
-gem 'sidekiq', github: 'mperham/sidekiq'
-gem 'sidetiq', github: 'tobiassvn/sidetiq'
+gem 'sidekiq'
+gem 'sidetiq'
 
 gem 'redis-rails'
 gem 'redis-objects'
-gem 'redmon', require: false
+gem 'redmon'
 
 gem 'rollbar' # rollbar error notification
 

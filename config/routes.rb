@@ -217,16 +217,21 @@ Rails.application.routes.draw do
   # use_doorkeeper
 
   # Developer routes
-  authenticate :user, -> (u) { u.developer? } do
-    mount Redmon::App => '/redmon'
+  scope path: '/monitoring' do
+    authenticated :user, -> (u) { u.developer? } do
+      mount Redmon::App => '/redmon'
 
-    require 'sidekiq/web'
-    mount Sidekiq::Web => '/sidekiq'
+      require 'sidekiq/web'
+      require 'sidetiq/web'
+      mount Sidekiq::Web => '/sidekiq'
+    end
   end
 
   # Admin routes
-  authenticate :user, -> (u) { u.admin? } do
-    mount RailsAdmin::Engine => '/admin/rails_admin', as: 'rails_admin'
+  scope path: '/admin' do
+    authenticated :user, -> (u) { u.admin? } do
+      mount RailsAdmin::Engine => '/rails_admin', as: 'rails_admin'
+    end
   end
 
   ActiveAdmin.routes(self)

@@ -32,17 +32,6 @@ GIT
       request_store (~> 1.0.3)
 
 GIT
-  remote: git://github.com/mperham/sidekiq.git
-  revision: 7ffc9947d19b6bfd75fe84796c71b85963d32ae7
-  specs:
-    sidekiq (3.0.2)
-      celluloid (>= 0.15.2)
-      connection_pool (>= 2.0.0)
-      json
-      redis (>= 3.0.6)
-      redis-namespace (>= 1.3.1)
-
-GIT
   remote: git://github.com/plataformatec/simple_form.git
   revision: 9196efd2562573aa08037034051fc8c924083e10
   specs:
@@ -65,15 +54,6 @@ GIT
   specs:
     shoulda-matchers (2.6.1)
       activesupport (>= 3.0.0)
-
-GIT
-  remote: git://github.com/tobiassvn/sidetiq.git
-  revision: 4f7d7daea3873443b17bf2f3da61619532bbeba2
-  specs:
-    sidetiq (0.5.0)
-      celluloid (>= 0.14.1)
-      ice_cube (~> 0.11.0)
-      sidekiq (>= 2.16.0)
 
 GEM
   remote: https://rubygems.org/
@@ -260,7 +240,7 @@ GEM
       multi_xml (>= 0.5.2)
     httpclient (2.3.4.1)
     i18n (0.6.11)
-    ice_cube (0.11.3)
+    ice_cube (0.12.1)
     impressionist (1.5.1)
       httpclient (~> 2.2)
       nokogiri (~> 1.5)
@@ -411,7 +391,7 @@ GEM
     rdoc (4.1.1)
       json (~> 1.4)
     redcarpet (3.1.1)
-    redis (3.0.7)
+    redis (3.1.0)
     redis-actionpack (4.0.0)
       actionpack (~> 4)
       redis-rack (~> 1.5.0)
@@ -419,8 +399,8 @@ GEM
     redis-activesupport (4.0.0)
       activesupport (~> 4)
       redis-store (~> 1.1.0)
-    redis-namespace (1.4.1)
-      redis (~> 3.0.4)
+    redis-namespace (1.5.1)
+      redis (~> 3.0, >= 3.0.4)
     redis-objects (0.9.1)
       redis (>= 3.0.2)
     redis-rack (1.5.0)
@@ -481,6 +461,16 @@ GEM
       activemodel
       elasticsearch (>= 1)
       hashie
+    sidekiq (3.2.5)
+      celluloid (= 0.15.2)
+      connection_pool (>= 2.0.0)
+      json
+      redis (>= 3.0.6)
+      redis-namespace (>= 1.3.1)
+    sidetiq (0.6.1)
+      celluloid (>= 0.14.1)
+      ice_cube (~> 0.12.0)
+      sidekiq (>= 2.16.0)
     simplecov (0.8.2)
       docile (~> 1.1.0)
       multi_json
@@ -613,8 +603,8 @@ DEPENDENCIES
   sdoc (~> 0.4.0)
   searchkick
   shoulda-matchers!
-  sidekiq!
-  sidetiq!
+  sidekiq
+  sidetiq
   simple_form (~> 3.1.0.rc1)!
   sinatra (>= 1.3.0)
   slim
