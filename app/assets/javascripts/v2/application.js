@@ -1,6 +1,3 @@
-//= require jquery
-//= require jquery-minicolors
-//
 //= require lodash
 //= require query-string
 //= require vue

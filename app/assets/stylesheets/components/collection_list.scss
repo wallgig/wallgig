@@ -110,6 +110,10 @@ ul.collectionList--compact {
     text-align: center;
     line-height: $height-halfWallpaperThumbnail;
   }
+  .collectionList-createNew .collectionList-previewOverlay {
+    // Max out line-height since preview overlay does not have meta
+    line-height: $height-compact--collectionListItem;
+  }
 
   // Collection name
   .collectionList-name {

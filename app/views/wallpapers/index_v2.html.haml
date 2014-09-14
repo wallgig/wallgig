@@ -125,7 +125,7 @@
   - else
     %small.text-muted No colors
 
-.panel.panel-default
+.panel.panel-default{:v => {:component => 'search-manager', :cloak => true}}
   .panel-body
     %ul.list-inline.no-bottom-margin
       %li
@@ -230,5 +230,11 @@
         = text_field_tag :q, search_options[:q], class: 'form-control input-md', placeholder: 'e.g. width:>1920 height:>1080'
         .input-group-btn
           = submit_tag 'Search', class: 'btn btn-default btn-md'
+
+  .panel-body
+    %input.form-control.minicolors-input{:type => 'text',
+      :v => {:component => 'color-picker', :with => 'color: search.color'}}
+
+  .panel-body {{search.color}}
 
 = render partial: 'list_v2', locals: { data: @wallpaper_data }
