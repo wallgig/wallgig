@@ -1,4 +1,9 @@
 class WallpaperSearchService
+  # TODO optimize values
+  COLOR_FILTER_H_RANGE = 20 # 10
+  COLOR_FILTER_S_RANGE = 10 # 5
+  COLOR_FILTER_V_RANGE = 10 # 5
+
   attr_reader :options
 
   def initialize(options)
@@ -317,46 +322,41 @@ class WallpaperSearchService
   end
 
   def build_color_filter
-    # TODO parameterize
-    h_range = 20 # 10
-    s_range = 10 # 5
-    v_range = 5 # 5
+    return if color_option.blank?
 
-    if color_option.present?
-      {
-        nested: {
-          path: :color,
-          filter: {
-            and: [
-              {
-                range: {
-                  h: {
-                    gte: color_option[:h] - h_range,
-                    lte: color_option[:h] + h_range
-                  }
-                }
-              },
-              {
-                range: {
-                  s: {
-                    gte: color_option[:s] - s_range,
-                    lte: color_option[:s] + s_range
-                  }
-                }
-              },
-              {
-                range: {
-                  v: {
-                    gte: color_option[:v] - v_range,
-                    lte: color_option[:v] + v_range
-                  }
+    {
+      nested: {
+        path: :color,
+        filter: {
+          and: [
+            {
+              range: {
+                h: {
+                  gte: color_option[:h] - COLOR_FILTER_H_RANGE,
+                  lte: color_option[:h] + COLOR_FILTER_H_RANGE
                 }
               }
-            ]
-          }
+            },
+            {
+              range: {
+                s: {
+                  gte: color_option[:s] - COLOR_FILTER_S_RANGE,
+                  lte: color_option[:s] + COLOR_FILTER_S_RANGE
+                }
+              }
+            },
+            {
+              range: {
+                v: {
+                  gte: color_option[:v] - COLOR_FILTER_V_RANGE,
+                  lte: color_option[:v] + COLOR_FILTER_V_RANGE
+                }
+              }
+            }
+          ]
         }
       }
-    end
+    }
   end
 
   def build_where_option
