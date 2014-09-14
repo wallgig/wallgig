@@ -324,31 +324,31 @@ class WallpaperSearchService
 
     if color_option.present?
       {
-        :nested => {
-          :path => 'color',
-          :filter => {
-            :and => [
+        nested: {
+          path: :color,
+          filter: {
+            and: [
               {
-                :range => {
-                  :'h' => {
-                    :gte => color_option[:h] - h_range,
-                    :lte => color_option[:h] + h_range
+                range: {
+                  h: {
+                    gte: color_option[:h] - h_range,
+                    lte: color_option[:h] + h_range
                   }
                 }
               },
               {
-                :range => {
-                  :'s' => {
-                    :gte => color_option[:s] - s_range,
-                    :lte => color_option[:s] + s_range
+                range: {
+                  s: {
+                    gte: color_option[:s] - s_range,
+                    lte: color_option[:s] + s_range
                   }
                 }
               },
               {
-                :range => {
-                  :'v' => {
-                    :gte => color_option[:v] - v_range,
-                    :lte => color_option[:v] + v_range
+                range: {
+                  v: {
+                    gte: color_option[:v] - v_range,
+                    lte: color_option[:v] + v_range
                   }
                 }
               }
