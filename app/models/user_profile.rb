@@ -44,7 +44,6 @@ class UserProfile < ActiveRecord::Base
     styles = []
     if cover_wallpaper.present? && cover_wallpaper.sfw?
       styles << "background-image: url(#{cover_wallpaper.image.thumb('2000x350#').url})"
-      styles << "background-color: ##{cover_wallpaper.primary_color.hex}" if cover_wallpaper.primary_color.present?
     else
       styles << "background-image: url(http://placekitten.com/1920/450)"
     end
