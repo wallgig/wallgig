@@ -3,7 +3,7 @@
 Vue.component('search-manager', {
   data: {
     search: {
-      color: '123'
+      color: '000000'
     }
   }
 });

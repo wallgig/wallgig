@@ -235,6 +235,8 @@
     %input.form-control.minicolors-input{:type => 'text',
       :v => {:component => 'color-picker', :with => 'color: search.color'}}
 
-  .panel-body {{search.color}}
+  .panel-body
+    %input.form-control{:type => 'text', :v => {:model => 'search.color'}}
+    {{search.color}}
 
 = render partial: 'list_v2', locals: { data: @wallpaper_data }

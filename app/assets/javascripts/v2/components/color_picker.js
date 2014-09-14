@@ -9,16 +9,19 @@ Vue.component('color-picker', {
   },
 
   ready: function () {
-    jQuery(this.$el).minicolors({
-      change: _.bind(this.onChange, this),
-      defaultValue: this.color,
+    var self = this;
+    var $jQueryEl = jQuery(self.$el);
+
+    $jQueryEl.val(self.color);
+    $jQueryEl.minicolors({
+      change: function (hex) {
+        self.color = hex.slice(1);
+      },
       theme: 'bootstrap'
     });
-  },
 
-  methods: {
-    onChange: function (hex) {
-      this.color = hex.slice(1); // Removes '#'
-    }
+    self.$watch('color', function (value) {
+      $jQueryEl.minicolors('value', value);
+    });
   }
 });
