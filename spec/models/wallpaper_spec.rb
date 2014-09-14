@@ -26,6 +26,7 @@
 #  approved_by_id      :integer
 #  approved_at         :datetime
 #  cooked_source       :text
+#  colors              :text
 #
 # Indexes
 #

@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20140907135918) do
+ActiveRecord::Schema.define(version: 20140914142611) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -508,6 +508,7 @@ ActiveRecord::Schema.define(version: 20140907135918) do
     t.integer  "approved_by_id"
     t.datetime "approved_at"
     t.text     "cooked_source"
+    t.text     "colors"
   end
 
   add_index "wallpapers", ["approved_at"], name: "index_wallpapers_on_approved_at", using: :btree
