@@ -152,9 +152,12 @@ class Wallpaper < ActiveRecord::Base
         width: { type: 'integer' },
         height: { type: 'integer' },
         color: {
+          type: 'nested',
           properties: {
-            hex: { type: 'string', analyzer: 'keyword', index: 'not_analyzed' },
-            percentage: { type: 'integer' }
+            h: { type: 'integer' },
+            s: { type: 'integer' },
+            v: { type: 'integer' },
+            score: { type: 'integer' }
           }
         },
         aspect_ratio: { type: 'float' },
@@ -175,7 +178,7 @@ class Wallpaper < ActiveRecord::Base
       category: category_list,
       width: image_width,
       height: image_height,
-      color: wallpaper_colors.includes(:color).map { |color| { hex: color.hex, percentage: (color.percentage * 10).ceil } },
+      color: new_wallpaper_colors,
       aspect_ratio: aspect_ratio,
       created_at: created_at,
       updated_at: updated_at,
@@ -214,6 +217,26 @@ class Wallpaper < ActiveRecord::Base
 
   def has_image_sizes?
     image_width.present? && image_height.present?
+  end
+
+  COLOR_SCORE_THRESHOLD = 0.01
+
+  def new_wallpaper_colors
+    return unless image.present?
+
+    scores = Colorscore::Histogram.new(image.path).scores.keep_if { |score| score[0] > COLOR_SCORE_THRESHOLD }
+    scores.map do |score|
+      color = score[1].to_hsl
+      h, s, l = color.h, color.s, color.l
+      s *= l < 0.5 ? l : 1 - l
+
+      {
+        h: h,
+        s: 2 * s / (l + s),
+        v: l + s,
+        score: (score[0] * 100).to_i # Convert float to percentage
+      }
+    end
   end
 
   def extract_colors
