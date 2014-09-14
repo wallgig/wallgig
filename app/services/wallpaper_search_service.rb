@@ -237,6 +237,64 @@ class WallpaperSearchService
       }
     end
 
+    if colors.any?
+      colors.each do |color|
+        musts << {
+          function_score: {
+            boost_mode: :replace,
+            query: {
+              nested: {
+                path: :color,
+                query: {
+                  function_score: {
+                    score_mode: :multiply,
+                    functions: [
+                      {
+                        exp: {
+                          h: {
+                            origin: color[:h],
+                            offset: 2,
+                            scale: 4
+                          }
+                        }
+                      },
+                      {
+                        exp: {
+                          s: {
+                            origin: color[:s],
+                            offset: 4,
+                            scale: 8
+                          }
+                        }
+                      },
+                      {
+                        exp: {
+                          v: {
+                            origin: color[:v],
+                            offset: 4,
+                            scale: 8
+                          }
+                        }
+                      },
+                      {
+                        linear: {
+                          score: {
+                            origin: 100,
+                            offset: 5,
+                            scale: 10
+                          }
+                        }
+                      }
+                    ]
+                  }
+                }
+              }
+            }
+          }
+        }
+      end
+    end
+
     if musts.empty? and must_nots.empty?
       { :match_all => {} }
     else
@@ -254,9 +312,9 @@ class WallpaperSearchService
 
     if colors.present?
       # TODO parameterize
-      h_range = 10
-      s_range = 5
-      v_range = 5
+      h_range = 20 # 10
+      s_range = 10 # 5
+      v_range = 5 # 5
 
       colors.each do |color|
         color_filters << {
