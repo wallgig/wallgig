@@ -397,6 +397,7 @@ class Wallpaper < ActiveRecord::Base
     end
 
     private
+
     def set_colors
       self.colors = image_hex_color_scores
     end
@@ -456,23 +457,25 @@ class Wallpaper < ActiveRecord::Base
     end
 
     private
-      def set_wallpaper_tag_added_by_user(wallpaper_tag)
-        wallpaper_tag.added_by = editing_user unless editing_user.nil?
-      end
 
-      def check_minimum_two_tags
-        errors.add :tags, 'minimum of two tags are required' if tag_ids.count < 2
-      end
+    def set_wallpaper_tag_added_by_user(wallpaper_tag)
+      wallpaper_tag.added_by = editing_user unless editing_user.nil?
+    end
+
+    def check_minimum_two_tags
+      errors.add :tags, 'minimum of two tags are required' if tag_ids.count < 2
+    end
   end
 
   private
-    def check_duplicate_image_hash
-      if image_hash.present? && (duplicate = self.class.where.not(id: self.id).where(image_hash: image_hash).first)
-        errors.add :image, "has already been uploaded (#{duplicate})"
-      end
-    end
 
-    def auto_approve_if_trusted_user
-      self.approved_at = Time.now if user.staff? || user.trusted?
+  def check_duplicate_image_hash
+    if image_hash.present? && (duplicate = self.class.where.not(id: self.id).where(image_hash: image_hash).first)
+      errors.add :image, "has already been uploaded (#{duplicate})"
     end
+  end
+
+  def auto_approve_if_trusted_user
+    self.approved_at = Time.now if user.staff? || user.trusted?
+  end
 end
