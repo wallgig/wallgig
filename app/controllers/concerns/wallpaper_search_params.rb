@@ -2,7 +2,7 @@ module WallpaperSearchParams
   extend ActiveSupport::Concern
 
   GLUE = ','
-  ARRAY_PARAMS = %i(categories exclude_categories tags exclude_tags colors aspect_ratios)
+  ARRAY_PARAMS = %i(categories exclude_categories tags exclude_tags aspect_ratios)
 
   included do
     helper_method :search_options
@@ -11,11 +11,10 @@ module WallpaperSearchParams
 
   def search_params(load_session = true)
     params.permit(
-      :q, :page, :per_page, :width, :height, :order, :user, :resolution_exactness,
-      :categories, :exclude_categories, :tags, :exclude_tags, :colors, :aspect_ratios,
+      :q, :page, :per_page, :width, :height, :order, :user, :resolution_exactness, :color,
+      :categories, :exclude_categories, :tags, :exclude_tags, :aspect_ratios,
       categories: [], exclude_categories: [],
-      tags: [], exclude_tags: [],
-      colors: [], aspect_ratios: []
+      tags: [], exclude_tags: [], aspect_ratios: []
     )
   end
 

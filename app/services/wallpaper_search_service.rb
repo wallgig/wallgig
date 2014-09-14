@@ -40,9 +40,11 @@ class WallpaperSearchService
     Wallpaper.none
   end
 
-  def colors
-    @colors ||= options[:colors].map do |html|
-      color = Color::RGB.from_html(html)
+  def color_option
+    @color_option ||= begin
+      return if options[:color].blank?
+
+      color = Color::RGB.from_html(options[:color])
       r, g, b = color.r, color.g, color.b
       max_rgb = [r, g, b].max
       min_rgb = [r, g, b].min
@@ -70,7 +72,11 @@ class WallpaperSearchService
         h += 360.0 if h < 0
       end
 
-      { h: h, s: s, v: v }
+      {
+        h: h,
+        s: s,
+        v: v
+      }
     end
   end
 
@@ -85,8 +91,13 @@ class WallpaperSearchService
       per_page: options[:per_page] || Wallpaper.default_per_page,
       execute: false
     )
-    query.body[:filter][:and] ||= []
-    query.body[:filter][:and].concat build_color_filters
+
+    # Advanced queries
+    color_filter = build_color_filter
+    if color_filter.present?
+      query.body[:filter][:and] ||= []
+      query.body[:filter][:and] << build_color_filter
+    end
 
     query
   end
@@ -237,62 +248,60 @@ class WallpaperSearchService
       }
     end
 
-    if colors.any?
-      colors.each do |color|
-        musts << {
-          function_score: {
-            boost_mode: :replace,
-            query: {
-              nested: {
-                path: :color,
-                query: {
-                  function_score: {
-                    score_mode: :multiply,
-                    functions: [
-                      {
-                        exp: {
-                          h: {
-                            origin: color[:h],
-                            offset: 2,
-                            scale: 4
-                          }
-                        }
-                      },
-                      {
-                        exp: {
-                          s: {
-                            origin: color[:s],
-                            offset: 4,
-                            scale: 8
-                          }
-                        }
-                      },
-                      {
-                        exp: {
-                          v: {
-                            origin: color[:v],
-                            offset: 4,
-                            scale: 8
-                          }
-                        }
-                      },
-                      {
-                        linear: {
-                          score: {
-                            origin: 100,
-                            offset: 5,
-                            scale: 10
-                          }
+    if color_option.present?
+      musts << {
+        function_score: {
+          boost_mode: :replace,
+          query: {
+            nested: {
+              path: :color,
+              query: {
+                function_score: {
+                  score_mode: :multiply,
+                  functions: [
+                    {
+                      exp: {
+                        h: {
+                          origin: color_option[:h],
+                          offset: 2,
+                          scale: 4
                         }
                       }
-                    ]
-                  }
+                    },
+                    {
+                      exp: {
+                        s: {
+                          origin: color_option[:s],
+                          offset: 4,
+                          scale: 8
+                        }
+                      }
+                    },
+                    {
+                      exp: {
+                        v: {
+                          origin: color_option[:v],
+                          offset: 4,
+                          scale: 8
+                        }
+                      }
+                    },
+                    {
+                      linear: {
+                        score: {
+                          origin: 100,
+                          offset: 5,
+                          scale: 10
+                        }
+                      }
+                    }
+                  ]
                 }
               }
             }
           }
         }
-      end
+      }
     end
 
     if musts.empty? and must_nots.empty?
@@ -307,61 +316,47 @@ class WallpaperSearchService
     end
   end
 
-  def build_color_filters
-    color_filters = []
+  def build_color_filter
+    # TODO parameterize
+    h_range = 20 # 10
+    s_range = 10 # 5
+    v_range = 5 # 5
 
-    if colors.present?
-      # TODO parameterize
-      h_range = 20 # 10
-      s_range = 10 # 5
-      v_range = 5 # 5
-
-      colors.each do |color|
-        color_filters << {
-          :nested => {
-            :path => 'color',
-            :filter => {
-              :and => [
-                # {
-                #   :range => {
-                #     :'score' => {
-                #       :gte => 80,
-                #       :lte => 100
-                #     }
-                #   }
-                # },
-                {
-                  :range => {
-                    :'h' => {
-                      :gte => color[:h] - h_range,
-                      :lte => color[:h] + h_range
-                    }
-                  }
-                },
-                {
-                  :range => {
-                    :'s' => {
-                      :gte => color[:s] - s_range,
-                      :lte => color[:s] + s_range
-                    }
-                  }
-                },
-                {
-                  :range => {
-                    :'v' => {
-                      :gte => color[:v] - v_range,
-                      :lte => color[:v] + v_range
-                    }
+    if color_option.present?
+      {
+        :nested => {
+          :path => 'color',
+          :filter => {
+            :and => [
+              {
+                :range => {
+                  :'h' => {
+                    :gte => color_option[:h] - h_range,
+                    :lte => color_option[:h] + h_range
                   }
                 }
-              ]
-            }
+              },
+              {
+                :range => {
+                  :'s' => {
+                    :gte => color_option[:s] - s_range,
+                    :lte => color_option[:s] + s_range
+                  }
+                }
+              },
+              {
+                :range => {
+                  :'v' => {
+                    :gte => color_option[:v] - v_range,
+                    :lte => color_option[:v] + v_range
+                  }
+                }
+              }
+            ]
           }
         }
-      end
+      }
     end
-
-    color_filters
   end
 
   def build_where_option
