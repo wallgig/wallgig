@@ -252,14 +252,18 @@ class WallpapersController < ApplicationController
   end
 
   def wallpaper_search_results(params, cache_params)
-    wallpapers = Wallpaper.none
-    begin
+    wallpaper_service_executor = proc { WallpaperSearchService.new(params).execute }
+
+    if Rails.env.development?
+      wallpaper_service_executor.call
+    else
       Rails.cache.fetch([:wallpaper_search, cache_params], expires_in: WALLPAPER_SEARCH_CACHE_TTL) do
-        wallpapers = WallpaperSearchService.new(params).execute
+        wallpaper_service_executor.call
       end
-    rescue TypeError
-      logger.warn "Cannot cache wallpaper search results with params #{params}"
-      wallpapers
     end
+  rescue TypeError
+    raise if Rails.env.development?
+    logger.warn "Cannot cache wallpaper search results with params #{params}"
+    Wallpaper.none
   end
 end

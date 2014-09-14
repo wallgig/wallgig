@@ -2,20 +2,19 @@ module WallpaperSearchParams
   extend ActiveSupport::Concern
 
   GLUE = ','
-  ARRAY_PARAMS = %i(categories exclude_categories tags exclude_tags colors aspect_ratios)
+  ARRAY_PARAMS = %i(categories exclude_categories tags exclude_tags aspect_ratios)
 
   included do
     helper_method :search_options
     helper_method :compact_search_options
   end
 
-  def search_params(load_session = true)
+  def search_params
     params.permit(
-      :q, :page, :per_page, :width, :height, :order, :user, :resolution_exactness,
-      :categories, :exclude_categories, :tags, :exclude_tags, :colors, :aspect_ratios,
+      :q, :page, :per_page, :width, :height, :order, :user, :resolution_exactness, :color,
+      :categories, :exclude_categories, :tags, :exclude_tags, :aspect_ratios,
       categories: [], exclude_categories: [],
-      tags: [], exclude_tags: [],
-      colors: [], aspect_ratios: []
+      tags: [], exclude_tags: [], aspect_ratios: []
     )
   end
 
@@ -62,6 +61,16 @@ module WallpaperSearchParams
         search_options[:random_seed] = nil if search_options[:page].to_i <= 1
         search_options[:random_seed] ||= Time.now.to_i
         session[:random_seed] = search_options[:random_seed]
+      end
+
+      # Parse color
+      if search_options[:color].present?
+        begin
+          search_options[:color] = Color::RGB.from_html(search_options[:color]).hex
+        rescue ArgumentError
+          raise if Rails.env.development?
+          search_options[:color] = nil
+        end
       end
 
       search_options

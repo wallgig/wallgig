@@ -52,8 +52,11 @@
 
     %div.container{:v => {:show => 'isCollectionsLoaded'}}
       %ul.collectionList.collectionList--compact
-        %li.collectionList-createNew{:v => {:on => 'dragenter: onDragEnter, dragleave: onDragLeave, dragover: onDragOver, drop: onDropNewCollection',
-              :class => 'is-hovering: isHovering'}}
+        %li.collectionList-createNew{:v => {:component => 'collection',
+              :on => 'dragenter: onDragEnter, dragleave: onDragLeave, dragover: onDragOver, drop: onDropNewCollection',
+              :class => 'is-draggedOver: isDraggedOver'}}
+          .collectionList-previewOverlay.collectionList-previewOverlay--plus{:v => {:if => '!isInCollection'}}
+            %span.fa.fa-plus
           New Collection
         %li{:v => {:repeat => 'collections | orderBy position',
               :component => 'collection',

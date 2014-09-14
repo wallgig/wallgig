@@ -200,12 +200,12 @@ GEM
       eco-source
       execjs
     eco-source (1.1.0.rc.1)
-    elasticsearch (0.4.11)
-      elasticsearch-api (= 0.4.11)
-      elasticsearch-transport (= 0.4.11)
-    elasticsearch-api (0.4.11)
+    elasticsearch (1.0.5)
+      elasticsearch-api (= 1.0.5)
+      elasticsearch-transport (= 1.0.5)
+    elasticsearch-api (1.0.5)
       multi_json
-    elasticsearch-transport (0.4.11)
+    elasticsearch-transport (1.0.5)
       faraday
       multi_json
     enumerize (0.8.0)
@@ -259,7 +259,7 @@ GEM
     has_scope (0.6.0.rc)
       actionpack (>= 3.2, < 5)
       activesupport (>= 3.2, < 5)
-    hashie (2.1.1)
+    hashie (2.1.2)
     hike (1.2.3)
     hiredis (0.4.5)
     httparty (0.13.1)
@@ -387,6 +387,7 @@ GEM
       railties (= 4.1.5)
       sprockets-rails (~> 2.0)
     rails-assets-fontawesome (4.2.0)
+    rails-assets-jquery-minicolors (2.1.7)
     rails-assets-lodash (2.4.1)
     rails-assets-query-string (1.0.0)
     rails-assets-superagent (0.18.2)
@@ -489,9 +490,9 @@ GEM
     sdoc (0.4.0)
       json (~> 1.8)
       rdoc (~> 4.0, < 5.0)
-    searchkick (0.7.4)
+    searchkick (0.8.2)
       activemodel
-      elasticsearch (~> 0.4.11)
+      elasticsearch (>= 1)
       hashie
     simplecov (0.8.2)
       docile (~> 1.1.0)
@@ -611,6 +612,7 @@ DEPENDENCIES
   rack-mini-profiler
   rails (= 4.1.5)
   rails-assets-fontawesome
+  rails-assets-jquery-minicolors
   rails-assets-lodash
   rails-assets-query-string
   rails-assets-superagent

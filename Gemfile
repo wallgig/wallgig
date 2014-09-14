@@ -101,6 +101,7 @@ gem 'rails-assets-lodash'
 gem 'rails-assets-query-string'
 gem 'rails-assets-superagent'
 gem 'rails-assets-vue'
+gem 'rails-assets-jquery-minicolors'
 
 # services
 gem 'sinatra', '>= 1.3.0', require: false

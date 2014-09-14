@@ -89,13 +89,10 @@ ActiveAdmin.register Wallpaper do
           end
         end
         row :source
-        row :primary_color do |wallpaper|
-          content_tag :div, nil, style: "width: 50px; height: 50px; background-color: #{wallpaper.primary_color.to_html_hex}" if wallpaper.primary_color.present?
-        end
         row :color do |wallpaper|
           ul style: 'list-style: none; padding: 0' do
-            wallpaper.wallpaper_colors.map do |wallpaper_color|
-              li wallpaper_color.percentage.round(2), style: "display: inline-block; width: 50px; height: 50px; background-color: #{wallpaper_color.to_html_hex}"
+            wallpaper.colors.map do |color|
+              li color[:score], style: "float: left; width: 20px; height: 20px; background-color: ##{color[:hex]}"
             end
           end
         end
