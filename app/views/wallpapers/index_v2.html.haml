@@ -215,12 +215,10 @@
 
   .panel-body
     .row
-      .col-md-6
+      .col-md-8
         = yield :faceted_tags
       .col-md-4
         = yield :faceted_categories
-      .col-md-2.faceted_colors
-        = yield :faceted_colors
 
   .panel-body
     = form_tag url_for, method: :get do
