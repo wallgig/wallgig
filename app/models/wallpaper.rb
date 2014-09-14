@@ -41,7 +41,7 @@ class Wallpaper < ActiveRecord::Base
   THUMBNAIL_HEIGHT = 188
 
   serialize :cached_tag_list, Array
-  serialize :colors, JSON
+  serialize :colors, Array
 
   include Approvable
   include Commentable
