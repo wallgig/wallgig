@@ -43,6 +43,7 @@ class Wallpaper < ActiveRecord::Base
   THUMBNAIL_HEIGHT = 188
 
   serialize :cached_tag_list, Array
+  serialize :colors, JSON
 
   include Approvable
   include Commentable
@@ -62,11 +63,6 @@ class Wallpaper < ActiveRecord::Base
   # Relations
   #
   belongs_to :user, counter_cache: true
-
-  has_many :wallpaper_colors, -> { order('wallpaper_colors.percentage DESC') }, dependent: :destroy
-  has_many :colors, through: :wallpaper_colors, class_name: 'Kolor'
-  has_one :primary_wallpaper_color, -> { order('wallpaper_colors.percentage DESC') }, class_name: 'WallpaperColor'
-  has_one :primary_color, through: :primary_wallpaper_color, class_name: 'Kolor', source: :color
 
   has_many :favourites, dependent: :destroy
   has_many :favourited_users, through: :favourites, source: :wallpaper
@@ -130,7 +126,6 @@ class Wallpaper < ActiveRecord::Base
   before_validation :set_image_hash, on: :create
   before_create :auto_approve_if_trusted_user
   after_create :queue_create_thumbnails
-  after_create :queue_process_image
   around_save :check_image_gravity_changed
   after_save :update_processing_status, if: :processing?
   after_commit :queue_notify_subscribers
@@ -179,7 +174,7 @@ class Wallpaper < ActiveRecord::Base
       category: category_list,
       width: image_width,
       height: image_height,
-      color: new_wallpaper_colors,
+      color: image_hsl_color_scores,
       aspect_ratio: aspect_ratio,
       created_at: created_at,
       updated_at: updated_at,
@@ -220,84 +215,6 @@ class Wallpaper < ActiveRecord::Base
     image_width.present? && image_height.present?
   end
 
-  COLOR_SCORE_THRESHOLD = 0.01
-
-  def new_wallpaper_colors
-    return unless image.present?
-
-    scores = Colorscore::Histogram.new(image.path).scores.keep_if { |score| score[0] > COLOR_SCORE_THRESHOLD }
-    scores.map do |score|
-      color = score[1].to_rgb
-      r, g, b = color.r, color.g, color.b
-      max_rgb = [r, g, b].max
-      min_rgb = [r, g, b].min
-      delta = max_rgb - min_rgb
-      v = max_rgb * 100
-
-      if max_rgb == 0.0
-        s = 0.0
-      else
-        s = delta / max_rgb * 100
-      end
-
-      if s == 0.0
-        h = 0.0
-      else
-        if r == max_rgb
-          h = (g - b) / delta
-        elsif g == max_rgb
-          h = 2 + (b - r) / delta
-        elsif b == max_rgb
-          h = 4 + (r - g) / delta
-        end
-
-        h *= 60.0
-        h += 360.0 if h < 0
-      end
-
-      {
-        h: h.to_i,
-        s: s.to_i,
-        v: v.to_i,
-        score: (score[0] * 100).to_i # Convert float to percentage
-      }
-    end
-  end
-
-  def extract_colors
-    return unless image.present? && image.format == 'jpeg'
-
-    histogram = Colorscore::Histogram.new(image.path)
-
-    # self.primary_color = Kolor.find_or_create_by_color(histogram.scores.first[1])
-
-    # dominant_colors = Miro::DominantColors.new(image.path)
-    # hexes = dominant_colors.to_hex
-    # rgbs = dominant_colors.to_rgb
-    # percentages = dominant_colors.by_percentage
-
-    # # clear any old colors
-    # self.primary_color = nil
-    wallpaper_colors.clear
-
-    # hexes.each_with_index do |hex, i|
-    #   hex = hex[1..-1]
-    #   color = Kolor.find_or_create_by(hex: hex, red: rgbs[i][0], green: rgbs[i][1], blue: rgbs[i][2])
-    #   self.primary_color = color if i == 0
-    #   self.wallpaper_colors.create color: color, percentage: percentages[i]
-    # end
-
-    palette = Colorscore::Palette.default
-    scores = palette.scores(histogram.scores)
-
-    scores.each do |score|
-      color = Kolor.find_or_create_by_color(score[1])
-      self.wallpaper_colors.create(color: color, percentage: score[0])
-    end
-
-    touch
-  end
-
   def check_image_gravity_changed
     image_gravity_changed = image_gravity_changed?
     yield
@@ -335,14 +252,6 @@ class Wallpaper < ActiveRecord::Base
 
   def queue_create_thumbnails
     WallpaperResizerWorker.perform_async(id)
-  end
-
-  def queue_process_image
-    WallpaperAttributeUpdateWorker.perform_async(id, 'process_image')
-  end
-
-  def process_image
-    extract_colors
   end
 
   def set_image_hash
@@ -422,6 +331,76 @@ class Wallpaper < ActiveRecord::Base
 
       # Destroy this wallpaper
       destroy
+    end
+  end
+
+  concerning :ColorIndexing do
+    COLOR_SCORE_THRESHOLD = 0.01
+
+    included do
+      before_create :set_colors
+    end
+
+    def image_color_scores
+      @image_color_scores ||= begin
+        return unless image.present?
+        Colorscore::Histogram.new(image.path).scores.keep_if { |score| score[0] > COLOR_SCORE_THRESHOLD }
+      end
+    end
+
+    def image_hex_color_scores
+      return if image_color_scores.blank?
+      image_color_scores.map do |score|
+        {
+          hex: score[1].to_rgb.hex,
+          score: (score[0] * 100).to_i
+        }
+      end
+    end
+
+    def image_hsl_color_scores
+      return if image_color_scores.blank?
+      image_color_scores.map do |score|
+        color = score[1].to_rgb
+        r, g, b = color.r, color.g, color.b
+        max_rgb = [r, g, b].max
+        min_rgb = [r, g, b].min
+        delta = max_rgb - min_rgb
+        v = max_rgb * 100
+
+        if max_rgb == 0.0
+          s = 0.0
+        else
+          s = delta / max_rgb * 100
+        end
+
+        if s == 0.0
+          h = 0.0
+        else
+          if r == max_rgb
+            h = (g - b) / delta
+          elsif g == max_rgb
+            h = 2 + (b - r) / delta
+          elsif b == max_rgb
+            h = 4 + (r - g) / delta
+          end
+
+          h *= 60.0
+          h += 360.0 if h < 0
+        end
+
+        {
+          h: h.to_i,
+          s: s.to_i,
+          v: v.to_i,
+          score: (score[0] * 100).to_i
+        }
+      end
+    end
+
+    private
+    def set_colors
+      self.colors = image_hex_color_scores
     end
   end
 
