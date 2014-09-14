@@ -124,9 +124,7 @@ gem 'rollbar' # rollbar error notification
 # utilities
 gem 'dotenv-rails'
 gem 'pry-rails'
-gem 'miro'
 gem 'color'
-gem 'colorscore'
 gem 'httparty'
 gem 'active_link_to'
 gem 'meta-tags', require: 'meta_tags'
