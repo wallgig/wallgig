@@ -363,7 +363,7 @@ class Wallpaper < ActiveRecord::Base
 
   # TODO deprecate
   def tag_list
-    cached_tag_list
+    cached_tag_list.presence || tags.pluck(:name) # FIXME
   end
 
   def tag_list_text(glue = ', ')

@@ -15,13 +15,7 @@ class WallpaperSearchService
   end
 
   def execute
-    wallpapers = Wallpaper.search(
-      query: build_query,
-      facets: build_facets,
-      order: build_sort,
-      page: options[:page],
-      per_page: options[:per_page] || Wallpaper.default_per_page
-    )
+    wallpapers = build_query.execute
 
     # Updates requested resolution of each wallpaper.
     if !resolution_exactness_is_at_least? && options[:width].present? && options[:height].present?
@@ -46,281 +40,206 @@ class WallpaperSearchService
     Wallpaper.none
   end
 
-  private
+  def colors
+    @colors ||= options[:colors].map do |html|
+      color = Color::RGB.from_html(html)
+      r, g, b = color.r, color.g, color.b
+      max_rgb = [r, g, b].max
+      min_rgb = [r, g, b].min
+      delta = max_rgb - min_rgb
+      v = max_rgb * 100
 
-    def build_facets
-      {
-        :tag => {
-          :limit => 20
-        },
-        :category => {
-          :limit => 10
-        },
-        :'color.hex' => {
-          :limit => 20
+      if max_rgb == 0.0
+        s = 0.0
+      else
+        s = delta / max_rgb * 100
+      end
+
+      if s == 0.0
+        h = 0.0
+      else
+        if r == max_rgb
+          h = (g - b) / delta
+        elsif g == max_rgb
+          h = 2 + (b - r) / delta
+        elsif b == max_rgb
+          h = 4 + (r - g) / delta
+        end
+
+        h *= 60.0
+        h += 360.0 if h < 0
+      end
+
+      { h: h, s: s, v: v }
+    end
+  end
+
+  private
+  def build_query
+    query = Wallpaper.lookup('*',
+      query: build_query_option,
+      where: build_where_option,
+      facets: build_facets_option,
+      order: build_order_option,
+      page: options[:page],
+      per_page: options[:per_page] || Wallpaper.default_per_page,
+      execute: false
+    )
+    query.body[:filter][:and] ||= []
+    query.body[:filter][:and].concat build_color_filters
+
+    query
+  end
+
+  def build_query_option
+    musts = []
+    must_nots = []
+
+    # Handle query string
+    if options[:q].present?
+      musts << {
+        :query_string => {
+          :query => options[:q],
+          :default_operator => 'AND',
+          :lenient => true
         }
       }
     end
 
-    def build_query
-      musts = []
-      must_nots = []
-
-      # Handle query string
-      if options[:q].present?
-        musts << {
-          :query_string => {
-            :query => options[:q],
-            :default_operator => 'AND',
-            :lenient => true
-          }
-        }
-      end
-
-      # Handle tags
-      if options[:tags].present?
-        options[:tags].each do |tag|
-          musts << {
-            :constant_score => {
-              :filter => {
-                :term => {
-                  :tag => tag
-                }
-              }
-            }
-          }
-        end
-      end
-
-      # Handle tag exclusions
-      if options[:exclude_tags].present?
-        options[:exclude_tags].each do |tag|
-          must_nots << {
-            :constant_score => {
-              :filter => {
-                :term => {
-                  :tag => tag
-                }
-              }
-            }
-          }
-        end
-      end
-
-      # Handle categories
-      if options[:categories].present?
-        options[:categories].each do |category|
-          musts << {
-            :constant_score => {
-              :filter => {
-                :term => {
-                  :category => category
-                }
-              }
-            }
-          }
-        end
-      end
-
-      # Handle categories exclusions
-      if options[:exclude_categories].present?
-        options[:exclude_categories].each do |category|
-          must_nots << {
-            :constant_score => {
-              :filter => {
-                :term => {
-                  :category => category
-                }
-              }
-            }
-          }
-        end
-      end
-
-      # Handle purity
-      musts << {
-        :constant_score => {
-          :filter => {
-            :terms => {
-              :purity => options[:purity]
-            }
-          }
-        }
-      }
-
-      # Handle width and height
-      if resolution_exactness_is_at_least?
-        [:width, :height].each do |a|
-          if options[a].present?
-            musts << {
-              :range => {
-                a => {
-                  :gte => options[a],
-                  :boost => 2.0
-                }
-              }
-            }
-          end
-        end
-      else
-        [:width, :height].each do |a|
-          if options[a].present?
-            musts << {
-              :constant_score => {
-                :filter => {
-                  :term => {
-                    a => options[a]
-                  }
-                }
-              }
-            }
-          end
-        end
-      end
-
-      # Handle colors
-      if options[:colors].present?
-        h_range = 10
-        s_range = 5
-        v_range = 5
-
-        options[:colors].map { |html| Color::RGB.from_html(html) }.each do |color|
-          r, g, b = color.r, color.g, color.b
-          max_rgb = [r, g, b].max
-          min_rgb = [r, g, b].min
-          delta = max_rgb - min_rgb
-          v = max_rgb * 100
-
-          if max_rgb == 0.0
-            s = 0.0
-          else
-            s = delta / max_rgb * 100
-          end
-
-          if s == 0.0
-            h = 0.0
-          else
-            if r == max_rgb
-              h = (g - b) / delta
-            elsif g == max_rgb
-              h = 2 + (b - r) / delta
-            elsif b == max_rgb
-              h = 4 + (r - g) / delta
-            end
-
-            h *= 60.0
-            h += 360.0 if h < 0
-          end
-
-          musts << {
-            :nested => {
-              :path => 'color',
-              :filter => {
-                :and => [
-                  # {
-                  #   :range => {
-                  #     :'score' => {
-                  #       :gte => 80,
-                  #       :lte => 100
-                  #     }
-                  #   }
-                  # },
-                  {
-                    :range => {
-                      :'h' => {
-                        :gte => h - h_range,
-                        :lte => h + h_range
-                      }
-                    }
-                  },
-                  {
-                    :range => {
-                      :'s' => {
-                        :gte => s - s_range,
-                        :lte => s + s_range
-                      }
-                    }
-                  },
-                  {
-                    :range => {
-                      :'v' => {
-                        :gte => v - v_range,
-                        :lte => v + v_range
-                      }
-                    }
-                  }
-                ]
-              }
-            }
-          }
-        end
-        # options[:colors].each do |color|
-        #   musts << {
-        #     :constant_score => {
-        #       :filter => {
-        #         :term => {
-        #           :'color.hex' => color
-        #         }
-        #       }
-        #     }
-        #   }
-        # end
-      end
-
-      # Handle user
-      if options[:user].present?
+    # Handle tags
+    if options[:tags].present?
+      options[:tags].each do |tag|
         musts << {
           :constant_score => {
             :filter => {
               :term => {
-                :user => options[:user]
+                :tag => tag
               }
             }
           }
         }
       end
+    end
 
-      # Handle aspect ratios
-      if options[:aspect_ratios].present?
+    # Handle tag exclusions
+    if options[:exclude_tags].present?
+      options[:exclude_tags].each do |tag|
+        must_nots << {
+          :constant_score => {
+            :filter => {
+              :term => {
+                :tag => tag
+              }
+            }
+          }
+        }
+      end
+    end
+
+    # Handle categories
+    if options[:categories].present?
+      options[:categories].each do |category|
         musts << {
           :constant_score => {
             :filter => {
-              :terms => {
-                :aspect_ratio => Array.wrap(options[:aspect_ratios]).map { |aspect_ratio| aspect_ratio.tr('_', '.').to_f }
+              :term => {
+                :category => category
               }
             }
           }
         }
       end
+    end
 
-      # Handle ordering
-      case options[:order]
-      when 'random'
-        musts << {
-          :function_score => {
-            :functions => [
-              {
-                :random_score => {
-                  :seed => options[:random_seed] || Time.now.to_i
-                }
+    # Handle categories exclusions
+    if options[:exclude_categories].present?
+      options[:exclude_categories].each do |category|
+        must_nots << {
+          :constant_score => {
+            :filter => {
+              :term => {
+                :category => category
               }
-            ]
-          }
-        }
-      when 'popular'
-        musts << {
-          :function_score => {
-            :functions => [
-              {
-                :script_score => {
-                  :script => Wallpaper::POPULARITY_SCRIPT
-                }
-              }
-            ]
+            }
           }
         }
       end
+    end
 
+    # Handle width and height
+    if resolution_exactness_is_at_least?
+      [:width, :height].each do |a|
+        if options[a].present?
+          musts << {
+            :range => {
+              a => {
+                :gte => options[a],
+                :boost => 2.0
+              }
+            }
+          }
+        end
+      end
+    else
+      [:width, :height].each do |a|
+        if options[a].present?
+          musts << {
+            :constant_score => {
+              :filter => {
+                :term => {
+                  a => options[a]
+                }
+              }
+            }
+          }
+        end
+      end
+    end
+
+    # Handle aspect ratios
+    if options[:aspect_ratios].present?
+      musts << {
+        :constant_score => {
+          :filter => {
+            :terms => {
+              :aspect_ratio => Array.wrap(options[:aspect_ratios]).map { |aspect_ratio| aspect_ratio.tr('_', '.').to_f }
+            }
+          }
+        }
+      }
+    end
+
+    # Handle ordering
+    case options[:order]
+    when 'random'
+      musts << {
+        :function_score => {
+          :functions => [
+            {
+              :random_score => {
+                :seed => options[:random_seed] || Time.now.to_i
+              }
+            }
+          ]
+        }
+      }
+    when 'popular'
+      musts << {
+        :function_score => {
+          :functions => [
+            {
+              :script_score => {
+                :script => Wallpaper::POPULARITY_SCRIPT
+              }
+            }
+          ]
+        }
+      }
+    end
+
+    if musts.empty? and must_nots.empty?
+      { :match_all => {} }
+    else
       {
         :bool => {
           :must => musts,
@@ -328,20 +247,96 @@ class WallpaperSearchService
         }
       }
     end
+  end
 
-    def build_sort
-      sorts = {}
+  def build_color_filters
+    color_filters = []
 
-      # Handle ordering
-      case options[:order]
+    if colors.present?
+      # TODO parameterize
+      h_range = 10
+      s_range = 5
+      v_range = 5
+
+      colors.each do |color|
+        color_filters << {
+          :nested => {
+            :path => 'color',
+            :filter => {
+              :and => [
+                # {
+                #   :range => {
+                #     :'score' => {
+                #       :gte => 80,
+                #       :lte => 100
+                #     }
+                #   }
+                # },
+                {
+                  :range => {
+                    :'h' => {
+                      :gte => color[:h] - h_range,
+                      :lte => color[:h] + h_range
+                    }
+                  }
+                },
+                {
+                  :range => {
+                    :'s' => {
+                      :gte => color[:s] - s_range,
+                      :lte => color[:s] + s_range
+                    }
+                  }
+                },
+                {
+                  :range => {
+                    :'v' => {
+                      :gte => color[:v] - v_range,
+                      :lte => color[:v] + v_range
+                    }
+                  }
+                }
+              ]
+            }
+          }
+        }
+      end
+    end
+
+    color_filters
+  end
+
+  def build_where_option
+    where = {}
+
+    where[:purity] = options[:purity] if options[:purity].any?
+    where[:user] = options[:user] if options[:user].present?
+
+    where
+  end
+
+  def build_order_option
+    order = {}
+
+    # Handle ordering
+    case options[:order]
       when 'random'
       when 'popular'
-        sorts['_score'] = 'desc'
+        order[:_score] = :desc
       else
         # Sort using created_at by default
-        sorts['created_at'] = 'desc'
-      end
-
-      sorts
+        order[:created_at] = :desc
     end
+
+    order
+  end
+
+  def build_facets_option
+    facets = {}
+
+    facets[:tag] = { limit: 20 }
+    facets[:category] = { limit: 10 }
+
+    facets
+  end
 end
