@@ -172,7 +172,7 @@ class Wallpaper < ActiveRecord::Base
       category: category_list,
       width: image_width,
       height: image_height,
-      color: image_hsl_color_scores,
+      color: image_hsv_color_scores,
       aspect_ratio: aspect_ratio,
       created_at: created_at,
       updated_at: updated_at,
@@ -356,7 +356,7 @@ class Wallpaper < ActiveRecord::Base
       end
     end
 
-    def image_hsl_color_scores
+    def image_hsv_color_scores
       return if image_color_scores.blank?
       image_color_scores.map do |score|
         color = score[1].to_rgb
