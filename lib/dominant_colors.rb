@@ -15,7 +15,8 @@ class DominantColors
   end
 
   def output
-    `#{options[:gm]} convert #{image_path} -resize #{options[:resize]} +dither -colorspace #{options[:colorspace]} -colors #{options[:colors]} histogram:- | #{options[:gm]} convert - -format "%c" info:-`
+    output = `#{options[:gm]} convert #{image_path} -resize #{options[:resize]} +dither -colorspace #{options[:colorspace]} -colors #{options[:colors]} histogram:- | #{options[:gm]} convert - -format "%c" info:-`
+    output.force_encoding('binary')
   end
 
   def raw_results
