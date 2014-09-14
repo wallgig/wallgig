@@ -299,7 +299,7 @@ class Wallpaper < ActiveRecord::Base
     raise 'Cannot merge two same wallpapers' if self == other_wallpaper
 
     # Don't move these associations
-    excluded_associations = [:wallpaper_colors]
+    excluded_associations = []
 
     # Find dependent destroy associations
     dependent_destroy_associations = self.class.reflect_on_all_associations.select do |association|
