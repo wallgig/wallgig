@@ -24,7 +24,7 @@ class DominantColors
       resize: options[:resize],
       colorspace: options[:colorspace],
       colors: options[:colors].to_s
-    ).set_encoding('binary')
+    ).force_encoding('binary')
   end
 
   def raw_results
