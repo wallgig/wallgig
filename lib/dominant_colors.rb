@@ -17,14 +17,14 @@ class DominantColors
   def output
     line = Cocaine::CommandLine.new(
       options[:gm_path],
-      "convert :image_path -resize :resize +dither -colorspace :colorspace -colors :colors histogram:- | #{options[:gm_path]} convert - -format %c info:-"
+      "convert :image_path -resize :resize +dither -colorspace :colorspace -colors :colors +profile '*' histogram:- | #{options[:gm_path]} identify -format %c -"
     )
     line.run(
       image_path: image_path,
       resize: options[:resize],
       colorspace: options[:colorspace],
       colors: options[:colors].to_s
-    )
+    ).set_encoding('binary')
   end
 
   def raw_results
