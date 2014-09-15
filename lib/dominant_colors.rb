@@ -25,6 +25,9 @@ class DominantColors
       colorspace: options[:colorspace],
       colors: options[:colors].to_s
     ).force_encoding('binary')
+  rescue Cocaine::ExitStatusError
+    # TODO friendly logging
+    ''
   end
 
   def raw_results
