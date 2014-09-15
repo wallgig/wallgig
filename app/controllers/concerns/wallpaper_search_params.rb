@@ -32,7 +32,7 @@ module WallpaperSearchParams
       end
 
       # Validate order
-      search_options[:order] = nil unless ['latest', 'popular', 'random'].include?(search_options[:order])
+      search_options[:order] = nil unless ['latest', 'popular', 'random', 'score'].include?(search_options[:order])
       search_options[:order] ||= 'latest'
 
       # Set purity

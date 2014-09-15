@@ -375,6 +375,7 @@ class WallpaperSearchService
     case options[:order]
       when 'random'
       when 'popular'
+      when 'score'
         order[:_score] = :desc
       else
         # Sort using created_at by default
