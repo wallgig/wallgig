@@ -352,8 +352,9 @@ class Wallpaper < ActiveRecord::Base
     end
 
     def image_hex_color_scores
+      return colors if colors.present?
       return if image_color_scores.blank?
-      image_color_scores.map do |score|
+      @image_hex_color_scores ||= image_color_scores.map do |score|
         {
           hex: score[1].to_rgb.hex,
           score: (score[0] * 100).to_i
@@ -362,9 +363,9 @@ class Wallpaper < ActiveRecord::Base
     end
 
     def image_hsv_color_scores
-      return if image_color_scores.blank?
-      image_color_scores.map do |score|
-        color = score[1].to_rgb
+      return if image_hex_color_scores.blank?
+      @image_hsv_color_scores ||= image_hex_color_scores.map do |score|
+        color = Color::RGB.by_hex(score[:hex])
         r, g, b = color.r, color.g, color.b
         max_rgb = [r, g, b].max
         min_rgb = [r, g, b].min
@@ -396,7 +397,7 @@ class Wallpaper < ActiveRecord::Base
           h: h.to_i,
           s: s.to_i,
           v: v.to_i,
-          score: (score[0] * 100).to_i
+          score: score[:score]
         }
       end
     end
