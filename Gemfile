@@ -130,6 +130,7 @@ gem 'active_link_to'
 gem 'meta-tags', require: 'meta_tags'
 gem 'draper', github: 'jianyuan/draper'
 gem 'redcarpet'
+gem 'cocaine'
 
 # rack
 gem 'rack-cache', require: 'rack/cache', group: :production

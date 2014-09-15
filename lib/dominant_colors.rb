@@ -6,7 +6,7 @@ class DominantColors
     @image_path = image_path
 
     default_options = {
-      gm: `which gm`.strip || '/usr/bin/gm',
+      gm_path: `which gm`.strip || '/usr/bin/gm',
       colors: 8,
       resize: '200x200',
       colorspace: 'RGB'
@@ -15,8 +15,16 @@ class DominantColors
   end
 
   def output
-    output = `#{options[:gm]} convert #{image_path} -resize #{options[:resize]} +dither -colorspace #{options[:colorspace]} -colors #{options[:colors]} histogram:- | #{options[:gm]} convert - -format "%c" info:-`
-    output.force_encoding('binary')
+    line = Cocaine::CommandLine.new(
+      options[:gm_path],
+      "convert :image_path -resize :resize +dither -colorspace :colorspace -colors :colors histogram:- | #{options[:gm_path]} convert - -format %c info:-"
+    )
+    line.run(
+      image_path: image_path,
+      resize: options[:resize],
+      colorspace: options[:colorspace],
+      colors: options[:colors].to_s
+    )
   end
 
   def raw_results
