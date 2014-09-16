@@ -1,0 +1,39 @@
+%div.collectionsOverlay{:v => {:component => 'collections-overlay',
+    :cloak => true,
+    :show => 'isVisible'}}
+  .collectionsOverlay-content
+    .loader{:v => {:if => 'isLoading'}}
+
+    %div.container{:v => {:show => 'isCollectionsLoaded'}}
+      %ul.collectionList.collectionList--compact
+        %li.collectionList-createNew{:v => {:component => 'collection',
+              :on => 'dragenter: onDragEnter, dragleave: onDragLeave, dragover: onDragOver, drop: onDropNewCollection',
+              :class => 'is-draggedOver: isDraggedOver'}}
+          .collectionList-previewOverlay.collectionList-previewOverlay--plus{:v => {:if => '!isInCollection'}}
+            %span.fa.fa-plus
+          New Collection
+        %li{:v => {:repeat => 'collections | orderBy position',
+              :component => 'collection',
+              :ref => 'collections',
+              :on => 'dragenter: onDragEnter, dragleave: onDragLeave, dragover: onDragOver, drop: onDrop',
+              :class => 'is-draggedOver: isDraggedOver, is-collected: isInCollection'}}
+          .collectionList-wallpapersCount{:v => {:if => 'wallpapers_count > 0 || !this.public'}}
+            %span.fa.fa-eye-slash{:v => {:if => '!this.public'}}
+            %span{:v => {:if => 'wallpapers_count > 0'}}
+              %span.fa.fa-picture-o
+              {{wallpapers_count}}
+
+          .collectionList-previewOverlay.collectionList-previewOverlay--added{:v => {:if => 'isInCollection'}}
+            %span.fa.fa-check
+          .collectionList-previewOverlay.collectionList-previewOverlay--plus{:v => {:if => '!isInCollection'}}
+            %span.fa.fa-plus
+
+          .collectionList-preview{:v => {:if => 'preview'}}
+            %img.wallpaperThumbnail.wallpaperThumbnail--halved{:class => 'is-{{preview.purity}}',
+              :v => {:attr => 'src: preview.url, width: preview.width, height: preview.height'}}
+          .collectionList-preview.collectionList-preview--centeredText.text-muted{:v => {:if => '!preview'}}
+            %em Empty
+
+          %h6.collectionList-name {{name}}
+
+  .collectionsOverlay-backdrop

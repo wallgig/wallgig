@@ -156,14 +156,9 @@ Vue.component('collections-overlay', {
       });
     },
 
-    onDragOver: function (e) {
-      if ( ! e.targetVM.isInCollection) {
-        e.preventDefault(); // prevent default to allow dropping
-        e.targetVM.isDraggedOver = true;
-      }
-    },
-
     onDrop: function (e) {
+      e.preventDefault();
+
       var wallpaperId = parseInt(e.dataTransfer.getData('text/x-wallpaper-id'));
 
       if (this.activeWallpaper.id === wallpaperId &&
@@ -175,9 +170,9 @@ Vue.component('collections-overlay', {
     },
 
     onDropNewCollection: function (e) {
-      var self = this;
-
       e.preventDefault();
+
+      var self = this;
       self.isHidingDeferred = true;
 
       var name = window.prompt('New collection name?', 'Untitled');

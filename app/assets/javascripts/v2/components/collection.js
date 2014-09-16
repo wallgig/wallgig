@@ -70,6 +70,13 @@ Vue.component('collection', {
 
     onDragLeave: function () {
       this.isDraggedOver = false;
+    },
+
+    onDragOver: function (e) {
+      if ( ! this.isInCollection) {
+        e.preventDefault(); // prevent default to allow dropping
+        this.isDraggedOver = true;
+      }
     }
   }
 });
