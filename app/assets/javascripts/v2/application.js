@@ -7,8 +7,8 @@
 //= require_tree ./directives/.
 //= require_self
 
-(function (exports, _, Vue) {
-  exports.app = new Vue({
+(function (exports, WG, _) {
+  exports.app = new WG({
     el: '#wallgig-app',
 
     data: {
@@ -22,14 +22,11 @@
     },
 
     created: function () {
-      var self = this;
-
-      // API
-      self.$on('apiError', self.handleApiError);
+      this.$on('apiError', this.apiDidError);
     },
 
     methods: {
-      handleApiError: function (res) {
+      apiDidError: function (res) {
         if (res.unauthorized) {
           if (res.body && res.body.message) {
             alert(res.body.message);
@@ -42,4 +39,4 @@
       }
     }
   });
-})(window, _, Vue);
+})(window, Vue, _);
