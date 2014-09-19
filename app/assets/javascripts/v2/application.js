@@ -1,14 +1,13 @@
+//= require bowser
 //= require lodash
 //= require query-string
-//= require vue
 //= require superagent
+//= require vue
 //= require_tree ./components/.
 //= require_tree ./directives/.
 //= require_self
 
-/* global _, Vue, superagent */
-
-(function (exports) {
+(function (exports, _, Vue) {
   exports.app = new Vue({
     el: '#wallgig-app',
 
@@ -43,4 +42,4 @@
       }
     }
   });
-})(window);
+})(window, _, Vue);
