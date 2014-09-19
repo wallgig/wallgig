@@ -1,8 +1,8 @@
 //= require jquery
 //= require jquery-minicolors
 
-(function (WG, _, $) {
-  WG.component('color-picker', {
+(function (Vue, _, $) {
+  Vue.component('color-picker', {
     data: {
       color: null
     },

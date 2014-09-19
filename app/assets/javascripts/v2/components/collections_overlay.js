@@ -1,5 +1,7 @@
-(function (WG, _, superagent) {
-  WG.component('collections-overlay', {
+(function (Vue, _, superagent) {
+  var ADD_TO_COLLECTION_HIDE_TIMER = 500;
+
+  Vue.component('collections-overlay', {
     data: {
       isVisible: false,
       isLoading: false,
@@ -33,7 +35,7 @@
 
       setActiveWallpaper: function (wallpaper) {
         this.activeWallpaper = wallpaper;
-        this.$broadcast('setActiveWallpaper', wallpaper);
+        this.$broadcast('activeWallpaperDidChange', wallpaper); // TODO move to root?
       },
 
       show: function () {
@@ -126,7 +128,7 @@
         }
       },
 
-      addWallpaperToCollection: function (wallpaper, collection) {
+      wallpaperWillAddToCollection: function (wallpaper, collection) {
         var self = this;
 
         if ( ! wallpaper || ! collection) {
@@ -153,7 +155,7 @@
         if (self.isHidingDeferred) {
           setTimeout(function () {
             self.isHidingDeferred = false;
-          }, 500);
+          }, ADD_TO_COLLECTION_HIDE_TIMER);
         }
 
         self.$root.$broadcast('wallpaperDidAddToCollection', {
@@ -166,13 +168,11 @@
         e.preventDefault();
 
         var wallpaperId = parseInt(e.dataTransfer.getData('text/x-wallpaper-id'));
+        var collection = e.targetVM;
 
-        if (this.activeWallpaper.id === wallpaperId &&
-             ! e.targetVM.isInCollection) {
-          this.addWallpaperToCollection(this.activeWallpaper, e.targetVM);
+        if (this.activeWallpaper.id === wallpaperId && ! collection.isInCollection) {
+          this.wallpaperWillAddToCollection(this.activeWallpaper, collection);
         }
-
-        e.targetVM.isDraggedOver = false;
       },
 
       onDropNewCollection: function (e) {
@@ -195,7 +195,7 @@
           .end(function (res) {
             if (res.ok) {
               self.collections.unshift(res.body.collection);
-              self.addWallpaperToCollection(wallpaper, res.body.collection);
+              self.wallpaperWillAddToCollection(wallpaper, res.body.collection);
             } else {
               self.isHidingDeferred = false;
               self.$dispatch('apiError', res);

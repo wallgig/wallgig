@@ -1,5 +1,5 @@
-(function (WG, _, superagent) {
-  WG.component('wallpaper', {
+(function (Vue, _, superagent) {
+  Vue.component('wallpaper', {
     data: {
       isToggling: false,
       id: null

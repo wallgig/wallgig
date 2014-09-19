@@ -1,5 +1,5 @@
-(function (WG, _, superagent) {
-  WG.component('wallpaper-list', {
+(function (Vue, _, superagent) {
+  Vue.component('wallpaper-list', {
     data: {
       isLoading: true,
       isFirst: false,
@@ -43,7 +43,7 @@
         self.isLoading = true;
 
         superagent
-          .get(this.endpoint)
+          .get(self.endpoint)
           .accept('json')
           .query(location.search.slice(1))
           .end(function (res) {

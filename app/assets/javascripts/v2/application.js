@@ -7,8 +7,8 @@
 //= require_tree ./directives/.
 //= require_self
 
-(function (exports, WG, _) {
-  exports.app = new WG({
+(function (exports, Vue, _) {
+  exports.app = new Vue({
     el: '#wallgig-app',
 
     data: {
