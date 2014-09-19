@@ -7,7 +7,11 @@
 //= require_tree ./directives/.
 //= require_self
 
-(function (exports, Vue, _) {
+(function (exports, Vue, _, queryString) {
+  if ('debug' in queryString.parse(window.location.search)) {
+    Vue.config('debug', true);
+  }
+
   exports.app = new Vue({
     el: '#wallgig-app',
 
@@ -39,4 +43,4 @@
       }
     }
   });
-})(window, Vue, _);
+})(window, Vue, _, queryString);

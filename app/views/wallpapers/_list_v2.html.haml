@@ -32,7 +32,10 @@
             %span.fa.fa-eye
             {{views_count}}
 
-    %ul.pager{:v => {:show => 'paging.previous || paging.next'}}
+    %ul.pager{:v => {:if => 'paging.previous || paging.next',
+          :component => 'pagination',
+          :ref => 'pagination',
+          :with => 'hasNextPage: !!paging.next'}}
       %li
         %a{:v => {:show => 'paging.previous', :attr => 'href: paging.previous'}}
           &larr; Previous
