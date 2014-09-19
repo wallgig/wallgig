@@ -1,5 +1,5 @@
-//= require bowser
 //= require lodash
+//= require q
 //= require query-string
 //= require superagent
 //= require vue

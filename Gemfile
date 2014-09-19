@@ -96,10 +96,11 @@ gem 'eco'
 # assets
 gem 'bootstrap-sass', '~> 3.2.0'
 gem 'bourbon'
-gem 'rails-assets-bowser'
+gem 'rails-assets-bowser' # TODO remove me
 gem 'rails-assets-fontawesome'
 gem 'rails-assets-jquery-minicolors'
 gem 'rails-assets-lodash'
+gem 'rails-assets-q', '~> 1.0'
 gem 'rails-assets-query-string'
 gem 'rails-assets-superagent'
 gem 'rails-assets-vue'

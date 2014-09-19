@@ -362,6 +362,7 @@ GEM
     rails-assets-fontawesome (4.2.0)
     rails-assets-jquery-minicolors (2.1.7)
     rails-assets-lodash (2.4.1)
+    rails-assets-q (1.0.1)
     rails-assets-query-string (1.0.0)
     rails-assets-superagent (0.18.2)
     rails-assets-vue (0.10.6)
@@ -597,6 +598,7 @@ DEPENDENCIES
   rails-assets-fontawesome
   rails-assets-jquery-minicolors
   rails-assets-lodash
+  rails-assets-q (~> 1.0)
   rails-assets-query-string
   rails-assets-superagent
   rails-assets-vue

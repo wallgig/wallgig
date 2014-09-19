@@ -1,4 +1,4 @@
-(function (Vue, _, bowser, superagent) {
+(function (Vue, _, superagent) {
   var config = {
     scrollThrottle: 50,
     infiniteScroll: {
@@ -117,7 +117,7 @@
 
         self.isLoading = true;
 
-        return superagent
+        superagent
           .get(self.endpoint)
           .accept('json')
           .query(location.search.slice(1))
@@ -156,4 +156,4 @@
       pagination: Pagination
     }
   });
-})(Vue, _, bowser, superagent);
+})(Vue, _, superagent);
