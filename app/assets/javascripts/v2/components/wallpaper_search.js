@@ -34,6 +34,9 @@
       this.$on('wallpaperSearchDidChange', function () {
         console.log('wallpaperSearchDidChange created');
       });
+      this.$watch('search.purities', function () {
+        console.log(arguments);
+      });
     },
 
     ready: function () {
@@ -59,12 +62,23 @@
         } else {
           this.search.purities.$remove(index);
         }
+      },
+
+      toggleTagInclusion: function (index, e) {
+        e.preventDefault();
+
+        this.search.facets.tags[index].included = !this.search.facets.tags[index].included;
       }
     },
 
     computed: {
       currentOrder: function () {
         return this.orderMappings[this.search.order];
+      },
+
+      toQueryString: function () {
+        console.log('toQueryString called');
+        return 'ok';
       }
     }
   });

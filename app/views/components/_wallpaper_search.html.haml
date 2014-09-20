@@ -1,7 +1,9 @@
 %div.wallpaperSearch{:v => {:component => 'wallpaper-search', :with => 'search: search'}}
   {{search.purities}}
+  {{search.facets.tags}}
+  {{toQueryString}}
   %ul.list-inline
-    %li
+    %li.wallpaperSearch--order
       .dropdown
         %button.btn.btn-default.dropdown-toggle{:type => 'button', :data => {:toggle => 'dropdown'}}
           {{currentOrder}}
@@ -9,7 +11,7 @@
           %li{:v => {:repeat => 'orderMappings', :show => '$key !== search.order'}}
             %a{:href => '#', :tabindex => -1, :v => {:on => 'click: changeOrder($key, $event)'}} {{$value}}
 
-    %li
+    %li.wallpaperSearch--purity
       .btn-group.btn-group--purity
         %a.btn.btn--purity{:href => '#',
             :class => 'is-{{$key}}',
@@ -19,4 +21,13 @@
           {{$value}}
 
   .row
+    .wallpaperSearch--tags.col-md-8
+      %ul.list-unstyled
+        %li{:v => {:repeat => 'search.facets.tags',
+              :class => 'is-included: included, is-excluded: excluded'}}
+          %a{:href => '#', :v => {:on => 'click: toggleTagInclusion($index, $event)'}}
+            {{term}}
+            %span{:v => {:if => '!included'}} ({{count}})
 
+    .wallpaperSearch--categories.col-md-4
+      categories here
