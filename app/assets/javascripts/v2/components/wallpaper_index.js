@@ -1,4 +1,4 @@
-(function (Vue, _, superagent) {
+(function (Vue, _, superagent, queryString) {
   var config = {
     scrollThrottle: 50,
     infiniteScroll: {
@@ -8,16 +8,10 @@
   };
 
   var Pagination = Vue.extend({
-    data: {
-      hasNextPage: false
-    },
-
     created: function () {
       if ( ! this.$root.settings.infinite_scroll) {
         return;
       }
-      console.log(this.hasNextPage);
-      this.$watch('hasNextPage', this.hasNextPageDidChange);
       this.$on('wallpaperPageWillLoad', this.wallpaperPageWillLoad);
       this.$on('wallpaperPageDidLoad', this.wallpaperPageDidLoad);
     },
@@ -41,14 +35,6 @@
 
       unwatchScroll: function () {
         window.onscroll = undefined;
-      },
-
-      hasNextPageDidChange: function (value) {
-        if (value) {
-          this.watchScroll();
-        } else {
-          this.unwatchScroll();
-        }
       },
 
       wallpaperPageWillLoad: function () {
@@ -158,6 +144,12 @@
           // TODO use this.currentPaging.next as endpoint
           this.fetchData(this.nextPage);
         }
+      },
+
+      generatePageHref: function (page) {
+        var query = queryString.parse(window.location.search);
+        query.page = page;
+        return window.location.pathname + '?' + queryString.stringify(query);
       }
     },
 
@@ -174,4 +166,4 @@
       'wallpaper-list': WallpaperList
     }
   });
-})(Vue, _, superagent);
+})(Vue, _, superagent, queryString);

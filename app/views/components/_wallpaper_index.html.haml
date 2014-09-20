@@ -42,11 +42,10 @@
 
   %ul.pager{:v => {:if => 'previousPage || nextPage',
         :component => 'pagination',
-        :ref => 'pagination',
-        :with => 'hasNextPage: !!nextPage'}}
+        :ref => 'pagination'}}
     %li
       /-# FIXME href link
-      %a{:v => {:show => 'previousPage', :attr => 'href: previousPage'}}
+      %a{:v => {:show => 'previousPage', :attr => 'href: generatePageHref(previousPage)'}}
         &larr; Previous
-      %a{:v => {:show => 'nextPage', :attr => 'href: nextPage'}}
+      %a{:v => {:show => 'nextPage', :attr => 'href: generatePageHref(nextPage)'}}
         Next &rarr;
