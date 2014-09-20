@@ -1,8 +1,21 @@
 json.partial! 'api/v1/shared/paging', collection: @wallpapers
 
-json.facets do
-  json.tags @wallpapers.facets['tag']['terms']
-  json.categories @wallpapers.facets['category']['terms']
+json.search do
+  WallpaperSearchParams::KEYS_SCALAR.each do |key|
+    json.set! key, search_options[key] if search_options.include?(key)
+  end
+  json.facets do
+    json.tags @wallpapers.facets['tag']['terms'] do |tag|
+      json.(tag, 'term', 'count')
+      json.included true if search_options[:tags].include?(tag['term'])
+      json.excluded true if search_options[:exclude_tags].include?(tag['term'])
+    end
+    json.categories @wallpapers.facets['category']['terms'] do |category|
+      json.(category, 'term', 'count')
+      json.included true if search_options[:categories].include?(category['term'])
+      json.excluded true if search_options[:exclude_categories].include?(category['term'])
+    end
+  end
 end
 
 json.wallpapers @wallpapers do |wallpaper|
