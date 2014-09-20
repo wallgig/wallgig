@@ -3,6 +3,8 @@
     :options => local_assigns[:search_options].try(:to_json),
     :data => local_assigns[:data]}
 
+  = render partial: 'components/wallpaper_search'
+
   %div{:v => {:component => 'wallpaper-list',
       :repeat => 'wallpaperPages'}}
     .wallpaperList--pageSeparator{:v => {:if => '$index > 0'}}

@@ -67,6 +67,7 @@
   Vue.component('wallpaper-index', {
     data: {
       isLoading: false,
+      search: {},
       wallpaperPages: [],
       options: {},
       previousPage: null,
@@ -134,7 +135,8 @@
           this.nextPage = null;
         }
 
-        this.wallpaperPages.push(wallpaperPage);
+        this.search = wallpaperPage.search; // Refresh search
+        this.wallpaperPages.push(_.pick(wallpaperPage, 'paging', 'wallpapers'));
 
         this.$broadcast('wallpaperPageDidLoad');
       },
