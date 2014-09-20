@@ -71,13 +71,13 @@
     }
   });
 
-  var WallpaperPage = Vue.extend({
+  var WallpaperList = Vue.extend({
     created: function () {
-      console.log('Wallpaper page created');
+      console.log('Wallpaper list created');
     }
   });
 
-  Vue.component('wallpaper-list', {
+  Vue.component('wallpaper-index', {
     data: {
       isLoading: true,
       wallpaperPages: [],
@@ -157,7 +157,7 @@
 
     components: {
       pagination: Pagination,
-      'wallpaper-page': WallpaperPage
+      'wallpaper-list': WallpaperList
     }
   });
 })(Vue, _, superagent);

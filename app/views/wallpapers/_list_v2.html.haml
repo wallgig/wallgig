@@ -1,9 +1,9 @@
-%div.wallpaper-list-container{:v => {:component => 'wallpaper-list', :cloak => true},
+%div{:v => {:component => 'wallpaper-index', :cloak => true},
     :endpoint => local_assigns[:endpoint],
     :options => local_assigns[:search_options].try(:to_json),
     :data => local_assigns[:data]}
 
-  %div{:v => {:component => 'wallpaper-page',
+  %div{:v => {:component => 'wallpaper-list',
       :repeat => 'wallpaperPages'}}
     .wallpaperList--pageSeparator{:v => {:if => '$index > 0'}}
       %a.pull-left{:v => {:attr => 'href: paging.self'}}
@@ -12,7 +12,7 @@
       %a.pull-right{:href => '#'}
         %span.fa.fa-chevron-up
 
-    %ul.list-wallpaper{:v => {:show => 'wallpapers.length'}}
+    %ul.wallpaperList{:v => {:show => 'wallpapers.length'}}
       %li{:v => {:repeat => 'wallpapers',
             :component => 'wallpaper',
             :on => 'dragstart: onDragStart, dragend: onDragEnd'},
@@ -20,12 +20,13 @@
           :draggable => 'true'}
         %a{:v => {:attr => 'target: linkTarget'},
             :href => '{{url}}'}
-          %img.img-wallpaper{:v => {:attr => 'src: image.thumbnail.url, width: image.thumbnail.width, height: image.thumbnail.height'},
-            :alt => 'Wallpaper #{{id}}'}
-        .overlay.overlay-bottom
+          %img.wallpaperThumbnail{:alt => 'Wallpaper #{{id}}',
+            :class => 'is-{{purity}}',
+            :v => {:attr => 'src: image.thumbnail.url, width: image.thumbnail.width, height: image.thumbnail.height'}}
+        .wallpaperList--overlay.wallpaperList--overlayBottom
           %strong {{image.original.width}}&times;{{image.original.height}}
-          %a.btn.btn-sm.btn-fav.pull-left{:href => '#',
-              :v => {:class => 'faved: favourited, disabled: isToggling',
+          %a.btn.btn-sm.btn--fav.pull-left{:href => '#',
+              :v => {:class => 'is-faved: favourited, disabled: isToggling',
                 :on => 'click: toggleFavourite'}}
             %span.fa.fa-star
             %span.count {{favourites_count}}
