@@ -1,0 +1,51 @@
+%div{:v => {:component => 'wallpaper-index', :cloak => true},
+    :endpoint => local_assigns[:endpoint],
+    :options => local_assigns[:search_options].try(:to_json),
+    :data => local_assigns[:data]}
+
+  %div{:v => {:component => 'wallpaper-list',
+      :repeat => 'wallpaperPages'}}
+    .wallpaperList--pageSeparator{:v => {:if => '$index > 0'}}
+      %a.pull-left{:v => {:attr => 'href: paging.self'}}
+        %small.text-muted Page
+        {{paging.current_page}}
+      %a.pull-right{:href => '#'}
+        %span.fa.fa-chevron-up
+
+    %ul.wallpaperList{:v => {:show => 'wallpapers.length'}}
+      %li{:v => {:repeat => 'wallpapers',
+            :component => 'wallpaper',
+            :on => 'dragstart: onDragStart, dragend: onDragEnd'},
+          :class => 'purity-{{purity}}',
+          :draggable => 'true'}
+        %a{:v => {:attr => 'target: linkTarget'},
+            :href => '{{url}}'}
+          %img.wallpaperThumbnail{:alt => 'Wallpaper #{{id}}',
+            :class => 'is-{{purity}}',
+            :v => {:attr => 'src: image.thumbnail.url, width: image.thumbnail.width, height: image.thumbnail.height'}}
+        .wallpaperList--overlay.wallpaperList--overlayBottom
+          %strong {{image.original.width}}&times;{{image.original.height}}
+          %a.btn.btn-sm.btn--fav.pull-left{:href => '#',
+              :v => {:class => 'is-faved: favourited, disabled: isToggling',
+                :on => 'click: toggleFavourite'}}
+            %span.fa.fa-star
+            %span.count {{favourites_count}}
+          .btn.btn-sm.pull-right
+            %span.fa.fa-eye
+            {{views_count}}
+
+    %div{:v => {:show => 'wallpapers.length === 0'}}
+      %h2.text-center No search results found :(
+
+  %div{:v => {:show => 'isLoading'}}
+    .loading-spinner
+
+  %ul.pager{:v => {:if => 'currentPaging && (currentPaging.previous || currentPaging.next)',
+        :component => 'pagination',
+        :ref => 'pagination',
+        :with => 'hasNextPage: !!currentPaging.next'}}
+    %li
+      %a{:v => {:show => 'wallpaperPages.length === 1 && currentPaging.previous', :attr => 'href: currentPaging.previous'}}
+        &larr; Previous
+      %a{:v => {:show => 'currentPaging.next', :attr => 'href: currentPaging.next'}}
+        Next &rarr;
