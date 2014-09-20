@@ -2,7 +2,7 @@
   var config = {
     scrollThrottle: 50,
     infiniteScroll: {
-      maxPages: 2,
+      maxPages: 6,
       distance: 100
     }
   };
@@ -82,7 +82,8 @@
       isLoading: true,
       wallpaperPages: [],
       options: {},
-      currentPaging: null
+      previousPage: null,
+      nextPage: null
     },
 
     paramAttributes: [
@@ -130,19 +131,32 @@
       },
 
       wallpaperPageDidLoad: function (wallpaperPage) {
+        // Set previous page number
+        if (this.wallpaperPages.length === 0) {
+          if (wallpaperPage.paging.previous) {
+            this.previousPage = wallpaperPage.paging.current_page - 1;
+          }
+        }
+
+        // Set next page number
+        if (wallpaperPage.paging.next) {
+          this.nextPage = wallpaperPage.paging.current_page + 1;
+        } else {
+          this.nextPage = null;
+        }
+
         this.wallpaperPages.push(wallpaperPage);
-        this.currentPaging = wallpaperPage.paging;
+
         this.$broadcast('wallpaperPageDidLoad');
       },
 
       infiniteScrollTargetDidReach: function () {
         if (this.wallpaperPages.length < config.infiniteScroll.maxPages
-            && this.currentPaging
-            && this.currentPaging.current_page < this.currentPaging.total_pages
+            && this.nextPage
           ) {
           // Fetch next page
           // TODO use this.currentPaging.next as endpoint
-          this.fetchData(this.currentPaging.current_page + 1);
+          this.fetchData(this.nextPage);
         }
       }
     },

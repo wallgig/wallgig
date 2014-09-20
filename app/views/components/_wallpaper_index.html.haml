@@ -40,12 +40,13 @@
   %div{:v => {:show => 'isLoading'}}
     .loading-spinner
 
-  %ul.pager{:v => {:if => 'currentPaging && (currentPaging.previous || currentPaging.next)',
+  %ul.pager{:v => {:if => 'previousPage || nextPage',
         :component => 'pagination',
         :ref => 'pagination',
-        :with => 'hasNextPage: !!currentPaging.next'}}
+        :with => 'hasNextPage: !!nextPage'}}
     %li
-      %a{:v => {:show => 'wallpaperPages.length === 1 && currentPaging.previous', :attr => 'href: currentPaging.previous'}}
+      /-# FIXME href link
+      %a{:v => {:show => 'previousPage', :attr => 'href: previousPage'}}
         &larr; Previous
-      %a{:v => {:show => 'currentPaging.next', :attr => 'href: currentPaging.next'}}
+      %a{:v => {:show => 'nextPage', :attr => 'href: nextPage'}}
         Next &rarr;
