@@ -1,7 +1,7 @@
 %div.wallpaperSearch{:v => {:component => 'wallpaper-search', :with => 'search: search'}}
   {{search.purities}}
-  .row
-    .col-md-6
+  %ul.list-inline
+    %li
       .dropdown
         %button.btn.btn-default.dropdown-toggle{:type => 'button', :data => {:toggle => 'dropdown'}}
           {{currentOrder}}
@@ -9,9 +9,14 @@
           %li{:v => {:repeat => 'orderMappings', :show => '$key !== search.order'}}
             %a{:href => '#', :tabindex => -1, :v => {:on => 'click: changeOrder($key, $event)'}} {{$value}}
 
+    %li
       .btn-group.btn-group--purity
-        %button.btn.btn--purity{:class => 'is-{{$key}}',
+        %a.btn.btn--purity{:href => '#',
+            :class => 'is-{{$key}}',
             :v => {:repeat => 'purityMappings',
               :class => 'is-active: search.purities.indexOf($key) !== -1',
               :on => 'click: togglePurity($key, $event)'}}
           {{$value}}
+
+  .row
+
