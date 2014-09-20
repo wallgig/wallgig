@@ -2,7 +2,8 @@
   var config = {
     scrollThrottle: 50,
     infiniteScroll: {
-      maxPages: 6,
+      maxPages: null, // Computed value: floor(maxImages / settings.perPage)
+      maxImages: 300,
       distance: 100
     }
   };
@@ -79,6 +80,8 @@
     ],
 
     created: function () {
+      config.infiniteScroll.maxPages = Math.floor(config.infiniteScroll.maxImages / this.$root.settings.per_page);
+
       if (this.options) {
         this.options = JSON.parse(this.options);
       }
@@ -92,14 +95,14 @@
         this.wallpaperPageDidLoad(JSON.parse(this.data));
         this.data = undefined;
       } else {
-        this.fetchData();
+        this.fetchPage();
       }
 
       this.$on('infiniteScrollTargetDidReach', this.infiniteScrollTargetDidReach);
     },
 
     methods: {
-      fetchData: function (page) {
+      fetchPage: function (page) {
         this.$broadcast('wallpaperPageWillLoad');
         this.isLoading = true;
 
@@ -107,7 +110,7 @@
           .get(this.endpoint)
           .accept('json')
           .query(location.search.slice(1))
-          .query({ page: page })
+          .query({ page: page || 1 })
           .end(_.bind(function (res) {
             if (res.ok) {
               this.wallpaperPageDidLoad(res.body);
@@ -141,8 +144,7 @@
             && this.nextPage
           ) {
           // Fetch next page
-          // TODO use this.currentPaging.next as endpoint
-          this.fetchData(this.nextPage);
+          this.fetchPage(this.nextPage);
         }
       },
 
