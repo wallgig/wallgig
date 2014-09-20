@@ -6,7 +6,7 @@
       // Search defaults
       search: {
         order: 'latest',
-        purity: ['sfw']
+        purities: []
       },
 
       // Mappings
@@ -20,17 +20,26 @@
         score: 'by relevance',
         popular: 'by popularity',
         random: 'by random'
-      }
+      },
+
+      myObj: {
+        myArr: []
+      },
+      myArr: []
     },
 
     created: function () {
       console.log('wallpaper search component ready');
-      console.log(this.orderMappings);
+
+      this.$on('wallpaperSearchDidChange', function () {
+        console.log('wallpaperSearchDidChange created');
+      });
     },
 
     ready: function () {
-      console.log(this.search);
-      console.log(this.orderMappings);
+      this.$on('wallpaperSearchDidChange', function () {
+        console.log('wallpaperSearchDidChange ready');
+      });
     },
 
     methods: {
@@ -41,14 +50,14 @@
 
       togglePurity: function (purity, e) {
         e.preventDefault();
+
         console.log('toggling', purity);
-        console.log(this.search);
-        this.search.purity.push(purity);
-        console.log(this.search);
-        if (_.contains(this.search.purity, purity)) {
-          this.search.purity = _.without(this.search.purity, purity);
+
+        var index = this.search.purities.indexOf(purity);
+        if (index === -1) {
+          this.search.purities.push(purity);
         } else {
-          this.search.purity.push(purity);
+          this.search.purities.$remove(index);
         }
       }
     },

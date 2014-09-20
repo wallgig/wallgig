@@ -4,6 +4,7 @@ json.search do
   WallpaperSearchParams::KEYS_SCALAR.each do |key|
     json.set! key, search_options[key] if search_options.include?(key)
   end
+  json.purities current_purities
   json.facets do
     json.tags @wallpapers.facets['tag']['terms'] do |tag|
       json.(tag, 'term', 'count')
