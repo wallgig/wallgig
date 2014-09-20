@@ -1,14 +1,17 @@
 //= require lodash
+//= require q
 //= require query-string
-//= require vue
 //= require superagent
+//= require vue
 //= require_tree ./components/.
 //= require_tree ./directives/.
 //= require_self
 
-/* global _, Vue, superagent */
+(function (exports, Vue, _, queryString) {
+  if ('debug' in queryString.parse(window.location.search)) {
+    Vue.config('debug', true);
+  }
 
-(function (exports) {
   exports.app = new Vue({
     el: '#wallgig-app',
 
@@ -23,14 +26,11 @@
     },
 
     created: function () {
-      var self = this;
-
-      // API
-      self.$on('apiError', self.handleApiError);
+      this.$on('apiError', this.apiDidError);
     },
 
     methods: {
-      handleApiError: function (res) {
+      apiDidError: function (res) {
         if (res.unauthorized) {
           if (res.body && res.body.message) {
             alert(res.body.message);
@@ -43,4 +43,4 @@
       }
     }
   });
-})(window);
+})(window, Vue, _, queryString);

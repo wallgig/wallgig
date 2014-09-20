@@ -3,7 +3,6 @@ ul.collectionList {
   @extend .clearfix;
   margin-left: -10px;
   margin-right: -10px;
-  overflow: hidden;
   text-align: center;
   &.row-1 {
     height: 374px;
@@ -66,9 +65,9 @@ ul.collectionList--compact {
 
   // Create new wallpaper
   .collectionList-createNew {
-    text-align: center;
     height: $height-compact--collectionListItem;
     line-height: $height-compact--collectionListItem;
+    text-align: center;
   }
 
   // Wallpapers count
@@ -83,36 +82,34 @@ ul.collectionList--compact {
 
   // Preview overlay
   .collectionList-previewOverlay {
-    font-size: $fontSize--collectionListItem-previewOverlayIcon;
     position: absolute;
     top: 0;
     right: 0;
     bottom: 0;
     left: 0;
-    background: rgba(0, 0, 0, 0.3);
+    background-color: rgba(0, 0, 0, 0.6);
     transition: all 0.1s ease-in;
+    text-align: center;
+    line-height: 120px;
+    font-size: $fontSize--collectionListItem-previewOverlayIcon;
   }
 
   .collectionList-previewOverlay--added {
-    color: $brand-success;
+    color: $color-green;
   }
 
   .collectionList-previewOverlay--plus {
+    color: $color-silver;
     opacity: 0;
   }
   .is-draggedOver .collectionList-previewOverlay--plus {
     opacity: 1;
   }
 
-  // Preview area and previewOverlay
-  .collectionList-preview--centeredText,
-  .collectionList-previewOverlay {
+  // Preview area
+  .collectionList-preview--centeredText {
     text-align: center;
     line-height: $height-halfWallpaperThumbnail;
-  }
-  .collectionList-createNew .collectionList-previewOverlay {
-    // Max out line-height since preview overlay does not have meta
-    line-height: $height-compact--collectionListItem;
   }
 
   // Collection name

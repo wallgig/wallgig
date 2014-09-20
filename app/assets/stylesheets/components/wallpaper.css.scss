@@ -1,3 +1,4 @@
+// Wallpaper thumbnail
 .wallpaperThumbnail {
   width: $width-wallpaperThumbnail;
   height: $height-wallpaperThumbnail;
@@ -6,4 +7,87 @@
 .wallpaperThumbnail--halved {
   width: $width-halfWallpaperThumbnail;
   height: $height-halfWallpaperThumbnail;
+}
+
+// Wallpaper list
+.wallpaperList {
+  @extend .list-unstyled;
+  @extend .clearfix;
+  margin-left: -10px;
+  margin-right: -10px;
+  text-align: center;
+  &.row-1 {
+    height: 208px;
+  }
+  &.row-2 {
+    height: 416px;
+  }
+
+  > li {
+    width: $width-wallpaperThumbnail;
+    height: $height-wallpaperThumbnail;
+    margin: 10px;
+
+    overflow: hidden;
+    position: relative;
+
+    display: inline-block;
+    font-size: 0;
+    & > * {
+      font-size: $font-size-base;
+    }
+
+    transition: all 0.1s ease-in;
+  }
+  > li:hover {
+    box-shadow: $color-black 0px 0px 5px;
+  }
+
+  // Common
+  .wallpaperList--overlay,
+  .btn {
+    color: $color-white;
+  }
+
+  // Overlays
+  .wallpaperList--overlay {
+    position: absolute;
+    transition: all 0.1s ease-in;
+  }
+
+  .wallpaperList--overlayBottom {
+    $overlay-height: 30px;
+    left: 0;
+    width: 100%;
+    bottom: -$overlay-height;
+    height: $overlay-height;
+    background-color: rgba(0, 0, 0, 0.5);
+    text-align: center;
+    line-height: $overlay-height;
+    opacity: 0;
+  }
+  > li:hover .wallpaperList--overlayBottom {
+    bottom: 0;
+    opacity: 1;
+  }
+
+  // Buttons
+  .btn--fav.is-faved {
+    @extend .btn-primary;
+  }
+}
+
+// Wallpaper list - Page separator
+.wallpaperList--pageSeparator {
+  @extend .clearfix;
+  font-size: $font-size-h3;
+
+  a {
+    color: $gray;
+    text-decoration: none;
+  }
+
+  a:hover {
+    color: $gray-darker;
+  }
 }
