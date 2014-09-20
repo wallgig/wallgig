@@ -65,7 +65,7 @@
 
   Vue.component('wallpaper-index', {
     data: {
-      isLoading: true,
+      isLoading: false,
       wallpaperPages: [],
       options: {},
       previousPage: null,
