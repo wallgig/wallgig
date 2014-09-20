@@ -1,5 +1,10 @@
 json.partial! 'api/v1/shared/paging', collection: @wallpapers
 
+json.facets do
+  json.tags @wallpapers.facets['tag']['terms']
+  json.categories @wallpapers.facets['category']['terms']
+end
+
 json.wallpapers @wallpapers do |wallpaper|
   json.(wallpaper, :id, :purity, :favourites_count)
   json.views_count wallpaper.impressions_count
