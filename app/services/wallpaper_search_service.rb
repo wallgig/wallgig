@@ -94,6 +94,7 @@ class WallpaperSearchService
       order: build_order_option,
       page: options[:page],
       per_page: options[:per_page] || Wallpaper.default_per_page,
+      smart_facets: true,
       execute: false
     )
 
