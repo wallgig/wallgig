@@ -40,3 +40,17 @@ $width-compact--collectionListItem: $width-halfWallpaperThumbnail;
 $height-compact--collectionListItem: $height-halfWallpaperThumbnail + $height-compact--collectionListItem-meta;
 
 $fontSize--collectionListItem-previewOverlayIcon: 40px;
+
+
+// Purities
+$color-sfw: $color-green;
+$color-sketchy: $color-orange;
+$color-nsfw: $color-red;
+
+// Purities - Active state
+$color-sfw--active: $color-white;
+$color-sketchy--active: $color-white;
+$color-nsfw--active: $color-white;
+$bgColor-sfw--active: $color-sfw;
+$bgColor-sketchy--active: $color-sketchy;
+$bgColor-nsfw--active: $color-nsfw;

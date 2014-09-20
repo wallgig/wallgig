@@ -1,5 +1,4 @@
 %div.wallpaperSearch{:v => {:component => 'wallpaper-search', :with => 'search: search'}}
-  {{search}}
   {{search.purities}}
   .row
     .col-md-6
@@ -11,7 +10,7 @@
             %a{:href => '#', :tabindex => -1, :v => {:on => 'click: changeOrder($key, $event)'}} {{$value}}
 
       .btn-group.btn-group--purity
-        %button.btn{:class => 'is-{{$key}}',
+        %button.btn.btn--purity{:class => 'is-{{$key}}',
             :v => {:repeat => 'purityMappings',
               :class => 'is-active: search.purities.indexOf($key) !== -1',
               :on => 'click: togglePurity($key, $event)'}}
