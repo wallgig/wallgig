@@ -18,8 +18,8 @@
       }
       console.log(this.hasNextPage);
       this.$watch('hasNextPage', this.hasNextPageDidChange);
-      this.$on('nextPageWillLoad', this.nextPageWillLoad);
-      this.$on('nextPageDidLoad', this.nextPageDidLoad);
+      this.$on('wallpaperPageWillLoad', this.wallpaperPageWillLoad);
+      this.$on('wallpaperPageDidLoad', this.wallpaperPageDidLoad);
     },
 
     ready: function () {
@@ -44,7 +44,6 @@
       },
 
       hasNextPageDidChange: function (value) {
-        console.log('hasNextPageDidChange');
         if (value) {
           this.watchScroll();
         } else {
@@ -52,11 +51,11 @@
         }
       },
 
-      nextPageWillLoad: function () {
+      wallpaperPageWillLoad: function () {
         this.unwatchScroll();
       },
 
-      nextPageDidLoad: function () {
+      wallpaperPageDidLoad: function () {
         this.watchScroll();
       },
 
@@ -70,17 +69,20 @@
         }
       }
     }
-  })
+  });
+
+  var WallpaperPage = Vue.extend({
+    created: function () {
+      console.log('Wallpaper page created');
+    }
+  });
 
   Vue.component('wallpaper-list', {
     data: {
       isLoading: true,
-      isFirst: false,
-
-      paging: {},
-      wallpapers: [],
-
-      options: {}
+      wallpaperPages: [],
+      options: {},
+      currentPaging: null
     },
 
     paramAttributes: [
@@ -99,11 +101,9 @@
       }
 
       if (this.data) {
-        this.data = JSON.parse(this.data);
-        this.wallpapers = this.data.wallpapers;
-        this.paging = this.data.paging;
-        this.isLoading = false;
-        this.isFirst = true;
+        // Process preloaded data
+        this.wallpaperPageDidLoad(JSON.parse(this.data));
+        this.data = undefined;
       } else {
         this.fetchData();
       }
@@ -113,34 +113,37 @@
 
     methods: {
       fetchData: function (page) {
-        var self = this;
-
-        self.isLoading = true;
+        this.$broadcast('wallpaperPageWillLoad');
+        this.isLoading = true;
 
         superagent
-          .get(self.endpoint)
+          .get(this.endpoint)
           .accept('json')
           .query(location.search.slice(1))
           .query({ page: page })
-          .end(function (res) {
+          .end(_.bind(function (res) {
             if (res.ok) {
-              self.paging = res.body.paging;
-              self.wallpapers = res.body.wallpapers;
+              this.wallpaperPageDidLoad(res.body);
             }
-            self.isLoading = false;
-          });
+            this.isLoading = false;
+          }, this));
+      },
+
+      wallpaperPageDidLoad: function (wallpaperPage) {
+        this.wallpaperPages.push(wallpaperPage);
+        this.currentPaging = wallpaperPage.paging;
+        this.$broadcast('wallpaperPageDidLoad');
       },
 
       infiniteScrollTargetDidReach: function () {
-        console.log('infiniteScrollTargetDidReach');
-
-        if ( ! this.paging.next) {
-          return;
+        if (this.wallpaperPages.length < config.infiniteScroll.maxPages
+            && this.currentPaging
+            && this.currentPaging.current_page < this.currentPaging.total_pages
+          ) {
+          // Fetch next page
+          // TODO use this.currentPaging.next as endpoint
+          this.fetchData(this.currentPaging.current_page + 1);
         }
-
-        this.$broadcast('nextPageWillLoad');
-
-        console.log(this.fetchData());
       }
     },
 
@@ -153,7 +156,8 @@
     },
 
     components: {
-      pagination: Pagination
+      pagination: Pagination,
+      'wallpaper-page': WallpaperPage
     }
   });
 })(Vue, _, superagent);

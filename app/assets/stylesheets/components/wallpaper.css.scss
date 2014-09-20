@@ -1,3 +1,4 @@
+// Wallpaper thumbnail
 .wallpaperThumbnail {
   width: $width-wallpaperThumbnail;
   height: $height-wallpaperThumbnail;
@@ -6,4 +7,19 @@
 .wallpaperThumbnail--halved {
   width: $width-halfWallpaperThumbnail;
   height: $height-halfWallpaperThumbnail;
+}
+
+// Wallpaper list
+.wallpaperList--pageSeparator {
+  @extend .clearfix;
+  font-size: $font-size-h3;
+
+  a {
+    color: $gray;
+    text-decoration: none;
+  }
+
+  a:hover {
+    color: $gray-darker;
+  }
 }
