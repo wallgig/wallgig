@@ -4,12 +4,10 @@
   {{toQueryString}}
   %ul.list-inline
     %li.wallpaperSearch--order
-      .dropdown
-        %button.btn.btn-default.dropdown-toggle{:type => 'button', :data => {:toggle => 'dropdown'}}
-          {{currentOrder}}
-        %ul.dropdown-menu
-          %li{:v => {:repeat => 'orderMappings', :show => '$key !== search.order'}}
-            %a{:href => '#', :tabindex => -1, :v => {:on => 'click: changeOrder($key, $event)'}} {{$value}}
+      %select.form-control{:v => {:model => 'search.order'}}
+        %option{:v => {:repeat => 'orderMappings',
+              :attr => 'value: $key'}}
+          Sort by {{$value}}
 
     %li.wallpaperSearch--purity
       .btn-group.btn-group--purity
@@ -22,12 +20,18 @@
 
   .row
     .wallpaperSearch--tags.col-md-8
-      %ul.list-unstyled
-        %li{:v => {:repeat => 'search.facets.tags',
-              :class => 'is-included: included, is-excluded: excluded'}}
-          %a{:href => '#', :v => {:on => 'click: toggleTagInclusion($index, $event)'}}
-            {{term}}
-            %span{:v => {:if => '!included'}} ({{count}})
+      .row
+        .col-xs-12
+          %h5 Tags
+        .col-lg-3.col-md.4.col-xs-6.wallpaperSearch--tagColumn{:v => {:repeat => 'search.facets.tags'}}
+          .btn-group
+            %a.btn.btn-xs.btn--tagInfo{:href => '/tags/{{id}}'}
+              %i.fa.fa-fw.fa-tag
+            %a.btn.btn-xs.btn--tag{:href => '#',
+                :v => {:on => 'click: toggleTagInclusion($index, $event)',
+                  :class => 'is-active: included'}}
+              {{name}}
+              %span{:v => {:if => '!included'}} ({{count}})
 
     .wallpaperSearch--categories.col-md-4
       categories here

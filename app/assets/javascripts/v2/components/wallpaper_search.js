@@ -16,10 +16,10 @@
         nsfw: 'NSFW'
       },
       orderMappings: {
-        latest: 'by recency',
-        score: 'by relevance',
-        popular: 'by popularity',
-        random: 'by random'
+        latest: 'Recency',
+        score: 'Relevance',
+        popular: 'Popularity',
+        random: 'Random'
       },
 
       myObj: {
@@ -46,11 +46,6 @@
     },
 
     methods: {
-      changeOrder: function (order, e) {
-        e.preventDefault();
-        this.search.order = order;
-      },
-
       togglePurity: function (purity, e) {
         e.preventDefault();
 
