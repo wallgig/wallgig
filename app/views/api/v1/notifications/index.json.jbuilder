@@ -1,4 +1,4 @@
-json.partial! 'api/v1/shared/page_meta', collection: @notifications
+json.partial! 'api/v1/shared/paging', collection: @notifications
 
 json._links do
   json.self url_for(notification_params.merge(only_path: true))

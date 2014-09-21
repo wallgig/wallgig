@@ -100,7 +100,7 @@
         this.fetchPage();
       }
 
-      this.searchQuery = location.search.slice(1);
+      this.searchQuery = queryString.parse(location.search);
 
       this.$on('infiniteScrollTargetDidReach', this.infiniteScrollTargetDidReach);
       this.$on('searchDidRequest', this.searchDidRequest);
@@ -146,7 +146,7 @@
         }
 
         this.search = wallpaperPage.search; // Refresh search
-        this.wallpaperPages.push(_.pick(wallpaperPage, 'paging', 'wallpapers'));
+        this.wallpaperPages.push(wallpaperPage);
 
         this.$broadcast('wallpaperPageDidLoad', wallpaperPage);
       },

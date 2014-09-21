@@ -8,7 +8,7 @@
   %div{:v => {:component => 'wallpaper-list',
       :repeat => 'wallpaperPages'}}
     .wallpaperList--pageSeparator{:v => {:if => '$index > 0'}}
-      %a.pull-left{:v => {:attr => 'href: paging.self'}}
+      %a.pull-left{:v => {:attr => 'href: generatePageHref(paging.current_page)'}}
         %small.text-muted Page
         {{paging.current_page}}
       %a.pull-right{:href => '#'}
