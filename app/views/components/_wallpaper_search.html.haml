@@ -1,58 +1,58 @@
-%div.wallpaperSearch{:v => {:component => 'wallpaper-search', :with => 'search: search'}}
-  %pre
-    {{search.purities}}
-    {{search.facets.tags}}
-    {{search.facets.categories}}
-    {{toQueryString}}
-  %ul.list-inline
-    %li.wallpaperSearch--order
-      %select.form-control{:v => {:model => 'search.order'}}
-        %option{:v => {:repeat => 'orderMappings',
-              :attr => 'value: $key'}}
-          Sort by {{$value}}
+%div.wallpaperSearch.panel.panel-default{:v => {:component => 'wallpaper-search', :with => 'search: search'}}
+  .panel-body
+    .row
+      .col-md-2.wallpaperSearch--purity
+        .btn-group.btn-group-justified.btn-group--purity
+          %a.btn.btn--purity{:href => '#',
+              :class => 'is-{{$key}}',
+              :v => {:repeat => 'purityMappings',
+                :class => 'is-active: search.purities.indexOf($key) !== -1',
+                :on => 'click: togglePurity($key, $event)'}}
+            {{$value}}
+      .col-md-8
+        %a.btn.btn-primary{:href => '#',
+            :v => {:on => 'click: onClickSearch'}}
+          %i.fa.fa-fw.fa-search
 
-    %li.wallpaperSearch--purity
-      .btn-group.btn-group--purity
-        %a.btn.btn--purity{:href => '#',
-            :class => 'is-{{$key}}',
-            :v => {:repeat => 'purityMappings',
-              :class => 'is-active: search.purities.indexOf($key) !== -1',
-              :on => 'click: togglePurity($key, $event)'}}
-          {{$value}}
+      .col-md-2.wallpaperSearch--order
+        %select.form-control{:v => {:model => 'search.order'}}
+          %option{:v => {:repeat => 'orderMappings',
+                :attr => 'value: $key'}}
+            Sort by {{$value}}
 
-  .row
-    .wallpaperSearch--tags.col-md-8
-      %h5
-        %i.fa.fa-fw.fa-tags
-        Tags
+  .panel-body
+    .row
+      .wallpaperSearch--tags.col-md-8
+        %h5
+          %i.fa.fa-fw.fa-tags
+          Tags
 
-      .row{:v => {:if => 'search.facets.tags.length > 0'}}
-        .col-lg-3.col-md.4.col-xs-6.wallpaperSearch--tagColumn{:v => {:repeat => 'search.facets.tags'}}
-          .btn-group
-            %a.btn.btn-xs.btn--tagInfo{:href => '/tags/{{id}}'}
-              %i.fa.fa-fw.fa-tag
-            %a.btn.btn-xs.btn--tag{:href => '#',
-                :v => {:on => 'click: toggleInclusion(search.facets.tags, $index, $event)',
-                  :class => 'is-active: included'}}
-              {{name}}
-              %span{:v => {:if => '!included'}} ({{count}})
+        .row{:v => {:if => 'search.facets.tags.length > 0'}}
+          .col-lg-3.col-md.4.col-xs-6.wallpaperSearch--tagColumn{:v => {:repeat => 'search.facets.tags'}}
+            .btn-group
+              %a.btn.btn-xs.btn--tagInfo{:href => '/tags/{{id}}'}
+                %i.fa.fa-fw.fa-tag
+              %a.btn.btn-xs.btn--tag{:href => '#',
+                  :v => {:on => 'click: toggleInclusion(search.facets.tags, $index, $event)',
+                    :class => 'is-active: included'}}
+                {{name}}
+                %span{:v => {:if => '!included'}} ({{count}})
 
-      %small.text-muted{:v => {:if => 'search.facets.tags.length === 0'}} No tags
+        %small.text-muted{:v => {:if => 'search.facets.tags.length === 0'}} No tags
 
-    .wallpaperSearch--categories.col-md-4
-      %h5
-        %i.fa.fa-fw.fa-folder-open
-        Categories
-      .row{:v => {:if => 'search.facets.categories.length > 0'}}
-        .col-lg-3.col-md.4.col-xs-6.wallpaperSearch--categoryColumn{:v => {:repeat => 'search.facets.categories'}}
-          .btn-group
-            %a.btn.btn-xs.btn--tagInfo{:href => '/categories/{{id}}'}
-              %i.fa.fa-fw.fa-folder
-            %a.btn.btn-xs.btn--tag{:href => '#',
-                :v => {:on => 'click: toggleInclusion(search.facets.categories, $index, $event)',
-                  :class => 'is-active: included'}}
-              {{name}}
-              %span{:v => {:if => '!included'}} ({{count}})
+      .wallpaperSearch--categories.col-md-4
+        %h5
+          %i.fa.fa-fw.fa-folder-open
+          Categories
+        .row{:v => {:if => 'search.facets.categories.length > 0'}}
+          .col-lg-3.col-md.4.col-xs-6.wallpaperSearch--categoryColumn{:v => {:repeat => 'search.facets.categories'}}
+            .btn-group
+              %a.btn.btn-xs.btn--tagInfo{:href => '/categories/{{id}}'}
+                %i.fa.fa-fw.fa-folder
+              %a.btn.btn-xs.btn--tag{:href => '#',
+                  :v => {:on => 'click: toggleInclusion(search.facets.categories, $index, $event)',
+                    :class => 'is-active: included'}}
+                {{name}}
+                %span{:v => {:if => '!included'}} ({{count}})
 
-      %small.text-muted{:v => {:if => 'search.facets.categories.length === 0'}} No tags
-      
+        %small.text-muted{:v => {:if => 'search.facets.categories.length === 0'}} No tags

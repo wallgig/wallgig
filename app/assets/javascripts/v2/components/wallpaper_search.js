@@ -83,6 +83,10 @@
         collection[index].included = ( ! collection[index].included);
       },
 
+      onClickSearch: function (e) {
+        e.preventDefault();
+      },
+
       toQueryStringObject: function () {
         return _.omit({
           'order': this.search.order,
