@@ -72,7 +72,7 @@
           'q': search.q,
           'order': search.order,
           'color': search.color,
-          'purity': search.purities, // FIXME
+          'purity[]': search.purities,
           'tags[]': _.chain(search.facets.tags).where({ included: true }).pluck('id').valueOf(),
           'categories[]': _.chain(search.facets.categories).where({ included: true }).pluck('id').valueOf()
         }, _.isEmpty);
@@ -82,10 +82,6 @@
     computed: {
       currentOrder: function () {
         return this.orderMappings[this.search.order];
-      },
-
-      toQueryString: function () {
-        return queryString.stringify(this.toQueryStringObject());
       }
     }
   });

@@ -114,8 +114,8 @@
         superagent
           .get(this.endpoint)
           .accept('json')
-          .query(this.searchQuery)
-          .query({ page: page || 1 })
+          .query(queryString.stringify(this.searchQuery))
+          .query({ page: page })
           .end(_.bind(function (res) {
             if (res.ok) {
               this.wallpaperPageDidLoad(res.body);
@@ -167,9 +167,9 @@
       },
 
       generatePageHref: function (page) {
-        var query = queryString.parse(window.location.search);
-        query.page = page;
-        return window.location.pathname + '?' + queryString.stringify(query);
+        var searchQuery = _.cloneDeep(this.searchQuery);
+        searchQuery.page = page;
+        return window.location.pathname + '?' + queryString.stringify(searchQuery);
       }
     },
 
