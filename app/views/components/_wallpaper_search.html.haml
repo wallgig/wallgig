@@ -36,7 +36,7 @@
           Tags
 
         .row{:v => {:if => 'search.facets.tags.length > 0'}}
-          .col-lg-3.col-md.4.col-xs-6.wallpaperSearch--tagColumn{:v => {:repeat => 'search.facets.tags'}}
+          .col-lg-3.col-md-4.col-xs-6.wallpaperSearch--tagColumn{:v => {:repeat => 'search.facets.tags'}}
             .btn-group
               %a.btn.btn-xs.btn--tagInfo{:href => '/tags/{{id}}'}
                 %i.fa.fa-fw.fa-tag
@@ -53,7 +53,7 @@
           %i.fa.fa-fw.fa-folder-open
           Categories
         .row{:v => {:if => 'search.facets.categories.length > 0'}}
-          .col-lg-3.col-md.4.col-xs-6.wallpaperSearch--categoryColumn{:v => {:repeat => 'search.facets.categories'}}
+          .col-md-6.col-xs-12.wallpaperSearch--categoryColumn{:v => {:repeat => 'search.facets.categories'}}
             .btn-group
               %a.btn.btn-xs.btn--tagInfo{:href => '/categories/{{id}}'}
                 %i.fa.fa-fw.fa-folder

@@ -73,8 +73,8 @@
           'order': search.order,
           'color': search.color,
           'purity[]': search.purities,
-          'tags[]': _.chain(search.facets.tags).where({ included: true }).pluck('id').valueOf(),
-          'categories[]': _.chain(search.facets.categories).where({ included: true }).pluck('id').valueOf()
+          'tags[]': _.chain(search.facets.tags).where({ included: true }).pluck('name').valueOf(),
+          'categories[]': _.chain(search.facets.categories).where({ included: true }).pluck('name').valueOf()
         }, _.isEmpty);
       }
     },
