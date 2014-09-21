@@ -22,7 +22,9 @@
 
   .row
     .wallpaperSearch--tags.col-md-8
-      %h5 Tags
+      %h5
+        %i.fa.fa-fw.fa-tags
+        Tags
 
       .row{:v => {:if => 'search.facets.tags.length > 0'}}
         .col-lg-3.col-md.4.col-xs-6.wallpaperSearch--tagColumn{:v => {:repeat => 'search.facets.tags'}}
@@ -38,7 +40,9 @@
       %small.text-muted{:v => {:if => 'search.facets.tags.length === 0'}} No tags
 
     .wallpaperSearch--categories.col-md-4
-      %h5 Categories
+      %h5
+        %i.fa.fa-fw.fa-folder-open
+        Categories
       .row{:v => {:if => 'search.facets.categories.length > 0'}}
         .col-lg-3.col-md.4.col-xs-6.wallpaperSearch--categoryColumn{:v => {:repeat => 'search.facets.categories'}}
           .btn-group

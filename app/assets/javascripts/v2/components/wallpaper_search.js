@@ -1,4 +1,4 @@
-(function (Vue, _) {
+(function (Vue, _, queryString) {
   Vue.component('wallpaper-search', {
     data: {
       isDirty: false,
@@ -72,8 +72,8 @@
 
       toQueryString: function () {
         console.log('toQueryString called');
-        return 'ok';
+        return queryString.stringify(this.search);
       }
     }
   });
-})(Vue, _);
+})(Vue, _, queryString);
