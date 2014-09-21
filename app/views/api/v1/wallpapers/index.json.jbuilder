@@ -9,12 +9,14 @@ json.search do
     json.tags @wallpapers.facets['tag']['terms'] do |tag|
       json.id tag['term'].parameterize
       json.name tag['term']
-      json.count tag['count'].presence
+      json.count tag['count']
       json.included true if search_options[:tags].include?(tag['term'])
       json.excluded true if search_options[:exclude_tags].include?(tag['term'])
     end
     json.categories @wallpapers.facets['category']['terms'] do |category|
-      json.(category, 'term', 'count')
+      json.id category['term'].parameterize
+      json.name category['term']
+      json.count category['count']
       json.included true if search_options[:categories].include?(category['term'])
       json.excluded true if search_options[:exclude_categories].include?(category['term'])
     end

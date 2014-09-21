@@ -59,10 +59,9 @@
         }
       },
 
-      toggleTagInclusion: function (index, e) {
+      toggleInclusion: function (collection, index, e) {
         e.preventDefault();
-
-        this.search.facets.tags[index].included = !this.search.facets.tags[index].included;
+        collection[index].included = ( ! collection[index].included);
       }
     },
 

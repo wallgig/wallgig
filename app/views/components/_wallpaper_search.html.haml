@@ -1,7 +1,9 @@
 %div.wallpaperSearch{:v => {:component => 'wallpaper-search', :with => 'search: search'}}
-  {{search.purities}}
-  {{search.facets.tags}}
-  {{toQueryString}}
+  %pre
+    {{search.purities}}
+    {{search.facets.tags}}
+    {{search.facets.categories}}
+    {{toQueryString}}
   %ul.list-inline
     %li.wallpaperSearch--order
       %select.form-control{:v => {:model => 'search.order'}}
@@ -20,18 +22,33 @@
 
   .row
     .wallpaperSearch--tags.col-md-8
-      .row
-        .col-xs-12
-          %h5 Tags
+      %h5 Tags
+
+      .row{:v => {:if => 'search.facets.tags.length > 0'}}
         .col-lg-3.col-md.4.col-xs-6.wallpaperSearch--tagColumn{:v => {:repeat => 'search.facets.tags'}}
           .btn-group
             %a.btn.btn-xs.btn--tagInfo{:href => '/tags/{{id}}'}
               %i.fa.fa-fw.fa-tag
             %a.btn.btn-xs.btn--tag{:href => '#',
-                :v => {:on => 'click: toggleTagInclusion($index, $event)',
+                :v => {:on => 'click: toggleInclusion(search.facets.tags, $index, $event)',
                   :class => 'is-active: included'}}
               {{name}}
               %span{:v => {:if => '!included'}} ({{count}})
 
+      %small.text-muted{:v => {:if => 'search.facets.tags.length === 0'}} No tags
+
     .wallpaperSearch--categories.col-md-4
-      categories here
+      %h5 Categories
+      .row{:v => {:if => 'search.facets.categories.length > 0'}}
+        .col-lg-3.col-md.4.col-xs-6.wallpaperSearch--categoryColumn{:v => {:repeat => 'search.facets.categories'}}
+          .btn-group
+            %a.btn.btn-xs.btn--tagInfo{:href => '/categories/{{id}}'}
+              %i.fa.fa-fw.fa-folder
+            %a.btn.btn-xs.btn--tag{:href => '#',
+                :v => {:on => 'click: toggleInclusion(search.facets.categories, $index, $event)',
+                  :class => 'is-active: included'}}
+              {{name}}
+              %span{:v => {:if => '!included'}} ({{count}})
+
+      %small.text-muted{:v => {:if => 'search.facets.categories.length === 0'}} No tags
+      
