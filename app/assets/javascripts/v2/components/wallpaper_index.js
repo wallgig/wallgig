@@ -100,6 +100,7 @@
       }
 
       this.$on('infiniteScrollTargetDidReach', this.infiniteScrollTargetDidReach);
+      this.$on('wallpaperSearchDidChange', this.wallpaperSearchDidChange);
     },
 
     methods: {
@@ -148,6 +149,10 @@
           // Fetch next page
           this.fetchPage(this.nextPage);
         }
+      },
+
+      wallpaperSearchDidChange: function () {
+        console.log('here');
       },
 
       generatePageHref: function (page) {

@@ -24,32 +24,46 @@
         score: 'Relevance',
         popular: 'Popularity',
         random: 'Random'
-      },
-
-      myObj: {
-        myArr: []
-      },
-      myArr: []
+      }
     },
 
     created: function () {
-      console.log('wallpaper search component ready');
+      this.$on('wallpaperSearchDidChange', this.wallpaperSearchDidChange);
+      this.$on('wallpaperPageWillLoad', this.wallpaperPageWillLoad);
+      this.$on('wallpaperPageDidLoad', this.wallpaperPageDidLoad);
 
-      this.$on('wallpaperSearchDidChange', function () {
-        console.log('wallpaperSearchDidChange created');
-      });
-      this.$watch('search.purities', function () {
-        console.log(arguments);
-      });
-    },
-
-    ready: function () {
-      this.$on('wallpaperSearchDidChange', function () {
-        console.log('wallpaperSearchDidChange ready');
-      });
+      this.$watch('search', this.triggerWallpaperSearch);
+      // Watch array in object workaround:
+      this.$watch('search.purities', this.triggerWallpaperSearch);
     },
 
     methods: {
+      wallpaperSearchDidChange: function (search) {
+        console.log('wallpaperSearchDidChange', search);
+        this.$unwatch('search');
+        this.$unwatch('search.purities');
+        this.search = search;
+        this.$watch('search', this.triggerWallpaperSearch);
+        this.$watch('search.purities', this.triggerWallpaperSearch);
+      },
+
+      triggerWallpaperSearch: function () {
+        console.log(arguments);
+        this.$unwatch('search');
+        this.$unwatch('search.purities');
+        this.$dispatch('wallpaperSearchDidChange', this.toQueryStringObject());
+        console.log('triggerWallpaperSearch');
+      },
+
+      wallpaperPageWillLoad: function () {
+        this.$unwatch('search');
+        this.$unwatch('search.purities');
+      },
+
+      wallpaperPageDidLoad: function () {
+
+      },
+
       togglePurity: function (purity, e) {
         e.preventDefault();
 
