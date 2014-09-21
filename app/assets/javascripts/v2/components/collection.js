@@ -29,7 +29,6 @@
 
     methods: {
       refreshCollectionState: function () {
-        console.log('refreshCollectionState');
         if (this.activeWallpaper) {
           this.isInCollection = _(this.cachedWallpaperIds).contains(this.activeWallpaper.id);
         } else {
