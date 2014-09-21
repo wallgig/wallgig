@@ -3,6 +3,8 @@
     :options => local_assigns[:search_options].try(:to_json),
     :data => local_assigns[:data]}
 
+  = render partial: 'components/wallpaper_search'
+
   %div{:v => {:component => 'wallpaper-list',
       :repeat => 'wallpaperPages'}}
     .wallpaperList--pageSeparator{:v => {:if => '$index > 0'}}
@@ -10,7 +12,7 @@
         %small.text-muted Page
         {{paging.current_page}}
       %a.pull-right{:href => '#'}
-        %span.fa.fa-chevron-up
+        %i.fa.fa-fw.fa-chevron-up
 
     %ul.wallpaperList{:v => {:show => 'wallpapers.length'}}
       %li{:v => {:repeat => 'wallpapers',
@@ -28,10 +30,10 @@
           %a.btn.btn-sm.btn--fav.pull-left{:href => '#',
               :v => {:class => 'is-faved: favourited, disabled: isToggling',
                 :on => 'click: toggleFavourite'}}
-            %span.fa.fa-star
+            %i.fa.fa-fw{:v => {:class => 'fa-star: !isToggling, fa-refresh: isToggling, fa-spin: isToggling'}}
             %span.count {{favourites_count}}
           .btn.btn-sm.pull-right
-            %span.fa.fa-eye
+            %i.fa.fa-fw.fa-eye
             {{views_count}}
 
     %div{:v => {:show => 'wallpapers.length === 0'}}

@@ -1,0 +1,29 @@
+// Wallpaper search
+.wallpaperSearch {
+
+  // Tag button
+  .btn--tag {
+    @extend .btn-link;
+  }
+  .btn--tag.is-active {
+    @extend .btn-success;
+  }
+
+  // Tag info button
+  .btn--tagInfo {
+    @extend .btn-default;
+  }
+}
+
+// Wallpaper search - Options
+ul.wallpaperSearch--options {
+  @extend .list-inline;
+  margin-bottom: 0;
+}
+
+// Wallpaper search - Tag column
+.wallpaperSearch--tagColumn {
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  overflow: hidden;
+}

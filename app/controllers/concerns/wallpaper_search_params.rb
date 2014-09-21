@@ -2,7 +2,8 @@ module WallpaperSearchParams
   extend ActiveSupport::Concern
 
   GLUE = ','
-  ARRAY_PARAMS = %i(categories exclude_categories tags exclude_tags aspect_ratios)
+  KEYS_SCALAR = %i(q page per_page width height color order user resolution_exactness color)
+  KEYS_VECTOR = %i(categories exclude_categories tags exclude_tags aspect_ratios)
 
   included do
     helper_method :search_options
@@ -23,7 +24,7 @@ module WallpaperSearchParams
       search_options = search_params
 
       # Ensure array
-      ARRAY_PARAMS.each do |key|
+      KEYS_VECTOR.each do |key|
         if search_options[key].is_a? String
           search_options[key] = search_options[key].split(GLUE)
         else

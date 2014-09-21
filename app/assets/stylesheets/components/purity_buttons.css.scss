@@ -1,0 +1,33 @@
+// Button purity
+
+.btn--purity {
+  @extend .btn-default;
+
+  // SFW
+  &.is-sfw {
+    color: $color-sfw;
+  }
+  &.is-sfw.is-active {
+    background-color: $bgColor-sfw--active;
+    color: $color-sfw--active;
+  }
+
+  // Sketchy
+  &.is-sketchy {
+    color: $color-sketchy;
+  }
+  &.is-sketchy.is-active {
+    background-color: $bgColor-sketchy--active;
+    color: $color-sketchy--active;
+  }
+
+  // NSFW
+  &.is-nsfw {
+    color: $color-nsfw;
+  }
+  &.is-nsfw.is-active {
+    background-color: $bgColor-nsfw--active;
+    color: $color-nsfw--active;
+  }
+
+}
