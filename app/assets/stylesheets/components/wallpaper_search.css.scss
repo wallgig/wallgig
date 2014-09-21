@@ -15,6 +15,12 @@
   }
 }
 
+// Wallpaper search - Options
+ul.wallpaperSearch--options {
+  @extend .list-inline;
+  margin-bottom: 0;
+}
+
 // Wallpaper search - Tag column
 .wallpaperSearch--tagColumn {
   text-overflow: ellipsis;
