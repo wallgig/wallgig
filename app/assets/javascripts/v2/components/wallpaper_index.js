@@ -67,7 +67,8 @@
   Vue.component('wallpaper-index', {
     data: {
       isLoading: false,
-      search: {},
+      searchId: null,
+      searchQuery: null,
       wallpaperPages: [],
       options: {},
       previousPage: null,
@@ -99,8 +100,10 @@
         this.fetchPage();
       }
 
+      this.searchQuery = location.search.slice(1);
+
       this.$on('infiniteScrollTargetDidReach', this.infiniteScrollTargetDidReach);
-      this.$on('wallpaperSearchDidChange', this.wallpaperSearchDidChange);
+      this.$on('searchDidRequest', this.searchDidRequest);
     },
 
     methods: {
@@ -111,7 +114,7 @@
         superagent
           .get(this.endpoint)
           .accept('json')
-          .query(location.search.slice(1))
+          .query(this.searchQuery)
           .query({ page: page || 1 })
           .end(_.bind(function (res) {
             if (res.ok) {
@@ -122,15 +125,21 @@
       },
 
       wallpaperPageDidLoad: function (wallpaperPage) {
+        if (wallpaperPage.search.id !== this.searchId) {
+          // TODO move to reset function
+          this.searchId = wallpaperPage.search.id;
+          this.wallpaperPages = [];
+        }
+
         // Set previous page number
         if (this.wallpaperPages.length === 0) {
-          if (wallpaperPage.paging.previous) {
+          if (wallpaperPage.paging && wallpaperPage.paging.previous) {
             this.previousPage = wallpaperPage.paging.current_page - 1;
           }
         }
 
         // Set next page number
-        if (wallpaperPage.paging.next) {
+        if (wallpaperPage.paging && wallpaperPage.paging.next) {
           this.nextPage = wallpaperPage.paging.current_page + 1;
         } else {
           this.nextPage = null;
@@ -139,7 +148,7 @@
         this.search = wallpaperPage.search; // Refresh search
         this.wallpaperPages.push(_.pick(wallpaperPage, 'paging', 'wallpapers'));
 
-        this.$broadcast('wallpaperPageDidLoad');
+        this.$broadcast('wallpaperPageDidLoad', wallpaperPage);
       },
 
       infiniteScrollTargetDidReach: function () {
@@ -151,8 +160,10 @@
         }
       },
 
-      wallpaperSearchDidChange: function () {
-        console.log('here');
+      searchDidRequest: function (searchQuery) {
+        console.log(searchQuery);
+        this.searchQuery = searchQuery;
+        this.fetchPage();
       },
 
       generatePageHref: function (page) {

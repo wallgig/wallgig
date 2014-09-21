@@ -25,9 +25,8 @@
             Sort by {{$value}}
 
       %li
-        %a.btn.btn-primary{:href => '#',
-            :v => {:on => 'click: onClickSearch'}}
-          %i.fa.fa-fw.fa-search
+        %button.btn.btn-primary{:v => {:on => 'click: searchButtonDidClick', :attr => 'disabled: isSearching'}}
+          %i.fa.fa-fw.fa-refresh{:v => {:class => 'fa-spin: isSearching'}}
 
   .panel-body
     .row
