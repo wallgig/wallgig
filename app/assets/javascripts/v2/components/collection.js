@@ -4,8 +4,9 @@
       isDraggedOver: false,
       activeWallpaper: null,
 
-      // Wallpaper states
+      // Collection states
       isInCollection: false,
+      isToggling: false,
       cachedWallpaperIds: [],
 
       id: null
@@ -22,6 +23,7 @@
 
       this.$on('activeWallpaperDidChange', this.activeWallpaperDidChange);
       this.$on('wallpaperInCollections', this.wallpaperInCollections);
+      this.$on('wallpaperWillAddToCollection', this.wallpaperWillAddToCollection);
       this.$on('wallpaperDidAddToCollection', this.wallpaperDidAddToCollection);
     },
 
@@ -52,16 +54,23 @@
         }
       },
 
-      wallpaperDidAddToCollection: function (data) {
-        if (data.collection.id !== this.id) {
+      wallpaperWillAddToCollection: function (wallpaper, collection) {
+        if (collection.id === this.id) {
+          this.isToggling = true;
+        }
+      },
+
+      wallpaperDidAddToCollection: function (wallpaper, collection) {
+        if (collection.id !== this.id) {
           // Not ours
           return;
         }
 
-        this.cachedWallpaperIds = _.chain(this.cachedWallpaperIds).
-          push(data.wallpaper.id).
-          uniq().
-          valueOf();
+        if (this.cachedWallpaperIds.indexOf(wallpaper.id) === -1) {
+          this.cachedWallpaperIds.push(wallpaper.id);
+        }
+
+        this.isToggling = false;
       },
 
       onDragEnter: function () {

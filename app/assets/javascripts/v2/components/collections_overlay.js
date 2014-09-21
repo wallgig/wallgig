@@ -135,6 +135,8 @@
           return;
         }
 
+        self.$root.$broadcast('wallpaperWillAddToCollection', wallpaper, collection);
+
         self.isHidingDeferred = true; // Defer hiding
 
         superagent
@@ -158,10 +160,7 @@
           }, ADD_TO_COLLECTION_HIDE_TIMER);
         }
 
-        self.$root.$broadcast('wallpaperDidAddToCollection', {
-          wallpaper: wallpaper,
-          collection: collection
-        });
+        self.$root.$broadcast('wallpaperDidAddToCollection', wallpaper, collection);
       },
 
       onDrop: function (e) {
