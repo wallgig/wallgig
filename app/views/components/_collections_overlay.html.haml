@@ -17,8 +17,8 @@
               :ref => 'collections',
               :on => 'dragenter: onDragEnter, dragleave: onDragLeave, dragover: onDragOver, drop: onDrop',
               :class => 'is-draggedOver: isDraggedOver, is-collected: isInCollection'}}
-          .collectionList-wallpapersCount{:v => {:if => 'wallpapers_count > 0 || !this.public'}}
-            %i.fa.fa-fw.fa-eye-slash{:v => {:if => '!this.public'}}
+          .collectionList-wallpapersCount{:v => {:if => 'wallpapers_count > 0 || !isPublic'}}
+            %i.fa.fa-fw.fa-eye-slash{:v => {:if => '!isPublic'}}
             %span{:v => {:if => 'wallpapers_count > 0'}}
               %i.fa.fa-fw.fa-picture-o
               {{wallpapers_count}}

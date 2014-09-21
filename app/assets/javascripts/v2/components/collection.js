@@ -9,7 +9,8 @@
       isToggling: false,
       cachedWallpaperIds: [],
 
-      id: null
+      id: null,
+      public: true
     },
 
     created: function () {
@@ -87,6 +88,13 @@
           e.preventDefault(); // prevent default to allow dropping
           this.isDraggedOver = true;
         }
+      }
+    },
+
+    computed: {
+      isPublic: function () {
+        // public is a reserved word and cannot be referenced in view
+        return this.public;
       }
     }
   });
