@@ -6,7 +6,11 @@
       // Search defaults
       search: {
         order: 'latest',
-        purities: []
+        purities: [],
+        facets: {
+          categories: [],
+          tags: []
+        }
       },
 
       // Mappings
@@ -49,19 +53,29 @@
       togglePurity: function (purity, e) {
         e.preventDefault();
 
-        console.log('toggling', purity);
-
         var index = this.search.purities.indexOf(purity);
         if (index === -1) {
           this.search.purities.push(purity);
         } else {
-          this.search.purities.$remove(index);
+          if (this.search.purities.length > 1) {
+            // Must select at least one purity
+            this.search.purities.$remove(index);
+          }
         }
       },
 
       toggleInclusion: function (collection, index, e) {
         e.preventDefault();
         collection[index].included = ( ! collection[index].included);
+      },
+
+      toQueryStringObject: function () {
+        return _.omit({
+          'order': this.search.order,
+          'purity[]': this.search.purities,
+          'tags[]': _.chain(this.search.facets.tags).where({ included: true }).pluck('id').valueOf(),
+          'categories[]': _.chain(this.search.facets.categories).where({ included: true }).pluck('id').valueOf()
+        }, _.isEmpty);
       }
     },
 
@@ -71,8 +85,7 @@
       },
 
       toQueryString: function () {
-        console.log('toQueryString called');
-        return queryString.stringify(this.search);
+        return queryString.stringify(this.toQueryStringObject());
       }
     }
   });
