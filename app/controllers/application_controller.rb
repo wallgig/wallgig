@@ -81,15 +81,15 @@ class ApplicationController < ActionController::Base
     end
 
     def purity_params
-      params
-        .permit(:purity, purity: [])
-        .tap do |p|
-          p[:purity] = p[:purity].split(',') if p[:purity].is_a? String
+      purities = case params[:purity].class.to_s
+        when 'String' then params[:purity].split(',').map(&:strip)
+        when 'Array' then params[:purity]
+        else []
+      end
 
-          Array.wrap(p[:purity])
-               .select { |purity| UserSetting::PURITY_STRING_KEYS.include?(purity) }
-               .presence
-        end
+      purities = purities.select { |purity| UserSetting::PURITY_STRING_KEYS.include?(purity) }.presence
+
+      { purity: purities }
     end
 
     # Current viewable purities
