@@ -4,6 +4,7 @@ ul.collectionList {
   margin-left: -10px;
   margin-right: -10px;
   text-align: center;
+  overflow: hidden;
   &.row-1 {
     height: 374px;
   }
