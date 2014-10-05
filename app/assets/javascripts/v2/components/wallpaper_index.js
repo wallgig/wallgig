@@ -67,7 +67,6 @@
   Vue.component('wallpaper-index', {
     data: {
       isLoading: false,
-      searchId: null,
       searchQuery: null,
       wallpaperPagesWillReset: false,
       wallpaperPages: [],
@@ -116,7 +115,8 @@
 
         page.base(location.pathname);
         page('*', function (ctx) {
-          self.searchQuery = queryString.parse(ctx.querystring);
+          self.searchQuery = _.omit(queryString.parse(ctx.querystring), _.isEmpty);
+          console.log('page changed', ctx, self.searchQuery);
           self.fetchPage();
         });
         page();
@@ -148,12 +148,6 @@
       },
 
       wallpaperPageDidLoad: function (wallpaperPage) {
-        if (wallpaperPage.search.id !== this.searchId) {
-          // TODO move to reset function
-          this.searchId = wallpaperPage.search.id;
-          this.wallpaperPages = [];
-        }
-
         // Set previous page number
         if (this.wallpaperPages.length === 0) {
           if (wallpaperPage.paging && wallpaperPage.paging.previous) {
