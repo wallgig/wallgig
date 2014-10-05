@@ -66,6 +66,7 @@
 
   Vue.component('wallpaper-index', {
     data: {
+      isInitialLoad: true,
       isLoading: false,
       searchQuery: null,
       wallpaperPagesWillReset: false,
@@ -101,6 +102,7 @@
 
     methods: {
       loadInitialPage: function () {
+        this.isInitialLoad = false;
         if (this.data) {
           // Process preloaded data
           this.wallpaperPageDidLoad(JSON.parse(this.data));
@@ -115,6 +117,10 @@
 
         page.base(location.pathname);
         page('*', function (ctx) {
+          if (self.isInitialLoad) {
+            return;
+          }
+
           self.searchQuery = queryString.parse(ctx.querystring);
           self.fetchPage();
         });
