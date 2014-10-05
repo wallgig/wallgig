@@ -1,4 +1,4 @@
-(function (Vue, _, superagent, queryString) {
+(function (Vue, _, superagent, queryString, page) {
   var config = {
     scrollThrottle: 50,
     infiniteScroll: {
@@ -92,21 +92,43 @@
         this.endpoint = '/api/v1/wallpapers';
       }
 
-      if (this.data) {
-        // Process preloaded data
-        this.wallpaperPageDidLoad(JSON.parse(this.data));
-        this.data = undefined;
-      } else {
-        this.fetchPage();
-      }
-
-      this.searchQuery = queryString.parse(location.search);
-
+      this.bindPushStateEvents();
       this.$on('infiniteScrollTargetDidReach', this.infiniteScrollTargetDidReach);
       this.$on('searchDidRequest', this.searchDidRequest);
+
+      this.loadInitialPage();
     },
 
     methods: {
+      loadInitialPage: function () {
+        if (this.data) {
+          // Process preloaded data
+          this.wallpaperPageDidLoad(JSON.parse(this.data));
+          this.data = undefined;
+        } else {
+          this.fetchPage();
+        }
+      },
+
+      bindPushStateEvents: function () {
+        var self = this;
+
+        page.base(location.pathname);
+        page('*', function (ctx) {
+          self.searchQuery = queryString.parse(ctx.querystring);
+          self.fetchPage();
+        });
+        page();
+
+        self.$on('searchDidChange', function (search) {
+          if (search) {
+            page('?' + queryString.stringify(search));
+          } else {
+            page('/');
+          }
+        });
+      },
+
       fetchPage: function (page) {
         this.$broadcast('wallpaperPageWillLoad');
         this.isLoading = true;
@@ -161,13 +183,11 @@
       },
 
       searchDidRequest: function (searchQuery) {
-        console.log(searchQuery);
-        this.searchQuery = searchQuery;
-        this.fetchPage();
+        this.$emit('searchDidChange', searchQuery);
       },
 
       generatePageHref: function (page) {
-        var searchQuery = _.cloneDeep(this.searchQuery);
+        var searchQuery = _.cloneDeep(this.searchQuery) || {};
         searchQuery.page = page;
         return window.location.pathname + '?' + queryString.stringify(searchQuery);
       }
@@ -186,4 +206,4 @@
       'wallpaper-list': WallpaperList
     }
   });
-})(Vue, _, superagent, queryString);
+})(Vue, _, superagent, queryString, page);
