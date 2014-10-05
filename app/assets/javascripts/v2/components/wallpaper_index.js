@@ -190,7 +190,7 @@
       },
 
       searchDidRequest: function (searchQuery) {
-        this.wallpaperpagesWillReset = true;
+        this.wallpaperPagesWillReset = true;
         this.$emit('searchDidChange', searchQuery);
       },
 

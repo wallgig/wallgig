@@ -9,6 +9,15 @@
   height: $height-halfWallpaperThumbnail;
 }
 
+// Wallpaper pages
+.wallpaperPages {
+  opacity: 1;
+  transition: opacity 0.1s ease-in;
+}
+.wallpaperPages.is-resetting {
+  opacity: 0.5;
+}
+
 // Wallpaper list
 .wallpaperList {
   @extend .list-unstyled;
