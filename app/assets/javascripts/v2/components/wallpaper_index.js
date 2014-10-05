@@ -1,4 +1,4 @@
-(function (Vue, _, superagent, queryString) {
+(function (Vue, _, superagent, queryString, page) {
   var config = {
     scrollThrottle: 50,
     infiniteScroll: {
@@ -66,9 +66,10 @@
 
   Vue.component('wallpaper-index', {
     data: {
+      isInitialLoad: true,
       isLoading: false,
-      searchId: null,
       searchQuery: null,
+      wallpaperPagesWillReset: false,
       wallpaperPages: [],
       options: {},
       previousPage: null,
@@ -82,31 +83,54 @@
     ],
 
     created: function () {
-      config.infiniteScroll.maxPages = Math.floor(config.infiniteScroll.maxImages / this.$root.settings.per_page);
+      config.infiniteScroll.maxPages = (config.infiniteScroll.maxPages
+        || Math.floor(config.infiniteScroll.maxImages / this.$root.settings.per_page));
+      this.options = this.options ? JSON.parse(this.options) : {};
+      this.endpoint = this.endpoint || '/api/v1/wallpapers';
 
-      if (this.options) {
-        this.options = JSON.parse(this.options);
-      }
-
-      if ( ! this.endpoint) {
-        this.endpoint = '/api/v1/wallpapers';
-      }
-
-      if (this.data) {
-        // Process preloaded data
-        this.wallpaperPageDidLoad(JSON.parse(this.data));
-        this.data = undefined;
-      } else {
-        this.fetchPage();
-      }
-
-      this.searchQuery = queryString.parse(location.search);
-
+      this.bindPushStateEvents();
       this.$on('infiniteScrollTargetDidReach', this.infiniteScrollTargetDidReach);
       this.$on('searchDidRequest', this.searchDidRequest);
+
+      this.loadInitialPage();
     },
 
     methods: {
+      loadInitialPage: function () {
+        this.isInitialLoad = false;
+        if (this.data) {
+          // Process preloaded data
+          this.wallpaperPageDidLoad(JSON.parse(this.data));
+          this.data = undefined;
+        } else {
+          this.fetchPage();
+        }
+      },
+
+      bindPushStateEvents: function () {
+        var self = this;
+
+        page.base(location.pathname);
+        page('*', function (ctx) {
+          if (self.isInitialLoad) {
+            return;
+          }
+
+          self.searchQuery = queryString.parse(ctx.querystring);
+          self.wallpaperPagesWillReset = true;
+          self.fetchPage();
+        });
+        page();
+
+        self.$on('searchDidChange', function (search) {
+          if (search) {
+            page('?' + queryString.stringify(search));
+          } else {
+            page('/');
+          }
+        });
+      },
+
       fetchPage: function (page) {
         this.$broadcast('wallpaperPageWillLoad');
         this.isLoading = true;
@@ -114,7 +138,7 @@
         superagent
           .get(this.endpoint)
           .accept('json')
-          .query(queryString.stringify(this.searchQuery))
+          .query(queryString.stringify(_.omit(this.searchQuery, _.isEmpty)))
           .query({ page: page })
           .end(_.bind(function (res) {
             if (res.ok) {
@@ -125,12 +149,6 @@
       },
 
       wallpaperPageDidLoad: function (wallpaperPage) {
-        if (wallpaperPage.search.id !== this.searchId) {
-          // TODO move to reset function
-          this.searchId = wallpaperPage.search.id;
-          this.wallpaperPages = [];
-        }
-
         // Set previous page number
         if (this.wallpaperPages.length === 0) {
           if (wallpaperPage.paging && wallpaperPage.paging.previous) {
@@ -146,7 +164,13 @@
         }
 
         this.search = wallpaperPage.search; // Refresh search
-        this.wallpaperPages.push(wallpaperPage);
+
+        if (this.wallpaperPagesWillReset) {
+          this.wallpaperPagesWillReset = false;
+          this.wallpaperPages = [wallpaperPage];
+        } else {
+          this.wallpaperPages.push(wallpaperPage);
+        }
 
         this.$broadcast('wallpaperPageDidLoad', wallpaperPage);
       },
@@ -161,13 +185,11 @@
       },
 
       searchDidRequest: function (searchQuery) {
-        console.log(searchQuery);
-        this.searchQuery = searchQuery;
-        this.fetchPage();
+        this.$emit('searchDidChange', searchQuery);
       },
 
       generatePageHref: function (page) {
-        var searchQuery = _.cloneDeep(this.searchQuery);
+        var searchQuery = _.cloneDeep(this.searchQuery) || {};
         searchQuery.page = page;
         return window.location.pathname + '?' + queryString.stringify(searchQuery);
       }
@@ -186,4 +208,4 @@
       'wallpaper-list': WallpaperList
     }
   });
-})(Vue, _, superagent, queryString);
+})(Vue, _, superagent, queryString, page);

@@ -1,7 +1,6 @@
 json.partial! 'api/v1/shared/paging', collection: @wallpapers
 
 json.search do
-  json.id Digest::MD5.hexdigest(search_options.except(:page, :per_page).to_query)
   WallpaperSearchParams::KEYS_SCALAR.each do |key|
     json.set! key, search_options[key] if search_options.include?(key)
   end

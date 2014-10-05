@@ -1,4 +1,5 @@
 //= require lodash
+//= require page
 //= require q
 //= require query-string
 //= require superagent
