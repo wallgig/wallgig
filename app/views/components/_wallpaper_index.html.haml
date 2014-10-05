@@ -1,7 +1,7 @@
 %div{:v => {:component => 'wallpaper-index', :cloak => true},
     :endpoint => local_assigns[:endpoint],
     :options => local_assigns[:search_options].try(:to_json),
-    :data => local_assigns[:data]}
+    :data => local_assigns[:initial_wallpapers_in_json]}
 
   = render partial: 'components/wallpaper_search'
 
@@ -26,12 +26,14 @@
               :class => 'is-{{purity}}',
               :v => {:attr => 'src: image.thumbnail.url, width: image.thumbnail.width, height: image.thumbnail.height'}}
           .wallpaperList--overlay.wallpaperList--overlayBottom
-            %strong {{image.original.width}}&times;{{image.original.height}}
+            %strong
+              {{image.original.width}}&times;{{image.original.height}}
             %a.btn.btn-sm.btn--fav.pull-left{:href => '#',
                 :v => {:class => 'is-faved: favourited, disabled: isToggling',
                   :on => 'click: toggleFavourite'}}
               %i.fa.fa-fw{:v => {:class => 'fa-star: !isToggling, fa-refresh: isToggling, fa-spin: isToggling'}}
-              %span.count {{favourites_count}}
+              %span.count
+                {{favourites_count}}
             .btn.btn-sm.pull-right
               %i.fa.fa-fw.fa-eye
               {{views_count}}
@@ -46,7 +48,7 @@
         :component => 'pagination',
         :ref => 'pagination'}}
     %li
-      /-# FIXME href link
+      -# FIXME href link
       %a{:v => {:show => 'previousPage', :attr => 'href: generatePageHref(previousPage)'}}
         &larr; Previous
       %a{:v => {:show => 'nextPage', :attr => 'href: generatePageHref(nextPage)'}}
