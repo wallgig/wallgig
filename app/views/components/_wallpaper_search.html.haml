@@ -5,7 +5,7 @@
         %input.form-control{:type => 'text',
             :placeholder => 'Search for tags&hellip;'.html_safe,
             :v => {:model => 'search.q'}}
-      %li
+      %li{:v => {:if => 'current_user'}}
         .btn-group.btn-group--purity
           %a.btn.btn--purity{:href => '#',
               :class => 'is-{{$key}}',

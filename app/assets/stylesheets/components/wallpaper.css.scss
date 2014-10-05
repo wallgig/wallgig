@@ -9,6 +9,14 @@
   height: $height-halfWallpaperThumbnail;
 }
 
+.wallpaperThumbnail.is-sketchy {
+  border: 3px solid $color-sketchy;
+}
+
+.wallpaperThumbnail.is-nsfw {
+  border: 3px solid $color-nsfw;
+}
+
 // Wallpaper pages
 .wallpaperPages {
   opacity: 1;
