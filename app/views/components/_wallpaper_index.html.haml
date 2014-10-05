@@ -1,7 +1,7 @@
 %div{:v => {:component => 'wallpaper-index', :cloak => true},
     :endpoint => local_assigns[:endpoint],
     :options => local_assigns[:search_options].try(:to_json),
-    :data => local_assigns[:data]}
+    :data => local_assigns[:initial_wallpapers_in_json]}
 
   = render partial: 'components/wallpaper_search'
 
