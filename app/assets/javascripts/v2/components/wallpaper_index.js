@@ -115,8 +115,7 @@
 
         page.base(location.pathname);
         page('*', function (ctx) {
-          self.searchQuery = _.omit(queryString.parse(ctx.querystring), _.isEmpty);
-          console.log('page changed', ctx, self.searchQuery);
+          self.searchQuery = queryString.parse(ctx.querystring);
           self.fetchPage();
         });
         page();
@@ -137,7 +136,7 @@
         superagent
           .get(this.endpoint)
           .accept('json')
-          .query(queryString.stringify(this.searchQuery))
+          .query(queryString.stringify(_.omit(this.searchQuery, _.isEmpty)))
           .query({ page: page })
           .end(_.bind(function (res) {
             if (res.ok) {
