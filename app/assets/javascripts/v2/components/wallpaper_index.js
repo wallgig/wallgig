@@ -69,6 +69,7 @@
       isLoading: false,
       searchId: null,
       searchQuery: null,
+      wallpaperPagesWillReset: false,
       wallpaperPages: [],
       options: {},
       previousPage: null,
@@ -168,7 +169,13 @@
         }
 
         this.search = wallpaperPage.search; // Refresh search
-        this.wallpaperPages.push(wallpaperPage);
+
+        if (this.wallpaperPagesWillReset) {
+          this.wallpaperPagesWillReset = false;
+          this.wallpaperPages = [wallpaperPage];
+        } else {
+          this.wallpaperPages.push(wallpaperPage);
+        }
 
         this.$broadcast('wallpaperPageDidLoad', wallpaperPage);
       },
@@ -183,6 +190,7 @@
       },
 
       searchDidRequest: function (searchQuery) {
+        this.wallpaperpagesWillReset = true;
         this.$emit('searchDidChange', searchQuery);
       },
 
