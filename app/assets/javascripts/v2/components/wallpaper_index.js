@@ -83,15 +83,10 @@
     ],
 
     created: function () {
-      config.infiniteScroll.maxPages = Math.floor(config.infiniteScroll.maxImages / this.$root.settings.per_page);
-
-      if (this.options) {
-        this.options = JSON.parse(this.options);
-      }
-
-      if ( ! this.endpoint) {
-        this.endpoint = '/api/v1/wallpapers';
-      }
+      config.infiniteScroll.maxPages = (config.infiniteScroll.maxPages
+        || Math.floor(config.infiniteScroll.maxImages / this.$root.settings.per_page));
+      this.options = this.options ? JSON.parse(this.options) : {};
+      this.endpoint = this.endpoint || '/api/v1/wallpapers';
 
       this.bindPushStateEvents();
       this.$on('infiniteScrollTargetDidReach', this.infiniteScrollTargetDidReach);
@@ -122,6 +117,7 @@
           }
 
           self.searchQuery = queryString.parse(ctx.querystring);
+          self.wallpaperPagesWillReset = true;
           self.fetchPage();
         });
         page();
@@ -189,7 +185,6 @@
       },
 
       searchDidRequest: function (searchQuery) {
-        this.wallpaperPagesWillReset = true;
         this.$emit('searchDidChange', searchQuery);
       },
 
