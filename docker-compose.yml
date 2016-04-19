@@ -1,0 +1,35 @@
+version: '2'
+services:
+  postgres:
+    image: postgres
+    logging: {driver: none}
+    environment:
+      POSTGRES_DB: wallgig_development
+      POSTGRES_USER: pg
+      POSTGRES_PASSWORD: pg
+  elasticsearch:
+    image: elasticsearch:1
+  redis:
+    image: redis
+  wallgig: &wallgig
+    build: .
+    links:
+      - postgres
+      - elasticsearch
+      - redis
+    ports:
+      - "3000:3000"
+    environment:
+      SECRET_KEY: secret-key
+      DEVISE_SECRET_KEY: devise-secret-key
+      DATABASE_URL: postgresql://pg:pg@postgres/wallgig_development?pool=5
+      ELASTICSEARCH_URL: http://elasticsearch:9200
+      REDIS_SERVER_URL: redis://redis:6379
+  db-migrate:
+    <<: *wallgig
+    command: rake db:migrate
+    ports: []
+  reindex-wallpaper:
+    <<: *wallgig
+    command: rake searchkick:reindex CLASS=Wallpaper
+    ports: []

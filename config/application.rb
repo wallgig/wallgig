@@ -20,7 +20,8 @@ module Wallgig
     # config.i18n.load_path += Dir[Rails.root.join('my', 'locales', '*.{rb,yml}').to_s]
     # config.i18n.default_locale = :de
 
-    config.cache_store = :redis_store, 'redis://localhost:6379/0/cache', { expires_in: 90.minutes }
+    uri = ENV['REDIS_SERVER_URL'] || 'redis://127.0.0.1:6379'
+    config.cache_store = :redis_store, uri + '/0/cache', { expires_in: 90.minutes }
 
     # Silence deprecation warning
     config.i18n.enforce_available_locales = true
